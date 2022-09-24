@@ -1,0 +1,113 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace net.minecraft.src
+{
+
+	public abstract class StructureStart
+	{
+		protected internal LinkedList components = new LinkedList();
+		protected internal StructureBoundingBox boundingBox;
+
+		public virtual StructureBoundingBox BoundingBox
+		{
+			get
+			{
+				return this.boundingBox;
+			}
+		}
+
+		public virtual LinkedList Components
+		{
+			get
+			{
+				return this.components;
+			}
+		}
+
+		public virtual void generateStructure(World world1, Random random2, StructureBoundingBox structureBoundingBox3)
+		{
+			System.Collections.IEnumerator iterator4 = this.components.GetEnumerator();
+
+			while (iterator4.MoveNext())
+			{
+				StructureComponent structureComponent5 = (StructureComponent)iterator4.Current;
+				if (structureComponent5.BoundingBox.intersectsWith(structureBoundingBox3) && !structureComponent5.addComponentParts(world1, random2, structureBoundingBox3))
+				{
+//JAVA TO C# CONVERTER TODO TASK: .NET enumerators are read-only:
+					iterator4.remove();
+				}
+			}
+
+		}
+
+		protected internal virtual void updateBoundingBox()
+		{
+			this.boundingBox = StructureBoundingBox.NewBoundingBox;
+			System.Collections.IEnumerator iterator1 = this.components.GetEnumerator();
+
+			while (iterator1.MoveNext())
+			{
+				StructureComponent structureComponent2 = (StructureComponent)iterator1.Current;
+				this.boundingBox.expandTo(structureComponent2.BoundingBox);
+			}
+
+		}
+
+		protected internal virtual void markAvailableHeight(World world1, Random random2, int i3)
+		{
+			int i4 = 63 - i3;
+			int i5 = this.boundingBox.YSize + 1;
+			if (i5 < i4)
+			{
+				i5 += random2.Next(i4 - i5);
+			}
+
+			int i6 = i5 - this.boundingBox.maxY;
+			this.boundingBox.offset(0, i6, 0);
+			System.Collections.IEnumerator iterator7 = this.components.GetEnumerator();
+
+			while (iterator7.MoveNext())
+			{
+				StructureComponent structureComponent8 = (StructureComponent)iterator7.Current;
+				structureComponent8.BoundingBox.offset(0, i6, 0);
+			}
+
+		}
+
+		protected internal virtual void setRandomHeight(World world1, Random random2, int i3, int i4)
+		{
+			int i5 = i4 - i3 + 1 - this.boundingBox.YSize;
+			bool z6 = true;
+			int i10;
+			if (i5 > 1)
+			{
+				i10 = i3 + random2.Next(i5);
+			}
+			else
+			{
+				i10 = i3;
+			}
+
+			int i7 = i10 - this.boundingBox.minY;
+			this.boundingBox.offset(0, i7, 0);
+			System.Collections.IEnumerator iterator8 = this.components.GetEnumerator();
+
+			while (iterator8.MoveNext())
+			{
+				StructureComponent structureComponent9 = (StructureComponent)iterator8.Current;
+				structureComponent9.BoundingBox.offset(0, i7, 0);
+			}
+
+		}
+
+		public virtual bool SizeableStructure
+		{
+			get
+			{
+				return true;
+			}
+		}
+	}
+
+}

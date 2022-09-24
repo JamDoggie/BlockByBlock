@@ -1,0 +1,31 @@
+﻿namespace net.minecraft.src
+{
+	using Minecraft = net.minecraft.client.Minecraft;
+
+	using GL11 = org.lwjgl.opengl.GL11;
+
+	public class GuiButtonLanguage : GuiButton
+	{
+		public GuiButtonLanguage(int i1, int i2, int i3) : base(i1, i2, i3, 20, 20, "")
+		{
+		}
+
+		public override void drawButton(Minecraft minecraft1, int i2, int i3)
+		{
+			if (this.drawButton_Conflict)
+			{
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft1.renderEngine.getTexture("/gui/gui.png"));
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				bool z4 = i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.field_52008_a && i3 < this.yPosition + this.field_52007_b;
+				int i5 = 106;
+				if (z4)
+				{
+					i5 += this.field_52007_b;
+				}
+
+				this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, i5, this.field_52008_a, this.field_52007_b);
+			}
+		}
+	}
+
+}

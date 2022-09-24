@@ -1,0 +1,72 @@
+﻿namespace net.minecraft.src
+{
+
+	public class NBTTagString : NBTBase
+	{
+		public string data;
+
+		public NBTTagString(string string1) : base(string1)
+		{
+		}
+
+		public NBTTagString(string string1, string string2) : base(string1)
+		{
+			this.data = string2;
+			if (string.ReferenceEquals(string2, null))
+			{
+				throw new System.ArgumentException("Empty string not allowed");
+			}
+		}
+
+//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+//ORIGINAL LINE: void write(java.io.DataOutput dataOutput1) throws java.io.IOException
+		internal override void write(DataOutput dataOutput1)
+		{
+			dataOutput1.writeUTF(this.data);
+		}
+
+//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+//ORIGINAL LINE: void load(java.io.DataInput dataInput1) throws java.io.IOException
+		internal override void load(DataInput dataInput1)
+		{
+			this.data = dataInput1.readUTF();
+		}
+
+		public override sbyte Id
+		{
+			get
+			{
+				return (sbyte)8;
+			}
+		}
+
+		public override string ToString()
+		{
+			return "" + this.data;
+		}
+
+		public override NBTBase copy()
+		{
+			return new NBTTagString(this.Name, this.data);
+		}
+
+		public override bool Equals(object object1)
+		{
+			if (!base.Equals(object1))
+			{
+				return false;
+			}
+			else
+			{
+				NBTTagString nBTTagString2 = (NBTTagString)object1;
+				return string.ReferenceEquals(this.data, null) && string.ReferenceEquals(nBTTagString2.data, null) || !string.ReferenceEquals(this.data, null) && this.data.Equals(nBTTagString2.data);
+			}
+		}
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode() ^ this.data.GetHashCode();
+		}
+	}
+
+}

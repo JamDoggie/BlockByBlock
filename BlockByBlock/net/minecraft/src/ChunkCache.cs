@@ -1,0 +1,317 @@
+﻿namespace net.minecraft.src
+{
+	public class ChunkCache : IBlockAccess
+	{
+		private int chunkX;
+		private int chunkZ;
+		private Chunk[][] chunkArray;
+		private bool field_48467_d;
+		private World worldObj;
+
+		public ChunkCache(World world1, int i2, int i3, int i4, int i5, int i6, int i7)
+		{
+			this.worldObj = world1;
+			this.chunkX = i2 >> 4;
+			this.chunkZ = i4 >> 4;
+			int i8 = i5 >> 4;
+			int i9 = i7 >> 4;
+			//JAVA TO C# CONVERTER NOTE: The following call to the 'RectangularArrays' helper class reproduces the rectangular array initialization that is automatic in Java:
+			//ORIGINAL LINE: this.chunkArray = new Chunk[i8 - this.chunkX + 1][i9 - this.chunkZ + 1];
+			this.chunkArray = RectangularArrays.RectangularChunkArray(i8 - this.chunkX + 1, i9 - this.chunkZ + 1);
+			this.field_48467_d = true;
+
+			for (int i10 = this.chunkX; i10 <= i8; ++i10)
+			{
+				for (int i11 = this.chunkZ; i11 <= i9; ++i11)
+				{
+					Chunk chunk12 = world1.getChunkFromChunkCoords(i10, i11);
+					if (chunk12 != null)
+					{
+						this.chunkArray[i10 - this.chunkX][i11 - this.chunkZ] = chunk12;
+						if (!chunk12.getAreLevelsEmpty(i3, i6))
+						{
+							this.field_48467_d = false;
+						}
+					}
+				}
+			}
+
+		}
+
+		public virtual bool func_48452_a()
+		{
+			return this.field_48467_d;
+		}
+
+		public virtual int getBlockId(int i1, int i2, int i3)
+		{
+			if (i2 < 0)
+			{
+				return 0;
+			}
+			else if (i2 >= 256)
+			{
+				return 0;
+			}
+			else
+			{
+				int i4 = (i1 >> 4) - this.chunkX;
+				int i5 = (i3 >> 4) - this.chunkZ;
+				if (i4 >= 0 && i4 < this.chunkArray.Length && i5 >= 0 && i5 < this.chunkArray[i4].Length)
+				{
+					Chunk chunk6 = this.chunkArray[i4][i5];
+					return chunk6 == null ? 0 : chunk6.getBlockID(i1 & 15, i2, i3 & 15);
+				}
+				else
+				{
+					return 0;
+				}
+			}
+		}
+
+		public virtual TileEntity getBlockTileEntity(int i1, int i2, int i3)
+		{
+			int i4 = (i1 >> 4) - this.chunkX;
+			int i5 = (i3 >> 4) - this.chunkZ;
+			return this.chunkArray[i4][i5].getChunkBlockTileEntity(i1 & 15, i2, i3 & 15);
+		}
+
+		public virtual float getBrightness(int i1, int i2, int i3, int i4)
+		{
+			int i5 = this.getLightValue(i1, i2, i3);
+			if (i5 < i4)
+			{
+				i5 = i4;
+			}
+
+			return this.worldObj.worldProvider.lightBrightnessTable[i5];
+		}
+
+		public virtual int getLightBrightnessForSkyBlocks(int i1, int i2, int i3, int i4)
+		{
+			int i5 = this.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, i1, i2, i3);
+			int i6 = this.getSkyBlockTypeBrightness(EnumSkyBlock.Block, i1, i2, i3);
+			if (i6 < i4)
+			{
+				i6 = i4;
+			}
+
+			return i5 << 20 | i6 << 4;
+		}
+
+		public virtual float getLightBrightness(int i1, int i2, int i3)
+		{
+			return this.worldObj.worldProvider.lightBrightnessTable[this.getLightValue(i1, i2, i3)];
+		}
+
+		public virtual int getLightValue(int i1, int i2, int i3)
+		{
+			return this.getLightValueExt(i1, i2, i3, true);
+		}
+
+		public virtual int getLightValueExt(int i1, int i2, int i3, bool z4)
+		{
+			if (i1 >= -30000000 && i3 >= -30000000 && i1 < 30000000 && i3 <= 30000000)
+			{
+				int i5;
+				int i6;
+				if (z4)
+				{
+					i5 = this.getBlockId(i1, i2, i3);
+					if (i5 == Block.stairSingle.blockID || i5 == Block.tilledField.blockID || i5 == Block.stairCompactPlanks.blockID || i5 == Block.stairCompactCobblestone.blockID)
+					{
+						i6 = this.getLightValueExt(i1, i2 + 1, i3, false);
+						int i7 = this.getLightValueExt(i1 + 1, i2, i3, false);
+						int i8 = this.getLightValueExt(i1 - 1, i2, i3, false);
+						int i9 = this.getLightValueExt(i1, i2, i3 + 1, false);
+						int i10 = this.getLightValueExt(i1, i2, i3 - 1, false);
+						if (i7 > i6)
+						{
+							i6 = i7;
+						}
+
+						if (i8 > i6)
+						{
+							i6 = i8;
+						}
+
+						if (i9 > i6)
+						{
+							i6 = i9;
+						}
+
+						if (i10 > i6)
+						{
+							i6 = i10;
+						}
+
+						return i6;
+					}
+				}
+
+				if (i2 < 0)
+				{
+					return 0;
+				}
+				else if (i2 >= 256)
+				{
+					i5 = 15 - this.worldObj.skylightSubtracted;
+					if (i5 < 0)
+					{
+						i5 = 0;
+					}
+
+					return i5;
+				}
+				else
+				{
+					i5 = (i1 >> 4) - this.chunkX;
+					i6 = (i3 >> 4) - this.chunkZ;
+					return this.chunkArray[i5][i6].getBlockLightValue(i1 & 15, i2, i3 & 15, this.worldObj.skylightSubtracted);
+				}
+			}
+			else
+			{
+				return 15;
+			}
+		}
+
+		public virtual int getBlockMetadata(int i1, int i2, int i3)
+		{
+			if (i2 < 0)
+			{
+				return 0;
+			}
+			else if (i2 >= 256)
+			{
+				return 0;
+			}
+			else
+			{
+				int i4 = (i1 >> 4) - this.chunkX;
+				int i5 = (i3 >> 4) - this.chunkZ;
+				return this.chunkArray[i4][i5].getBlockMetadata(i1 & 15, i2, i3 & 15);
+			}
+		}
+
+		public virtual Material getBlockMaterial(int i1, int i2, int i3)
+		{
+			int i4 = this.getBlockId(i1, i2, i3);
+			return i4 == 0 ? Material.air : Block.blocksList[i4].blockMaterial;
+		}
+
+		public virtual BiomeGenBase getBiomeGenForCoords(int i1, int i2)
+		{
+			return this.worldObj.getBiomeGenForCoords(i1, i2);
+		}
+
+		public virtual bool isBlockOpaqueCube(int i1, int i2, int i3)
+		{
+			Block block4 = Block.blocksList[this.getBlockId(i1, i2, i3)];
+			return block4 == null ? false : block4.OpaqueCube;
+		}
+
+		public virtual bool isBlockNormalCube(int i1, int i2, int i3)
+		{
+			Block block4 = Block.blocksList[this.getBlockId(i1, i2, i3)];
+			return block4 == null ? false : block4.blockMaterial.blocksMovement() && block4.renderAsNormalBlock();
+		}
+
+		public virtual bool isAirBlock(int i1, int i2, int i3)
+		{
+			Block block4 = Block.blocksList[this.getBlockId(i1, i2, i3)];
+			return block4 == null;
+		}
+
+		public virtual int getSkyBlockTypeBrightness(EnumSkyBlock enumSkyBlock1, int i2, int i3, int i4)
+		{
+			if (i3 < 0)
+			{
+				i3 = 0;
+			}
+
+			if (i3 >= 256)
+			{
+				i3 = 255;
+			}
+
+			if (i3 >= 0 && i3 < 256 && i2 >= -30000000 && i4 >= -30000000 && i2 < 30000000 && i4 <= 30000000)
+			{
+				int i5;
+				int i6;
+				if (Block.useNeighborBrightness[this.getBlockId(i2, i3, i4)])
+				{
+					i5 = this.getSpecialBlockBrightness(enumSkyBlock1, i2, i3 + 1, i4);
+					i6 = this.getSpecialBlockBrightness(enumSkyBlock1, i2 + 1, i3, i4);
+					int i7 = this.getSpecialBlockBrightness(enumSkyBlock1, i2 - 1, i3, i4);
+					int i8 = this.getSpecialBlockBrightness(enumSkyBlock1, i2, i3, i4 + 1);
+					int i9 = this.getSpecialBlockBrightness(enumSkyBlock1, i2, i3, i4 - 1);
+					if (i6 > i5)
+					{
+						i5 = i6;
+					}
+
+					if (i7 > i5)
+					{
+						i5 = i7;
+					}
+
+					if (i8 > i5)
+					{
+						i5 = i8;
+					}
+
+					if (i9 > i5)
+					{
+						i5 = i9;
+					}
+
+					return i5;
+				}
+				else
+				{
+					i5 = (i2 >> 4) - this.chunkX;
+					i6 = (i4 >> 4) - this.chunkZ;
+					return this.chunkArray[i5][i6].getSavedLightValue(enumSkyBlock1, i2 & 15, i3, i4 & 15);
+				}
+			}
+			else
+			{
+				return enumSkyBlock1.defaultLightValue;
+			}
+		}
+
+		public virtual int getSpecialBlockBrightness(EnumSkyBlock enumSkyBlock1, int i2, int i3, int i4)
+		{
+			if (i3 < 0)
+			{
+				i3 = 0;
+			}
+
+			if (i3 >= 256)
+			{
+				i3 = 255;
+			}
+
+			if (i3 >= 0 && i3 < 256 && i2 >= -30000000 && i4 >= -30000000 && i2 < 30000000 && i4 <= 30000000)
+			{
+				int i5 = (i2 >> 4) - this.chunkX;
+				int i6 = (i4 >> 4) - this.chunkZ;
+				return this.chunkArray[i5][i6].getSavedLightValue(enumSkyBlock1, i2 & 15, i3, i4 & 15);
+			}
+			else
+			{
+				return enumSkyBlock1.defaultLightValue;
+			}
+		}
+
+		public virtual int Height
+		{
+			get
+			{
+				return 256;
+			}
+		}
+	}
+
+}
