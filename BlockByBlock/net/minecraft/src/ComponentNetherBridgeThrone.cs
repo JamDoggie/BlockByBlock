@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -13,17 +14,17 @@ namespace net.minecraft.src
 			this.boundingBox = structureBoundingBox3;
 		}
 
-		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, Random random3)
+		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, RandomExtended random3)
 		{
 		}
 
-		public static ComponentNetherBridgeThrone createValidComponent(System.Collections.IList list0, Random random1, int i2, int i3, int i4, int i5, int i6)
+		public static ComponentNetherBridgeThrone createValidComponent(System.Collections.IList list0, RandomExtended random1, int i2, int i3, int i4, int i5, int i6)
 		{
 			StructureBoundingBox structureBoundingBox7 = StructureBoundingBox.getComponentToAddBoundingBox(i2, i3, i4, -2, 0, 0, 7, 8, 9, i5);
 			return isAboveGround(structureBoundingBox7) && StructureComponent.findIntersecting(list0, structureBoundingBox7) == null ? new ComponentNetherBridgeThrone(i6, random1, structureBoundingBox7, i5) : null;
 		}
 
-		public override bool addComponentParts(World world1, Random random2, StructureBoundingBox structureBoundingBox3)
+		public override bool addComponentParts(World world1, RandomExtended random2, StructureBoundingBox structureBoundingBox3)
 		{
 			this.fillWithBlocks(world1, structureBoundingBox3, 0, 2, 0, 6, 7, 7, 0, 0, false);
 			this.fillWithBlocks(world1, structureBoundingBox3, 1, 0, 0, 5, 1, 7, Block.netherBrick.blockID, Block.netherBrick.blockID, false);

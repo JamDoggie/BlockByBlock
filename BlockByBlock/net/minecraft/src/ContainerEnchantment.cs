@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -17,7 +18,7 @@ namespace net.minecraft.src
 		private int posX;
 		private int posY;
 		private int posZ;
-		private Random rand = new Random();
+		private RandomExtended rand = new RandomExtended();
 		public long nameSeed;
 		public int[] enchantLevels = new int[3];
 
@@ -85,7 +86,7 @@ namespace net.minecraft.src
 				int i3;
 				if (itemStack2 != null && itemStack2.ItemEnchantable)
 				{
-					this.nameSeed = this.rand.nextLong();
+					this.nameSeed = this.rand.NextInt64();
 					if (!this.worldPointer.isRemote)
 					{
 						i3 = 0;

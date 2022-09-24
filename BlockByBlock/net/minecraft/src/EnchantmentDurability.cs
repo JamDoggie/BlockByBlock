@@ -4,7 +4,7 @@
 	{
 		protected internal EnchantmentDurability(int i1, int i2) : base(i1, i2, EnumEnchantmentType.digger)
 		{
-			this.Name = "durability";
+			Name = "durability";
 		}
 
 		public override int getMinEnchantability(int i1)

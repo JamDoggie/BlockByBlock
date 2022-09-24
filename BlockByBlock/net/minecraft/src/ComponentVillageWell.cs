@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -8,7 +9,7 @@ namespace net.minecraft.src
 		private readonly bool field_35104_a = true;
 		private int averageGroundLevel = -1;
 
-		public ComponentVillageWell(int i1, Random random2, int i3, int i4) : base(i1)
+		public ComponentVillageWell(int i1, RandomExtended random2, int i3, int i4) : base(i1)
 		{
 			this.coordBaseMode = random2.Next(4);
 			switch (this.coordBaseMode)
@@ -24,7 +25,7 @@ namespace net.minecraft.src
 
 		}
 
-		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, Random random3)
+		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, RandomExtended random3)
 		{
 			StructureVillagePieces.getNextStructureComponentVillagePath((ComponentVillageStartPiece)structureComponent1, list2, random3, this.boundingBox.minX - 1, this.boundingBox.maxY - 4, this.boundingBox.minZ + 1, 1, this.ComponentType);
 			StructureVillagePieces.getNextStructureComponentVillagePath((ComponentVillageStartPiece)structureComponent1, list2, random3, this.boundingBox.maxX + 1, this.boundingBox.maxY - 4, this.boundingBox.minZ + 1, 3, this.ComponentType);
@@ -32,7 +33,7 @@ namespace net.minecraft.src
 			StructureVillagePieces.getNextStructureComponentVillagePath((ComponentVillageStartPiece)structureComponent1, list2, random3, this.boundingBox.minX + 1, this.boundingBox.maxY - 4, this.boundingBox.maxZ + 1, 0, this.ComponentType);
 		}
 
-		public override bool addComponentParts(World world1, Random random2, StructureBoundingBox structureBoundingBox3)
+		public override bool addComponentParts(World world1, RandomExtended random2, StructureBoundingBox structureBoundingBox3)
 		{
 			if (this.averageGroundLevel < 0)
 			{

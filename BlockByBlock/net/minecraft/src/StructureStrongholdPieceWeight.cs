@@ -2,7 +2,7 @@
 
 namespace net.minecraft.src
 {
-	internal class StructureStrongholdPieceWeight
+	public class StructureStrongholdPieceWeight
 	{
 		public Type pieceClass;
 		public readonly int pieceWeight;

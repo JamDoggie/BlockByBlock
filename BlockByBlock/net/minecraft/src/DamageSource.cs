@@ -17,8 +17,8 @@
 		private bool isUnblockable = false;
 		private bool isDamageAllowedInCreativeMode = false;
 		private float hungerDamage = 0.3F;
-//JAVA TO C# CONVERTER NOTE: Field name conflicts with a method name of the current type:
-		private bool fireDamage_Conflict;
+		// JAVA TO C# CONVERTER NOTE: Field name conflicts with a method name of the current type:
+		private bool fireDamage;
 		private bool projectile;
 		public string damageType;
 
@@ -123,13 +123,13 @@
 
 		protected internal virtual DamageSource setFireDamage()
 		{
-			this.fireDamage_Conflict = true;
+			this.fireDamage = true;
 			return this;
 		}
 
-		public virtual bool fireDamage()
+		public virtual bool getFireDamage()
 		{
-			return this.fireDamage_Conflict;
+			return this.fireDamage;
 		}
 
 		public virtual string DamageType

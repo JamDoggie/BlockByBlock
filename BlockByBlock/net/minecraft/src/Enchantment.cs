@@ -103,8 +103,13 @@
 		{
 			get
 			{
-				return "enchantment." + this.name;
+				return "enchantment." + name;
 			}
+
+			protected set
+            {
+				name = value;
+            }
 		}
 
 		public virtual string getTranslatedName(int i1)

@@ -10,7 +10,7 @@
 
 		public EnchantmentDamage(int i1, int i2, int i3) : base(i1, i2, EnumEnchantmentType.weapon)
 		{
-			this.damageType = i3;
+			damageType = i3;
 		}
 
 		public override int getMinEnchantability(int i1)

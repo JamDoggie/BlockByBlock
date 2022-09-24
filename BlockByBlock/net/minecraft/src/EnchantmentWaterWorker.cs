@@ -4,7 +4,7 @@
 	{
 		public EnchantmentWaterWorker(int i1, int i2) : base(i1, i2, EnumEnchantmentType.armor_head)
 		{
-			this.Name = "waterWorker";
+			Name = "waterWorker";
 		}
 
 		public override int getMinEnchantability(int i1)

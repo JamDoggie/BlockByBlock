@@ -4,7 +4,7 @@
 	{
 		protected internal EnchantmentUntouching(int i1, int i2) : base(i1, i2, EnumEnchantmentType.digger)
 		{
-			this.Name = "untouching";
+			Name = "untouching";
 		}
 
 		public override int getMinEnchantability(int i1)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -9,8 +10,8 @@ namespace net.minecraft.src
 		public StructureStrongholdPieceWeight field_35038_a;
 		public ComponentStrongholdPortalRoom portalRoom;
 		public ArrayList field_35037_b = new ArrayList();
-
-		public ComponentStrongholdStairs2(int i1, Random random2, int i3, int i4) : base(0, random2, i3, i4)
+        
+		public ComponentStrongholdStairs2(int i1, RandomExtended random2, int i3, int i4) : base(0, random2, i3, i4)
 		{
 		}
 

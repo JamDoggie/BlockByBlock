@@ -10,22 +10,22 @@
 
 		public EnchantmentProtection(int i1, int i2, int i3) : base(i1, i2, EnumEnchantmentType.armor)
 		{
-			this.protectionType = i3;
+			protectionType = i3;
 			if (i3 == 2)
 			{
-				this.type = EnumEnchantmentType.armor_feet;
+				type = EnumEnchantmentType.armor_feet;
 			}
 
 		}
 
 		public override int getMinEnchantability(int i1)
 		{
-			return baseEnchantability[this.protectionType] + (i1 - 1) * levelEnchantability[this.protectionType];
+			return baseEnchantability[this.protectionType] + (i1 - 1) * levelEnchantability[protectionType];
 		}
 
 		public override int getMaxEnchantability(int i1)
 		{
-			return this.getMinEnchantability(i1) + thresholdEnchantability[this.protectionType];
+			return getMinEnchantability(i1) + thresholdEnchantability[protectionType];
 		}
 
 		public override int MaxLevel
@@ -45,7 +45,7 @@
 			else
 			{
 				int i3 = (6 + i1 * i1) / 2;
-				return this.protectionType == 0 ? i3 : (this.protectionType == 1 && damageSource2.fireDamage() ? i3 : (this.protectionType == 2 && damageSource2 == DamageSource.fall ? i3 * 2 : (this.protectionType == 3 && damageSource2 == DamageSource.explosion ? i3 : (this.protectionType == 4 && damageSource2.Projectile ? i3 : 0))));
+				return this.protectionType == 0 ? i3 : (this.protectionType == 1 && damageSource2.getFireDamage() ? i3 : (this.protectionType == 2 && damageSource2 == DamageSource.fall ? i3 * 2 : (this.protectionType == 3 && damageSource2 == DamageSource.explosion ? i3 : (this.protectionType == 4 && damageSource2.Projectile ? i3 : 0))));
 			}
 		}
 

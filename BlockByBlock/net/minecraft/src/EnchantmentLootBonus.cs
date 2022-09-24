@@ -4,10 +4,10 @@
 	{
 		protected internal EnchantmentLootBonus(int i1, int i2, EnumEnchantmentType enumEnchantmentType3) : base(i1, i2, enumEnchantmentType3)
 		{
-			this.Name = "lootBonus";
+			Name = "lootBonus";
 			if (enumEnchantmentType3 == EnumEnchantmentType.digger)
 			{
-				this.Name = "lootBonusDigger";
+				Name = "lootBonusDigger";
 			}
 
 		}

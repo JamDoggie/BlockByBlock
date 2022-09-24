@@ -4,7 +4,7 @@
 	{
 		public EnchantmentArrowKnockback(int i1, int i2) : base(i1, i2, EnumEnchantmentType.bow)
 		{
-			this.Name = "arrowKnockback";
+			Name = "arrowKnockback";
 		}
 
 		public override int getMinEnchantability(int i1)

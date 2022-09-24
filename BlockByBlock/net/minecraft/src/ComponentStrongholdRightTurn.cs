@@ -1,15 +1,16 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
 
 	public class ComponentStrongholdRightTurn : ComponentStrongholdLeftTurn
 	{
-		public ComponentStrongholdRightTurn(int i1, Random random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1, random2, structureBoundingBox3, i4)
+		public ComponentStrongholdRightTurn(int i1, RandomExtended random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1, random2, structureBoundingBox3, i4)
 		{
 		}
 
-		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, Random random3)
+		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, RandomExtended random3)
 		{
 			if (this.coordBaseMode != 2 && this.coordBaseMode != 3)
 			{
@@ -22,7 +23,7 @@ namespace net.minecraft.src
 
 		}
 
-		public override bool addComponentParts(World world1, Random random2, StructureBoundingBox structureBoundingBox3)
+		public override bool addComponentParts(World world1, RandomExtended random2, StructureBoundingBox structureBoundingBox3)
 		{
 			if (this.isLiquidInStructureBoundingBox(world1, structureBoundingBox3))
 			{

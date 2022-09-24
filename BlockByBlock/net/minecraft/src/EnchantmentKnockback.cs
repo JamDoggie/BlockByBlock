@@ -4,7 +4,7 @@
 	{
 		protected internal EnchantmentKnockback(int i1, int i2) : base(i1, i2, EnumEnchantmentType.weapon)
 		{
-			this.Name = "knockback";
+			Name = "knockback";
 		}
 
 		public override int getMinEnchantability(int i1)

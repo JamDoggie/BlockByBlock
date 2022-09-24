@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -7,13 +8,13 @@ namespace net.minecraft.src
 	{
 		private bool hasSpawner;
 
-		public ComponentStrongholdPortalRoom(int i1, Random random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
+		public ComponentStrongholdPortalRoom(int i1, RandomExtended random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
 		{
 			this.coordBaseMode = i4;
 			this.boundingBox = structureBoundingBox3;
 		}
 
-		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, Random random3)
+		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, RandomExtended random3)
 		{
 			if (structureComponent1 != null)
 			{
@@ -22,13 +23,13 @@ namespace net.minecraft.src
 
 		}
 
-		public static ComponentStrongholdPortalRoom findValidPlacement(System.Collections.IList list0, Random random1, int i2, int i3, int i4, int i5, int i6)
+		public static ComponentStrongholdPortalRoom findValidPlacement(System.Collections.IList list0, RandomExtended random1, int i2, int i3, int i4, int i5, int i6)
 		{
 			StructureBoundingBox structureBoundingBox7 = StructureBoundingBox.getComponentToAddBoundingBox(i2, i3, i4, -4, -1, 0, 11, 8, 16, i5);
 			return canStrongholdGoDeeper(structureBoundingBox7) && StructureComponent.findIntersecting(list0, structureBoundingBox7) == null ? new ComponentStrongholdPortalRoom(i6, random1, structureBoundingBox7, i5) : null;
 		}
 
-		public override bool addComponentParts(World world1, Random random2, StructureBoundingBox structureBoundingBox3)
+		public override bool addComponentParts(World world1, RandomExtended random2, StructureBoundingBox structureBoundingBox3)
 		{
 			this.fillWithRandomizedBlocks(world1, structureBoundingBox3, 0, 0, 0, 10, 7, 15, false, random2, StructureStrongholdPieces.StrongholdStones);
 			this.placeDoor(world1, random2, structureBoundingBox3, EnumDoor.GRATES, 4, 1, 0);
@@ -95,18 +96,18 @@ namespace net.minecraft.src
 			break;
 			}
 
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b14 + (random2.nextFloat() > 0.9F ? 4 : 0), 4, 3, 8, structureBoundingBox3);
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b14 + (random2.nextFloat() > 0.9F ? 4 : 0), 5, 3, 8, structureBoundingBox3);
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b14 + (random2.nextFloat() > 0.9F ? 4 : 0), 6, 3, 8, structureBoundingBox3);
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b7 + (random2.nextFloat() > 0.9F ? 4 : 0), 4, 3, 12, structureBoundingBox3);
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b7 + (random2.nextFloat() > 0.9F ? 4 : 0), 5, 3, 12, structureBoundingBox3);
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b7 + (random2.nextFloat() > 0.9F ? 4 : 0), 6, 3, 12, structureBoundingBox3);
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b8 + (random2.nextFloat() > 0.9F ? 4 : 0), 3, 3, 9, structureBoundingBox3);
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b8 + (random2.nextFloat() > 0.9F ? 4 : 0), 3, 3, 10, structureBoundingBox3);
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b8 + (random2.nextFloat() > 0.9F ? 4 : 0), 3, 3, 11, structureBoundingBox3);
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b9 + (random2.nextFloat() > 0.9F ? 4 : 0), 7, 3, 9, structureBoundingBox3);
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b9 + (random2.nextFloat() > 0.9F ? 4 : 0), 7, 3, 10, structureBoundingBox3);
-			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b9 + (random2.nextFloat() > 0.9F ? 4 : 0), 7, 3, 11, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b14 + (random2.NextSingle() > 0.9F ? 4 : 0), 4, 3, 8, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b14 + (random2.NextSingle() > 0.9F ? 4 : 0), 5, 3, 8, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b14 + (random2.NextSingle() > 0.9F ? 4 : 0), 6, 3, 8, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b7 + (random2.NextSingle() > 0.9F ? 4 : 0), 4, 3, 12, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b7 + (random2.NextSingle() > 0.9F ? 4 : 0), 5, 3, 12, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b7 + (random2.NextSingle() > 0.9F ? 4 : 0), 6, 3, 12, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b8 + (random2.NextSingle() > 0.9F ? 4 : 0), 3, 3, 9, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b8 + (random2.NextSingle() > 0.9F ? 4 : 0), 3, 3, 10, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b8 + (random2.NextSingle() > 0.9F ? 4 : 0), 3, 3, 11, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b9 + (random2.NextSingle() > 0.9F ? 4 : 0), 7, 3, 9, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b9 + (random2.NextSingle() > 0.9F ? 4 : 0), 7, 3, 10, structureBoundingBox3);
+			this.placeBlockAtCurrentPosition(world1, Block.endPortalFrame.blockID, b9 + (random2.NextSingle() > 0.9F ? 4 : 0), 7, 3, 11, structureBoundingBox3);
 			if (!this.hasSpawner)
 			{
 				int i13 = this.getYWithOffset(3);

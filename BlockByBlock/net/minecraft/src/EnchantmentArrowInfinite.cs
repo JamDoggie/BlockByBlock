@@ -4,7 +4,7 @@
 	{
 		public EnchantmentArrowInfinite(int i1, int i2) : base(i1, i2, EnumEnchantmentType.bow)
 		{
-			this.Name = "arrowInfinite";
+			Name = "arrowInfinite";
 		}
 
 		public override int getMinEnchantability(int i1)

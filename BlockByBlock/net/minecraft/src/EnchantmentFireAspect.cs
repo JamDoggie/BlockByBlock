@@ -4,7 +4,7 @@
 	{
 		protected internal EnchantmentFireAspect(int i1, int i2) : base(i1, i2, EnumEnchantmentType.weapon)
 		{
-			this.Name = "fire";
+			Name = "fire";
 		}
 
 		public override int getMinEnchantability(int i1)

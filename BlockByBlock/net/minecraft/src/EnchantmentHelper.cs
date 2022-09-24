@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
 
 	public class EnchantmentHelper
 	{
-		private static readonly Random enchantmentRand = new Random();
+		private static readonly RandomExtended enchantmentRand = new RandomExtended();
 		private static readonly EnchantmentModifierDamage enchantmentModifierDamage = new EnchantmentModifierDamage((Empty3)null);
 		private static readonly EnchantmentModifierLiving enchantmentModifierLiving = new EnchantmentModifierLiving((Empty3)null);
 
@@ -159,7 +160,7 @@ namespace net.minecraft.src
 			return getMaxEnchantmentLevel(Enchantment.aquaAffinity.effectId, inventoryPlayer0.armorInventory) > 0;
 		}
 
-		public static int calcItemStackEnchantability(Random random0, int i1, int i2, ItemStack itemStack3)
+		public static int calcItemStackEnchantability(RandomExtended random0, int i1, int i2, ItemStack itemStack3)
 		{
 			Item item4 = itemStack3.Item;
 			int i5 = item4.ItemEnchantability;
@@ -180,7 +181,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public static void func_48441_a(Random random0, ItemStack itemStack1, int i2)
+		public static void func_48441_a(RandomExtended random0, ItemStack itemStack1, int i2)
 		{
 			System.Collections.IList list3 = buildEnchantmentList(random0, itemStack1, i2);
 			if (list3 != null)
@@ -195,8 +196,8 @@ namespace net.minecraft.src
 			}
 
 		}
-
-		public static System.Collections.IList buildEnchantmentList(Random random0, ItemStack itemStack1, int i2)
+        
+		public static System.Collections.IList buildEnchantmentList(RandomExtended random0, ItemStack itemStack1, int i2)
 		{
 			Item item3 = itemStack1.Item;
 			int i4 = item3.ItemEnchantability;
@@ -208,7 +209,7 @@ namespace net.minecraft.src
 			{
 				i4 = 1 + random0.Next((i4 >> 1) + 1) + random0.Next((i4 >> 1) + 1);
 				int i5 = i4 + i2;
-				float f6 = (random0.nextFloat() + random0.nextFloat() - 1.0F) * 0.25F;
+				float f6 = (random0.NextSingle() + random0.NextSingle() - 1.0F) * 0.25F;
 				int i7 = (int)((float)i5 * (1.0F + f6) + 0.5F);
 				ArrayList arrayList8 = null;
 				System.Collections.IDictionary map9 = mapEnchantmentData(i7, itemStack1);
@@ -223,6 +224,8 @@ namespace net.minecraft.src
 						for (int i11 = i7 >> 1; random0.Next(50) <= i11; i11 >>= 1)
 						{
 							System.Collections.IEnumerator iterator12 = map9.Keys.GetEnumerator();
+
+							List<int> toRemove = new();
 
 							while (iterator12.MoveNext())
 							{
@@ -242,10 +245,14 @@ namespace net.minecraft.src
 
 								if (!z14)
 								{
-//JAVA TO C# CONVERTER TODO TASK: .NET enumerators are read-only:
-									iterator12.remove();
+									toRemove.Add(integer13.Value);
 								}
 							}
+
+							foreach(int i in toRemove)
+                            {
+								map9.Remove(i);
+                            }
 
 							if (map9.Count > 0)
 							{

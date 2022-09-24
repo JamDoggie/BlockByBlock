@@ -3,7 +3,7 @@
 namespace net.minecraft.src
 {
 
-	internal abstract class ComponentStronghold : StructureComponent
+	public abstract class ComponentStronghold : StructureComponent
 	{
 		protected internal ComponentStronghold(int i1) : base(i1)
 		{
@@ -11,7 +11,7 @@ namespace net.minecraft.src
 
 		protected internal virtual void placeDoor(World world1, Random random2, StructureBoundingBox structureBoundingBox3, EnumDoor enumDoor4, int i5, int i6, int i7)
 		{
-			switch (EnumDoorHelper.doorEnum[enumDoor4.ordinal()])
+			switch (EnumDoorHelper.doorEnum[(int)enumDoor4])
 			{
 			case 1:
 			default:

@@ -727,7 +727,7 @@ namespace net.minecraft.src
 				{
 					return false;
 				}
-				else if (damageSource1.fireDamage() && this.isPotionActive(Potion.fireResistance))
+				else if (damageSource1.getFireDamage() && this.isPotionActive(Potion.fireResistance))
 				{
 					return false;
 				}

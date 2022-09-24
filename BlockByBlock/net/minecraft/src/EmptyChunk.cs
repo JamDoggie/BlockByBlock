@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -134,9 +135,9 @@ namespace net.minecraft.src
 			return false;
 		}
 
-		public override Random getRandomWithSeed(long j1)
+		public override RandomExtended getRandomWithSeed(long j1)
 		{
-			return new Random(this.worldObj.Seed + (long)(this.xPosition * this.xPosition * 4987142) + (long)(this.xPosition * 5947611) + (long)(this.zPosition * this.zPosition) * 4392871L + (long)(this.zPosition * 389711) ^ j1);
+			return new RandomExtended(this.worldObj.Seed + (long)(this.xPosition * this.xPosition * 4987142) + (long)(this.xPosition * 5947611) + (long)(this.zPosition * this.zPosition) * 4392871L + (long)(this.zPosition * 389711) ^ j1);
 		}
 
 		public override bool Empty

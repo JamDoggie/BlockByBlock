@@ -70,9 +70,9 @@ namespace net.minecraft.src
 			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public static Packet readPacket(java.io.DataInputStream dataInputStream0, boolean z1) throws java.io.IOException
-		public static Packet readPacket(DataInputStream dataInputStream0, bool z1)
+		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+		// ORIGINAL LINE: public static Packet readPacket(java.io.DataInputStream dataInputStream0, boolean z1) throws java.io.IOException
+		public static Packet readPacket(BinaryReader dataInputStream0, bool z1)
 		{
 			bool z2 = false;
 			Packet packet3 = null;
@@ -80,7 +80,7 @@ namespace net.minecraft.src
 			int i6;
 			try
 			{
-				i6 = dataInputStream0.read();
+				i6 = dataInputStream0.ReadByte();
 				if (i6 == -1)
 				{
 					return null;
@@ -101,7 +101,7 @@ namespace net.minecraft.src
 				++field_48158_m;
 				field_48156_n += (long)packet3.PacketSize;
 			}
-			catch (EOFException)
+			catch (EndOfStreamException)
 			{
 				Console.WriteLine("Reached end of stream");
 				return null;
@@ -113,9 +113,9 @@ namespace net.minecraft.src
 			return packet3;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public static void writePacket(Packet packet0, java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public static void writePacket(Packet packet0, DataOutputStream dataOutputStream1)
+		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+		// ORIGINAL LINE: public static void writePacket(Packet packet0, java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
+		public static void writePacket(Packet packet0, BinaryWriter dataOutputStream1)
 		{
 			dataOutputStream1.write(packet0.PacketId);
 			packet0.writePacketData(dataOutputStream1);
@@ -123,9 +123,9 @@ namespace net.minecraft.src
 			field_48155_p += (long)packet0.PacketSize;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public static void writeString(String string0, java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public static void writeString(string string0, DataOutputStream dataOutputStream1)
+		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+		// ORIGINAL LINE: public static void writeString(String string0, java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
+		public static void writeString(string string0, BinaryWriter dataOutputStream1)
 		{
 			if (string0.Length > 32767)
 			{
@@ -133,16 +133,16 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				dataOutputStream1.writeShort(string0.Length);
-				dataOutputStream1.writeChars(string0);
+				dataOutputStream1.Write((short)string0.Length);
+				dataOutputStream1.Write(string0.ToArray());
 			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public static String readString(java.io.DataInputStream dataInputStream0, int i1) throws java.io.IOException
-		public static string readString(DataInputStream dataInputStream0, int i1)
+		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+		// ORIGINAL LINE: public static String readString(java.io.DataInputStream dataInputStream0, int i1) throws java.io.IOException
+		public static string readString(BinaryReader dataInputStream0, int i1)
 		{
-			short s2 = dataInputStream0.readShort();
+			short s2 = dataInputStream0.ReadInt16();
 			if (s2 > i1)
 			{
 				throw new IOException("Received string length longer than maximum allowed (" + s2 + " > " + i1 + ")");
@@ -157,35 +157,35 @@ namespace net.minecraft.src
 
 				for (int i4 = 0; i4 < s2; ++i4)
 				{
-					stringBuilder3.Append(dataInputStream0.readChar());
+					stringBuilder3.Append(dataInputStream0.ReadChar());
 				}
 
 				return stringBuilder3.ToString();
 			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public abstract void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException;
-		public abstract void readPacketData(DataInputStream dataInputStream1);
+		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+		// ORIGINAL LINE: public abstract void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException;
+		public abstract void readPacketData(BinaryReader dataInputStream1);
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public abstract void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException;
-		public abstract void writePacketData(DataOutputStream dataOutputStream1);
+		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+		// ORIGINAL LINE: public abstract void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException;
+		public abstract void writePacketData(BinaryWriter dataOutputStream1);
 
 		public abstract void processPacket(NetHandler netHandler1);
 
 		public abstract int PacketSize {get;}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: protected ItemStack readItemStack(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		protected internal virtual ItemStack readItemStack(DataInputStream dataInputStream1)
+		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+		// ORIGINAL LINE: protected ItemStack readItemStack(java.io.DataInputStream dataInputStream1) throws java.io.IOException
+		protected internal virtual ItemStack readItemStack(BinaryReader dataInputStream1)
 		{
 			ItemStack itemStack2 = null;
-			short s3 = dataInputStream1.readShort();
+			short s3 = dataInputStream1.ReadInt16();
 			if (s3 >= 0)
 			{
-				sbyte b4 = dataInputStream1.readByte();
-				short s5 = dataInputStream1.readShort();
+				sbyte b4 = dataInputStream1.ReadSByte();
+				short s5 = dataInputStream1.ReadInt16();
 				itemStack2 = new ItemStack(s3, b4, s5);
 				if (Item.itemsList[s3].Damageable || Item.itemsList[s3].func_46056_k())
 				{
@@ -196,19 +196,19 @@ namespace net.minecraft.src
 			return itemStack2;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: protected void writeItemStack(ItemStack itemStack1, java.io.DataOutputStream dataOutputStream2) throws java.io.IOException
-		protected internal virtual void writeItemStack(ItemStack itemStack1, DataOutputStream dataOutputStream2)
+		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+		// ORIGINAL LINE: protected void writeItemStack(ItemStack itemStack1, java.io.DataOutputStream dataOutputStream2) throws java.io.IOException
+		protected internal virtual void writeItemStack(ItemStack itemStack1, BinaryWriter dataOutputStream2)
 		{
 			if (itemStack1 == null)
 			{
-				dataOutputStream2.writeShort(-1);
+				dataOutputStream2.Write((short)-1);
 			}
 			else
 			{
-				dataOutputStream2.writeShort(itemStack1.itemID);
-				dataOutputStream2.writeByte(itemStack1.stackSize);
-				dataOutputStream2.writeShort(itemStack1.ItemDamage);
+				dataOutputStream2.Write((short)itemStack1.itemID);
+				dataOutputStream2.Write((sbyte)itemStack1.stackSize);
+				dataOutputStream2.Write((short)itemStack1.ItemDamage);
 				if (itemStack1.Item.Damageable || itemStack1.Item.func_46056_k())
 				{
 					this.writeNBTTagCompound(itemStack1.stackTagCompound, dataOutputStream2);
@@ -217,36 +217,36 @@ namespace net.minecraft.src
 
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: protected NBTTagCompound readNBTTagCompound(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		protected internal virtual NBTTagCompound readNBTTagCompound(DataInputStream dataInputStream1)
+		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+		// ORIGINAL LINE: protected NBTTagCompound readNBTTagCompound(java.io.DataInputStream dataInputStream1) throws java.io.IOException
+		protected internal virtual NBTTagCompound readNBTTagCompound(BinaryReader dataInputStream1)
 		{
-			short s2 = dataInputStream1.readShort();
+			short s2 = dataInputStream1.ReadInt16();
 			if (s2 < 0)
 			{
 				return null;
 			}
 			else
 			{
-				sbyte[] b3 = new sbyte[s2];
-				dataInputStream1.readFully(b3);
+				byte[] b3 = new byte[s2];
+				dataInputStream1.Read(b3);
 				return CompressedStreamTools.decompress(b3);
 			}
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: protected void writeNBTTagCompound(NBTTagCompound nBTTagCompound1, java.io.DataOutputStream dataOutputStream2) throws java.io.IOException
-		protected internal virtual void writeNBTTagCompound(NBTTagCompound nBTTagCompound1, DataOutputStream dataOutputStream2)
+        
+		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
+		// ORIGINAL LINE: protected void writeNBTTagCompound(NBTTagCompound nBTTagCompound1, java.io.DataOutputStream dataOutputStream2) throws java.io.IOException
+		protected internal virtual void writeNBTTagCompound(NBTTagCompound nBTTagCompound1, BinaryWriter dataOutputStream2)
 		{
 			if (nBTTagCompound1 == null)
 			{
-				dataOutputStream2.writeShort(-1);
+				dataOutputStream2.Write((short)-1);
 			}
 			else
 			{
-				sbyte[] b3 = CompressedStreamTools.compress(nBTTagCompound1);
-				dataOutputStream2.writeShort((short)b3.Length);
-				dataOutputStream2.write(b3);
+				byte[] b3 = CompressedStreamTools.compress(nBTTagCompound1);
+				dataOutputStream2.Write((short)b3.Length);
+				dataOutputStream2.Write(b3);
 			}
 
 		}

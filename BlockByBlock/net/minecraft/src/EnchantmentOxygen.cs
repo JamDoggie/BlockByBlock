@@ -4,7 +4,7 @@
 	{
 		public EnchantmentOxygen(int i1, int i2) : base(i1, i2, EnumEnchantmentType.armor_head)
 		{
-			this.Name = "oxygen";
+			Name = "oxygen";
 		}
 
 		public override int getMinEnchantability(int i1)
@@ -14,7 +14,7 @@
 
 		public override int getMaxEnchantability(int i1)
 		{
-			return this.getMinEnchantability(i1) + 30;
+			return getMinEnchantability(i1) + 30;
 		}
 
 		public override int MaxLevel

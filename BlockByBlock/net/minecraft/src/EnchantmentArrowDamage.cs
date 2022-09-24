@@ -4,7 +4,7 @@
 	{
 		public EnchantmentArrowDamage(int i1, int i2) : base(i1, i2, EnumEnchantmentType.bow)
 		{
-			this.Name = "arrowDamage";
+			Name = "arrowDamage";
 		}
 
 		public override int getMinEnchantability(int i1)

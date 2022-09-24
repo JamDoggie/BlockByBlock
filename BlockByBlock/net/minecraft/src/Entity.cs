@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -48,7 +49,7 @@ namespace net.minecraft.src
 		public float stepHeight = 0.0F;
 		public bool noClip = false;
 		public float entityCollisionReduction = 0.0F;
-		protected internal Random rand = new Random();
+		protected internal RandomExtended rand = new RandomExtended();
 		public int ticksExisted = 0;
 		public int fireResistance = 1;
 		private int fire = 0;
@@ -196,7 +197,7 @@ namespace net.minecraft.src
 				int i4 = this.worldObj.getBlockId(i1, i2, i3);
 				if (i4 > 0)
 				{
-					this.worldObj.spawnParticle("tilecrack_" + i4, this.posX + ((double)this.rand.nextFloat() - 0.5D) * (double)this.width, this.boundingBox.minY + 0.1D, this.posZ + ((double)this.rand.nextFloat() - 0.5D) * (double)this.width, -this.motionX * 4.0D, 1.5D, -this.motionZ * 4.0D);
+					this.worldObj.spawnParticle("tilecrack_" + i4, this.posX + ((double)this.rand.NextSingle() - 0.5D) * (double)this.width, this.boundingBox.minY + 0.1D, this.posZ + ((double)this.rand.NextSingle() - 0.5D) * (double)this.width, -this.motionX * 4.0D, 1.5D, -this.motionZ * 4.0D);
 				}
 			}
 
@@ -210,22 +211,22 @@ namespace net.minecraft.src
 						f6 = 1.0F;
 					}
 
-					this.worldObj.playSoundAtEntity(this, "random.splash", f6, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4F);
+					this.worldObj.playSoundAtEntity(this, "random.splash", f6, 1.0F + (this.rand.NextSingle() - this.rand.NextSingle()) * 0.4F);
 					float f7 = (float)MathHelper.floor_double(this.boundingBox.minY);
 
 					float f5;
 					float f8;
 					for (i3 = 0; (float)i3 < 1.0F + this.width * 20.0F; ++i3)
 					{
-						f8 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width;
-						f5 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width;
-						this.worldObj.spawnParticle("bubble", this.posX + (double)f8, (double)(f7 + 1.0F), this.posZ + (double)f5, this.motionX, this.motionY - (double)(this.rand.nextFloat() * 0.2F), this.motionZ);
+						f8 = (this.rand.NextSingle() * 2.0F - 1.0F) * this.width;
+						f5 = (this.rand.NextSingle() * 2.0F - 1.0F) * this.width;
+						this.worldObj.spawnParticle("bubble", this.posX + (double)f8, (double)(f7 + 1.0F), this.posZ + (double)f5, this.motionX, this.motionY - (double)(this.rand.NextSingle() * 0.2F), this.motionZ);
 					}
 
 					for (i3 = 0; (float)i3 < 1.0F + this.width * 20.0F; ++i3)
 					{
-						f8 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width;
-						f5 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width;
+						f8 = (this.rand.NextSingle() * 2.0F - 1.0F) * this.width;
+						f5 = (this.rand.NextSingle() * 2.0F - 1.0F) * this.width;
 						this.worldObj.spawnParticle("splash", this.posX + (double)f8, (double)(f7 + 1.0F), this.posZ + (double)f5, this.motionX, this.motionY, this.motionZ);
 					}
 				}
@@ -651,7 +652,7 @@ namespace net.minecraft.src
 
 				if (z41 && this.fire > 0)
 				{
-					this.worldObj.playSoundAtEntity(this, "random.fizz", 0.7F, 1.6F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4F);
+					this.worldObj.playSoundAtEntity(this, "random.fizz", 0.7F, 1.6F + (this.rand.NextSingle() - this.rand.NextSingle()) * 0.4F);
 					this.fire = -this.fireResistance;
 				}
 
@@ -1537,7 +1538,7 @@ namespace net.minecraft.src
 					b22 = 5;
 				}
 
-				float f25 = this.rand.nextFloat() * 0.2F + 0.1F;
+				float f25 = this.rand.NextSingle() * 0.2F + 0.1F;
 				if (b22 == 0)
 				{
 					this.motionX = (double)(-f25);

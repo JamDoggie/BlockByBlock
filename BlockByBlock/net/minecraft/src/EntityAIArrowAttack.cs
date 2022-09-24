@@ -87,7 +87,7 @@ namespace net.minecraft.src
 			if (this.rangedAttackID == 1)
 			{
 				EntityArrow entityArrow1 = new EntityArrow(this.worldObj, this.entityHost, this.attackTarget, 1.6F, 12.0F);
-				this.worldObj.playSoundAtEntity(this.entityHost, "random.bow", 1.0F, 1.0F / (this.entityHost.RNG.nextFloat() * 0.4F + 0.8F));
+				this.worldObj.playSoundAtEntity(this.entityHost, "random.bow", 1.0F, 1.0F / (this.entityHost.RNG.NextSingle() * 0.4F + 0.8F));
 				this.worldObj.spawnEntityInWorld(entityArrow1);
 			}
 			else if (this.rangedAttackID == 2)
@@ -98,7 +98,7 @@ namespace net.minecraft.src
 				double d6 = this.attackTarget.posZ - this.entityHost.posZ;
 				float f8 = MathHelper.sqrt_double(d2 * d2 + d6 * d6) * 0.2F;
 				entitySnowball9.setThrowableHeading(d2, d4 + (double)f8, d6, 1.6F, 12.0F);
-				this.worldObj.playSoundAtEntity(this.entityHost, "random.bow", 1.0F, 1.0F / (this.entityHost.RNG.nextFloat() * 0.4F + 0.8F));
+				this.worldObj.playSoundAtEntity(this.entityHost, "random.bow", 1.0F, 1.0F / (this.entityHost.RNG.NextSingle() * 0.4F + 0.8F));
 				this.worldObj.spawnEntityInWorld(entitySnowball9);
 			}
 

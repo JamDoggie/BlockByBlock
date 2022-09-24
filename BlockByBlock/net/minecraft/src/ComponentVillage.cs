@@ -1,9 +1,10 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
 
-	internal abstract class ComponentVillage : StructureComponent
+	public abstract class ComponentVillage : StructureComponent
 	{
 		private int villagersSpawned;
 
@@ -11,7 +12,7 @@ namespace net.minecraft.src
 		{
 		}
 
-		protected internal virtual StructureComponent getNextComponentNN(ComponentVillageStartPiece componentVillageStartPiece1, System.Collections.IList list2, Random random3, int i4, int i5)
+		protected internal virtual StructureComponent getNextComponentNN(ComponentVillageStartPiece componentVillageStartPiece1, System.Collections.IList list2, RandomExtended random3, int i4, int i5)
 		{
 			switch (this.coordBaseMode)
 			{
@@ -28,7 +29,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		protected internal virtual StructureComponent getNextComponentPP(ComponentVillageStartPiece componentVillageStartPiece1, System.Collections.IList list2, Random random3, int i4, int i5)
+		protected internal virtual StructureComponent getNextComponentPP(ComponentVillageStartPiece componentVillageStartPiece1, System.Collections.IList list2, RandomExtended random3, int i4, int i5)
 		{
 			switch (this.coordBaseMode)
 			{

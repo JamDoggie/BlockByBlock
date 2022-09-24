@@ -6,6 +6,8 @@ namespace net.minecraft.src
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	public class EffectRenderer
 	{
 		protected internal World worldObj;

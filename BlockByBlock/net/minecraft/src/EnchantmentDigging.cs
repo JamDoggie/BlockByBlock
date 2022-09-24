@@ -4,7 +4,7 @@
 	{
 		protected internal EnchantmentDigging(int i1, int i2) : base(i1, i2, EnumEnchantmentType.digger)
 		{
-			this.Name = "digging";
+			Name = "digging";
 		}
 
 		public override int getMinEnchantability(int i1)

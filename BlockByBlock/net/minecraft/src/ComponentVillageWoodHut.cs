@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -9,25 +10,25 @@ namespace net.minecraft.src
 		private readonly bool isTallHouse;
 		private readonly int tablePosition;
 
-		public ComponentVillageWoodHut(int i1, Random random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
+		public ComponentVillageWoodHut(int i1, RandomExtended random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
 		{
 			this.coordBaseMode = i4;
 			this.boundingBox = structureBoundingBox3;
-			this.isTallHouse = random2.nextBoolean();
+			this.isTallHouse = random2.NextBool();
 			this.tablePosition = random2.Next(3);
 		}
 
-		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, Random random3)
+		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, RandomExtended random3)
 		{
 		}
 
-		public static ComponentVillageWoodHut findValidPlacement(System.Collections.IList list0, Random random1, int i2, int i3, int i4, int i5, int i6)
+		public static ComponentVillageWoodHut findValidPlacement(System.Collections.IList list0, RandomExtended random1, int i2, int i3, int i4, int i5, int i6)
 		{
 			StructureBoundingBox structureBoundingBox7 = StructureBoundingBox.getComponentToAddBoundingBox(i2, i3, i4, 0, 0, 0, 4, 6, 5, i5);
 			return canVillageGoDeeper(structureBoundingBox7) && StructureComponent.findIntersecting(list0, structureBoundingBox7) == null ? new ComponentVillageWoodHut(i6, random1, structureBoundingBox7, i5) : null;
 		}
 
-		public override bool addComponentParts(World world1, Random random2, StructureBoundingBox structureBoundingBox3)
+		public override bool addComponentParts(World world1, RandomExtended random2, StructureBoundingBox structureBoundingBox3)
 		{
 			if (this.averageGroundLevel < 0)
 			{
