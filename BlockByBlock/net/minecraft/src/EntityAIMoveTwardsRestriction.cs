@@ -17,23 +17,23 @@
 
 		public override bool shouldExecute()
 		{
-			if (this.theEntity.WithinHomeDistanceCurrentPosition)
+			if (theEntity.WithinHomeDistanceCurrentPosition)
 			{
 				return false;
 			}
 			else
 			{
 				ChunkCoordinates chunkCoordinates1 = this.theEntity.HomePosition;
-				Vec3D vec3D2 = RandomPositionGenerator.func_48620_a(this.theEntity, 16, 7, Vec3D.createVector((double)chunkCoordinates1.posX, (double)chunkCoordinates1.posY, (double)chunkCoordinates1.posZ));
+				Vec3D? vec3D2 = RandomPositionGenerator.func_48620_a(this.theEntity, 16, 7, Vec3D.createVector((double)chunkCoordinates1.posX, (double)chunkCoordinates1.posY, (double)chunkCoordinates1.posZ));
 				if (vec3D2 == null)
 				{
 					return false;
 				}
 				else
 				{
-					this.movePosX = vec3D2.xCoord;
-					this.movePosY = vec3D2.yCoord;
-					this.movePosZ = vec3D2.zCoord;
+					movePosX = vec3D2.xCoord;
+					movePosY = vec3D2.yCoord;
+					movePosZ = vec3D2.zCoord;
 					return true;
 				}
 			}

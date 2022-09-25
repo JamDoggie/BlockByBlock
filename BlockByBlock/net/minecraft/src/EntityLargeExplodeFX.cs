@@ -2,6 +2,8 @@
 {
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	public class EntityLargeExplodeFX : EntityFX
 	{
 		private int field_35130_a = 0;
@@ -13,7 +15,7 @@
 		{
 			this.field_35128_az = renderEngine1;
 			this.field_35129_ay = 6 + this.rand.Next(4);
-			this.particleRed = this.particleGreen = this.particleBlue = this.rand.nextFloat() * 0.6F + 0.4F;
+			this.particleRed = this.particleGreen = this.particleBlue = this.rand.NextSingle() * 0.6F + 0.4F;
 			this.field_35131_aA = 1.0F - (float)d9 * 0.5F;
 		}
 

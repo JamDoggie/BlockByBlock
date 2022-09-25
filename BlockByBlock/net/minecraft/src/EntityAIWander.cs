@@ -27,7 +27,7 @@
 			}
 			else
 			{
-				Vec3D vec3D1 = RandomPositionGenerator.func_48622_a(this.entity, 10, 7);
+				Vec3D? vec3D1 = RandomPositionGenerator.func_48622_a(this.entity, 10, 7);
 				if (vec3D1 == null)
 				{
 					return false;

@@ -426,7 +426,7 @@ namespace net.minecraft.src
 			this.looksWithInterest = z1;
 		}
 
-		public override bool func_48135_b(EntityAnimal entityAnimal1)
+		public override bool canMateWith(EntityAnimal entityAnimal1)
 		{
 			if (entityAnimal1 == this)
 			{

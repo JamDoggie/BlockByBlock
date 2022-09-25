@@ -3,7 +3,7 @@
 	public class EntityAIMoveTowardsTarget : EntityAIBase
 	{
 		private EntityCreature theEntity;
-		private EntityLiving targetEntity;
+		private EntityLiving? targetEntity;
 		private double movePosX;
 		private double movePosY;
 		private double movePosZ;

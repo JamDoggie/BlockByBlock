@@ -180,11 +180,11 @@ namespace net.minecraft.src
 
 				for (int i10 = 0; (double)i10 < 1.0D + d21 * 60.0D; ++i10)
 				{
-					double d11 = (double)(this.rand.nextFloat() * 2.0F - 1.0F);
+					double d11 = (double)(this.rand.NextSingle() * 2.0F - 1.0F);
 					double d13 = (double)(this.rand.Next(2) * 2 - 1) * 0.7D;
 					double d15;
 					double d17;
-					if (this.rand.nextBoolean())
+					if (this.rand.NextBool())
 					{
 						d15 = this.posX - d6 * d11 * 0.8D + d8 * d13;
 						d17 = this.posZ - d8 * d11 * 0.8D - d6 * d13;
@@ -394,11 +394,11 @@ namespace net.minecraft.src
 			}
 		}
 
-		protected internal override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
+		public override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
 		{
 		}
 
-		protected internal override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
+		public override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
 		{
 		}
 

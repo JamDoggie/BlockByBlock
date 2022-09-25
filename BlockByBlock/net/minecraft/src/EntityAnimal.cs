@@ -36,10 +36,10 @@ namespace net.minecraft.src
 				string string1 = "heart";
 				if (this.inLove % 10 == 0)
 				{
-					double d2 = this.rand.nextGaussian() * 0.02D;
-					double d4 = this.rand.nextGaussian() * 0.02D;
-					double d6 = this.rand.nextGaussian() * 0.02D;
-					this.worldObj.spawnParticle(string1, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d2, d4, d6);
+					double d2 = this.rand.NextGaussian() * 0.02D;
+					double d4 = this.rand.NextGaussian() * 0.02D;
+					double d6 = this.rand.NextGaussian() * 0.02D;
+					this.worldObj.spawnParticle(string1, this.posX + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.NextSingle() * this.height), this.posZ + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, d2, d4, d6);
 				}
 			}
 			else
@@ -91,7 +91,7 @@ namespace net.minecraft.src
 						++this.breeding;
 						if (this.breeding % 4 == 0)
 						{
-							this.worldObj.spawnParticle("heart", this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, 0.0D, 0.0D, 0.0D);
+							this.worldObj.spawnParticle("heart", this.posX + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.NextSingle() * this.height), this.posZ + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, 0.0D, 0.0D, 0.0D);
 						}
 
 						if (this.breeding == 60)
@@ -131,10 +131,10 @@ namespace net.minecraft.src
 
 				for (int i3 = 0; i3 < 7; ++i3)
 				{
-					double d4 = this.rand.nextGaussian() * 0.02D;
-					double d6 = this.rand.nextGaussian() * 0.02D;
-					double d8 = this.rand.nextGaussian() * 0.02D;
-					this.worldObj.spawnParticle("heart", this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d4, d6, d8);
+					double d4 = this.rand.NextGaussian() * 0.02D;
+					double d6 = this.rand.NextGaussian() * 0.02D;
+					double d8 = this.rand.NextGaussian() * 0.02D;
+					this.worldObj.spawnParticle("heart", this.posX + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.NextSingle() * this.height), this.posZ + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, d4, d6, d8);
 				}
 
 				this.worldObj.spawnEntityInWorld(entityAnimal2);
@@ -282,10 +282,10 @@ namespace net.minecraft.src
 
 				for (int i3 = 0; i3 < 7; ++i3)
 				{
-					double d4 = this.rand.nextGaussian() * 0.02D;
-					double d6 = this.rand.nextGaussian() * 0.02D;
-					double d8 = this.rand.nextGaussian() * 0.02D;
-					this.worldObj.spawnParticle("heart", this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d4, d6, d8);
+					double d4 = this.rand.NextGaussian() * 0.02D;
+					double d6 = this.rand.NextGaussian() * 0.02D;
+					double d8 = this.rand.NextGaussian() * 0.02D;
+					this.worldObj.spawnParticle("heart", this.posX + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.NextSingle() * this.height), this.posZ + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, d4, d6, d8);
 				}
 
 				return true;
@@ -309,7 +309,7 @@ namespace net.minecraft.src
 			this.inLove = 0;
 		}
 
-		public virtual bool func_48135_b(EntityAnimal entityAnimal1)
+		public virtual bool canMateWith(EntityAnimal entityAnimal1)
 		{
 			return entityAnimal1 == this ? false : (entityAnimal1.GetType() != this.GetType() ? false : this.InLove && entityAnimal1.InLove);
 		}

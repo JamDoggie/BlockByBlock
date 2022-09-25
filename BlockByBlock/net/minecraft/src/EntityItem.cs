@@ -6,7 +6,7 @@
 		public int age = 0;
 		public int delayBeforeCanPickup;
 		private int health = 5;
-		public float field_804_d = (float)(MathHelper.NextDouble * Math.PI * 2.0D);
+		public float field_804_d = (float)(portinghelpers.MathHelper.NextDouble * Math.PI * 2.0D);
 
 		public EntityItem(World world1, double d2, double d4, double d6, ItemStack itemStack8) : base(world1)
 		{
@@ -14,10 +14,10 @@
 			this.yOffset = this.height / 2.0F;
 			this.setPosition(d2, d4, d6);
 			this.item = itemStack8;
-			this.rotationYaw = (float)(MathHelper.NextDouble * 360.0D);
-			this.motionX = (double)((float)(MathHelper.NextDouble * (double)0.2F - (double)0.1F));
+			this.rotationYaw = (float)(portinghelpers.MathHelper.NextDouble * 360.0D);
+			this.motionX = (double)((float)(portinghelpers.MathHelper.NextDouble * (double)0.2F - (double)0.1F));
 			this.motionY = (double)0.2F;
-			this.motionZ = (double)((float)(MathHelper.NextDouble * (double)0.2F - (double)0.1F));
+			this.motionZ = (double)((float)(portinghelpers.MathHelper.NextDouble * (double)0.2F - (double)0.1F));
 		}
 
 		protected internal override bool canTriggerWalking()
@@ -50,9 +50,9 @@
 			if (this.worldObj.getBlockMaterial(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)) == Material.lava)
 			{
 				this.motionY = (double)0.2F;
-				this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-				this.motionZ = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-				this.worldObj.playSoundAtEntity(this, "random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
+				this.motionX = (double)((this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F);
+				this.motionZ = (double)((this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F);
+				this.worldObj.playSoundAtEntity(this, "random.fizz", 0.4F, 2.0F + this.rand.NextSingle() * 0.4F);
 			}
 
 			this.pushOutOfBlocks(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
@@ -153,7 +153,7 @@
 						entityPlayer1.triggerAchievement(AchievementList.blazeRod);
 					}
 
-					this.worldObj.playSoundAtEntity(this, "random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+					this.worldObj.playSoundAtEntity(this, "random.pop", 0.2F, ((this.rand.NextSingle() - this.rand.NextSingle()) * 0.7F + 1.0F) * 2.0F);
 					entityPlayer1.onItemPickup(this, i2);
 					if (this.item.stackSize <= 0)
 					{

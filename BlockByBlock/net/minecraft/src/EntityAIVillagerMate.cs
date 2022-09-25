@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -113,14 +114,14 @@ namespace net.minecraft.src
 
 		private void spawnHeartParticles(EntityLiving entityLiving1)
 		{
-			Random random2 = entityLiving1.RNG;
+			RandomExtended random2 = entityLiving1.RNG;
 
 			for (int i3 = 0; i3 < 5; ++i3)
 			{
-				double d4 = random2.nextGaussian() * 0.02D;
-				double d6 = random2.nextGaussian() * 0.02D;
-				double d8 = random2.nextGaussian() * 0.02D;
-				this.worldObj.spawnParticle("heart", entityLiving1.posX + (double)(random2.nextFloat() * entityLiving1.width * 2.0F) - (double)entityLiving1.width, entityLiving1.posY + 1.0D + (double)(random2.nextFloat() * entityLiving1.height), entityLiving1.posZ + (double)(random2.nextFloat() * entityLiving1.width * 2.0F) - (double)entityLiving1.width, d4, d6, d8);
+				double d4 = random2.NextGaussian() * 0.02D;
+				double d6 = random2.NextGaussian() * 0.02D;
+				double d8 = random2.NextGaussian() * 0.02D;
+				this.worldObj.spawnParticle("heart", entityLiving1.posX + (double)(random2.NextSingle() * entityLiving1.width * 2.0F) - (double)entityLiving1.width, entityLiving1.posY + 1.0D + (double)(random2.NextSingle() * entityLiving1.height), entityLiving1.posZ + (double)(random2.NextSingle() * entityLiving1.width * 2.0F) - (double)entityLiving1.width, d4, d6, d8);
 			}
 
 		}

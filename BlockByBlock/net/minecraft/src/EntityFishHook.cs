@@ -92,9 +92,9 @@ namespace net.minecraft.src
 			d1 /= (double)f9;
 			d3 /= (double)f9;
 			d5 /= (double)f9;
-			d1 += this.rand.nextGaussian() * (double)0.0075F * (double)f8;
-			d3 += this.rand.nextGaussian() * (double)0.0075F * (double)f8;
-			d5 += this.rand.nextGaussian() * (double)0.0075F * (double)f8;
+			d1 += this.rand.NextGaussian() * (double)0.0075F * (double)f8;
+			d3 += this.rand.NextGaussian() * (double)0.0075F * (double)f8;
+			d5 += this.rand.NextGaussian() * (double)0.0075F * (double)f8;
 			d1 *= (double)f7;
 			d3 *= (double)f7;
 			d5 *= (double)f7;
@@ -198,9 +198,9 @@ namespace net.minecraft.src
 					}
 
 					this.inGround = false;
-					this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
-					this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
-					this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
+					this.motionX *= (double)(this.rand.NextSingle() * 0.2F);
+					this.motionY *= (double)(this.rand.NextSingle() * 0.2F);
+					this.motionZ *= (double)(this.rand.NextSingle() * 0.2F);
 					this.ticksInGround = 0;
 					this.ticksInAir = 0;
 				}
@@ -329,7 +329,7 @@ namespace net.minecraft.src
 							{
 								this.ticksCatchable = this.rand.Next(30) + 10;
 								this.motionY -= (double)0.2F;
-								this.worldObj.playSoundAtEntity(this, "random.splash", 0.25F, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4F);
+								this.worldObj.playSoundAtEntity(this, "random.splash", 0.25F, 1.0F + (this.rand.NextSingle() - this.rand.NextSingle()) * 0.4F);
 								float f30 = (float)MathHelper.floor_double(this.boundingBox.minY);
 
 								int i15;
@@ -337,15 +337,15 @@ namespace net.minecraft.src
 								float f31;
 								for (i15 = 0; (float)i15 < 1.0F + this.width * 20.0F; ++i15)
 								{
-									f31 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width;
-									f17 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width;
-									this.worldObj.spawnParticle("bubble", this.posX + (double)f31, (double)(f30 + 1.0F), this.posZ + (double)f17, this.motionX, this.motionY - (double)(this.rand.nextFloat() * 0.2F), this.motionZ);
+									f31 = (this.rand.NextSingle() * 2.0F - 1.0F) * this.width;
+									f17 = (this.rand.NextSingle() * 2.0F - 1.0F) * this.width;
+									this.worldObj.spawnParticle("bubble", this.posX + (double)f31, (double)(f30 + 1.0F), this.posZ + (double)f17, this.motionX, this.motionY - (double)(this.rand.NextSingle() * 0.2F), this.motionZ);
 								}
 
 								for (i15 = 0; (float)i15 < 1.0F + this.width * 20.0F; ++i15)
 								{
-									f31 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width;
-									f17 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width;
+									f31 = (this.rand.NextSingle() * 2.0F - 1.0F) * this.width;
+									f17 = (this.rand.NextSingle() * 2.0F - 1.0F) * this.width;
 									this.worldObj.spawnParticle("splash", this.posX + (double)f31, (double)(f30 + 1.0F), this.posZ + (double)f17, this.motionX, this.motionY, this.motionZ);
 								}
 							}
@@ -354,7 +354,7 @@ namespace net.minecraft.src
 
 					if (this.ticksCatchable > 0)
 					{
-						this.motionY -= (double)(this.rand.nextFloat() * this.rand.nextFloat() * this.rand.nextFloat()) * 0.2D;
+						this.motionY -= (double)(this.rand.NextSingle() * this.rand.NextSingle() * this.rand.NextSingle()) * 0.2D;
 					}
 
 					d13 = d27 * 2.0D - 1.0D;

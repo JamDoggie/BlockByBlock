@@ -26,7 +26,7 @@
 			this.particleGravity = 0.06F;
 			this.materialType = material8;
 			this.bobTimer = 40;
-			this.particleMaxAge = (int)(64.0D / (MathHelper.NextDouble * 0.8D + 0.2D));
+			this.particleMaxAge = (int)(64.0D / (portinghelpers.MathHelper.NextDouble * 0.8D + 0.2D));
 			this.motionX = this.motionY = this.motionZ = 0.0D;
 		}
 

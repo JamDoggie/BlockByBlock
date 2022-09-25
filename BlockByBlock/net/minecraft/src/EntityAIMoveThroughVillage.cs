@@ -8,7 +8,7 @@ namespace net.minecraft.src
 		private EntityCreature theEntity;
 		private float field_48290_b;
 		private PathEntity field_48291_c;
-		private VillageDoorInfo doorInfo;
+		private VillageDoorInfo? doorInfo;
 		private bool field_48289_e;
 		private System.Collections.IList doorList = new ArrayList();
 
@@ -22,7 +22,7 @@ namespace net.minecraft.src
 
 		public override bool shouldExecute()
 		{
-			this.func_48286_h();
+			trimCheckedDoorQueue();
 			if (this.field_48289_e && this.theEntity.worldObj.Daytime)
 			{
 				return false;
@@ -53,7 +53,7 @@ namespace net.minecraft.src
 						}
 						else
 						{
-							Vec3D vec3D3 = RandomPositionGenerator.func_48620_a(this.theEntity, 10, 7, Vec3D.createVector((double)this.doorInfo.posX, (double)this.doorInfo.posY, (double)this.doorInfo.posZ));
+							Vec3D? vec3D3 = RandomPositionGenerator.func_48620_a(this.theEntity, 10, 7, Vec3D.createVector((double)this.doorInfo.posX, (double)this.doorInfo.posY, (double)this.doorInfo.posZ));
 							if (vec3D3 == null)
 							{
 								return false;
@@ -98,9 +98,9 @@ namespace net.minecraft.src
 
 		}
 
-		private VillageDoorInfo func_48284_a(Village village1)
+		private VillageDoorInfo? func_48284_a(Village village1)
 		{
-			VillageDoorInfo villageDoorInfo2 = null;
+			VillageDoorInfo? villageDoorInfo2 = null;
 			int i3 = int.MaxValue;
 			System.Collections.IList list4 = village1.VillageDoorInfoList;
 			System.Collections.IEnumerator iterator5 = list4.GetEnumerator();
@@ -109,7 +109,7 @@ namespace net.minecraft.src
 			{
 				VillageDoorInfo villageDoorInfo6 = (VillageDoorInfo)iterator5.Current;
 				int i7 = villageDoorInfo6.getDistanceSquared(MathHelper.floor_double(this.theEntity.posX), MathHelper.floor_double(this.theEntity.posY), MathHelper.floor_double(this.theEntity.posZ));
-				if (i7 < i3 && !this.func_48285_a(villageDoorInfo6))
+				if (i7 < i3 && !this.hasCheckedDoor(villageDoorInfo6))
 				{
 					villageDoorInfo2 = villageDoorInfo6;
 					i3 = i7;
@@ -118,28 +118,26 @@ namespace net.minecraft.src
 
 			return villageDoorInfo2;
 		}
-
-		private bool func_48285_a(VillageDoorInfo villageDoorInfo1)
+		
+		/// <summary>
+		/// PORTING TODO: ensure this method name is accurate. I tried my best naming this one, as it was unmapped before.
+		/// </summary>
+		/// <param name="villageDoorInfo1"></param>
+		/// <returns></returns>
+		private bool hasCheckedDoor(VillageDoorInfo villageDoorInfo1)
 		{
-			System.Collections.IEnumerator iterator2 = this.doorList.GetEnumerator();
+            foreach(VillageDoorInfo door in doorList)
+            {
+                if (villageDoorInfo1.posX == door.posX && villageDoorInfo1.posY == door.posY && villageDoorInfo1.posZ == door.posZ)
+                {
+                    return true;
+                }
+            }
 
-			VillageDoorInfo villageDoorInfo3;
-			do
-			{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				if (!iterator2.hasNext())
-				{
-					return false;
-				}
-
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				villageDoorInfo3 = (VillageDoorInfo)iterator2.next();
-			} while (villageDoorInfo1.posX != villageDoorInfo3.posX || villageDoorInfo1.posY != villageDoorInfo3.posY || villageDoorInfo1.posZ != villageDoorInfo3.posZ);
-
-			return true;
+			return false;
 		}
 
-		private void func_48286_h()
+		private void trimCheckedDoorQueue()
 		{
 			if (this.doorList.Count > 15)
 			{

@@ -72,7 +72,7 @@
 			this.field_752_b += this.field_755_h * 2.0F;
 			if (!this.Child && !this.worldObj.isRemote && --this.timeUntilNextEgg <= 0)
 			{
-				this.worldObj.playSoundAtEntity(this, "mob.chickenplop", 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+				this.worldObj.playSoundAtEntity(this, "mob.chickenplop", 1.0F, (this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F + 1.0F);
 				this.dropItem(Item.egg.shiftedIndex, 1);
 				this.timeUntilNextEgg = this.rand.Next(6000) + 6000;
 			}

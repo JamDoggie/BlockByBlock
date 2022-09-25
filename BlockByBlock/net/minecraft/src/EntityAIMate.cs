@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -27,7 +28,7 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				this.targetMate = this.func_48258_h();
+				this.targetMate = this.getTrueLove();
 				return this.targetMate != null;
 			}
 		}
@@ -55,27 +56,22 @@ namespace net.minecraft.src
 
 		}
 
-		private EntityAnimal func_48258_h()
+        /// <summary>
+		/// Returns this animal's one and only true love... for now.
+		/// </summary>
+		/// <returns></returns>
+		private EntityAnimal getTrueLove()
 		{
-			float f1 = 8.0F;
-			System.Collections.IList list2 = this.theWorld.getEntitiesWithinAABB(this.theAnimal.GetType(), this.theAnimal.boundingBox.expand((double)f1, (double)f1, (double)f1));
-			System.Collections.IEnumerator iterator3 = list2.GetEnumerator();
+			float mateRange = 8.0F;
+			System.Collections.IList possibleMates = this.theWorld.getEntitiesWithinAABB(this.theAnimal.GetType(), this.theAnimal.boundingBox.expand((double)mateRange, (double)mateRange, (double)mateRange));
 
-			EntityAnimal entityAnimal5;
-			do
-			{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				if (!iterator3.hasNext())
-				{
-					return null;
-				}
+            foreach(EntityAnimal animal in possibleMates)
+            {
+				if (theAnimal.canMateWith(animal))
+					return animal;
+            }
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				Entity entity4 = (Entity)iterator3.next();
-				entityAnimal5 = (EntityAnimal)entity4;
-			} while (!this.theAnimal.func_48135_b(entityAnimal5));
-
-			return entityAnimal5;
+			return null;
 		}
 
 		private void func_48257_i()
@@ -90,14 +86,14 @@ namespace net.minecraft.src
 				entityAnimal1.GrowingAge = -24000;
 				entityAnimal1.setLocationAndAngles(this.theAnimal.posX, this.theAnimal.posY, this.theAnimal.posZ, 0.0F, 0.0F);
 				this.theWorld.spawnEntityInWorld(entityAnimal1);
-				Random random2 = this.theAnimal.RNG;
+				RandomExtended random2 = this.theAnimal.RNG;
 
 				for (int i3 = 0; i3 < 7; ++i3)
 				{
-					double d4 = random2.nextGaussian() * 0.02D;
-					double d6 = random2.nextGaussian() * 0.02D;
-					double d8 = random2.nextGaussian() * 0.02D;
-					this.theWorld.spawnParticle("heart", this.theAnimal.posX + (double)(random2.nextFloat() * this.theAnimal.width * 2.0F) - (double)this.theAnimal.width, this.theAnimal.posY + 0.5D + (double)(random2.nextFloat() * this.theAnimal.height), this.theAnimal.posZ + (double)(random2.nextFloat() * this.theAnimal.width * 2.0F) - (double)this.theAnimal.width, d4, d6, d8);
+					double d4 = random2.NextGaussian() * 0.02D;
+					double d6 = random2.NextGaussian() * 0.02D;
+					double d8 = random2.NextGaussian() * 0.02D;
+					this.theWorld.spawnParticle("heart", this.theAnimal.posX + (double)(random2.NextSingle() * this.theAnimal.width * 2.0F) - (double)this.theAnimal.width, this.theAnimal.posY + 0.5D + (double)(random2.NextSingle() * this.theAnimal.height), this.theAnimal.posZ + (double)(random2.NextSingle() * this.theAnimal.width * 2.0F) - (double)this.theAnimal.width, d4, d6, d8);
 				}
 
 			}

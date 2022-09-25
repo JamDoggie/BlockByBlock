@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -7,12 +8,12 @@ namespace net.minecraft.src
 	{
 		private static Vec3D field_48624_a = Vec3D.createVectorHelper(0.0D, 0.0D, 0.0D);
 
-		public static Vec3D func_48622_a(EntityCreature entityCreature0, int i1, int i2)
+		public static Vec3D? func_48622_a(EntityCreature entityCreature0, int i1, int i2)
 		{
-			return func_48621_c(entityCreature0, i1, i2, (Vec3D)null);
+			return func_48621_c(entityCreature0, i1, i2, null);
 		}
 
-		public static Vec3D func_48620_a(EntityCreature entityCreature0, int i1, int i2, Vec3D vec3D3)
+		public static Vec3D? func_48620_a(EntityCreature entityCreature0, int i1, int i2, Vec3D vec3D3)
 		{
 			field_48624_a.xCoord = vec3D3.xCoord - entityCreature0.posX;
 			field_48624_a.yCoord = vec3D3.yCoord - entityCreature0.posY;
@@ -20,7 +21,7 @@ namespace net.minecraft.src
 			return func_48621_c(entityCreature0, i1, i2, field_48624_a);
 		}
 
-		public static Vec3D func_48623_b(EntityCreature entityCreature0, int i1, int i2, Vec3D vec3D3)
+		public static Vec3D? func_48623_b(EntityCreature entityCreature0, int i1, int i2, Vec3D vec3D3)
 		{
 			field_48624_a.xCoord = entityCreature0.posX - vec3D3.xCoord;
 			field_48624_a.yCoord = entityCreature0.posY - vec3D3.yCoord;
@@ -28,9 +29,9 @@ namespace net.minecraft.src
 			return func_48621_c(entityCreature0, i1, i2, field_48624_a);
 		}
 
-		private static Vec3D func_48621_c(EntityCreature entityCreature0, int i1, int i2, Vec3D vec3D3)
+		private static Vec3D? func_48621_c(EntityCreature entityCreature0, int i1, int i2, Vec3D? vec3D3)
 		{
-			Random random4 = entityCreature0.RNG;
+			RandomExtended random4 = entityCreature0.RNG;
 			bool z5 = false;
 			int i6 = 0;
 			int i7 = 0;

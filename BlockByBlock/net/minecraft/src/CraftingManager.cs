@@ -101,7 +101,7 @@ namespace net.minecraft.src
 			addShapelessRecipe(new ItemStack(Item.eyeOfEnder, 1), new object[]{Item.enderPearl, Item.blazePowder});
 			addShapelessRecipe(new ItemStack(Item.fireballCharge, 3), new object[]{Item.gunpowder, Item.blazePowder, Item.coal});
 			addShapelessRecipe(new ItemStack(Item.fireballCharge, 3), new object[]{Item.gunpowder, Item.blazePowder, new ItemStack(Item.coal, 1, 1)});
-			recipes.OrderBy(recipe => recipe, new RecipeSorter(this));
+			recipes = recipes.OrderBy(recipe => recipe, new RecipeSorter(this)).ToList();
 			Console.WriteLine(this.recipes.Count + " recipes");
 		}
 

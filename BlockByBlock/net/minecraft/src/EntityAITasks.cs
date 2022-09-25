@@ -24,8 +24,8 @@ namespace net.minecraft.src
 				EntityAITaskEntry entityAITaskEntry3;
 				while (true)
 				{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					if (!iterator2.hasNext())
+					// JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
+					if (!iterator2.MoveNext())
 					{
 						bool z5 = false;
 						if (z5 && arrayList1.Count > 0)
@@ -61,8 +61,8 @@ namespace net.minecraft.src
 						return;
 					}
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					entityAITaskEntry3 = (EntityAITaskEntry)iterator2.next();
+					// JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
+					entityAITaskEntry3 = (EntityAITaskEntry)iterator2.Current;
 					bool z4 = this.executingTasks.Contains(entityAITaskEntry3);
 					if (!z4)
 					{

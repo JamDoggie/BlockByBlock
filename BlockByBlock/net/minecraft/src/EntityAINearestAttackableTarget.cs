@@ -8,7 +8,7 @@ namespace net.minecraft.src
 		internal EntityLiving targetEntity;
 		internal Type targetClass;
 		internal int field_48386_f;
-		private EntityAINearestAttackableTargetSorter field_48387_g;
+		private EntityAINearestAttackableTargetSorter entDistanceSorter;
 
 		public EntityAINearestAttackableTarget(EntityLiving entityLiving1, Type class2, float f3, int i4, bool z5) : this(entityLiving1, class2, f3, i4, z5, false)
 		{
@@ -19,7 +19,7 @@ namespace net.minecraft.src
 			this.targetClass = class2;
 			this.field_48379_d = f3;
 			this.field_48386_f = i4;
-			this.field_48387_g = new EntityAINearestAttackableTargetSorter(this, entityLiving1);
+			this.entDistanceSorter = new EntityAINearestAttackableTargetSorter(this, entityLiving1);
 			this.MutexBits = 1;
 		}
 
@@ -43,7 +43,7 @@ namespace net.minecraft.src
 				else
 				{
 					System.Collections.IList list5 = this.taskOwner.worldObj.getEntitiesWithinAABB(this.targetClass, this.taskOwner.boundingBox.expand((double)this.field_48379_d, 4.0D, (double)this.field_48379_d));
-					list5.Sort(this.field_48387_g);
+					list5 = list5.Cast<Entity>().OrderBy(ent => ent, this.entDistanceSorter).ToList();
 					System.Collections.IEnumerator iterator2 = list5.GetEnumerator();
 
 					while (iterator2.MoveNext())

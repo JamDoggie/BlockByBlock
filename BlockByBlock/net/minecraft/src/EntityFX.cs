@@ -22,18 +22,18 @@
 			this.yOffset = this.height / 2.0F;
 			this.setPosition(d2, d4, d6);
 			this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
-			this.motionX = d8 + (double)((float)(MathHelper.NextDouble * 2.0D - 1.0D) * 0.4F);
-			this.motionY = d10 + (double)((float)(MathHelper.NextDouble * 2.0D - 1.0D) * 0.4F);
-			this.motionZ = d12 + (double)((float)(MathHelper.NextDouble * 2.0D - 1.0D) * 0.4F);
-			float f14 = (float)(MathHelper.NextDouble + MathHelper.NextDouble + 1.0D) * 0.15F;
+			this.motionX = d8 + (double)((float)(portinghelpers.MathHelper.NextDouble * 2.0D - 1.0D) * 0.4F);
+			this.motionY = d10 + (double)((float)(portinghelpers.MathHelper.NextDouble * 2.0D - 1.0D) * 0.4F);
+			this.motionZ = d12 + (double)((float)(portinghelpers.MathHelper.NextDouble * 2.0D - 1.0D) * 0.4F);
+			float f14 = (float)(portinghelpers.MathHelper.NextDouble + portinghelpers.MathHelper.NextDouble + 1.0D) * 0.15F;
 			float f15 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
 			this.motionX = this.motionX / (double)f15 * (double)f14 * (double)0.4F;
 			this.motionY = this.motionY / (double)f15 * (double)f14 * (double)0.4F + (double)0.1F;
 			this.motionZ = this.motionZ / (double)f15 * (double)f14 * (double)0.4F;
-			this.particleTextureJitterX = this.rand.nextFloat() * 3.0F;
-			this.particleTextureJitterY = this.rand.nextFloat() * 3.0F;
-			this.particleScale = (this.rand.nextFloat() * 0.5F + 0.5F) * 2.0F;
-			this.particleMaxAge = (int)(4.0F / (this.rand.nextFloat() * 0.9F + 0.1F));
+			this.particleTextureJitterX = this.rand.NextSingle() * 3.0F;
+			this.particleTextureJitterY = this.rand.NextSingle() * 3.0F;
+			this.particleScale = (this.rand.NextSingle() * 0.5F + 0.5F) * 2.0F;
+			this.particleMaxAge = (int)(4.0F / (this.rand.NextSingle() * 0.9F + 0.1F));
 			this.particleAge = 0;
 		}
 

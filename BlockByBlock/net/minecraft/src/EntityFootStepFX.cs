@@ -2,6 +2,8 @@
 {
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	public class EntityFootStepFX : EntityFX
 	{
 		private int field_27018_a = 0;

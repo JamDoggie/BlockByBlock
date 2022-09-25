@@ -25,7 +25,7 @@
 
 		public override bool shouldExecute()
 		{
-			EntityLiving entityLiving1 = this.thePet.getOwner();
+			EntityLiving entityLiving1 = thePet.getOwner();
 			if (entityLiving1 == null)
 			{
 				return false;

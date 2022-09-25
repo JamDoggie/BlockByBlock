@@ -47,11 +47,11 @@
 
 		}
 
-		protected internal override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
+		public override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
 		{
 		}
 
-		protected internal override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
+		public override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
 		{
 		}
 

@@ -23,7 +23,7 @@
 
 			for (int i2 = 0; i2 < 32; ++i2)
 			{
-				this.worldObj.spawnParticle("portal", this.posX, this.posY + this.rand.NextDouble() * 2.0D, this.posZ, this.rand.nextGaussian(), 0.0D, this.rand.nextGaussian());
+				this.worldObj.spawnParticle("portal", this.posX, this.posY + this.rand.NextDouble() * 2.0D, this.posZ, this.rand.NextGaussian(), 0.0D, this.rand.NextGaussian());
 			}
 
 			if (!this.worldObj.isRemote)

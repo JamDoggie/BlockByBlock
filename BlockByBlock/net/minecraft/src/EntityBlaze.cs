@@ -87,7 +87,7 @@ namespace net.minecraft.src
 				if (this.heightOffsetUpdateTime <= 0)
 				{
 					this.heightOffsetUpdateTime = 100;
-					this.heightOffset = 0.5F + (float)this.rand.nextGaussian() * 3.0F;
+					this.heightOffset = 0.5F + (float)this.rand.NextGaussian() * 3.0F;
 				}
 
 				if (this.EntityToAttack != null && this.EntityToAttack.posY + (double)this.EntityToAttack.EyeHeight > this.posY + (double)this.EyeHeight + (double)this.heightOffset)
@@ -98,7 +98,7 @@ namespace net.minecraft.src
 
 			if (this.rand.Next(24) == 0)
 			{
-				this.worldObj.playSoundEffect(this.posX + 0.5D, this.posY + 0.5D, this.posZ + 0.5D, "fire.fire", 1.0F + this.rand.nextFloat(), this.rand.nextFloat() * 0.7F + 0.3F);
+				this.worldObj.playSoundEffect(this.posX + 0.5D, this.posY + 0.5D, this.posZ + 0.5D, "fire.fire", 1.0F + this.rand.NextSingle(), this.rand.NextSingle() * 0.7F + 0.3F);
 			}
 
 			if (!this.onGround && this.motionY < 0.0D)
@@ -152,7 +152,7 @@ namespace net.minecraft.src
 
 						for (int i10 = 0; i10 < 1; ++i10)
 						{
-							EntitySmallFireball entitySmallFireball11 = new EntitySmallFireball(this.worldObj, this, d3 + this.rand.nextGaussian() * (double)f9, d5, d7 + this.rand.nextGaussian() * (double)f9);
+							EntitySmallFireball entitySmallFireball11 = new EntitySmallFireball(this.worldObj, this, d3 + this.rand.NextGaussian() * (double)f9, d5, d7 + this.rand.NextGaussian() * (double)f9);
 							entitySmallFireball11.posY = this.posY + (double)(this.height / 2.0F) + 0.5D;
 							this.worldObj.spawnEntityInWorld(entitySmallFireball11);
 						}

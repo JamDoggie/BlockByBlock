@@ -21,7 +21,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		protected internal override void updateEntityActionState()
+		public override void updateEntityActionState()
 		{
 			Profiler.startSection("ai");
 			if (this.fleeingTick > 0)
@@ -146,7 +146,7 @@ namespace net.minecraft.src
 					this.isJumping = true;
 				}
 
-				if (this.rand.nextFloat() < 0.8F && (z3 || z4))
+				if (this.rand.NextSingle() < 0.8F && (z3 || z4))
 				{
 					this.isJumping = true;
 				}

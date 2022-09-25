@@ -101,7 +101,7 @@ namespace net.minecraft.src
 			return this.entityId;
 		}
 
-		protected internal virtual void preparePlayerToSpawn()
+		public virtual void preparePlayerToSpawn()
 		{
 			if (this.worldObj != null)
 			{
@@ -1090,9 +1090,9 @@ namespace net.minecraft.src
 			}
 		}
 
-		protected internal abstract void readEntityFromNBT(NBTTagCompound nBTTagCompound1);
+		public abstract void readEntityFromNBT(NBTTagCompound nBTTagCompound1);
 
-		protected internal abstract void writeEntityToNBT(NBTTagCompound nBTTagCompound1);
+		public abstract void writeEntityToNBT(NBTTagCompound nBTTagCompound1);
 
 		protected internal virtual NBTTagList newDoubleNBTList(params double[] d1)
 		{

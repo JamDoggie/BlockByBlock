@@ -11,7 +11,7 @@
 		{
 			this.setLocationAndAngles(d2, d4, d6, 0.0F, 0.0F);
 			this.lightningState = 2;
-			this.boltVertex = this.rand.nextLong();
+			this.boltVertex = this.rand.NextInt64();
 			this.boltLivingTime = this.rand.Next(3) + 1;
 			if (world1.difficultySetting >= 2 && world1.doChunksNearChunkExist(MathHelper.floor_double(d2), MathHelper.floor_double(d4), MathHelper.floor_double(d6), 10))
 			{
@@ -42,8 +42,8 @@
 			base.onUpdate();
 			if (this.lightningState == 2)
 			{
-				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "ambient.weather.thunder", 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.explode", 2.0F, 0.5F + this.rand.nextFloat() * 0.2F);
+				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "ambient.weather.thunder", 10000.0F, 0.8F + this.rand.NextSingle() * 0.2F);
+				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.explode", 2.0F, 0.5F + this.rand.NextSingle() * 0.2F);
 			}
 
 			--this.lightningState;
@@ -57,7 +57,7 @@
 				{
 					--this.boltLivingTime;
 					this.lightningState = 1;
-					this.boltVertex = this.rand.nextLong();
+					this.boltVertex = this.rand.NextInt64();
 					if (this.worldObj.doChunksNearChunkExist(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ), 10))
 					{
 						int i1 = MathHelper.floor_double(this.posX);
@@ -91,11 +91,11 @@
 		{
 		}
 
-		protected internal override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
+		public override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
 		{
 		}
 
-		protected internal override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
+		public override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
 		{
 		}
 

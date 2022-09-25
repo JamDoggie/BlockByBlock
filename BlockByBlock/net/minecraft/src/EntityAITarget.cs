@@ -70,7 +70,7 @@
 
 		public override void resetTask()
 		{
-			this.taskOwner.AttackTarget = (EntityLiving)null;
+			taskOwner.AttackTarget = null;
 		}
 
 		protected internal virtual bool func_48376_a(EntityLiving entityLiving1, bool z2)

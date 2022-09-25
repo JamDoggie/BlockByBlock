@@ -282,24 +282,24 @@ namespace net.minecraft.src
 		{
 			if (itemStack1.ItemUseAction == EnumAction.drink)
 			{
-				this.worldObj.playSoundAtEntity(this, "random.drink", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+				this.worldObj.playSoundAtEntity(this, "random.drink", 0.5F, this.worldObj.rand.NextSingle() * 0.1F + 0.9F);
 			}
 
 			if (itemStack1.ItemUseAction == EnumAction.eat)
 			{
 				for (int i3 = 0; i3 < i2; ++i3)
 				{
-					Vec3D vec3D4 = Vec3D.createVector(((double)this.rand.nextFloat() - 0.5D) * 0.1D, MathHelper.NextDouble * 0.1D + 0.1D, 0.0D);
+					Vec3D vec3D4 = Vec3D.createVector(((double)this.rand.NextSingle() - 0.5D) * 0.1D, portinghelpers.MathHelper.NextDouble * 0.1D + 0.1D, 0.0D);
 					vec3D4.rotateAroundX(-this.rotationPitch * (float)Math.PI / 180.0F);
 					vec3D4.rotateAroundY(-this.rotationYaw * (float)Math.PI / 180.0F);
-					Vec3D vec3D5 = Vec3D.createVector(((double)this.rand.nextFloat() - 0.5D) * 0.3D, (double)(-this.rand.nextFloat()) * 0.6D - 0.3D, 0.6D);
+					Vec3D vec3D5 = Vec3D.createVector(((double)this.rand.NextSingle() - 0.5D) * 0.3D, (double)(-this.rand.NextSingle()) * 0.6D - 0.3D, 0.6D);
 					vec3D5.rotateAroundX(-this.rotationPitch * (float)Math.PI / 180.0F);
 					vec3D5.rotateAroundY(-this.rotationYaw * (float)Math.PI / 180.0F);
 					vec3D5 = vec3D5.addVector(this.posX, this.posY + (double)this.EyeHeight, this.posZ);
 					this.worldObj.spawnParticle("iconcrack_" + itemStack1.Item.shiftedIndex, vec3D5.xCoord, vec3D5.yCoord, vec3D5.zCoord, vec3D4.xCoord, vec3D4.yCoord + 0.05D, vec3D4.zCoord);
 				}
 
-				this.worldObj.playSoundAtEntity(this, "random.eat", 0.5F + 0.5F * (float)this.rand.Next(2), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+				this.worldObj.playSoundAtEntity(this, "random.eat", 0.5F + 0.5F * (float)this.rand.Next(2), (this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F + 1.0F);
 			}
 
 		}
@@ -346,7 +346,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		protected internal virtual void closeScreen()
+		public virtual void closeScreen()
 		{
 			this.craftingInventory = this.inventorySlots;
 		}
@@ -385,7 +385,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		protected internal override void updateEntityActionState()
+		public override void updateEntityActionState()
 		{
 			int i1 = this.SwingSpeedModifier;
 			if (this.isSwinging)
@@ -548,8 +548,8 @@ namespace net.minecraft.src
 				float f5;
 				if (z2)
 				{
-					f5 = this.rand.nextFloat() * 0.5F;
-					float f6 = this.rand.nextFloat() * (float)Math.PI * 2.0F;
+					f5 = this.rand.NextSingle() * 0.5F;
+					float f6 = this.rand.NextSingle() * (float)Math.PI * 2.0F;
 					entityItem3.motionX = (double)(-MathHelper.sin(f6) * f5);
 					entityItem3.motionZ = (double)(MathHelper.cos(f6) * f5);
 					entityItem3.motionY = (double)0.2F;
@@ -561,10 +561,10 @@ namespace net.minecraft.src
 					entityItem3.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI) * f4);
 					entityItem3.motionY = (double)(-MathHelper.sin(this.rotationPitch / 180.0F * (float)Math.PI) * f4 + 0.1F);
 					f4 = 0.02F;
-					f5 = this.rand.nextFloat() * (float)Math.PI * 2.0F;
-					f4 *= this.rand.nextFloat();
+					f5 = this.rand.NextSingle() * (float)Math.PI * 2.0F;
+					f4 *= this.rand.NextSingle();
 					entityItem3.motionX += Math.Cos((double)f5) * (double)f4;
-					entityItem3.motionY += (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
+					entityItem3.motionY += (double)((this.rand.NextSingle() - this.rand.NextSingle()) * 0.1F);
 					entityItem3.motionZ += Math.Sin((double)f5) * (double)f4;
 				}
 
@@ -820,14 +820,14 @@ namespace net.minecraft.src
 								{
 									do
 									{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-										if (!iterator4.hasNext())
+										//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
+										if (!iterator4.MoveNext())
 										{
 											return;
 										}
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-										Entity entity5 = (Entity)iterator4.next();
+										//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
+										Entity entity5 = (Entity)iterator4.Current;
 										entityWolf6 = (EntityWolf)entity5;
 									} while (!entityWolf6.Tamed);
 								} while (entityWolf6.EntityToAttack != null);
@@ -995,7 +995,10 @@ namespace net.minecraft.src
 							this.triggerAchievement(AchievementList.overkill);
 						}
 
-						this.setLastAttackingEntity(entity1);
+						if (entity1 is EntityLiving) 
+						{
+							this.LastAttackingEntity = (EntityLiving)entity1;
+						}
 					}
 
 					ItemStack itemStack7 = this.CurrentEquippedItem;

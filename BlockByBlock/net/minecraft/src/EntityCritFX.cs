@@ -16,11 +16,11 @@
 			this.motionX += d8 * 0.4D;
 			this.motionY += d10 * 0.4D;
 			this.motionZ += d12 * 0.4D;
-			this.particleRed = this.particleGreen = this.particleBlue = (float)(MathHelper.NextDouble * (double)0.3F + (double)0.6F);
+			this.particleRed = this.particleGreen = this.particleBlue = (float)(portinghelpers.MathHelper.NextDouble * (double)0.3F + (double)0.6F);
 			this.particleScale *= 0.75F;
 			this.particleScale *= f14;
 			this.field_35137_a = this.particleScale;
-			this.particleMaxAge = (int)(6.0D / (MathHelper.NextDouble * 0.8D + 0.6D));
+			this.particleMaxAge = (int)(6.0D / (portinghelpers.MathHelper.NextDouble * 0.8D + 0.6D));
 			this.particleMaxAge = (int)((float)this.particleMaxAge * f14);
 			this.noClip = false;
 			this.ParticleTextureIndex = 65;

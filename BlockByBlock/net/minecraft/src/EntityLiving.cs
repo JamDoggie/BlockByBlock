@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 using System.Collections;
 
 namespace net.minecraft.src
@@ -154,7 +155,7 @@ namespace net.minecraft.src
 			return this.field_48104_at;
 		}
 
-		public virtual Random RNG
+		public virtual RandomExtended RNG
 		{
 			get
 			{
@@ -217,7 +218,7 @@ namespace net.minecraft.src
 			return false;
 		}
 
-		public virtual EntityLiving AttackTarget
+		public virtual EntityLiving? AttackTarget
 		{
 			get
 			{
@@ -1385,7 +1386,7 @@ namespace net.minecraft.src
 			Profiler.endSection();
 		}
 
-		protected internal virtual bool AIEnabled
+		public virtual bool AIEnabled
 		{
 			get
 			{
@@ -1498,14 +1499,14 @@ namespace net.minecraft.src
 		{
 		}
 
-		protected internal virtual void updateEntityActionState()
+		public virtual void updateEntityActionState()
 		{
 			++this.entityAge;
 			this.despawnEntity();
 			this.moveStrafing = 0.0F;
 			this.moveForward = 0.0F;
 			float f1 = 8.0F;
-			if (this.rand.nextFloat() < 0.02F)
+			if (this.rand.NextSingle() < 0.02F)
 			{
 				EntityPlayer entityPlayer2 = this.worldObj.getClosestPlayerToEntity(this, (double)f1);
 				if (entityPlayer2 != null)
@@ -1515,7 +1516,7 @@ namespace net.minecraft.src
 				}
 				else
 				{
-					this.randomYawVelocity = (this.rand.nextFloat() - 0.5F) * 20.0F;
+					this.randomYawVelocity = (this.rand.NextSingle() - 0.5F) * 20.0F;
 				}
 			}
 
@@ -1529,9 +1530,9 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				if (this.rand.nextFloat() < 0.05F)
+				if (this.rand.NestSingle() < 0.05F)
 				{
-					this.randomYawVelocity = (this.rand.nextFloat() - 0.5F) * 20.0F;
+					this.randomYawVelocity = (this.rand.NextSingle() - 0.5F) * 20.0F;
 				}
 
 				this.rotationYaw += this.randomYawVelocity;
@@ -1542,7 +1543,7 @@ namespace net.minecraft.src
 			bool z3 = this.handleLavaMovement();
 			if (z4 || z3)
 			{
-				this.isJumping = this.rand.nextFloat() < 0.8F;
+				this.isJumping = this.rand.NextSingle() < 0.8F;
 			}
 
 		}

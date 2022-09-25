@@ -1,7 +1,7 @@
 ﻿namespace net.minecraft.src
 {
 
-	public class EntityAINearestAttackableTargetSorter : System.Collections.IComparer
+	public class EntityAINearestAttackableTargetSorter : IComparer<Entity>
 	{
 		private Entity theEntity;
 		internal readonly EntityAINearestAttackableTarget parent;
@@ -19,9 +19,9 @@
 			return d3 < d5 ? -1 : (d3 > d5 ? 1 : 0);
 		}
 
-		public virtual int Compare(object object1, object object2)
+		public virtual int Compare(Entity? object1, Entity? object2)
 		{
-			return this.func_48469_a((Entity)object1, (Entity)object2);
+			return this.func_48469_a(object1, object2);
 		}
 	}
 

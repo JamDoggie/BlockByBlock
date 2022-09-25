@@ -3,7 +3,7 @@
 	public class EntityAIMoveIndoors : EntityAIBase
 	{
 		private EntityCreature entityObj;
-		private VillageDoorInfo doorInfo;
+		private VillageDoorInfo? doorInfo;
 		private int insidePosX = -1;
 		private int insidePosZ = -1;
 
@@ -55,7 +55,7 @@
 			this.insidePosX = -1;
 			if (this.entityObj.getDistanceSq((double)this.doorInfo.InsidePosX, (double)this.doorInfo.posY, (double)this.doorInfo.InsidePosZ) > 256.0D)
 			{
-				Vec3D vec3D1 = RandomPositionGenerator.func_48620_a(this.entityObj, 14, 3, Vec3D.createVector((double)this.doorInfo.InsidePosX + 0.5D, (double)this.doorInfo.InsidePosY, (double)this.doorInfo.InsidePosZ + 0.5D));
+				Vec3D? vec3D1 = RandomPositionGenerator.func_48620_a(this.entityObj, 14, 3, Vec3D.createVector((double)this.doorInfo.InsidePosX + 0.5D, (double)this.doorInfo.InsidePosY, (double)this.doorInfo.InsidePosZ + 0.5D));
 				if (vec3D1 != null)
 				{
 					this.entityObj.Navigator.func_48666_a(vec3D1.xCoord, vec3D1.yCoord, vec3D1.zCoord, 0.3F);

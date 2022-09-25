@@ -31,7 +31,7 @@ namespace net.minecraft.src
 
 		public override bool shouldExecute()
 		{
-			if (this.field_46105_a.RNG.nextFloat() >= this.field_48294_e)
+			if (this.field_46105_a.RNG.NextSingle() >= this.field_48294_e)
 			{
 				return false;
 			}

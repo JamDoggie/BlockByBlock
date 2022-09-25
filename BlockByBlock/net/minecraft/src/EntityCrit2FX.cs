@@ -29,9 +29,9 @@
 		{
 			for (int i1 = 0; i1 < 16; ++i1)
 			{
-				double d2 = (double)(this.rand.nextFloat() * 2.0F - 1.0F);
-				double d4 = (double)(this.rand.nextFloat() * 2.0F - 1.0F);
-				double d6 = (double)(this.rand.nextFloat() * 2.0F - 1.0F);
+				double d2 = (double)(this.rand.NextSingle() * 2.0F - 1.0F);
+				double d4 = (double)(this.rand.NextSingle() * 2.0F - 1.0F);
+				double d6 = (double)(this.rand.NextSingle() * 2.0F - 1.0F);
 				if (d2 * d2 + d4 * d4 + d6 * d6 <= 1.0D)
 				{
 					double d8 = this.field_35134_a.posX + d2 * (double)this.field_35134_a.width / 4.0D;

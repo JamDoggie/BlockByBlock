@@ -202,6 +202,11 @@
 				}
     
 			}
+
+			get
+            {
+				return health;
+            }
 		}
 
 		public override void addStat(StatBase statBase1, int i2)

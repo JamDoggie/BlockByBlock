@@ -52,9 +52,9 @@ namespace net.minecraft.src
 			this.setPosition(this.posX, this.posY, this.posZ);
 			this.yOffset = 0.0F;
 			this.motionX = this.motionY = this.motionZ = 0.0D;
-			d3 += this.rand.nextGaussian() * 0.4D;
-			d5 += this.rand.nextGaussian() * 0.4D;
-			d7 += this.rand.nextGaussian() * 0.4D;
+			d3 += this.rand.NextGaussian() * 0.4D;
+			d5 += this.rand.NextGaussian() * 0.4D;
+			d7 += this.rand.NextGaussian() * 0.4D;
 			double d9 = (double)MathHelper.sqrt_double(d3 * d3 + d5 * d5 + d7 * d7);
 			this.accelerationX = d3 / d9 * 0.1D;
 			this.accelerationY = d5 / d9 * 0.1D;
@@ -82,9 +82,9 @@ namespace net.minecraft.src
 					}
 
 					this.inGround = false;
-					this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
-					this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
-					this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
+					this.motionX *= (double)(this.rand.NextSingle() * 0.2F);
+					this.motionY *= (double)(this.rand.NextSingle() * 0.2F);
+					this.motionZ *= (double)(this.rand.NextSingle() * 0.2F);
 					this.ticksAlive = 0;
 					this.ticksInAir = 0;
 				}

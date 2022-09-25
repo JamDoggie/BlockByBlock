@@ -65,10 +65,10 @@
 
 			for (int i3 = 0; i3 < 7; ++i3)
 			{
-				double d4 = this.rand.nextGaussian() * 0.02D;
-				double d6 = this.rand.nextGaussian() * 0.02D;
-				double d8 = this.rand.nextGaussian() * 0.02D;
-				this.worldObj.spawnParticle(string2, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d4, d6, d8);
+				double d4 = this.rand.NextGaussian() * 0.02D;
+				double d6 = this.rand.NextGaussian() * 0.02D;
+				double d8 = this.rand.NextGaussian() * 0.02D;
+				this.worldObj.spawnParticle(string2, this.posX + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.NextSingle() * this.height), this.posZ + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, d4, d6, d8);
 			}
 
 		}
@@ -142,16 +142,14 @@
 			}
 		}
 
-		public virtual string Owner
+		public void setOwner(string string1)
 		{
-			set
-			{
-				this.dataWatcher.updateObject(17, value);
-			}
-			get
-			{
-				return this.worldObj.getPlayerEntityByName(this.OwnerName);
-			}
+			dataWatcher.updateObject(17, string1);
+		}
+
+		public EntityLiving getOwner()
+		{
+			return worldObj.getPlayerEntityByName(OwnerName);
 		}
 
 

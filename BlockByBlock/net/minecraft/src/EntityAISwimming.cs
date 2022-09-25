@@ -18,7 +18,7 @@
 
 		public override void updateTask()
 		{
-			if (this.theEntity.RNG.nextFloat() < 0.8F)
+			if (this.theEntity.RNG.NextSingle() < 0.8F)
 			{
 				this.theEntity.JumpHelper.setJumping();
 			}

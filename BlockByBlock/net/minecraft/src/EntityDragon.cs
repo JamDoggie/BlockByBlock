@@ -15,8 +15,8 @@ namespace net.minecraft.src
 		public double targetX;
 		public double targetY;
 		public double targetZ;
-//JAVA TO C# CONVERTER NOTE: The following call to the 'RectangularArrays' helper class reproduces the rectangular array initialization that is automatic in Java:
-//ORIGINAL LINE: public double[][] field_40162_d = new double[64][3];
+		// JAVA TO C# CONVERTER NOTE: The following call to the 'RectangularArrays' helper class reproduces the rectangular array initialization that is automatic in Java:
+		// ORIGINAL LINE: public double[][] field_40162_d = new double[64][3];
 		public double[][] field_40162_d = RectangularArrays.RectangularDoubleArray(64, 3);
 		public int field_40164_e = -1;
 		public EntityDragonPart[] dragonPartArray;
@@ -102,9 +102,9 @@ namespace net.minecraft.src
 			float f26;
 			if (this.health <= 0)
 			{
-				f1 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-				f26 = (this.rand.nextFloat() - 0.5F) * 4.0F;
-				f3 = (this.rand.nextFloat() - 0.5F) * 8.0F;
+				f1 = (this.rand.NextSingle() - 0.5F) * 8.0F;
+				f26 = (this.rand.NextSingle() - 0.5F) * 4.0F;
+				f3 = (this.rand.NextSingle() - 0.5F) * 8.0F;
 				this.worldObj.spawnParticle("largeexplode", this.posX + (double)f1, this.posY + 2.0D + (double)f26, this.posZ + (double)f3, 0.0D, 0.0D, 0.0D);
 			}
 			else
@@ -199,8 +199,8 @@ namespace net.minecraft.src
 					}
 					else
 					{
-						this.targetX += this.rand.nextGaussian() * 2.0D;
-						this.targetZ += this.rand.nextGaussian() * 2.0D;
+						this.targetX += this.rand.NextGaussian() * 2.0D;
+						this.targetZ += this.rand.NextGaussian() * 2.0D;
 					}
 
 					if (this.field_40163_ay || d8 < 100.0D || d8 > 22500.0D || this.isCollidedHorizontally || this.isCollidedVertically)
@@ -461,10 +461,10 @@ namespace net.minecraft.src
 				do
 				{
 					this.targetX = 0.0D;
-					this.targetY = (double)(70.0F + this.rand.nextFloat() * 50.0F);
+					this.targetY = (double)(70.0F + this.rand.NextSingle() * 50.0F);
 					this.targetZ = 0.0D;
-					this.targetX += (double)(this.rand.nextFloat() * 120.0F - 60.0F);
-					this.targetZ += (double)(this.rand.nextFloat() * 120.0F - 60.0F);
+					this.targetX += (double)(this.rand.NextSingle() * 120.0F - 60.0F);
+					this.targetZ += (double)(this.rand.NextSingle() * 120.0F - 60.0F);
 					double d2 = this.posX - this.targetX;
 					double d4 = this.posY - this.targetY;
 					double d6 = this.posZ - this.targetZ;
@@ -527,9 +527,9 @@ namespace net.minecraft.src
 
 			if (z9)
 			{
-				double d16 = axisAlignedBB1.minX + (axisAlignedBB1.maxX - axisAlignedBB1.minX) * (double)this.rand.nextFloat();
-				double d17 = axisAlignedBB1.minY + (axisAlignedBB1.maxY - axisAlignedBB1.minY) * (double)this.rand.nextFloat();
-				double d14 = axisAlignedBB1.minZ + (axisAlignedBB1.maxZ - axisAlignedBB1.minZ) * (double)this.rand.nextFloat();
+				double d16 = axisAlignedBB1.minX + (axisAlignedBB1.maxX - axisAlignedBB1.minX) * (double)this.rand.NextSingle();
+				double d17 = axisAlignedBB1.minY + (axisAlignedBB1.maxY - axisAlignedBB1.minY) * (double)this.rand.NextSingle();
+				double d14 = axisAlignedBB1.minZ + (axisAlignedBB1.maxZ - axisAlignedBB1.minZ) * (double)this.rand.NextSingle();
 				this.worldObj.spawnParticle("largeexplode", d16, d17, d14, 0.0D, 0.0D, 0.0D);
 			}
 
@@ -546,9 +546,9 @@ namespace net.minecraft.src
 			float f4 = this.rotationYaw * (float)Math.PI / 180.0F;
 			float f5 = MathHelper.sin(f4);
 			float f6 = MathHelper.cos(f4);
-			this.targetX = this.posX + (double)(f5 * 5.0F) + (double)((this.rand.nextFloat() - 0.5F) * 2.0F);
-			this.targetY = this.posY + (double)(this.rand.nextFloat() * 3.0F) + 1.0D;
-			this.targetZ = this.posZ - (double)(f6 * 5.0F) + (double)((this.rand.nextFloat() - 0.5F) * 2.0F);
+			this.targetX = this.posX + (double)(f5 * 5.0F) + (double)((this.rand.NextSingle() - 0.5F) * 2.0F);
+			this.targetY = this.posY + (double)(this.rand.NextSingle() * 3.0F) + 1.0D;
+			this.targetZ = this.posZ - (double)(f6 * 5.0F) + (double)((this.rand.NextSingle() - 0.5F) * 2.0F);
 			this.target = null;
 			if (damageSource2.Entity is EntityPlayer || damageSource2 == DamageSource.explosion)
 			{
@@ -563,9 +563,9 @@ namespace net.minecraft.src
 			++this.field_40178_aA;
 			if (this.field_40178_aA >= 180 && this.field_40178_aA <= 200)
 			{
-				float f1 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-				float f2 = (this.rand.nextFloat() - 0.5F) * 4.0F;
-				float f3 = (this.rand.nextFloat() - 0.5F) * 8.0F;
+				float f1 = (this.rand.NextSingle() - 0.5F) * 8.0F;
+				float f2 = (this.rand.NextSingle() - 0.5F) * 4.0F;
+				float f3 = (this.rand.NextSingle() - 0.5F) * 8.0F;
 				this.worldObj.spawnParticle("hugeexplosion", this.posX + (double)f1, this.posY + 2.0D + (double)f2, this.posZ + (double)f3, 0.0D, 0.0D, 0.0D);
 			}
 

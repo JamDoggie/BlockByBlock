@@ -149,7 +149,7 @@
 			if (this.worldObj.Daytime && !this.worldObj.isRemote)
 			{
 				float f6 = this.getBrightness(1.0F);
-				if (f6 > 0.5F && this.worldObj.canBlockSeeTheSky(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)) && this.rand.nextFloat() * 30.0F < (f6 - 0.4F) * 2.0F)
+				if (f6 > 0.5F && this.worldObj.canBlockSeeTheSky(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)) && this.rand.NextSingle() * 30.0F < (f6 - 0.4F) * 2.0F)
 				{
 					this.entityToAttack = null;
 					this.teleportRandomly();
@@ -273,9 +273,9 @@
 				for (i18 = 0; i18 < s30; ++i18)
 				{
 					double d19 = (double)i18 / ((double)s30 - 1.0D);
-					float f21 = (this.rand.nextFloat() - 0.5F) * 0.2F;
-					float f22 = (this.rand.nextFloat() - 0.5F) * 0.2F;
-					float f23 = (this.rand.nextFloat() - 0.5F) * 0.2F;
+					float f21 = (this.rand.NextSingle() - 0.5F) * 0.2F;
+					float f22 = (this.rand.NextSingle() - 0.5F) * 0.2F;
+					float f23 = (this.rand.NextSingle() - 0.5F) * 0.2F;
 					double d24 = d7 + (this.posX - d7) * d19 + (this.rand.NextDouble() - 0.5D) * (double)this.width * 2.0D;
 					double d26 = d9 + (this.posY - d9) * d19 + this.rand.NextDouble() * (double)this.height;
 					double d28 = d11 + (this.posZ - d11) * d19 + (this.rand.NextDouble() - 0.5D) * (double)this.width * 2.0D;

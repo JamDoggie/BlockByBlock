@@ -90,12 +90,12 @@
 			}
 		}
 
-		protected internal override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
+		public override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
 		{
 			nBTTagCompound1.setByte("Tile", (sbyte)this.blockID);
 		}
 
-		protected internal override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
+		public override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
 		{
 			this.blockID = nBTTagCompound1.getByte("Tile") & 255;
 		}

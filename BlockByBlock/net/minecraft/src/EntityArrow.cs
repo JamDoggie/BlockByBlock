@@ -81,9 +81,9 @@ namespace net.minecraft.src
 			d1 /= (double)f9;
 			d3 /= (double)f9;
 			d5 /= (double)f9;
-			d1 += this.rand.nextGaussian() * (double)0.0075F * (double)f8;
-			d3 += this.rand.nextGaussian() * (double)0.0075F * (double)f8;
-			d5 += this.rand.nextGaussian() * (double)0.0075F * (double)f8;
+			d1 += this.rand.NextGaussian() * (double)0.0075F * (double)f8;
+			d3 += this.rand.NextGaussian() * (double)0.0075F * (double)f8;
+			d5 += this.rand.NextGaussian() * (double)0.0075F * (double)f8;
 			d1 *= (double)f7;
 			d3 *= (double)f7;
 			d5 *= (double)f7;
@@ -156,9 +156,9 @@ namespace net.minecraft.src
 				else
 				{
 					this.inGround = false;
-					this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
-					this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
-					this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
+					this.motionX *= (double)(this.rand.NextSingle() * 0.2F);
+					this.motionY *= (double)(this.rand.NextSingle() * 0.2F);
+					this.motionZ *= (double)(this.rand.NextSingle() * 0.2F);
 					this.ticksInGround = 0;
 					this.ticksInAir = 0;
 				}
@@ -249,7 +249,7 @@ namespace net.minecraft.src
 								}
 							}
 
-							this.worldObj.playSoundAtEntity(this, "random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+							this.worldObj.playSoundAtEntity(this, "random.bowhit", 1.0F, 1.2F / (this.rand.NextSingle() * 0.2F + 0.9F));
 							this.setDead();
 						}
 						else
@@ -276,7 +276,7 @@ namespace net.minecraft.src
 						this.posX -= this.motionX / (double)f19 * (double)0.05F;
 						this.posY -= this.motionY / (double)f19 * (double)0.05F;
 						this.posZ -= this.motionZ / (double)f19 * (double)0.05F;
-						this.worldObj.playSoundAtEntity(this, "random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+						this.worldObj.playSoundAtEntity(this, "random.bowhit", 1.0F, 1.2F / (this.rand.NextSingle() * 0.2F + 0.9F));
 						this.inGround = true;
 						this.arrowShake = 7;
 						this.arrowCritical = false;
@@ -375,7 +375,7 @@ namespace net.minecraft.src
 			{
 				if (this.inGround && this.doesArrowBelongToPlayer && this.arrowShake <= 0 && entityPlayer1.inventory.addItemStackToInventory(new ItemStack(Item.arrow, 1)))
 				{
-					this.worldObj.playSoundAtEntity(this, "random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+					this.worldObj.playSoundAtEntity(this, "random.pop", 0.2F, ((this.rand.NextSingle() - this.rand.NextSingle()) * 0.7F + 1.0F) * 2.0F);
 					entityPlayer1.onItemPickup(this, 1);
 					this.setDead();
 				}

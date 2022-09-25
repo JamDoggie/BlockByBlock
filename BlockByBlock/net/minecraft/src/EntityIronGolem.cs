@@ -95,7 +95,7 @@ namespace net.minecraft.src
 				int i4 = this.worldObj.getBlockId(i1, i2, i3);
 				if (i4 > 0)
 				{
-					this.worldObj.spawnParticle("tilecrack_" + i4, this.posX + ((double)this.rand.nextFloat() - 0.5D) * (double)this.width, this.boundingBox.minY + 0.1D, this.posZ + ((double)this.rand.nextFloat() - 0.5D) * (double)this.width, 4.0D * ((double)this.rand.nextFloat() - 0.5D), 0.5D, ((double)this.rand.nextFloat() - 0.5D) * 4.0D);
+					this.worldObj.spawnParticle("tilecrack_" + i4, this.posX + ((double)this.rand.NextSingle() - 0.5D) * (double)this.width, this.boundingBox.minY + 0.1D, this.posZ + ((double)this.rand.NextSingle() - 0.5D) * (double)this.width, 4.0D * ((double)this.rand.NextSingle() - 0.5D), 0.5D, ((double)this.rand.NextSingle() - 0.5D) * 4.0D);
 				}
 			}
 

@@ -101,7 +101,7 @@
 
 					if (this.timeInPortal == 0.0F)
 					{
-						this.mc.sndManager.playSoundFX("portal.trigger", 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
+						this.mc.sndManager.playSoundFX("portal.trigger", 1.0F, this.rand.NextSingle() * 0.4F + 0.8F);
 					}
 
 					this.timeInPortal += 0.0125F;
@@ -111,7 +111,7 @@
 						if (!this.worldObj.isRemote)
 						{
 							this.timeUntilPortal = 10;
-							this.mc.sndManager.playSoundFX("portal.travel", 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
+							this.mc.sndManager.playSoundFX("portal.travel", 1.0F, this.rand.NextSingle() * 0.4F + 0.8F);
 							z1 = false;
 							sbyte b5;
 							if (this.dimension == -1)
@@ -249,7 +249,7 @@
 				else
 				{
 					this.triggerAchievement(AchievementList.theEnd);
-					this.mc.sndManager.playSoundFX("portal.travel", 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
+					this.mc.sndManager.playSoundFX("portal.travel", 1.0F, this.rand.NextSingle() * 0.4F + 0.8F);
 					this.mc.usePortal(1);
 				}
 
@@ -372,7 +372,7 @@
 		{
 			set
 			{
-				int i2 = this.Health - value;
+				int i2 = health - value;
 				if (i2 <= 0)
 				{
 					this.EntityHealth = value;
@@ -391,6 +391,11 @@
 				}
     
 			}
+
+			get
+            {
+				return health;
+            }
 		}
 
 		public override void respawnPlayer()

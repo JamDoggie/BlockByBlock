@@ -17,7 +17,7 @@ namespace net.minecraft.src
 
 		public override bool shouldExecute()
 		{
-			return this.idleEntity.RNG.nextFloat() < 0.02F;
+			return this.idleEntity.RNG.NextSingle() < 0.02F;
 		}
 
 		public override bool continueExecuting()

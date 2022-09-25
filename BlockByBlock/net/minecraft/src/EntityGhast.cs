@@ -56,7 +56,7 @@ namespace net.minecraft.src
 			this.texture = b1 == 1 ? "/mob/ghast_fire.png" : "/mob/ghast.png";
 		}
 
-		protected internal override void updateEntityActionState()
+		public override void updateEntityActionState()
 		{
 			if (!this.worldObj.isRemote && this.worldObj.difficultySetting == 0)
 			{
@@ -71,9 +71,9 @@ namespace net.minecraft.src
 			double d7 = (double)MathHelper.sqrt_double(d1 * d1 + d3 * d3 + d5 * d5);
 			if (d7 < 1.0D || d7 > 60.0D)
 			{
-				this.waypointX = this.posX + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
-				this.waypointY = this.posY + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
-				this.waypointZ = this.posZ + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+				this.waypointX = this.posX + (double)((this.rand.NextSingle() * 2.0F - 1.0F) * 16.0F);
+				this.waypointY = this.posY + (double)((this.rand.NextSingle() * 2.0F - 1.0F) * 16.0F);
+				this.waypointZ = this.posZ + (double)((this.rand.NextSingle() * 2.0F - 1.0F) * 16.0F);
 			}
 
 			if (this.courseChangeCooldown-- <= 0)

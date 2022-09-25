@@ -26,7 +26,7 @@
 				}
 				else
 				{
-					this.field_48391_b = entityLiving1.getLastAttackingEntity();
+					this.field_48391_b = entityLiving1.LastAttackingEntity;
 					return this.func_48376_a(this.field_48391_b, false);
 				}
 			}

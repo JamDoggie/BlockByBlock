@@ -9,12 +9,12 @@
 			this.motionX = this.motionX * (double)0.01F + d8;
 			this.motionY = this.motionY * (double)0.01F + d10;
 			this.motionZ = this.motionZ * (double)0.01F + d12;
-			double d10000 = d2 + (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.05F);
-			d10000 = d4 + (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.05F);
-			d10000 = d6 + (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.05F);
+			double d10000 = d2 + (double)((this.rand.NextSingle() - this.rand.NextSingle()) * 0.05F);
+			d10000 = d4 + (double)((this.rand.NextSingle() - this.rand.NextSingle()) * 0.05F);
+			d10000 = d6 + (double)((this.rand.NextSingle() - this.rand.NextSingle()) * 0.05F);
 			this.flameScale = this.particleScale;
 			this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
-			this.particleMaxAge = (int)(8.0D / (MathHelper.NextDouble * 0.8D + 0.2D)) + 4;
+			this.particleMaxAge = (int)(8.0D / (portinghelpers.MathHelper.NextDouble * 0.8D + 0.2D)) + 4;
 			this.noClip = true;
 			this.ParticleTextureIndex = 48;
 		}

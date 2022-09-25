@@ -51,7 +51,7 @@
 
 				if (this.targetVillager == null)
 				{
-					Vec3D vec3D9 = RandomPositionGenerator.func_48622_a(this.villagerObj, 16, 3);
+					Vec3D? vec3D9 = RandomPositionGenerator.func_48622_a(this.villagerObj, 16, 3);
 					if (vec3D9 == null)
 					{
 						return false;
@@ -95,7 +95,7 @@
 			}
 			else if (this.villagerObj.Navigator.noPath())
 			{
-				Vec3D vec3D1 = RandomPositionGenerator.func_48622_a(this.villagerObj, 16, 3);
+				Vec3D? vec3D1 = RandomPositionGenerator.func_48622_a(this.villagerObj, 16, 3);
 				if (vec3D1 == null)
 				{
 					return;

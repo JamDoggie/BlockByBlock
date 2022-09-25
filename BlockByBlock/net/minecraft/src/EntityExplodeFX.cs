@@ -4,12 +4,12 @@
 	{
 		public EntityExplodeFX(World world1, double d2, double d4, double d6, double d8, double d10, double d12) : base(world1, d2, d4, d6, d8, d10, d12)
 		{
-			this.motionX = d8 + (double)((float)(MathHelper.NextDouble * 2.0D - 1.0D) * 0.05F);
-			this.motionY = d10 + (double)((float)(MathHelper.NextDouble * 2.0D - 1.0D) * 0.05F);
-			this.motionZ = d12 + (double)((float)(MathHelper.NextDouble * 2.0D - 1.0D) * 0.05F);
-			this.particleRed = this.particleGreen = this.particleBlue = this.rand.nextFloat() * 0.3F + 0.7F;
-			this.particleScale = this.rand.nextFloat() * this.rand.nextFloat() * 6.0F + 1.0F;
-			this.particleMaxAge = (int)(16.0D / ((double)this.rand.nextFloat() * 0.8D + 0.2D)) + 2;
+			this.motionX = d8 + (double)((float)(portinghelpers.MathHelper.NextDouble * 2.0D - 1.0D) * 0.05F);
+			this.motionY = d10 + (double)((float)(portinghelpers.MathHelper.NextDouble * 2.0D - 1.0D) * 0.05F);
+			this.motionZ = d12 + (double)((float)(portinghelpers.MathHelper.NextDouble * 2.0D - 1.0D) * 0.05F);
+			this.particleRed = this.particleGreen = this.particleBlue = this.rand.NextSingle() * 0.3F + 0.7F;
+			this.particleScale = this.rand.NextSingle() * this.rand.NextSingle() * 6.0F + 1.0F;
+			this.particleMaxAge = (int)(16.0D / ((double)this.rand.NextSingle() * 0.8D + 0.2D)) + 2;
 		}
 
 		public override void onUpdate()

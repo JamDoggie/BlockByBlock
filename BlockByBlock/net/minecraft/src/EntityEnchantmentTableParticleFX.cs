@@ -15,14 +15,14 @@
 			this.field_40109_aw = this.posX = d2;
 			this.field_40108_ax = this.posY = d4;
 			this.field_40106_ay = this.posZ = d6;
-			float f14 = this.rand.nextFloat() * 0.6F + 0.4F;
-			this.field_40107_a = this.particleScale = this.rand.nextFloat() * 0.5F + 0.2F;
+			float f14 = this.rand.NextSingle() * 0.6F + 0.4F;
+			this.field_40107_a = this.particleScale = this.rand.NextSingle() * 0.5F + 0.2F;
 			this.particleRed = this.particleGreen = this.particleBlue = 1.0F * f14;
 			this.particleGreen *= 0.9F;
 			this.particleRed *= 0.9F;
-			this.particleMaxAge = (int)(MathHelper.NextDouble * 10.0D) + 30;
+			this.particleMaxAge = (int)(portinghelpers.MathHelper.NextDouble * 10.0D) + 30;
 			this.noClip = true;
-			this.ParticleTextureIndex = (int)(MathHelper.NextDouble * 26.0D + 1.0D + 224.0D);
+			this.ParticleTextureIndex = (int)(portinghelpers.MathHelper.NextDouble * 26.0D + 1.0D + 224.0D);
 		}
 
 		public override int getBrightnessForRender(float f1)
