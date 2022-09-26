@@ -6,10 +6,10 @@ namespace net.minecraft.src
 	public class IntCache
 	{
 		private static int intCacheSize = 256;
-		private static System.Collections.IList freeSmallArrays = new ArrayList();
-		private static System.Collections.IList inUseSmallArrays = new ArrayList();
-		private static System.Collections.IList freeLargeArrays = new ArrayList();
-		private static System.Collections.IList inUseLargeArrays = new ArrayList();
+		private static List<int[]> freeSmallArrays = new List<int[]>();
+		private static List<int[]> inUseSmallArrays = new List<int[]>();
+		private static List<int[]> freeLargeArrays = new List<int[]>();
+		private static List<int[]> inUseLargeArrays = new List<int[]>();
 
 		public static int[] getIntCache(int i0)
 		{

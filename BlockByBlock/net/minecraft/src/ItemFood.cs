@@ -28,8 +28,8 @@
 		{
 			--itemStack1.stackSize;
 			entityPlayer3.FoodStats.addStats(this);
-			world2.playSoundAtEntity(entityPlayer3, "random.burp", 0.5F, world2.rand.nextFloat() * 0.1F + 0.9F);
-			if (!world2.isRemote && this.potionId > 0 && world2.rand.nextFloat() < this.potionEffectProbability)
+			world2.playSoundAtEntity(entityPlayer3, "random.burp", 0.5F, world2.rand.NextSingle() * 0.1F + 0.9F);
+			if (!world2.isRemote && this.potionId > 0 && world2.rand.NextSingle() < this.potionEffectProbability)
 			{
 				entityPlayer3.addPotionEffect(new PotionEffect(this.potionId, this.potionDuration * 20, this.potionAmplifier));
 			}

@@ -16,11 +16,11 @@
 			this.motionX += d8;
 			this.motionY += d10;
 			this.motionZ += d12;
-			this.particleRed = this.particleGreen = this.particleBlue = (float)(MathHelper.NextDouble * (double)0.3F);
+			this.particleRed = this.particleGreen = this.particleBlue = (float)(portinghelpers.MathHelper.NextDouble * (double)0.3F);
 			this.particleScale *= 0.75F;
 			this.particleScale *= f14;
 			this.smokeParticleScale = this.particleScale;
-			this.particleMaxAge = (int)(8.0D / (MathHelper.NextDouble * 0.8D + 0.2D));
+			this.particleMaxAge = (int)(8.0D / (portinghelpers.MathHelper.NextDouble * 0.8D + 0.2D));
 			this.particleMaxAge = (int)((float)this.particleMaxAge * f14);
 			this.noClip = false;
 		}

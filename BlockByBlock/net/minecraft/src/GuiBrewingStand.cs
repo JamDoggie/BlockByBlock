@@ -2,6 +2,8 @@
 {
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code.
+
 	public class GuiBrewingStand : GuiContainer
 	{
 		private TileEntityBrewingStand field_40217_h;

@@ -23,7 +23,7 @@ namespace net.minecraft.src
 		{
 			this.texture = "/mob/squid.png";
 			this.setSize(0.95F, 0.95F);
-			this.field_21080_l = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
+			this.field_21080_l = 1.0F / (this.rand.NextSingle() + 1.0F) * 0.2F;
 		}
 
 		public override int MaxHealth
@@ -121,7 +121,7 @@ namespace net.minecraft.src
 				this.field_21085_g -= 6.2831855F;
 				if (this.rand.Next(10) == 0)
 				{
-					this.field_21080_l = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
+					this.field_21080_l = 1.0F / (this.rand.NextSingle() + 1.0F) * 0.2F;
 				}
 			}
 
@@ -183,7 +183,7 @@ namespace net.minecraft.src
 			this.moveEntity(this.motionX, this.motionY, this.motionZ);
 		}
 
-		protected internal override void updateEntityActionState()
+		public override void updateEntityActionState()
 		{
 			++this.entityAge;
 			if (this.entityAge > 100)
@@ -192,9 +192,9 @@ namespace net.minecraft.src
 			}
 			else if (this.rand.Next(50) == 0 || !this.inWater || this.randomMotionVecX == 0.0F && this.randomMotionVecY == 0.0F && this.randomMotionVecZ == 0.0F)
 			{
-				float f1 = this.rand.nextFloat() * (float)Math.PI * 2.0F;
+				float f1 = this.rand.NextSingle() * (float)Math.PI * 2.0F;
 				this.randomMotionVecX = MathHelper.cos(f1) * 0.2F;
-				this.randomMotionVecY = -0.1F + this.rand.nextFloat() * 0.2F;
+				this.randomMotionVecY = -0.1F + this.rand.NextSingle() * 0.2F;
 				this.randomMotionVecZ = MathHelper.sin(f1) * 0.2F;
 			}
 

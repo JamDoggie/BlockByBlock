@@ -18,14 +18,14 @@
 				f9 = 1.0F;
 			}
 
-			float f12 = (float)MathHelper.NextDouble * 0.4F + 0.6F;
-			this.particleRed = ((float)(MathHelper.NextDouble * (double)0.2F) + 0.8F) * f9 * f12;
-			this.particleGreen = ((float)(MathHelper.NextDouble * (double)0.2F) + 0.8F) * f10 * f12;
-			this.particleBlue = ((float)(MathHelper.NextDouble * (double)0.2F) + 0.8F) * f11 * f12;
+			float f12 = (float)portinghelpers.MathHelper.NextDouble * 0.4F + 0.6F;
+			this.particleRed = ((float)(portinghelpers.MathHelper.NextDouble * (double)0.2F) + 0.8F) * f9 * f12;
+			this.particleGreen = ((float)(portinghelpers.MathHelper.NextDouble * (double)0.2F) + 0.8F) * f10 * f12;
+			this.particleBlue = ((float)(portinghelpers.MathHelper.NextDouble * (double)0.2F) + 0.8F) * f11 * f12;
 			this.particleScale *= 0.75F;
 			this.particleScale *= f8;
 			this.reddustParticleScale = this.particleScale;
-			this.particleMaxAge = (int)(8.0D / (MathHelper.NextDouble * 0.8D + 0.2D));
+			this.particleMaxAge = (int)(8.0D / (portinghelpers.MathHelper.NextDouble * 0.8D + 0.2D));
 			this.particleMaxAge = (int)((float)this.particleMaxAge * f8);
 			this.noClip = false;
 		}

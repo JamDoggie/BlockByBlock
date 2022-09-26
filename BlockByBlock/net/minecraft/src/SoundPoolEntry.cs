@@ -4,9 +4,9 @@
 	public class SoundPoolEntry
 	{
 		public string soundName;
-		public URL soundUrl;
+		public Uri soundUrl;
 
-		public SoundPoolEntry(string string1, URL uRL2)
+		public SoundPoolEntry(string string1, Uri uRL2)
 		{
 			this.soundName = string1;
 			this.soundUrl = uRL2;

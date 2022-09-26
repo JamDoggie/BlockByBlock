@@ -5,6 +5,7 @@ namespace net.minecraft.src
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code.
 	public class GLAllocation
 	{
 		private static System.Collections.IList displayLists = new ArrayList();

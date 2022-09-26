@@ -1,6 +1,7 @@
 ﻿using BlockByBlock.java_extensions;
 using System;
 using System.Collections;
+using System.Linq;
 
 namespace net.minecraft.src
 {
@@ -51,7 +52,7 @@ namespace net.minecraft.src
 		protected internal bool dead = false;
 		protected internal int experienceValue;
 		public int field_9326_T = -1;
-		public float field_9325_U = (float)(MathHelper.NextDouble * (double)0.9F + (double)0.1F);
+		public float field_9325_U = (float)(portinghelpers.MathHelper.NextDouble * (double)0.9F + (double)0.1F);
 		public float field_705_Q;
 		public float field_704_R;
 		public float field_703_S;
@@ -62,7 +63,7 @@ namespace net.minecraft.src
 		private EntityLiving lastAttackingEntity = null;
 		public int arrowHitTempCounter = 0;
 		public int arrowHitTimer = 0;
-		protected internal Hashtable activePotionsMap = new Hashtable();
+		protected internal Dictionary<int, PotionEffect> activePotionsMap = new();
 		private bool potionsNeedUpdate = true;
 		private int field_39002_c;
 		private EntityLookHelper lookHelper;
@@ -110,10 +111,10 @@ namespace net.minecraft.src
 			this.bodyHelper = new EntityBodyHelper(this);
 			this.navigator = new PathNavigate(this, world1, 16.0F);
 			this.field_48104_at = new EntitySenses(this);
-			this.field_9363_r = (float)(MathHelper.NextDouble + 1.0D) * 0.01F;
+			this.field_9363_r = (float)(portinghelpers.MathHelper.NextDouble + 1.0D) * 0.01F;
 			this.setPosition(this.posX, this.posY, this.posZ);
-			this.field_9365_p = (float)MathHelper.NextDouble * 12398.0F;
-			this.rotationYaw = (float)(MathHelper.NextDouble * (double)(float)Math.PI * 2.0D);
+			this.field_9365_p = (float)portinghelpers.MathHelper.NextDouble * 12398.0F;
+			this.rotationYaw = (float)(portinghelpers.MathHelper.NextDouble * (double)(float)Math.PI * 2.0D);
 			this.rotationYawHead = this.rotationYaw;
 			this.stepHeight = 0.5F;
 		}
@@ -210,6 +211,14 @@ namespace net.minecraft.src
 		{
 			this.field_48111_au = f1;
 			this.MoveForward = f1;
+		}
+
+		public void setLastAttackingEntity(Entity entity1)
+		{
+			if (entity1 is EntityLiving) 
+			{
+				this.lastAttackingEntity = (EntityLiving)entity1;
+			}
 		}
 
 		public virtual bool attackEntityAsMob(Entity entity1)
@@ -378,9 +387,9 @@ namespace net.minecraft.src
 
 					for (int i1 = 0; i1 < 8; ++i1)
 					{
-						float f2 = this.rand.nextFloat() - this.rand.nextFloat();
-						float f3 = this.rand.nextFloat() - this.rand.nextFloat();
-						float f4 = this.rand.nextFloat() - this.rand.nextFloat();
+						float f2 = this.rand.NextSingle() - this.rand.NextSingle();
+						float f3 = this.rand.NextSingle() - this.rand.NextSingle();
+						float f4 = this.rand.NextSingle() - this.rand.NextSingle();
 						this.worldObj.spawnParticle("bubble", this.posX + (double)f2, this.posY + (double)f3, this.posZ + (double)f4, this.motionX, this.motionY, this.motionZ);
 					}
 
@@ -477,10 +486,10 @@ namespace net.minecraft.src
 
 				for (i1 = 0; i1 < 20; ++i1)
 				{
-					double d8 = this.rand.nextGaussian() * 0.02D;
-					double d4 = this.rand.nextGaussian() * 0.02D;
-					double d6 = this.rand.nextGaussian() * 0.02D;
-					this.worldObj.spawnParticle("explode", this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d8, d4, d6);
+					double d8 = this.rand.NextGaussian() * 0.02D;
+					double d4 = this.rand.NextGaussian() * 0.02D;
+					double d6 = this.rand.NextGaussian() * 0.02D;
+					this.worldObj.spawnParticle("explode", this.posX + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.NextSingle() * this.height), this.posZ + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width, d8, d4, d6);
 				}
 			}
 
@@ -508,11 +517,11 @@ namespace net.minecraft.src
 		{
 			for (int i1 = 0; i1 < 20; ++i1)
 			{
-				double d2 = this.rand.nextGaussian() * 0.02D;
-				double d4 = this.rand.nextGaussian() * 0.02D;
-				double d6 = this.rand.nextGaussian() * 0.02D;
+				double d2 = this.rand.NextGaussian() * 0.02D;
+				double d4 = this.rand.NextGaussian() * 0.02D;
+				double d6 = this.rand.NextGaussian() * 0.02D;
 				double d8 = 10.0D;
-				this.worldObj.spawnParticle("explode", this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width - d2 * d8, this.posY + (double)(this.rand.nextFloat() * this.height) - d4 * d8, this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width - d6 * d8, d2, d4, d6);
+				this.worldObj.spawnParticle("explode", this.posX + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width - d2 * d8, this.posY + (double)(this.rand.NextSingle() * this.height) - d4 * d8, this.posZ + (double)(this.rand.NextSingle() * this.width * 2.0F) - (double)this.width - d6 * d8, d2, d4, d6);
 			}
 
 		}
@@ -788,11 +797,11 @@ namespace net.minecraft.src
 						if (entity4 != null)
 						{
 							double d9 = entity4.posX - this.posX;
-
+                            
 							double d7;
-							for (d7 = entity4.posZ - this.posZ; d9 * d9 + d7 * d7 < 1.0E-4D; d7 = (MathHelper.NextDouble - MathHelper.NextDouble) * 0.01D)
+							for (d7 = entity4.posZ - this.posZ; d9 * d9 + d7 * d7 < 1.0E-4D; d7 = (portinghelpers.MathHelper.NextDouble - portinghelpers.MathHelper.NextDouble) * 0.01D)
 							{
-								d9 = (MathHelper.NextDouble - MathHelper.NextDouble) * 0.01D;
+								d9 = (portinghelpers.MathHelper.NextDouble - portinghelpers.MathHelper.NextDouble) * 0.01D;
 							}
 
 							this.attackedAtYaw = (float)(Math.Atan2(d7, d9) * 180.0D / (double)(float)Math.PI) - this.rotationYaw;
@@ -800,7 +809,7 @@ namespace net.minecraft.src
 						}
 						else
 						{
-							this.attackedAtYaw = (float)((int)(MathHelper.NextDouble * 2.0D) * 180);
+							this.attackedAtYaw = (float)((int)(portinghelpers.MathHelper.NextDouble * 2.0D) * 180);
 						}
 					}
 
@@ -827,7 +836,7 @@ namespace net.minecraft.src
 		{
 			get
 			{
-				return this.Child ? (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.5F : (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F;
+				return this.Child ? (this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F + 1.5F : (this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F + 1.0F;
 			}
 		}
 
@@ -1530,7 +1539,7 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				if (this.rand.NestSingle() < 0.05F)
+				if (this.rand.NextSingle() < 0.05F)
 				{
 					this.randomYawVelocity = (this.rand.NextSingle() - 0.5F) * 20.0F;
 				}
@@ -1720,12 +1729,12 @@ namespace net.minecraft.src
 				this.heartsLife = this.heartsHalvesLife;
 				this.hurtTime = this.maxHurtTime = 10;
 				this.attackedAtYaw = 0.0F;
-				this.worldObj.playSoundAtEntity(this, this.HurtSound, this.SoundVolume, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+				this.worldObj.playSoundAtEntity(this, this.HurtSound, this.SoundVolume, (this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F + 1.0F);
 				this.attackEntityFrom(DamageSource.generic, 0);
 			}
 			else if (b1 == 3)
 			{
-				this.worldObj.playSoundAtEntity(this, this.DeathSound, this.SoundVolume, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+				this.worldObj.playSoundAtEntity(this, this.DeathSound, this.SoundVolume, (this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F + 1.0F);
 				this.health = 0;
 				this.onDeath(DamageSource.generic);
 			}
@@ -1751,19 +1760,17 @@ namespace net.minecraft.src
 
 		protected internal virtual void updatePotionEffects()
 		{
-			System.Collections.IEnumerator iterator1 = this.activePotionsMap.Keys.GetEnumerator();
-
-			while (iterator1.MoveNext())
-			{
-				int? integer2 = (int?)iterator1.Current;
-				PotionEffect potionEffect3 = (PotionEffect)this.activePotionsMap[integer2];
-				if (!potionEffect3.onUpdate(this) && !this.worldObj.isRemote)
-				{
-//JAVA TO C# CONVERTER TODO TASK: .NET enumerators are read-only:
-					iterator1.remove();
-					this.onFinishedPotionEffect(potionEffect3);
-				}
-			}
+			for(int i = activePotionsMap.Keys.Count - 1; i >= 0; i--) // PORTING TODO: Possible logic difference, original code used an iterator and deleted as it went. 
+																	  // You can't do that with C# iterators, so I opted to iterate backwards here instead.
+            {
+                int potionId = activePotionsMap.Keys.ElementAt(i);
+                PotionEffect potionEffect3 = activePotionsMap[potionId];
+                if (!potionEffect3.onUpdate(this) && !this.worldObj.isRemote)
+                {
+                    activePotionsMap.Remove(potionId);
+                    onFinishedPotionEffect(potionEffect3);
+                }
+            }
 
 			int i9;
 			if (this.potionsNeedUpdate)
@@ -1800,20 +1807,14 @@ namespace net.minecraft.src
 
 		public virtual void clearActivePotions()
 		{
-			System.Collections.IEnumerator iterator1 = this.activePotionsMap.Keys.GetEnumerator();
+            foreach (PotionEffect potionEffect in activePotionsMap.Values)
+            {
+                onFinishedPotionEffect(potionEffect);
+            }
 
-			while (iterator1.MoveNext())
-			{
-				int? integer2 = (int?)iterator1.Current;
-				PotionEffect potionEffect3 = (PotionEffect)this.activePotionsMap[integer2];
-				if (!this.worldObj.isRemote)
-				{
-//JAVA TO C# CONVERTER TODO TASK: .NET enumerators are read-only:
-					iterator1.remove();
-					this.onFinishedPotionEffect(potionEffect3);
-				}
-			}
+			activePotionsMap.Clear();
 
+			/* PORTING TODO: possible logic difference. */
 		}
 
 		public virtual System.Collections.ICollection ActivePotionEffects

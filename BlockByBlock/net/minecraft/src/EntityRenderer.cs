@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using BlockByBlock.helpers;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -11,6 +13,8 @@ namespace net.minecraft.src
 	using GL11 = org.lwjgl.opengl.GL11;
 	using GLContext = org.lwjgl.opengl.GLContext;
 	using GLU = org.lwjgl.util.glu.GLU;
+
+	// PORTING TODO: OpenGL code
 
 	public class EntityRenderer
 	{
@@ -58,7 +62,7 @@ namespace net.minecraft.src
 		internal float torchFlickerDX = 0.0F;
 		internal float torchFlickerY = 0.0F;
 		internal float torchFlickerDY = 0.0F;
-		private Random random = new Random();
+		private RandomExtended random = new RandomExtended();
 		private int rainSoundCounter = 0;
 		internal float[] rainXCoords;
 		internal float[] rainYCoords;
@@ -547,8 +551,8 @@ namespace net.minecraft.src
 
 		private void updateTorchFlicker()
 		{
-			this.torchFlickerDX = (float)((double)this.torchFlickerDX + (MathHelper.NextDouble - MathHelper.NextDouble) * MathHelper.NextDouble * MathHelper.NextDouble);
-			this.torchFlickerDY = (float)((double)this.torchFlickerDY + (MathHelper.NextDouble - MathHelper.NextDouble) * MathHelper.NextDouble * MathHelper.NextDouble);
+			this.torchFlickerDX = (float)((double)this.torchFlickerDX + (portinghelpers.MathHelper.NextDouble - portinghelpers.MathHelper.NextDouble) * portinghelpers.MathHelper.NextDouble * portinghelpers.MathHelper.NextDouble);
+			this.torchFlickerDY = (float)((double)this.torchFlickerDY + (portinghelpers.MathHelper.NextDouble - portinghelpers.MathHelper.NextDouble) * portinghelpers.MathHelper.NextDouble * portinghelpers.MathHelper.NextDouble);
 			this.torchFlickerDX = (float)((double)this.torchFlickerDX * 0.9D);
 			this.torchFlickerDY = (float)((double)this.torchFlickerDY * 0.9D);
 			this.torchFlickerX += (this.torchFlickerDX - this.torchFlickerX) * 1.0F;
@@ -728,7 +732,7 @@ namespace net.minecraft.src
 					s18 = 40;
 				}
 
-				long j8;
+				long sleepMs;
 				if (this.mc.theWorld != null)
 				{
 					Profiler.startSection("level");
@@ -744,22 +748,14 @@ namespace net.minecraft.src
 					Profiler.endStartSection("sleep");
 					if (this.mc.gameSettings.limitFramerate == 2)
 					{
-						j8 = (this.renderEndNanoTime + (long)(1000000000 / s18) - System.nanoTime()) / 1000000L;
-						if (j8 > 0L && j8 < 500L)
+						sleepMs = (this.renderEndNanoTime + (long)(1000000000 / s18) - JTime.NanoTime()) / 1000000L;
+						if (sleepMs > 0L && sleepMs < 500L)
 						{
-							try
-							{
-								Thread.Sleep(j8);
-							}
-							catch (InterruptedException interruptedException12)
-							{
-								Console.WriteLine(interruptedException12.ToString());
-								Console.Write(interruptedException12.StackTrace);
-							}
+							Thread.Sleep((int)sleepMs);
 						}
 					}
 
-					this.renderEndNanoTime = System.nanoTime();
+					this.renderEndNanoTime = JTime.NanoTime();
 					Profiler.endStartSection("gui");
 					if (!this.mc.gameSettings.hideGUI || this.mc.currentScreen != null)
 					{
@@ -776,26 +772,18 @@ namespace net.minecraft.src
 					GL11.glMatrixMode(GL11.GL_MODELVIEW);
 					GL11.glLoadIdentity();
 					this.setupOverlayRendering();
-					j8 = (this.renderEndNanoTime + (long)(1000000000 / s18) - System.nanoTime()) / 1000000L;
-					if (j8 < 0L)
+					sleepMs = (this.renderEndNanoTime + (long)(1000000000 / s18) - JTime.NanoTime()) / 1000000L;
+					if (sleepMs < 0L)
 					{
-						j8 += 10L;
+						sleepMs += 10L;
 					}
 
-					if (j8 > 0L && j8 < 500L)
+					if (sleepMs > 0L && sleepMs < 500L)
 					{
-						try
-						{
-							Thread.Sleep(j8);
-						}
-						catch (InterruptedException interruptedException11)
-						{
-							Console.WriteLine(interruptedException11.ToString());
-							Console.Write(interruptedException11.StackTrace);
-						}
+						Thread.Sleep((int)sleepMs);
 					}
 
-					this.renderEndNanoTime = System.nanoTime();
+					this.renderEndNanoTime = JTime.NanoTime();
 				}
 
 				if (this.mc.currentScreen != null)
@@ -869,7 +857,7 @@ namespace net.minecraft.src
 				this.setupCameraTransform(f1, i18);
 				ActiveRenderInfo.updateRenderInfo(this.mc.thePlayer, this.mc.gameSettings.thirdPersonView == 2);
 				Profiler.endStartSection("frustrum");
-				ClippingHelperImpl.Instance;
+				ClippingHelperImpl.getInstance();
 				if (this.mc.gameSettings.renderDistance < 2)
 				{
 					this.setupFog(-1, f1);
@@ -894,7 +882,7 @@ namespace net.minecraft.src
 
 					while (!this.mc.renderGlobal.updateRenderers(entityLiving4, false) && j2 != 0L)
 					{
-						long j20 = j2 - System.nanoTime();
+						long j20 = j2 - JTime.NanoTime();
 						if (j20 < 0L || j20 > 1000000000L)
 						{
 							break;
@@ -1042,7 +1030,8 @@ namespace net.minecraft.src
 
 			if (f1 != 0.0F)
 			{
-				this.random.setSeed((long)this.rendererUpdateCount * 312987231L);
+				//this.random.setSeed((long)this.rendererUpdateCount * 312987231L); PORTING TODO: RandomExtended.setSeed
+				random = new RandomExtended((long)this.rendererUpdateCount * 312987231L);
 				EntityLiving entityLiving2 = this.mc.renderViewEntity;
 				World world3 = this.mc.theWorld;
 				int i4 = MathHelper.floor_double(entityLiving2.posX);
@@ -1072,8 +1061,8 @@ namespace net.minecraft.src
 					BiomeGenBase biomeGenBase21 = world3.getBiomeGenForCoords(i17, i18);
 					if (i19 <= i5 + b7 && i19 >= i5 - b7 && biomeGenBase21.canSpawnLightningBolt() && biomeGenBase21.FloatTemperature > 0.2F)
 					{
-						float f22 = this.random.nextFloat();
-						float f23 = this.random.nextFloat();
+						float f22 = this.random.NextSingle();
+						float f23 = this.random.NextSingle();
 						if (i20 > 0)
 						{
 							if (Block.blocksList[i20].blockMaterial == Material.lava)
@@ -1201,7 +1190,8 @@ namespace net.minecraft.src
 
 							if (i27 != i28)
 							{
-								this.random.setSeed((long)(i21 * i21 * 3121 + i21 * 45238971 ^ i20 * i20 * 418711 + i20 * 13761));
+								//this.random.setSeed((long)(i21 * i21 * 3121 + i21 * 45238971 ^ i20 * i20 * 418711 + i20 * 13761)); PORTING TODO: RandomExtended.setSeed
+								random = new RandomExtended((long)(i21 * i21 * 3121 + i21 * 45238971 ^ i20 * i20 * 418711 + i20 * 13761));
 								float f31 = biomeGenBase25.FloatTemperature;
 								float f32;
 								double d35;
@@ -1219,7 +1209,7 @@ namespace net.minecraft.src
 										tessellator8.startDrawingQuads();
 									}
 
-									f32 = ((float)(this.rendererUpdateCount + i21 * i21 * 3121 + i21 * 45238971 + i20 * i20 * 418711 + i20 * 13761 & 31) + f1) / 32.0F * (3.0F + this.random.nextFloat());
+									f32 = ((float)(this.rendererUpdateCount + i21 * i21 * 3121 + i21 * 45238971 + i20 * i20 * 418711 + i20 * 13761 & 31) + f1) / 32.0F * (3.0F + this.random.NextSingle());
 									double d33 = (double)((float)i21 + 0.5F) - entityLiving41.posX;
 									d35 = (double)((float)i20 + 0.5F) - entityLiving41.posZ;
 									float f37 = MathHelper.sqrt_double(d33 * d33 + d35 * d35) / (float)b16;
@@ -1248,8 +1238,8 @@ namespace net.minecraft.src
 									}
 
 									f32 = ((float)(this.rendererUpdateCount & 511) + f1) / 512.0F;
-									float f46 = this.random.nextFloat() + f19 * 0.01F * (float)this.random.nextGaussian();
-									float f34 = this.random.nextFloat() + f19 * (float)this.random.nextGaussian() * 0.001F;
+									float f46 = this.random.NextSingle() + f19 * 0.01F * (float)this.random.NextGaussian();
+									float f34 = this.random.NextSingle() + f19 * (float)this.random.NextGaussian() * 0.001F;
 									d35 = (double)((float)i21 + 0.5F) - entityLiving41.posX;
 									double d47 = (double)((float)i20 + 0.5F) - entityLiving41.posZ;
 									float f39 = MathHelper.sqrt_double(d35 * d35 + d47 * d47) / (float)b16;
@@ -1589,7 +1579,7 @@ namespace net.minecraft.src
 		private FloatBuffer setFogColorBuffer(float f1, float f2, float f3, float f4)
 		{
 			this.fogColorBuffer.clear();
-			this.fogColorBuffer.put(f1).put(f2).put(f3).put(f4);
+			this.fogColorBuffer.putFloat(f1).putFloat(f2).putFloat(f3).putFloat(f4);
 			this.fogColorBuffer.flip();
 			return this.fogColorBuffer;
 		}

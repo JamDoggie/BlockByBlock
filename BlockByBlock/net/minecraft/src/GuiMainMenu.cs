@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BlockByBlock;
+using BlockByBlock.java_extensions;
+using System;
 using System.Collections;
 using System.IO;
 
@@ -10,7 +12,7 @@ namespace net.minecraft.src
 
 	public class GuiMainMenu : GuiScreen
 	{
-		private static readonly Random rand = new Random();
+		private static readonly RandomExtended rand = new RandomExtended();
 		private float updateCounter = 0.0F;
 		private string splashText = "missingno";
 		private GuiButton multiplayerButton;
@@ -22,7 +24,7 @@ namespace net.minecraft.src
 			try
 			{
 				ArrayList arrayList1 = new ArrayList();
-				StreamReader bufferedReader2 = new StreamReader(typeof(GuiMainMenu).getResourceAsStream("/title/splashes.txt"), Charset.forName("UTF-8"));
+				StreamReader bufferedReader2 = new StreamReader(GameEnv.GetResourceAsStream("/title/splashes.txt"));
 				string string3 = "";
 
 				while (!string.ReferenceEquals((string3 = bufferedReader2.ReadLine()), null))
@@ -43,7 +45,7 @@ namespace net.minecraft.src
 			{
 			}
 
-			this.updateCounter = rand.nextFloat();
+			this.updateCounter = rand.NextSingle();
 		}
 
 		public override void updateScreen()
@@ -63,8 +65,7 @@ namespace net.minecraft.src
 		public override void initGui()
 		{
 			this.viewportTexture = this.mc.renderEngine.allocateAndSetupTexture(new BufferedImage(256, 256, 2));
-			DateTime calendar1 = new DateTime();
-			calendar1 = new DateTime(DateTime.Now);
+			DateTime calendar1 = DateTime.Now;
 			if (calendar1.Month + 1 == 11 && calendar1.Day == 9)
 			{
 				this.splashText = "Happy birthday, ez!";

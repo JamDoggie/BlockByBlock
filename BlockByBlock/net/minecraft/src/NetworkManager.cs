@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Immutable;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 
 namespace net.minecraft.src
@@ -11,22 +14,19 @@ namespace net.minecraft.src
 		public static int numReadThreads;
 		public static int numWriteThreads;
 		private object sendQueueLock = new object();
-		private Socket networkSocket;
-		private readonly SocketAddress remoteSocketAddress;
-		private DataInputStream socketInputStream;
-		private DataOutputStream socketOutputStream;
-//JAVA TO C# CONVERTER NOTE: Field name conflicts with a method name of the current type:
-		private bool isRunning_Conflict = true;
-		private System.Collections.IList readPackets = Collections.synchronizedList(new ArrayList());
-		private System.Collections.IList dataPackets = Collections.synchronizedList(new ArrayList());
-		private System.Collections.IList chunkDataPackets = Collections.synchronizedList(new ArrayList());
+		private Socket? networkSocket;
+		private NetworkStream networkStream;
+		private BinaryReader? socketInputStream;
+		private BinaryWriter? socketOutputStream;
+		private bool isRunning = true;
+		private ImmutableList<Packet> readPackets = ImmutableList.Create<Packet>();
+		private ImmutableList<Packet> dataPackets = ImmutableList.Create<Packet>();
+		private ImmutableList<Packet> chunkDataPackets = ImmutableList.Create<Packet>();
 		private NetHandler netHandler;
-//JAVA TO C# CONVERTER NOTE: Field name conflicts with a method name of the current type:
 		private bool isServerTerminating_Conflict = false;
-		private Thread writeThread;
-		private Thread readThread;
-//JAVA TO C# CONVERTER NOTE: Field name conflicts with a method name of the current type:
-		private bool isTerminating_Conflict = false;
+		private NetworkWriterThread writeThread;
+		private NetworkReaderThread readThread;
+		private bool isTerminating = false;
 		private string terminationReason = "";
 		private object[] field_20101_t;
 		private int timeSinceLastRead = 0;
@@ -36,30 +36,29 @@ namespace net.minecraft.src
 		public int chunkDataSendCounter = 0;
 		private int field_20100_w = 50;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public NetworkManager(java.net.Socket socket1, String string2, NetHandler netHandler3) throws java.io.IOException
 		public NetworkManager(Socket socket1, string string2, NetHandler netHandler3)
 		{
 			this.networkSocket = socket1;
-			this.remoteSocketAddress = socket1.getRemoteSocketAddress();
 			this.netHandler = netHandler3;
 
 			try
 			{
-				socket1.setSoTimeout(30000);
-				socket1.setTrafficClass(24);
+				socket1.ReceiveTimeout = 30000;
 			}
 			catch (SocketException socketException5)
 			{
 				Console.Error.WriteLine(socketException5.Message);
 			}
 
-			this.socketInputStream = new DataInputStream(socket1.getInputStream());
-			this.socketOutputStream = new DataOutputStream(new BufferedOutputStream(socket1.getOutputStream(), 5120));
-			this.readThread = new NetworkReaderThread(this, string2 + " read thread");
-			this.writeThread = new NetworkWriterThread(this, string2 + " write thread");
-			this.readThread.Start();
-			this.writeThread.Start();
+			networkStream = new NetworkStream(socket1);
+			
+            socketInputStream = new BinaryReader(networkStream);
+            socketOutputStream = new BinaryWriter(networkStream);
+			
+            readThread = new NetworkReaderThread(this, new CancellationTokenSource(), string2 + " read thread");
+			writeThread = new NetworkWriterThread(this, new CancellationTokenSource(), string2 + " write thread");
+			readThread.startThread();
+			writeThread.startThread();
 		}
 
 		public virtual void addToSendQueue(Packet packet1)
@@ -130,7 +129,7 @@ namespace net.minecraft.src
 			}
 			catch (Exception exception8)
 			{
-				if (!this.isTerminating_Conflict)
+				if (!this.isTerminating)
 				{
 					this.onNetworkError(exception8);
 				}
@@ -141,8 +140,8 @@ namespace net.minecraft.src
 
 		public virtual void wakeThreads()
 		{
-			this.readThread.Interrupt();
-			this.writeThread.Interrupt();
+			this.readThread.thread.Interrupt();
+			this.writeThread.thread.Interrupt();
 		}
 
 		private bool readPacket()
@@ -173,7 +172,7 @@ namespace net.minecraft.src
 			}
 			catch (Exception exception3)
 			{
-				if (!this.isTerminating_Conflict)
+				if (!this.isTerminating)
 				{
 					this.onNetworkError(exception3);
 				}
@@ -191,17 +190,17 @@ namespace net.minecraft.src
 
 		public virtual void networkShutdown(string string1, params object[] object2)
 		{
-			if (this.isRunning_Conflict)
+			if (this.isRunning)
 			{
-				this.isTerminating_Conflict = true;
+				this.isTerminating = true;
 				this.terminationReason = string1;
 				this.field_20101_t = object2;
-				(new NetworkMasterThread(this)).Start();
-				this.isRunning_Conflict = false;
+				(new NetworkMasterThread(this, new CancellationTokenSource())).startThread();
+				this.isRunning = false;
 
 				try
 				{
-					this.socketInputStream.close();
+					this.socketInputStream.Dispose();
 					this.socketInputStream = null;
 				}
 				catch (Exception)
@@ -210,7 +209,7 @@ namespace net.minecraft.src
 
 				try
 				{
-					this.socketOutputStream.close();
+					this.socketOutputStream.Dispose();
 					this.socketOutputStream = null;
 				}
 				catch (Exception)
@@ -219,7 +218,7 @@ namespace net.minecraft.src
 
 				try
 				{
-					this.networkSocket.close();
+					this.networkSocket.Dispose();
 					this.networkSocket = null;
 				}
 				catch (Exception)
@@ -257,7 +256,7 @@ namespace net.minecraft.src
 			}
 
 			this.wakeThreads();
-			if (this.isTerminating_Conflict && this.readPackets.Count == 0)
+			if (this.isTerminating && this.readPackets.Count == 0)
 			{
 				this.netHandler.handleErrorMessage(this.terminationReason, this.field_20101_t);
 			}
@@ -270,14 +269,14 @@ namespace net.minecraft.src
 			{
 				this.wakeThreads();
 				this.isServerTerminating_Conflict = true;
-				this.readThread.Interrupt();
-				(new ThreadMonitorConnection(this)).Start();
+				this.readThread.thread.Interrupt();
+				(new ThreadMonitorConnection(this, new CancellationTokenSource())).startThread();
 			}
 		}
 
-		internal static bool isRunning(NetworkManager networkManager0)
+		internal static bool getIsRunning(NetworkManager networkManager0)
 		{
-			return networkManager0.isRunning_Conflict;
+			return networkManager0.isRunning;
 		}
 
 		internal static bool isServerTerminating(NetworkManager networkManager0)
@@ -295,14 +294,14 @@ namespace net.minecraft.src
 			return networkManager0.sendPacket();
 		}
 
-		internal static DataOutputStream getOutputStream(NetworkManager networkManager0)
+		internal static BinaryWriter? getOutputStream(NetworkManager networkManager0)
 		{
 			return networkManager0.socketOutputStream;
 		}
 
-		internal static bool isTerminating(NetworkManager networkManager0)
+		internal static bool getIsTerminating(NetworkManager networkManager0)
 		{
-			return networkManager0.isTerminating_Conflict;
+			return networkManager0.isTerminating;
 		}
 
 		internal static void sendError(NetworkManager networkManager0, Exception exception1)
@@ -310,12 +309,12 @@ namespace net.minecraft.src
 			networkManager0.onNetworkError(exception1);
 		}
 
-		internal static Thread getReadThread(NetworkManager networkManager0)
+		internal static NetworkThread getReadThread(NetworkManager networkManager0)
 		{
 			return networkManager0.readThread;
 		}
 
-		internal static Thread getWriteThread(NetworkManager networkManager0)
+		internal static NetworkThread getWriteThread(NetworkManager networkManager0)
 		{
 			return networkManager0.writeThread;
 		}

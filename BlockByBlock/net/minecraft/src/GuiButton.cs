@@ -4,6 +4,8 @@
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code.
+
 	public class GuiButton : Gui
 	{
 		protected internal int field_52008_a;

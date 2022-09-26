@@ -4,7 +4,7 @@
 	{
 		public ItemBucketMilk(int i1) : base(i1)
 		{
-			this.MaxStackSize = 1;
+			this.setMaxStackSize(1);
 		}
 
 		public override ItemStack onFoodEaten(ItemStack itemStack1, World world2, EntityPlayer entityPlayer3)

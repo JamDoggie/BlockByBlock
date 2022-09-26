@@ -62,10 +62,10 @@ namespace net.minecraft.src
 			}
 
 			string string8 = saveFormatComparator6.FileName;
-			string8 = string8 + " (" + GuiSelectWorld.getDateFormatter(this.parentWorldGui).format(new DateTime(saveFormatComparator6.LastTimePlayed));
+			string8 = string8 + " (" + new DateTime(saveFormatComparator6.LastTimePlayed).ToString(GuiSelectWorld.getDateFormat(parentWorldGui));
 			string8 = string8 + ")";
 			string string9 = "";
-			if (saveFormatComparator6.requiresConversion())
+			if (saveFormatComparator6.getRequiresConversion())
 			{
 				string9 = GuiSelectWorld.getLocalizedMustConvert(this.parentWorldGui) + " " + string9;
 			}

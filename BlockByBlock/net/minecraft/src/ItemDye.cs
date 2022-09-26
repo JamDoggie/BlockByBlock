@@ -7,8 +7,8 @@
 
 		public ItemDye(int i1) : base(i1)
 		{
-			this.HasSubtypes = true;
-			this.MaxDamage = 0;
+			this.setHasSubtypes(true);
+			this.setMaxDamage(0);
 		}
 
 		public override int getIconFromDamage(int i1)

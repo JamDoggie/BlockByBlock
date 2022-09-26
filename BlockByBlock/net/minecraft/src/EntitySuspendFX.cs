@@ -9,11 +9,11 @@
 			this.particleBlue = 0.7F;
 			this.ParticleTextureIndex = 0;
 			this.setSize(0.01F, 0.01F);
-			this.particleScale *= this.rand.nextFloat() * 0.6F + 0.2F;
+			this.particleScale *= this.rand.NextSingle() * 0.6F + 0.2F;
 			this.motionX = d8 * 0.0D;
 			this.motionY = d10 * 0.0D;
 			this.motionZ = d12 * 0.0D;
-			this.particleMaxAge = (int)(16.0D / (MathHelper.NextDouble * 0.8D + 0.2D));
+			this.particleMaxAge = (int)(16.0D / (portinghelpers.MathHelper.NextDouble * 0.8D + 0.2D));
 		}
 
 		public override void onUpdate()

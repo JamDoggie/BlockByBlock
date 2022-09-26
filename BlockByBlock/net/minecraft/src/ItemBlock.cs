@@ -7,7 +7,7 @@
 		public ItemBlock(int i1) : base(i1)
 		{
 			this.blockID = i1 + 256;
-			this.IconIndex = Block.blocksList[i1 + 256].getBlockTextureFromSide(2);
+			this.setIconIndex(Block.blocksList[i1 + 256].getBlockTextureFromSide(2));
 		}
 
 		public virtual int BlockID

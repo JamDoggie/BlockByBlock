@@ -31,7 +31,7 @@ namespace net.minecraft.src
 			this.dataWatcher.addObject(18, (sbyte)0);
 		}
 
-		public override void updateAITick()
+		protected internal override void updateAITick()
 		{
 			if (!this.MoveHelper.func_48186_a())
 			{

@@ -21,6 +21,12 @@
 			}
 		}
 
+		public static ClippingHelper getInstance()
+		{
+			instance.init();
+			return instance;
+		}
+
 		private void normalize(float[][] f1, int i2)
 		{
 			float f3 = MathHelper.sqrt_float(f1[i2][0] * f1[i2][0] + f1[i2][1] * f1[i2][1] + f1[i2][2] * f1[i2][2]);

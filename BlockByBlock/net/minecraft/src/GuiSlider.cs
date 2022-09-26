@@ -4,6 +4,8 @@
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	public class GuiSlider : GuiButton
 	{
 		public float sliderValue = 1.0F;

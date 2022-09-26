@@ -8,8 +8,7 @@ namespace net.minecraft.src
 		private readonly string displayName;
 		private readonly long lastTimePlayed;
 		private readonly long sizeOnDisk;
-//JAVA TO C# CONVERTER NOTE: Field name conflicts with a method name of the current type:
-		private readonly bool requiresConversion_Conflict;
+		private readonly bool requiresConversion;
 		private readonly int gameType;
 		private readonly bool hardcore;
 
@@ -20,7 +19,7 @@ namespace net.minecraft.src
 			this.lastTimePlayed = j3;
 			this.sizeOnDisk = j5;
 			this.gameType = i7;
-			this.requiresConversion_Conflict = z8;
+			this.requiresConversion = z8;
 			this.hardcore = z9;
 		}
 
@@ -40,9 +39,9 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual bool requiresConversion()
+		public virtual bool getRequiresConversion()
 		{
-			return this.requiresConversion_Conflict;
+			return requiresConversion;
 		}
 
 		public virtual long LastTimePlayed

@@ -56,7 +56,7 @@ namespace net.minecraft.src
 			this.tasks.addTask(8, new EntityAILookIdle(this));
 		}
 
-		protected internal override bool AIEnabled
+		public override bool AIEnabled
 		{
 			get
 			{
@@ -155,9 +155,9 @@ namespace net.minecraft.src
 					for (int i4 = 0; i4 < i3; ++i4)
 					{
 						EntityItem entityItem5 = this.entityDropItem(new ItemStack(Block.cloth.blockID, 1, this.FleeceColor), 1.0F);
-						entityItem5.motionY += (double)(this.rand.nextFloat() * 0.05F);
-						entityItem5.motionX += (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
-						entityItem5.motionZ += (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
+						entityItem5.motionY += (double)(this.rand.NextSingle() * 0.05F);
+						entityItem5.motionX += (double)((this.rand.NextSingle() - this.rand.NextSingle()) * 0.1F);
+						entityItem5.motionZ += (double)((this.rand.NextSingle() - this.rand.NextSingle()) * 0.1F);
 					}
 				}
 
@@ -251,7 +251,7 @@ namespace net.minecraft.src
 		{
 			EntitySheep entitySheep2 = (EntitySheep)entityAnimal1;
 			EntitySheep entitySheep3 = new EntitySheep(this.worldObj);
-			if (this.rand.nextBoolean())
+			if (this.rand.NextBool())
 			{
 				entitySheep3.FleeceColor = this.FleeceColor;
 			}

@@ -12,8 +12,8 @@ namespace net.minecraft.src
 		public GuiConnecting(Minecraft minecraft1, string string2, int i3)
 		{
 			Console.WriteLine("Connecting to " + string2 + ", " + i3);
-			minecraft1.changeWorld1((World)null);
-			(new ThreadConnectToServer(this, minecraft1, string2, i3)).Start();
+			minecraft1.changeWorld1(null);
+			(new ThreadConnectToServer(this, minecraft1, string2, i3)).startThread();
 		}
 
 		public override void updateScreen()

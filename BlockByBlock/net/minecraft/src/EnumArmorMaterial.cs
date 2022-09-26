@@ -2,28 +2,24 @@
 
 namespace net.minecraft.src
 {
+	// PORTING TODO: Check this class. I think it's fine but not sure.
 	public sealed class EnumArmorMaterial
 	{
-//JAVA TO C# CONVERTER TODO TASK: Enum value-specific class bodies are not converted by Java to C# Converter:
-//        CLOTH(5, new int[]{1, 3, 2, 1}, 15),
-//JAVA TO C# CONVERTER TODO TASK: Enum value-specific class bodies are not converted by Java to C# Converter:
-//        CHAIN(15, new int[]{2, 5, 4, 1}, 12),
-//JAVA TO C# CONVERTER TODO TASK: Enum value-specific class bodies are not converted by Java to C# Converter:
-//        IRON(15, new int[]{2, 6, 5, 2}, 9),
-//JAVA TO C# CONVERTER TODO TASK: Enum value-specific class bodies are not converted by Java to C# Converter:
-//        GOLD(7, new int[]{2, 5, 3, 1}, 25),
-//JAVA TO C# CONVERTER TODO TASK: Enum value-specific class bodies are not converted by Java to C# Converter:
-//        DIAMOND(33, new int[]{3, 8, 6, 3}, 10);
+        public static readonly EnumArmorMaterial CLOTH = new EnumArmorMaterial("CLOTH", InnerEnum.CLOTH, 5, new int[] { 1, 3, 2, 1 }, 15);
+        public static readonly EnumArmorMaterial CHAIN = new EnumArmorMaterial("CHAIN", InnerEnum.CHAIN, 15, new int[] { 2, 5, 4, 1 }, 12);
+        public static readonly EnumArmorMaterial IRON = new EnumArmorMaterial("IRON", InnerEnum.IRON, 15, new int[] { 2, 6, 5, 2 }, 9);
+        public static readonly EnumArmorMaterial GOLD = new EnumArmorMaterial("GOLD", InnerEnum.GOLD, 7, new int[] { 2, 5, 3, 1 }, 25);
+        public static readonly EnumArmorMaterial DIAMOND = new EnumArmorMaterial("DIAMOND", InnerEnum.DIAMOND, 33, new int[] { 3, 8, 6, 3 }, 10);
 
-		private static readonly List<EnumArmorMaterial> valueList = new List<EnumArmorMaterial>();
+        private static readonly List<EnumArmorMaterial> valueList = new List<EnumArmorMaterial>();
 
 		static EnumArmorMaterial()
 		{
-			valueList.Add(CLOTH);
-			valueList.Add(CHAIN);
-			valueList.Add(IRON);
-			valueList.Add(GOLD);
-			valueList.Add(DIAMOND);
+			valueList.Add(new EnumArmorMaterial("CLOTH", InnerEnum.CLOTH, 5, new int[] { 1, 3, 2, 1 }, 15));
+			valueList.Add(new EnumArmorMaterial("CHAIN", InnerEnum.CHAIN, 15, new int[] { 2, 5, 4, 1 }, 12));
+			valueList.Add(new EnumArmorMaterial("IRON", InnerEnum.IRON, 15, new int[] { 2, 6, 5, 2 }, 9));
+			valueList.Add(new EnumArmorMaterial("GOLD", InnerEnum.GOLD, 7, new int[] { 2, 5, 3, 1 }, 25));
+			valueList.Add(new EnumArmorMaterial("DIAMOND", InnerEnum.DIAMOND, 33, new int[] { 3, 8, 6, 3 }, 10));
 		}
 
 		public enum InnerEnum

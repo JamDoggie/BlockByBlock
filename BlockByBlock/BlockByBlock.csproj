@@ -26,6 +26,13 @@
 
   <ItemGroup>
     <PackageReference Include="SharpZipLib" Version="1.4.0" />
+    <PackageReference Include="TextCopy" Version="6.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BidiSharp">
+      <HintPath>..\..\BidiSharp\BidiSharp\bin\Debug\netstandard2.0\BidiSharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

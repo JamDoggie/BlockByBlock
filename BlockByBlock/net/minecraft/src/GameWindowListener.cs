@@ -23,12 +23,12 @@ namespace net.minecraft.src
 
 			try
 			{
-				this.mcThread.Join();
+				mcThread.Join();
 			}
-			catch (InterruptedException interruptedException3)
+			catch (ThreadInterruptedException e)
 			{
-				Console.WriteLine(interruptedException3.ToString());
-				Console.Write(interruptedException3.StackTrace);
+				Console.WriteLine(e.ToString());
+				Console.Write(e.StackTrace);
 			}
 
 			Environment.Exit(0);

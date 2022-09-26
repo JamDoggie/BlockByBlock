@@ -1,14 +1,17 @@
-﻿namespace net.minecraft.src
+﻿using System.Linq;
+using System.Collections.Generic;
+
+namespace net.minecraft.src
 {
 
 	public class GuiSelectWorld : GuiScreen
 	{
-		private readonly DateFormat dateFormatter = new SimpleDateFormat();
-		protected internal GuiScreen parentScreen;
+        private readonly string dateFormat = "M/dd/y h:mm tt";
+        protected internal GuiScreen parentScreen;
 		protected internal string screenTitle = "Select world";
 		private bool selected = false;
 		private int selectedWorld;
-		private System.Collections.IList saveList;
+		private List<SaveFormatComparator> saveList;
 		private GuiWorldSlot worldSlotContainer;
 		private string localizedWorldText;
 		private string localizedMustConvertText;
@@ -41,18 +44,18 @@
 		{
 			ISaveFormat iSaveFormat1 = this.mc.SaveLoader;
 			this.saveList = iSaveFormat1.SaveList;
-			this.saveList.Sort();
-			this.selectedWorld = -1;
+			saveList.Sort();
+            this.selectedWorld = -1;
 		}
 
 		protected internal virtual string getSaveFileName(int i1)
 		{
-			return ((SaveFormatComparator)this.saveList[i1]).FileName;
+			return (this.saveList[i1]).FileName;
 		}
 
 		protected internal virtual string getSaveName(int i1)
 		{
-			string string2 = ((SaveFormatComparator)this.saveList[i1]).DisplayName;
+			string string2 = (this.saveList[i1]).DisplayName;
 			if (string.ReferenceEquals(string2, null) || MathHelper.stringNullOrLengthZero(string2))
 			{
 				StringTranslate stringTranslate3 = StringTranslate.Instance;
@@ -205,9 +208,9 @@
 			return guiSelectWorld0.localizedWorldText;
 		}
 
-		internal static DateFormat getDateFormatter(GuiSelectWorld guiSelectWorld0)
+		internal static string getDateFormat(GuiSelectWorld guiSelectWorld0)
 		{
-			return guiSelectWorld0.dateFormatter;
+			return guiSelectWorld0.dateFormat;
 		}
 
 		internal static string getLocalizedMustConvert(GuiSelectWorld guiSelectWorld0)

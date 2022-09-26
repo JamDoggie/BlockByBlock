@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -7,6 +8,7 @@ namespace net.minecraft.src
 	using GL11 = org.lwjgl.opengl.GL11;
 	using GL12 = org.lwjgl.opengl.GL12;
 
+    // PORTING TODO: OpenGL code.
 	public class GuiAchievements : GuiScreen
 	{
 		private static readonly int guiMapTop = AchievementList.minDisplayColumn * 24 - 112;
@@ -195,7 +197,7 @@ namespace net.minecraft.src
 			int i13 = i5 + 288 >> 4;
 			int i14 = (i4 + 288) % 16;
 			int i15 = (i5 + 288) % 16;
-			Random random21 = new Random();
+			RandomExtended random21 = new RandomExtended();
 
 			int i22;
 			int i24;
@@ -208,8 +210,9 @@ namespace net.minecraft.src
 
 				for (i24 = 0; i24 * 16 - i14 < 224; ++i24)
 				{
-					random21.setSeed((long)(1234 + i12 + i24));
-					random21.Next();
+					//random21.setSeed((long)(1234 + i12 + i24)); PORTING TODO: RandomExtended.setSeed
+					random21 = new RandomExtended((long)(1234 + i12 + i24));
+                    random21.Next();
 					i25 = random21.Next(1 + i13 + i22) + (i13 + i22) / 2;
 					i26 = Block.sand.blockIndexInTexture;
 					if (i25 <= 37 && i13 + i22 != 35)

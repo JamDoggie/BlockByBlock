@@ -7,6 +7,8 @@ namespace net.minecraft.src
 	using GL11 = org.lwjgl.opengl.GL11;
 	using GL12 = org.lwjgl.opengl.GL12;
 
+	// PORTING TODO: OpenGL code
+
 	public abstract class GuiContainer : GuiScreen
 	{
 		protected internal static RenderItem itemRenderer = new RenderItem();

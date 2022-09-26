@@ -3,7 +3,7 @@
 
 	public interface ImageBuffer
 	{
-		BufferedImage parseUserSkin(BufferedImage bufferedImage1);
+		BufferedImage parseUserSkin(BufferedImage bufferedImage1); // PORTING TODO: Java image type
 	}
 
 }

@@ -38,7 +38,7 @@
 			}
 		}
 
-		protected internal override bool AIEnabled
+		public override bool AIEnabled
 		{
 			get
 			{
@@ -51,7 +51,7 @@
 			if (this.worldObj.Daytime && !this.worldObj.isRemote)
 			{
 				float f1 = this.getBrightness(1.0F);
-				if (f1 > 0.5F && this.worldObj.canBlockSeeTheSky(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)) && this.rand.nextFloat() * 30.0F < (f1 - 0.4F) * 2.0F)
+				if (f1 > 0.5F && this.worldObj.canBlockSeeTheSky(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)) && this.rand.NextSingle() * 30.0F < (f1 - 0.4F) * 2.0F)
 				{
 					this.Fire = 8;
 				}

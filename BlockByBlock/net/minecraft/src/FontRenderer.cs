@@ -1,20 +1,25 @@
-﻿using System;
+﻿using BidiSharp;
+using BlockByBlock;
+using BlockByBlock.java_extensions;
+using System;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace net.minecraft.src
 {
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
 	public class FontRenderer
 	{
-		private static readonly Pattern field_52015_r = Pattern.compile("(?i)\\u00A7[0-9A-FK-OR]");
+		private static readonly Regex chatColorRegex = new Regex("(?i)\\u00A7[0-9A-FK-OR]", RegexOptions.Compiled);
 		private int[] charWidth = new int[256];
 		public int fontTextureName = 0;
 		public int FONT_HEIGHT = 8;
-		public Random fontRandom = new Random();
-		private sbyte[] glyphWidth = new sbyte[65536];
+		public RandomExtended fontRandom = new RandomExtended();
+		private byte[] glyphWidth = new byte[65536];
 		private readonly int[] glyphTextureName = new int[256];
 		private int[] colorCode = new int[32];
 		private int boundTextureName;
@@ -41,9 +46,11 @@ namespace net.minecraft.src
 			BufferedImage bufferedImage5;
 			try
 			{
-				bufferedImage5 = ImageIO.read(typeof(RenderEngine).getResourceAsStream(string2));
-				Stream inputStream6 = typeof(RenderEngine).getResourceAsStream("/font/glyph_sizes.bin");
-				inputStream6.Read(this.glyphWidth, 0, this.glyphWidth.Length);
+				bufferedImage5 = ImageIO.read(GameEnv.GetResourceAsStream(string2));
+				Stream? inputStream6 = GameEnv.GetResourceAsStream("/font/glyph_sizes.bin");
+                
+				if (inputStream6 != null)
+					inputStream6.Read(this.glyphWidth, 0, this.glyphWidth.Length);
 			}
 			catch (IOException iOException18)
 			{
@@ -168,7 +175,7 @@ namespace net.minecraft.src
 			BufferedImage bufferedImage2;
 			try
 			{
-				bufferedImage2 = ImageIO.read(typeof(RenderEngine).getResourceAsStream(string3));
+				bufferedImage2 = ImageIO.read(GameEnv.GetResourceAsStream(string3));
 			}
 			catch (IOException iOException5)
 			{
@@ -243,10 +250,14 @@ namespace net.minecraft.src
 			this.func_50101_a(string1, i2, i3, i4, false);
 		}
 
-		private string bidiReorder(string string1)
+		private string bidiReorder(string str)
 		{
-			if (!string.ReferenceEquals(string1, null) && Bidi.requiresBidi(string1.ToCharArray(), 0, string1.Length))
+			// PORTING TODO: properly implement this method
+			return Bidi.LogicalToVisual(str);
+            
+			/*if (!string.ReferenceEquals(string1, null) && Bidi.requiresBidi(string1.ToCharArray(), 0, string1.Length))
 			{
+				BidiSharp.Bidi.
 				Bidi bidi2 = new Bidi(string1, -2);
 				sbyte[] b3 = new sbyte[bidi2.getRunCount()];
 				string[] string4 = new string[b3.Length];
@@ -308,7 +319,7 @@ namespace net.minecraft.src
 			else
 			{
 				return string1;
-			}
+			}*/
 		}
 
 		private void renderStringAtPos(string string1, bool z2)
@@ -757,7 +768,7 @@ namespace net.minecraft.src
 
 		public virtual System.Collections.IList func_50108_c(string string1, int i2)
 		{
-			return Arrays.asList(this.func_50113_d(string1, i2).Split("\n", true));
+			return func_50113_d(string1, i2).Split("\n", true).ToList();
 		}
 
 		internal virtual string func_50113_d(string string1, int i2)
@@ -843,13 +854,18 @@ namespace net.minecraft.src
 			return c0 >= (char)107 && c0 <= (char)111 || c0 >= (char)75 && c0 <= (char)79 || c0 == (char)114 || c0 == (char)82;
 		}
 
+		/// <summary>
+		/// This has something to do with chat colors. char 167 is the section symbol (§) in the unicode font. 0x00A7
+		/// </summary>
+		/// <param name="string0"></param>
+		/// <returns></returns>
 		private static string func_50114_c(string string0)
 		{
 			string string1 = "";
 			int i2 = -1;
 			int i3 = string0.Length;
 
-			while ((i2 = string0.IndexOf(167, i2 + 1)) != -1)
+			while ((i2 = string0.IndexOf((char)167, i2 + 1)) != -1)
 			{
 				if (i2 < i3 - 1)
 				{
@@ -868,9 +884,15 @@ namespace net.minecraft.src
 			return string1;
 		}
 
-		public static string func_52014_d(string string0)
+		/// <summary>
+		/// Something to do with chat colors. This function takes the input string and replaces all parts of the string that match a regex. 
+		/// Go to the definition of this method to find the Regex in question.
+		/// </summary>
+		/// <param name="str"></param>
+		/// <returns></returns>
+		public static string func_52014_d(string str)
 		{
-			return field_52015_r.matcher(string0).replaceAll("");
+			return chatColorRegex.Replace(str, "");
 		}
 	}
 

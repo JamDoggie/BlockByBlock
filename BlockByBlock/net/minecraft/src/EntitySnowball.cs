@@ -26,7 +26,7 @@
 
 				if (movingObjectPosition1.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.thrower), b2))
 				{
-					;
+					; // Incredible
 				}
 			}
 

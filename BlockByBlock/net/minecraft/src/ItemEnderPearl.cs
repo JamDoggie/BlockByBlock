@@ -20,7 +20,7 @@
 			else
 			{
 				--itemStack1.stackSize;
-				world2.playSoundAtEntity(entityPlayer3, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+				world2.playSoundAtEntity(entityPlayer3, "random.bow", 0.5F, 0.4F / (itemRand.NextSingle() * 0.4F + 0.8F));
 				if (!world2.isRemote)
 				{
 					world2.spawnEntityInWorld(new EntityEnderPearl(world2, entityPlayer3));

@@ -2,6 +2,8 @@
 {
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+    
 	public class GuiDispenser : GuiContainer
 	{
 		public GuiDispenser(InventoryPlayer inventoryPlayer1, TileEntityDispenser tileEntityDispenser2) : base(new ContainerDispenser(inventoryPlayer1, tileEntityDispenser2))

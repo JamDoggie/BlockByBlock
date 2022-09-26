@@ -7,6 +7,8 @@ namespace net.minecraft.src
 	using GLU = org.lwjgl.util.glu.GLU;
 	using GL12 = org.lwjgl.opengl.GL12;
 
+	// PORTING TODO: OpenGL code
+
 	public class GuiEnchantment : GuiContainer
 	{
 		private bool InstanceFieldsInitialized = false;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.helpers;
+using System;
 
 namespace net.minecraft.src
 {
@@ -6,6 +7,9 @@ namespace net.minecraft.src
 	using Minecraft = net.minecraft.client.Minecraft;
 
 	using Sys = org.lwjgl.Sys;
+
+    // PORTING TODO: OpenGL code; 
+	//				 main class code.
 
 	public class GuiTexturePacks : GuiScreen
 	{
@@ -22,12 +26,12 @@ namespace net.minecraft.src
 		public override void initGui()
 		{
 			StringTranslate stringTranslate1 = StringTranslate.Instance;
-			this.controlList.Add(new GuiSmallButton(5, this.width / 2 - 154, this.height - 48, stringTranslate1.translateKey("texturePack.openFolder")));
-			this.controlList.Add(new GuiSmallButton(6, this.width / 2 + 4, this.height - 48, stringTranslate1.translateKey("gui.done")));
-			this.mc.texturePackList.updateAvaliableTexturePacks();
-			this.fileLocation = (new File(Minecraft.MinecraftDir, "texturepacks")).getAbsolutePath();
-			this.guiTexturePackSlot = new GuiTexturePackSlot(this);
-			this.guiTexturePackSlot.registerScrollButtons(this.controlList, 7, 8);
+			controlList.Add(new GuiSmallButton(5, this.width / 2 - 154, this.height - 48, stringTranslate1.translateKey("texturePack.openFolder")));
+			controlList.Add(new GuiSmallButton(6, this.width / 2 + 4, this.height - 48, stringTranslate1.translateKey("gui.done")));
+			mc.texturePackList.updateAvaliableTexturePacks();
+			fileLocation = Minecraft.MinecraftDir.FullName + "/texturepacks";
+			guiTexturePackSlot = new GuiTexturePackSlot(this);
+			guiTexturePackSlot.registerScrollButtons(this.controlList, 7, 8);
 		}
 
 		protected internal override void actionPerformed(GuiButton guiButton1)
@@ -40,9 +44,7 @@ namespace net.minecraft.src
 
 					try
 					{
-						Type class3 = Type.GetType("java.awt.Desktop");
-						object object4 = class3.GetMethod("getDesktop", new Type[0]).invoke((object)null, new object[0]);
-						class3.GetMethod("browse", new Type[]{typeof(URI)}).invoke(object4, new object[]{(new File(Minecraft.MinecraftDir, "texturepacks")).toURI()});
+						SystemHelpers.OpenUrl(fileLocation);
 					}
 					catch (Exception throwable5)
 					{
@@ -101,60 +103,60 @@ namespace net.minecraft.src
 			--this.refreshTimer;
 		}
 
-		internal static Minecraft func_22124_a(GuiTexturePacks guiTexturePacks0)
-		{
-			return guiTexturePacks0.mc;
-		}
-
-		internal static Minecraft func_22126_b(GuiTexturePacks guiTexturePacks0)
-		{
-			return guiTexturePacks0.mc;
-		}
-
-		internal static Minecraft func_22119_c(GuiTexturePacks guiTexturePacks0)
-		{
-			return guiTexturePacks0.mc;
-		}
-
-		internal static Minecraft func_22122_d(GuiTexturePacks guiTexturePacks0)
-		{
-			return guiTexturePacks0.mc;
-		}
-
-		internal static Minecraft func_22117_e(GuiTexturePacks guiTexturePacks0)
-		{
-			return guiTexturePacks0.mc;
-		}
-
-		internal static Minecraft func_35307_f(GuiTexturePacks guiTexturePacks0)
-		{
-			return guiTexturePacks0.mc;
-		}
-
-		internal static Minecraft func_35308_g(GuiTexturePacks guiTexturePacks0)
-		{
-			return guiTexturePacks0.mc;
-		}
-
-		internal static Minecraft func_22118_f(GuiTexturePacks guiTexturePacks0)
-		{
-			return guiTexturePacks0.mc;
-		}
-
-		internal static Minecraft func_22116_g(GuiTexturePacks guiTexturePacks0)
-		{
-			return guiTexturePacks0.mc;
-		}
-
-		internal static Minecraft func_22121_h(GuiTexturePacks guiTexturePacks0)
-		{
-			return guiTexturePacks0.mc;
-		}
-
-		internal static Minecraft func_22123_i(GuiTexturePacks guiTexturePacks0)
-		{
-			return guiTexturePacks0.mc;
-		}
+		internal static Minecraft func_22124_a(GuiTexturePacks guiTexturePacks0)   /// WTF???
+		{																		   /// WTF???
+			return guiTexturePacks0.mc;											   /// WTF???
+		}																		   /// WTF???
+																				   /// WTF???
+		internal static Minecraft func_22126_b(GuiTexturePacks guiTexturePacks0)   /// WTF???
+		{																		   /// WTF???
+			return guiTexturePacks0.mc;											   /// WTF???
+		}																		   /// WTF???
+																				   /// WTF???
+		internal static Minecraft func_22119_c(GuiTexturePacks guiTexturePacks0)   /// WTF???
+		{																		   /// WTF???
+			return guiTexturePacks0.mc;											   /// WTF???
+		}																		   /// WTF???
+																				   /// WTF???
+		internal static Minecraft func_22122_d(GuiTexturePacks guiTexturePacks0)   /// WTF???
+		{																		   /// WTF???
+			return guiTexturePacks0.mc;											   /// WTF???
+		}																		   /// WTF???
+																				   /// WTF???
+		internal static Minecraft func_22117_e(GuiTexturePacks guiTexturePacks0)   /// WTF???
+		{																		   /// WTF???
+			return guiTexturePacks0.mc;											   /// WTF???
+		}																		   /// WTF???
+																				   /// WTF???
+		internal static Minecraft func_35307_f(GuiTexturePacks guiTexturePacks0)   /// WTF???
+		{																		   /// WTF???
+			return guiTexturePacks0.mc;											   /// WTF???
+		}																		   /// WTF???
+																				   /// WTF???
+		internal static Minecraft func_35308_g(GuiTexturePacks guiTexturePacks0)   /// WTF???
+		{																		   /// WTF???
+			return guiTexturePacks0.mc;											   /// WTF???
+		}																		   /// WTF???
+																				   /// WTF???
+		internal static Minecraft func_22118_f(GuiTexturePacks guiTexturePacks0)   /// WTF???
+		{																		   /// WTF???
+			return guiTexturePacks0.mc;											   /// WTF???
+		}																		   /// WTF???
+																				   /// WTF???
+		internal static Minecraft func_22116_g(GuiTexturePacks guiTexturePacks0)   /// WTF???
+		{																		   /// WTF???
+			return guiTexturePacks0.mc;											   /// WTF???
+		}																		   /// WTF???
+																				   /// WTF???
+		internal static Minecraft func_22121_h(GuiTexturePacks guiTexturePacks0)   /// WTF???
+		{																		   /// WTF???
+			return guiTexturePacks0.mc;											   /// WTF???
+		}																		   /// WTF???
+																				   /// WTF???
+		internal static Minecraft func_22123_i(GuiTexturePacks guiTexturePacks0)   /// WTF???
+		{																		   /// WTF???
+			return guiTexturePacks0.mc;											   /// WTF???
+		}																		   /// WTF???
 
 		internal static FontRenderer func_22127_j(GuiTexturePacks guiTexturePacks0)
 		{

@@ -3,6 +3,8 @@
 	using Keyboard = org.lwjgl.input.Keyboard;
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code; input
+
 	public class GuiEditSign : GuiScreen
 	{
 		private static readonly string allowedCharacters = ChatAllowedCharacters.allowedCharacters;

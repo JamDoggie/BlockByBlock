@@ -2,16 +2,14 @@
 
 namespace net.minecraft.src
 {
-	internal class NetworkReaderThread : Thread
+	internal class NetworkReaderThread : NetworkThread
 	{
-		internal readonly NetworkManager netManager;
 
-		internal NetworkReaderThread(NetworkManager networkManager1, string string2) : base(string2)
+        internal NetworkReaderThread(NetworkManager networkManager1, CancellationTokenSource tokenSource, string string2) : base(networkManager1, tokenSource)
 		{
-			this.netManager = networkManager1;
 		}
 
-		public virtual void run()
+        protected override void runThreadLoop()
 		{
 			object object1 = NetworkManager.threadSyncObject;
 			lock (NetworkManager.threadSyncObject)
@@ -26,7 +24,7 @@ namespace net.minecraft.src
 				try
 				{
 					z12 = true;
-					if (!NetworkManager.isRunning(this.netManager))
+					if (!NetworkManager.getIsRunning(this.netManager))
 					{
 						z12 = false;
 						break;
@@ -38,15 +36,18 @@ namespace net.minecraft.src
 						break;
 					}
 
+					if (tokenSource.Token.IsCancellationRequested)
+						break;
+
 					while (NetworkManager.readNetworkPacket(this.netManager))
 					{
 					}
 
 					try
 					{
-						sleep(2L);
+						Thread.Sleep(2);
 					}
-					catch (InterruptedException)
+					catch (ThreadInterruptedException)
 					{
 					}
 				}

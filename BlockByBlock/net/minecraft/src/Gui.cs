@@ -2,6 +2,7 @@
 {
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code.
 	public class Gui
 	{
 		protected internal float zLevel = 0.0F;

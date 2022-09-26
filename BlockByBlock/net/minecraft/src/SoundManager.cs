@@ -9,6 +9,8 @@ namespace net.minecraft.src
 	using CodecWav = paulscode.sound.codecs.CodecWav;
 	using LibraryLWJGLOpenAL = paulscode.sound.libraries.LibraryLWJGLOpenAL;
 
+	// PORTING TODO: sound
+
 	public class SoundManager
 	{
 		private bool InstanceFieldsInitialized = false;
@@ -106,17 +108,17 @@ namespace net.minecraft.src
 
 		}
 
-		public virtual void addSound(string string1, File file2)
+		public virtual void addSound(string string1, FileInfo file2)
 		{
 			this.soundPoolSounds.addSound(string1, file2);
 		}
 
-		public virtual void addStreaming(string string1, File file2)
+		public virtual void addStreaming(string string1, FileInfo file2)
 		{
 			this.soundPoolStreaming.addSound(string1, file2);
 		}
 
-		public virtual void addMusic(string string1, File file2)
+		public virtual void addMusic(string string1, FileInfo file2)
 		{
 			this.soundPoolMusic.addSound(string1, file2);
 		}

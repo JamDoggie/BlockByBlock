@@ -4,16 +4,15 @@ using System.Threading;
 namespace net.minecraft.src
 {
 
-	internal class NetworkWriterThread : Thread
+	internal class NetworkWriterThread : NetworkThread
 	{
-		internal readonly NetworkManager netManager;
 
-		internal NetworkWriterThread(NetworkManager networkManager1, string string2) : base(string2)
+		internal NetworkWriterThread(NetworkManager networkManager1, CancellationTokenSource source, string string2) : base(networkManager1, source)
 		{
-			this.netManager = networkManager1;
+			
 		}
 
-		public virtual void run()
+		protected override void runThreadLoop()
 		{
 			object object1 = NetworkManager.threadSyncObject;
 			lock (NetworkManager.threadSyncObject)
@@ -28,7 +27,7 @@ namespace net.minecraft.src
 				try
 				{
 					z13 = true;
-					if (!NetworkManager.isRunning(this.netManager))
+					if (!NetworkManager.getIsRunning(this.netManager))
 					{
 						z13 = false;
 						break;
@@ -42,12 +41,12 @@ namespace net.minecraft.src
 					{
 						if (NetworkManager.getOutputStream(this.netManager) != null)
 						{
-							NetworkManager.getOutputStream(this.netManager).flush();
+							NetworkManager.getOutputStream(this.netManager).Flush();
 						}
 					}
 					catch (IOException iOException18)
 					{
-						if (!NetworkManager.isTerminating(this.netManager))
+						if (!NetworkManager.getIsTerminating(this.netManager))
 						{
 							NetworkManager.sendError(this.netManager, iOException18);
 						}
@@ -56,11 +55,14 @@ namespace net.minecraft.src
 						Console.Write(iOException18.StackTrace);
 					}
 
+					if (tokenSource.Token.IsCancellationRequested)
+						break;
+
 					try
 					{
-						sleep(2L);
+						Thread.Sleep(2);
 					}
-					catch (InterruptedException)
+					catch (ThreadInterruptedException)
 					{
 					}
 				}

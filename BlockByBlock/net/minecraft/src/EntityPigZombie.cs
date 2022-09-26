@@ -28,7 +28,7 @@
 			this.moveSpeed = this.entityToAttack != null ? 0.95F : 0.5F;
 			if (this.randomSoundDelay > 0 && --this.randomSoundDelay == 0)
 			{
-				this.worldObj.playSoundAtEntity(this, "mob.zombiepig.zpigangry", this.SoundVolume * 2.0F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 1.8F);
+				this.worldObj.playSoundAtEntity(this, "mob.zombiepig.zpigangry", this.SoundVolume * 2.0F, ((this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F + 1.0F) * 1.8F);
 			}
 
 			base.onUpdate();

@@ -8,6 +8,8 @@ namespace net.minecraft.src
 
 	using Keyboard = org.lwjgl.input.Keyboard;
 
+	// PORTING TODO: OpenGL code; inputs.
+
 	public class GameSettings
 	{
 		private bool InstanceFieldsInitialized = false;
@@ -50,7 +52,7 @@ namespace net.minecraft.src
 		public KeyBinding keyBindPickBlock = new KeyBinding("key.pickItem", -98);
 		public KeyBinding[] keyBindings;
 		protected internal Minecraft mc;
-		private File optionsFile;
+		private FileInfo optionsFile;
 		public int difficulty = 2;
 		public bool hideGUI = false;
 		public int thirdPersonView = 0;
@@ -68,7 +70,7 @@ namespace net.minecraft.src
 		public int particleSetting = 0;
 		public string language = "en_US";
 
-		public GameSettings(Minecraft minecraft1, File file2)
+		public GameSettings(Minecraft minecraft1, DirectoryInfo gameDirectory)
 		{
 			if (!InstanceFieldsInitialized)
 			{
@@ -76,7 +78,7 @@ namespace net.minecraft.src
 				InstanceFieldsInitialized = true;
 			}
 			this.mc = minecraft1;
-			this.optionsFile = new File(file2, "options.txt");
+			this.optionsFile = new FileInfo(gameDirectory + "/options.txt");
 			this.loadOptions();
 		}
 
@@ -252,13 +254,13 @@ namespace net.minecraft.src
 		public virtual string getKeyBinding(EnumOptions enumOptions1)
 		{
 			StringTranslate stringTranslate2 = StringTranslate.Instance;
-			string string3 = stringTranslate2.translateKey(enumOptions1.getEnumString()) + ": ";
-			if (enumOptions1.getEnumFloat())
+			string string3 = stringTranslate2.translateKey(enumOptions1.EnumString) + ": ";
+			if (enumOptions1.EnumFloat)
 			{
 				float f5 = this.getOptionFloatValue(enumOptions1);
 				return enumOptions1 == EnumOptions.SENSITIVITY ? (f5 == 0.0F ? string3 + stringTranslate2.translateKey("options.sensitivity.min") : (f5 == 1.0F ? string3 + stringTranslate2.translateKey("options.sensitivity.max") : string3 + (int)(f5 * 200.0F) + "%")) : (enumOptions1 == EnumOptions.FOV ? (f5 == 0.0F ? string3 + stringTranslate2.translateKey("options.fov.min") : (f5 == 1.0F ? string3 + stringTranslate2.translateKey("options.fov.max") : string3 + (int)(70.0F + f5 * 40.0F))) : (enumOptions1 == EnumOptions.GAMMA ? (f5 == 0.0F ? string3 + stringTranslate2.translateKey("options.gamma.min") : (f5 == 1.0F ? string3 + stringTranslate2.translateKey("options.gamma.max") : string3 + "+" + (int)(f5 * 100.0F) + "%")) : (f5 == 0.0F ? string3 + stringTranslate2.translateKey("options.off") : string3 + (int)(f5 * 100.0F) + "%")));
 			}
-			else if (enumOptions1.getEnumBoolean())
+			else if (enumOptions1.EnumBoolean)
 			{
 				bool z4 = this.getOptionOrdinalValue(enumOptions1);
 				return z4 ? string3 + stringTranslate2.translateKey("options.on") : string3 + stringTranslate2.translateKey("options.off");
@@ -273,12 +275,12 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				if (!this.optionsFile.exists())
+				if (!optionsFile.Exists)
 				{
 					return;
 				}
 
-				StreamReader bufferedReader1 = new StreamReader(this.optionsFile);
+				StreamReader bufferedReader1 = new StreamReader(new FileStream(optionsFile.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite));
 				string string2 = "";
 
 				while (!string.ReferenceEquals((string2 = bufferedReader1.ReadLine()), null))
@@ -401,7 +403,7 @@ namespace net.minecraft.src
 				}
 
 				KeyBinding.resetKeyBindingArrayAndHash();
-				bufferedReader1.Close();
+				bufferedReader1.Dispose();
 			}
 			catch (Exception exception6)
 			{
@@ -421,34 +423,34 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				PrintWriter printWriter1 = new PrintWriter(new StreamWriter(this.optionsFile));
-				printWriter1.println("music:" + this.musicVolume);
-				printWriter1.println("sound:" + this.soundVolume);
-				printWriter1.println("invertYMouse:" + this.invertMouse);
-				printWriter1.println("mouseSensitivity:" + this.mouseSensitivity);
-				printWriter1.println("fov:" + this.fovSetting);
-				printWriter1.println("gamma:" + this.gammaSetting);
-				printWriter1.println("viewDistance:" + this.renderDistance);
-				printWriter1.println("guiScale:" + this.guiScale);
-				printWriter1.println("particles:" + this.particleSetting);
-				printWriter1.println("bobView:" + this.viewBobbing);
-				printWriter1.println("anaglyph3d:" + this.anaglyph);
-				printWriter1.println("advancedOpengl:" + this.advancedOpengl);
-				printWriter1.println("fpsLimit:" + this.limitFramerate);
-				printWriter1.println("difficulty:" + this.difficulty);
-				printWriter1.println("fancyGraphics:" + this.fancyGraphics);
-				printWriter1.println("ao:" + this.ambientOcclusion);
-				printWriter1.println("clouds:" + this.clouds);
-				printWriter1.println("skin:" + this.skin);
-				printWriter1.println("lastServer:" + this.lastServer);
-				printWriter1.println("lang:" + this.language);
+				StreamWriter optionsWriter = new StreamWriter(new FileStream(optionsFile.FullName, FileMode.Open, FileAccess.ReadWrite));
+				optionsWriter.WriteLine("music:" + this.musicVolume);
+				optionsWriter.WriteLine("sound:" + this.soundVolume);
+				optionsWriter.WriteLine("invertYMouse:" + this.invertMouse);
+				optionsWriter.WriteLine("mouseSensitivity:" + this.mouseSensitivity);
+				optionsWriter.WriteLine("fov:" + this.fovSetting);
+				optionsWriter.WriteLine("gamma:" + this.gammaSetting);
+				optionsWriter.WriteLine("viewDistance:" + this.renderDistance);
+				optionsWriter.WriteLine("guiScale:" + this.guiScale);
+				optionsWriter.WriteLine("particles:" + this.particleSetting);
+				optionsWriter.WriteLine("bobView:" + this.viewBobbing);
+				optionsWriter.WriteLine("anaglyph3d:" + this.anaglyph);
+				optionsWriter.WriteLine("advancedOpengl:" + this.advancedOpengl);
+				optionsWriter.WriteLine("fpsLimit:" + this.limitFramerate);
+				optionsWriter.WriteLine("difficulty:" + this.difficulty);
+				optionsWriter.WriteLine("fancyGraphics:" + this.fancyGraphics);
+				optionsWriter.WriteLine("ao:" + this.ambientOcclusion);
+				optionsWriter.WriteLine("clouds:" + this.clouds);
+				optionsWriter.WriteLine("skin:" + this.skin);
+				optionsWriter.WriteLine("lastServer:" + this.lastServer);
+				optionsWriter.WriteLine("lang:" + this.language);
 
 				for (int i2 = 0; i2 < this.keyBindings.Length; ++i2)
 				{
-					printWriter1.println("key_" + this.keyBindings[i2].keyDescription + ":" + this.keyBindings[i2].keyCode);
+					optionsWriter.WriteLine("key_" + this.keyBindings[i2].keyDescription + ":" + this.keyBindings[i2].keyCode);
 				}
-
-				printWriter1.close();
+                
+				optionsWriter.Dispose();
 			}
 			catch (Exception exception3)
 			{

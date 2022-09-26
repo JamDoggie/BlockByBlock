@@ -4,8 +4,8 @@
 	{
 		public ItemHoe(int i1, EnumToolMaterial enumToolMaterial2) : base(i1)
 		{
-			this.maxStackSize = 1;
-			this.MaxDamage = enumToolMaterial2.getMaxUses();
+			maxStackSize = 1;
+			setMaxDamage(enumToolMaterial2.MaxUses);
 		}
 
 		public override bool onItemUse(ItemStack itemStack1, EntityPlayer entityPlayer2, World world3, int i4, int i5, int i6, int i7)

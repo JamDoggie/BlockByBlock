@@ -44,6 +44,7 @@ namespace net.minecraft.src
 			}
 		}
 
+		// WTF????
 		protected internal override void onImpact(MovingObjectPosition movingObjectPosition1)
 		{
 			if (!this.worldObj.isRemote)
@@ -63,14 +64,12 @@ namespace net.minecraft.src
 							double d7;
 							do
 							{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-								if (!iterator5.hasNext())
+								if (!iterator5.MoveNext())
 								{
 									goto label48Break;
 								}
-
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-								entity6 = (Entity)iterator5.next();
+                                
+								entity6 = (Entity)iterator5.Current;
 								d7 = this.getDistanceSqToEntity(entity6);
 							} while (d7 >= 16.0D);
 

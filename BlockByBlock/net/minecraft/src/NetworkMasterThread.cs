@@ -3,43 +3,41 @@ using System.Threading;
 
 namespace net.minecraft.src
 {
-	internal class NetworkMasterThread : Thread
-	{
-		internal readonly NetworkManager netManager;
-
-		internal NetworkMasterThread(NetworkManager networkManager1)
+	internal class NetworkMasterThread : NetworkThread
+	{ 
+        
+		internal NetworkMasterThread(NetworkManager networkManager1, CancellationTokenSource source) : base(networkManager1, source)
 		{
-			this.netManager = networkManager1;
 		}
 
-		public virtual void run()
+        protected override void runThreadLoop()
 		{
 			try
 			{
-				Thread.Sleep(5000L);
-				if (NetworkManager.getReadThread(this.netManager).IsAlive)
+				Thread.Sleep(5000);
+				if (NetworkManager.getReadThread(this.netManager).thread.IsAlive)
 				{
 					try
 					{
-						NetworkManager.getReadThread(this.netManager).Abort();
+						NetworkManager.getReadThread(this.netManager).stopThread();
 					}
 					catch (Exception)
 					{
 					}
 				}
 
-				if (NetworkManager.getWriteThread(this.netManager).IsAlive)
+				if (NetworkManager.getWriteThread(this.netManager).thread.IsAlive)
 				{
 					try
 					{
-						NetworkManager.getWriteThread(this.netManager).Abort();
+						NetworkManager.getWriteThread(this.netManager).stopThread();
 					}
 					catch (Exception)
 					{
 					}
 				}
 			}
-			catch (InterruptedException interruptedException4)
+			catch (ThreadInterruptedException interruptedException4)
 			{
 				Console.WriteLine(interruptedException4.ToString());
 				Console.Write(interruptedException4.StackTrace);

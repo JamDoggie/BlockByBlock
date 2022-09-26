@@ -1,21 +1,32 @@
-﻿using System;
+﻿using BlockByBlock.helpers;
+using System;
+using System.Net.Sockets;
 using System.Threading;
 
 namespace net.minecraft.src
 {
 
-	internal class ThreadPollServers : Thread
+	internal class ThreadPollServers
 	{
 		internal readonly ServerNBTStorage server;
 		internal readonly GuiSlotServer serverSlotContainer;
+
+		protected Thread thread;
 
 		internal ThreadPollServers(GuiSlotServer guiSlotServer1, ServerNBTStorage serverNBTStorage2)
 		{
 			this.serverSlotContainer = guiSlotServer1;
 			this.server = serverNBTStorage2;
+
+			thread = new Thread(() => run());
 		}
 
-		public virtual void run()
+        public virtual void startThread()
+        {
+			thread.Start();
+        }
+        
+		protected virtual void run()
 		{
 			bool z27 = false;
 
@@ -28,27 +39,14 @@ namespace net.minecraft.src
 								{
 									z27 = true;
 									this.server.motd = "\u00a78Polling..";
-									long j1 = System.nanoTime();
+									long j1 = JTime.NanoTime();
 									GuiMultiplayer.pollServer(this.serverSlotContainer.parentGui, this.server);
-									long j3 = System.nanoTime();
+									long j3 = JTime.NanoTime();
 									this.server.lag = (j3 - j1) / 1000000L;
 									z27 = false;
 									goto label183Break;
 								}
-								catch (UnknownHostException)
-								{
-									this.server.lag = -1L;
-									this.server.motd = "\u00a74Can\'t resolve hostname";
-									z27 = false;
-									goto label184Break;
-								}
-								catch (SocketTimeoutException)
-								{
-									this.server.lag = -1L;
-									this.server.motd = "\u00a74Can\'t reach server";
-									z27 = false;
-								}
-								catch (ConnectException)
+								catch (SocketException)
 								{
 									this.server.lag = -1L;
 									this.server.motd = "\u00a74Can\'t reach server";

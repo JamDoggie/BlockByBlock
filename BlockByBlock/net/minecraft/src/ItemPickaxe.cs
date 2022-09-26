@@ -10,7 +10,7 @@
 
 		public override bool canHarvestBlock(Block block1)
 		{
-			return block1 == Block.obsidian ? this.toolMaterial.getHarvestLevel() == 3 : (block1 != Block.blockDiamond && block1 != Block.oreDiamond ? (block1 != Block.blockGold && block1 != Block.oreGold ? (block1 != Block.blockSteel && block1 != Block.oreIron ? (block1 != Block.blockLapis && block1 != Block.oreLapis ? (block1 != Block.oreRedstone && block1 != Block.oreRedstoneGlowing ? (block1.blockMaterial == Material.rock ? true : block1.blockMaterial == Material.iron) : this.toolMaterial.getHarvestLevel() >= 2) : this.toolMaterial.getHarvestLevel() >= 1) : this.toolMaterial.getHarvestLevel() >= 1) : this.toolMaterial.getHarvestLevel() >= 2) : this.toolMaterial.getHarvestLevel() >= 2);
+			return block1 == Block.obsidian ? this.toolMaterial.HarvestLevel == 3 : (block1 != Block.blockDiamond && block1 != Block.oreDiamond ? (block1 != Block.blockGold && block1 != Block.oreGold ? (block1 != Block.blockSteel && block1 != Block.oreIron ? (block1 != Block.blockLapis && block1 != Block.oreLapis ? (block1 != Block.oreRedstone && block1 != Block.oreRedstoneGlowing ? (block1.blockMaterial == Material.rock ? true : block1.blockMaterial == Material.iron) : this.toolMaterial.HarvestLevel >= 2) : this.toolMaterial.HarvestLevel >= 1) : this.toolMaterial.HarvestLevel >= 1) : this.toolMaterial.HarvestLevel >= 2) : this.toolMaterial.HarvestLevel >= 2);
 		}
 
 		public override float getStrVsBlock(ItemStack itemStack1, Block block2)

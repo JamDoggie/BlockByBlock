@@ -3,23 +3,23 @@ using System.Threading;
 
 namespace net.minecraft.src
 {
-	internal class ThreadMonitorConnection : Thread
+	internal class ThreadMonitorConnection : NetworkThread
 	{
 		internal readonly NetworkManager netManager;
 
-		internal ThreadMonitorConnection(NetworkManager networkManager1)
+		internal ThreadMonitorConnection(NetworkManager networkManager1, CancellationTokenSource source) : base(networkManager1, source)
 		{
 			this.netManager = networkManager1;
 		}
 
-		public virtual void run()
+		protected virtual void run()
 		{
 			try
 			{
-				Thread.Sleep(2000L);
-				if (NetworkManager.isRunning(this.netManager))
+				Thread.Sleep(2000);
+				if (NetworkManager.getIsRunning(this.netManager))
 				{
-					NetworkManager.getWriteThread(this.netManager).Interrupt();
+					NetworkManager.getWriteThread(this.netManager).thread.Interrupt();
 					this.netManager.networkShutdown("disconnect.closed", new object[0]);
 				}
 			}

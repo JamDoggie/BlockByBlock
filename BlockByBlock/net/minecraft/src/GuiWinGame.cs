@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BlockByBlock;
+using BlockByBlock.java_extensions;
+using System;
 using System.Collections;
 using System.IO;
 
@@ -7,10 +9,12 @@ namespace net.minecraft.src
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	public class GuiWinGame : GuiScreen
 	{
 		private int updateCounter = 0;
-		private System.Collections.IList lines;
+		private System.Collections.ArrayList lines;
 		private int field_41042_d = 0;
 		private float field_41043_e = 0.5F;
 
@@ -65,15 +69,15 @@ namespace net.minecraft.src
 					string string1 = "";
 					string string2 = "\u00a7f\u00a7k\u00a7a\u00a7b";
 					short s3 = 274;
-					StreamReader bufferedReader4 = new StreamReader(typeof(GuiWinGame).getResourceAsStream("/title/win.txt"), Charset.forName("UTF-8"));
-					Random random5 = new Random(8124371L);
+					StreamReader bufferedReader4 = new StreamReader(GameEnv.GetResourceAsStream("/title/win.txt"));
+					RandomExtended random5 = new RandomExtended(8124371L);
 
 					int i6;
 					while (!string.ReferenceEquals((string1 = bufferedReader4.ReadLine()), null))
 					{
 						string string7;
 						string string8;
-						for (string1 = string1.replaceAll("PLAYERNAME", this.mc.session.username); string1.IndexOf(string2, StringComparison.Ordinal) >= 0; string1 = string7 + "\u00a7f\u00a7k" + "XXXXXXXX".Substring(0, random5.Next(4) + 3) + string8)
+						for (string1 = string1.Replace("PLAYERNAME", mc.session.username); string1.IndexOf(string2, StringComparison.Ordinal) >= 0; string1 = string7 + "\u00a7f\u00a7k" + "XXXXXXXX".Substring(0, random5.Next(4) + 3) + string8)
 						{
 							i6 = string1.IndexOf(string2, StringComparison.Ordinal);
 							string7 = string1.Substring(0, i6);
@@ -89,12 +93,12 @@ namespace net.minecraft.src
 						this.lines.Add("");
 					}
 
-					bufferedReader4 = new StreamReader(typeof(GuiWinGame).getResourceAsStream("/title/credits.txt"), Charset.forName("UTF-8"));
+					bufferedReader4 = new StreamReader(GameEnv.GetResourceAsStream("/title/credits.txt"));
 
 					while (!string.ReferenceEquals((string1 = bufferedReader4.ReadLine()), null))
 					{
-						string1 = string1.replaceAll("PLAYERNAME", this.mc.session.username);
-						string1 = string1.replaceAll("\t", "    ");
+						string1 = string1.Replace("PLAYERNAME", this.mc.session.username);
+						string1 = string1.Replace("\t", "    ");
 						this.lines.AddRange(this.mc.fontRenderer.func_50108_c(string1, s3));
 						this.lines.Add("");
 					}
@@ -185,10 +189,12 @@ namespace net.minecraft.src
 					}
 					else
 					{
-						this.fontRenderer.fontRandom.setSeed((long)i10 * 4238972211L + (long)(this.updateCounter / 4));
+						//this.fontRenderer.fontRandom.setSeed((long)i10 * 4238972211L + (long)(this.updateCounter / 4)); // PORTING TODO: RandomExtended.setSeed
+						fontRenderer.fontRandom = new RandomExtended((long)i10 * 4238972211L + (long)(this.updateCounter / 4));
 						this.fontRenderer.func_50101_a(string12, i6 + 1, i9 + 1, 0xFFFFFF, true);
-						this.fontRenderer.fontRandom.setSeed((long)i10 * 4238972211L + (long)(this.updateCounter / 4));
-						this.fontRenderer.func_50101_a(string12, i6, i9, 0xFFFFFF, false);
+                        //this.fontRenderer.fontRandom.setSeed((long)i10 * 4238972211L + (long)(this.updateCounter / 4)); // PORTING TODO: RandomExtended.setSeed
+                        fontRenderer.fontRandom = new RandomExtended((long)i10 * 4238972211L + (long)(this.updateCounter / 4));
+                        this.fontRenderer.func_50101_a(string12, i6, i9, 0xFFFFFF, false);
 					}
 				}
 

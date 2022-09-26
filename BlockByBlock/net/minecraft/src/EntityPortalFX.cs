@@ -15,14 +15,14 @@
 			this.portalPosX = this.posX = d2;
 			this.portalPosY = this.posY = d4;
 			this.portalPosZ = this.posZ = d6;
-			float f14 = this.rand.nextFloat() * 0.6F + 0.4F;
-			this.portalParticleScale = this.particleScale = this.rand.nextFloat() * 0.2F + 0.5F;
+			float f14 = this.rand.NextSingle() * 0.6F + 0.4F;
+			this.portalParticleScale = this.particleScale = this.rand.NextSingle() * 0.2F + 0.5F;
 			this.particleRed = this.particleGreen = this.particleBlue = 1.0F * f14;
 			this.particleGreen *= 0.3F;
 			this.particleRed *= 0.9F;
-			this.particleMaxAge = (int)(MathHelper.NextDouble * 10.0D) + 40;
+			this.particleMaxAge = (int)(portinghelpers.MathHelper.NextDouble * 10.0D) + 40;
 			this.noClip = true;
-			this.ParticleTextureIndex = (int)(MathHelper.NextDouble * 8.0D);
+			this.ParticleTextureIndex = (int)(portinghelpers.MathHelper.NextDouble * 8.0D);
 		}
 
 		public override void renderParticle(Tessellator tessellator1, float f2, float f3, float f4, float f5, float f6, float f7)

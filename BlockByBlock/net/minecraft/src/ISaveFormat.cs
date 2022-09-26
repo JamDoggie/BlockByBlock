@@ -7,7 +7,7 @@
 
 		ISaveHandler getSaveLoader(string string1, bool z2);
 
-		System.Collections.IList SaveList {get;}
+		List<SaveFormatComparator> SaveList {get;}
 
 		void flushCache();
 

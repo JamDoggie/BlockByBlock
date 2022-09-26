@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Net;
+using System.Net.Sockets;
 
 namespace net.minecraft.src
 {
 
 	using Keyboard = org.lwjgl.input.Keyboard;
+
+	// PORTING TODO: OpenGL code; input
 
 	public class GuiMultiplayer : GuiScreen
 	{
@@ -46,7 +50,7 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				NBTTagCompound nBTTagCompound1 = CompressedStreamTools.read(new File(this.mc.mcDataDir, "servers.dat"));
+				NBTTagCompound? nBTTagCompound1 = CompressedStreamTools.read(new FileInfo(mc.mcDataDir + "/servers.dat"));
 				NBTTagList nBTTagList2 = nBTTagCompound1.getTagList("servers");
 				this.serverList.Clear();
 
@@ -76,7 +80,7 @@ namespace net.minecraft.src
 
 				NBTTagCompound nBTTagCompound4 = new NBTTagCompound();
 				nBTTagCompound4.setTag("servers", nBTTagList1);
-				CompressedStreamTools.safeWrite(nBTTagCompound4, new File(this.mc.mcDataDir, "servers.dat"));
+				CompressedStreamTools.safeWrite(nBTTagCompound4, new FileInfo(mc.mcDataDir + "/servers.dat"));
 			}
 			catch (Exception exception3)
 			{
@@ -290,54 +294,57 @@ namespace net.minecraft.src
 
 			this.mc.displayGuiScreen(new GuiConnecting(this.mc, string3[0], string3.Length > 1 ? this.parseIntWithDefault(string3[1], 25565) : 25565));
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: private void pollServer(ServerNBTStorage serverNBTStorage1) throws java.io.IOException
+        
 		private void pollServer(ServerNBTStorage serverNBTStorage1)
 		{
-			string string2 = serverNBTStorage1.host;
-			string[] string3 = string2.Split(":", true);
-			if (string2.StartsWith("[", StringComparison.Ordinal))
+			string hostAddress = serverNBTStorage1.host;
+			string[] addressSections = hostAddress.Split(":", true);
+			if (hostAddress.StartsWith("[", StringComparison.Ordinal))
 			{
-				int i4 = string2.IndexOf("]", StringComparison.Ordinal);
+				int i4 = hostAddress.IndexOf("]", StringComparison.Ordinal);
 				if (i4 > 0)
 				{
-					string string5 = string2.Substring(1, i4 - 1);
-					string string6 = string2.Substring(i4 + 1).Trim();
+					string string5 = hostAddress.Substring(1, i4 - 1);
+					string string6 = hostAddress.Substring(i4 + 1).Trim();
 					if (string6.StartsWith(":", StringComparison.Ordinal) && string6.Length > 0)
 					{
 						string6 = string6.Substring(1);
-						string3 = new string[]{string5, string6};
+						addressSections = new string[]{string5, string6};
 					}
 					else
 					{
-						string3 = new string[]{string5};
+						addressSections = new string[]{string5};
 					}
 				}
 			}
 
-			if (string3.Length > 2)
+			if (addressSections.Length > 2)
 			{
-				string3 = new string[]{string2};
+				addressSections = new string[]{hostAddress};
 			}
 
-			string string29 = string3[0];
-			int i30 = string3.Length > 1 ? this.parseIntWithDefault(string3[1], 25565) : 25565;
-			Socket socket31 = null;
-			DataInputStream dataInputStream7 = null;
-			DataOutputStream dataOutputStream8 = null;
+			string ipAddress = addressSections[0];
+			int port = addressSections.Length > 1 ? this.parseIntWithDefault(addressSections[1], 25565) : 25565;
+			Socket serverSocket = null;
+			BinaryReader dataInputStream7 = null;
+			BinaryWriter dataOutputStream8 = null;
 
 			try
 			{
-				socket31 = new Socket();
-				socket31.setSoTimeout(3000);
-				socket31.setTcpNoDelay(true);
-				socket31.setTrafficClass(18);
-				socket31.connect(new InetSocketAddress(string29, i30), 3000);
-				dataInputStream7 = new DataInputStream(socket31.getInputStream());
-				dataOutputStream8 = new DataOutputStream(socket31.getOutputStream());
-				dataOutputStream8.write(254);
-				if (dataInputStream7.read() != 255)
+				IPHostEntry host = Dns.GetHostEntry(ipAddress);
+				IPAddress ip = host.AddressList[0];
+				IPEndPoint endPoint = new IPEndPoint(ip, port);
+
+                serverSocket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+				serverSocket.Connect(endPoint);
+
+				NetworkStream networkStream = new NetworkStream(serverSocket);
+
+				dataInputStream7 = new BinaryReader(networkStream);
+				dataOutputStream8 = new BinaryWriter(networkStream);
+
+				dataOutputStream8.Write((byte)254);
+				if (dataInputStream7.ReadByte() != 255)
 				{
 					throw new IOException("Bad message");
 				}
@@ -355,15 +362,15 @@ namespace net.minecraft.src
 				}
 
 				string9 = new string(c10);
-				string3 = string9.Split("\u00a7", true);
-				string9 = string3[0];
+				addressSections = string9.Split("\u00a7", true);
+				string9 = addressSections[0];
 				i11 = -1;
 				int i12 = -1;
 
 				try
 				{
-					i11 = int.Parse(string3[1]);
-					i12 = int.Parse(string3[2]);
+					i11 = int.Parse(addressSections[1]);
+					i12 = int.Parse(addressSections[2]);
 				}
 				catch (Exception)
 				{
@@ -385,7 +392,7 @@ namespace net.minecraft.src
 				{
 					if (dataInputStream7 != null)
 					{
-						dataInputStream7.close();
+						dataInputStream7.Dispose();
 					}
 				}
 				catch (Exception)
@@ -396,7 +403,7 @@ namespace net.minecraft.src
 				{
 					if (dataOutputStream8 != null)
 					{
-						dataOutputStream8.close();
+						dataOutputStream8.Dispose();
 					}
 				}
 				catch (Exception)
@@ -405,9 +412,9 @@ namespace net.minecraft.src
 
 				try
 				{
-					if (socket31 != null)
+					if (serverSocket != null)
 					{
-						socket31.close();
+						serverSocket.Close();
 					}
 				}
 				catch (Exception)

@@ -6,8 +6,8 @@
 
 		public ItemMinecart(int i1, int i2) : base(i1)
 		{
-			this.maxStackSize = 1;
-			this.minecartType = i2;
+			maxStackSize = 1;
+			minecartType = i2;
 		}
 
 		public override bool onItemUse(ItemStack itemStack1, EntityPlayer entityPlayer2, World world3, int i4, int i5, int i6, int i7)

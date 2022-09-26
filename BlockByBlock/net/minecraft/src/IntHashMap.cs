@@ -125,7 +125,7 @@ namespace net.minecraft.src
 
 		public virtual object removeObject(int i1)
 		{
-			this.keySet.remove(i1);
+			this.keySet.Remove(i1);
 			IntHashMapEntry intHashMapEntry2 = this.removeEntry(i1);
 			return intHashMapEntry2 == null ? null : intHashMapEntry2.valueEntry;
 		}

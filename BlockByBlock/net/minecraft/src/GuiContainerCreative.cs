@@ -3,6 +3,8 @@
 	using Mouse = org.lwjgl.input.Mouse;
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	public class GuiContainerCreative : GuiContainer
 	{
 		private static InventoryBasic inventory = new InventoryBasic("tmp", 72);

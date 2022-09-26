@@ -25,7 +25,7 @@
 		{
 			if (guiButton1.id == 2)
 			{
-				this.func_50052_d();
+				this.copyLink();
 				base.actionPerformed((GuiButton)this.controlList[1]);
 			}
 			else
@@ -35,7 +35,7 @@
 
 		}
 
-		public abstract void func_50052_d();
+		public abstract void copyLink();
 
 		public override void drawScreen(int i1, int i2, float f3)
 		{

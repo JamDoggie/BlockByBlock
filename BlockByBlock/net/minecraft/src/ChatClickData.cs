@@ -86,5 +86,4 @@ namespace net.minecraft.src
 			return FontRenderer.func_52014_d(this.chatLine.message.Substring(i1, i2 - i1));
 		}
 	}
-
 }

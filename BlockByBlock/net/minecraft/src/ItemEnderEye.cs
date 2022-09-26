@@ -24,9 +24,9 @@
 					int i10;
 					for (i10 = 0; i10 < 16; ++i10)
 					{
-						double d11 = (double)((float)i4 + (5.0F + itemRand.nextFloat() * 6.0F) / 16.0F);
+						double d11 = (double)((float)i4 + (5.0F + itemRand.NextSingle() * 6.0F) / 16.0F);
 						double d13 = (double)((float)i5 + 0.8125F);
-						double d15 = (double)((float)i6 + (5.0F + itemRand.nextFloat() * 6.0F) / 16.0F);
+						double d15 = (double)((float)i6 + (5.0F + itemRand.NextSingle() * 6.0F) / 16.0F);
 						double d17 = 0.0D;
 						double d19 = 0.0D;
 						double d21 = 0.0D;
@@ -152,7 +152,7 @@
 					EntityEnderEye entityEnderEye6 = new EntityEnderEye(world2, entityPlayer3.posX, entityPlayer3.posY + 1.62D - (double)entityPlayer3.yOffset, entityPlayer3.posZ);
 					entityEnderEye6.func_40090_a((double)chunkPosition7.x, chunkPosition7.y, (double)chunkPosition7.z);
 					world2.spawnEntityInWorld(entityEnderEye6);
-					world2.playSoundAtEntity(entityPlayer3, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+					world2.playSoundAtEntity(entityPlayer3, "random.bow", 0.5F, 0.4F / (itemRand.NextSingle() * 0.4F + 0.8F));
 					world2.playAuxSFXAtEntity((EntityPlayer)null, 1002, (int)entityPlayer3.posX, (int)entityPlayer3.posY, (int)entityPlayer3.posZ, 0);
 					if (!entityPlayer3.capabilities.isCreativeMode)
 					{

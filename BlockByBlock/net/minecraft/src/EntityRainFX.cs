@@ -5,7 +5,7 @@
 		public EntityRainFX(World world1, double d2, double d4, double d6) : base(world1, d2, d4, d6, 0.0D, 0.0D, 0.0D)
 		{
 			this.motionX *= (double)0.3F;
-			this.motionY = (double)((float)MathHelper.NextDouble * 0.2F + 0.1F);
+			this.motionY = (double)((float)portinghelpers.MathHelper.NextDouble * 0.2F + 0.1F);
 			this.motionZ *= (double)0.3F;
 			this.particleRed = 1.0F;
 			this.particleGreen = 1.0F;
@@ -13,7 +13,7 @@
 			this.ParticleTextureIndex = 19 + this.rand.Next(4);
 			this.setSize(0.01F, 0.01F);
 			this.particleGravity = 0.06F;
-			this.particleMaxAge = (int)(8.0D / (MathHelper.NextDouble * 0.8D + 0.2D));
+			this.particleMaxAge = (int)(8.0D / (portinghelpers.MathHelper.NextDouble * 0.8D + 0.2D));
 		}
 
 		public override void onUpdate()
@@ -33,7 +33,7 @@
 
 			if (this.onGround)
 			{
-				if (MathHelper.NextDouble < 0.5D)
+				if (portinghelpers.MathHelper.NextDouble < 0.5D)
 				{
 					this.setDead();
 				}

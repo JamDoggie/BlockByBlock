@@ -117,7 +117,7 @@ namespace net.minecraft.src
 		// ORIGINAL LINE: public static void writePacket(Packet packet0, java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
 		public static void writePacket(Packet packet0, BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.write(packet0.PacketId);
+			dataOutputStream1.Write(packet0.PacketId);
 			packet0.writePacketData(dataOutputStream1);
 			++field_48157_o;
 			field_48155_p += (long)packet0.PacketSize;

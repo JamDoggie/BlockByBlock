@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -8,14 +9,14 @@ namespace net.minecraft.src
 	public class Explosion
 	{
 		public bool isFlaming = false;
-		private Random explosionRNG = new Random();
+		private RandomExtended explosionRNG = new RandomExtended();
 		private World worldObj;
 		public double explosionX;
 		public double explosionY;
 		public double explosionZ;
 		public Entity exploder;
 		public float explosionSize;
-		public ISet<object> destroyedBlockPositions = new HashSet<object>();
+		public ICollection<object> destroyedBlockPositions = new List<object>();
 
 		public Explosion(World world1, Entity entity2, double d3, double d5, double d7, float f9)
 		{
@@ -53,7 +54,7 @@ namespace net.minecraft.src
 							d6 /= d12;
 							d8 /= d12;
 							d10 /= d12;
-							float f14 = this.explosionSize * (0.7F + this.worldObj.rand.nextFloat() * 0.6F);
+							float f14 = this.explosionSize * (0.7F + this.worldObj.rand.NextSingle() * 0.6F);
 							d15 = this.explosionX;
 							d17 = this.explosionY;
 							d19 = this.explosionZ;
@@ -122,7 +123,7 @@ namespace net.minecraft.src
 
 		public virtual void doExplosionB(bool z1)
 		{
-			this.worldObj.playSoundEffect(this.explosionX, this.explosionY, this.explosionZ, "random.explode", 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
+			this.worldObj.playSoundEffect(this.explosionX, this.explosionY, this.explosionZ, "random.explode", 4.0F, (1.0F + (this.worldObj.rand.NextSingle() - this.worldObj.rand.NextSingle()) * 0.2F) * 0.7F);
 			this.worldObj.spawnParticle("hugeexplosion", this.explosionX, this.explosionY, this.explosionZ, 0.0D, 0.0D, 0.0D);
 			ArrayList arrayList2 = new ArrayList();
 			arrayList2.AddRange(this.destroyedBlockPositions);

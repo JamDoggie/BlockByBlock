@@ -1,7 +1,7 @@
 ﻿namespace net.minecraft.src
 {
 
-	internal class SorterStatsItem : System.Collections.IComparer
+	internal class SorterStatsItem : IComparer<StatCrafting>
 	{
 		internal readonly GuiStats statsGUI;
 		internal readonly GuiSlotStatsItem slotStatsItemGUI;
@@ -57,9 +57,9 @@
 			return i3 - i4;
 		}
 
-		public virtual int Compare(object object1, object object2)
+		public virtual int Compare(StatCrafting object1, StatCrafting object2)
 		{
-			return this.func_27371_a((StatCrafting)object1, (StatCrafting)object2);
+			return this.func_27371_a(object1, object2);
 		}
 	}
 

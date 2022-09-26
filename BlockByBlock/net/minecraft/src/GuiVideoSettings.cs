@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace net.minecraft.src
 {
@@ -28,7 +29,7 @@ namespace net.minecraft.src
 			for (i5 = 0; i5 < i4; ++i5)
 			{
 				EnumOptions enumOptions6 = enumOptions3[i5];
-				if (!enumOptions6.getEnumFloat())
+				if (!enumOptions6.EnumFloat)
 				{
 					this.controlList.Add(new GuiSmallButton(enumOptions6.returnEnumOrdinal(), this.width / 2 - 155 + i2 % 2 * 160, this.height / 6 + 24 * (i2 >> 1), enumOptions6, this.guiGameSettings.getKeyBinding(enumOptions6)));
 				}
@@ -41,22 +42,8 @@ namespace net.minecraft.src
 			}
 
 			this.controlList.Add(new GuiButton(200, this.width / 2 - 100, this.height / 6 + 168, stringTranslate1.translateKey("gui.done")));
-			this.is64bit = false;
-			string[] string9 = new string[]{"sun.arch.data.model", "com.ibm.vm.bitmode", "os.arch"};
-			string[] string10 = string9;
-			i5 = string9.Length;
 
-			for (int i11 = 0; i11 < i5; ++i11)
-			{
-				string string7 = string10[i11];
-				string string8 = System.getProperty(string7);
-				if (!string.ReferenceEquals(string8, null) && string8.IndexOf("64", StringComparison.Ordinal) >= 0)
-				{
-					this.is64bit = true;
-					break;
-				}
-			}
-
+			is64bit = RuntimeInformation.ProcessArchitecture == Architecture.X64 || RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
 		}
 
 		protected internal override void actionPerformed(GuiButton guiButton1)

@@ -5,6 +5,8 @@ namespace net.minecraft.src
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	internal class GuiTexturePackSlot : GuiSlot
 	{
 		internal readonly GuiTexturePacks parentTexturePackGui;
@@ -29,12 +31,12 @@ namespace net.minecraft.src
 
 			try
 			{
-				GuiTexturePacks.func_22122_d(this.parentTexturePackGui).texturePackList.TexturePack = (TexturePackBase)list3[i1];
+				GuiTexturePacks.func_22122_d(this.parentTexturePackGui).texturePackList.setTexturePack((TexturePackBase)list3[i1]);
 				GuiTexturePacks.func_22117_e(this.parentTexturePackGui).renderEngine.refreshTextures();
 			}
 			catch (Exception)
 			{
-				GuiTexturePacks.func_35307_f(this.parentTexturePackGui).texturePackList.TexturePack = (TexturePackBase)list3[0];
+				GuiTexturePacks.func_35307_f(this.parentTexturePackGui).texturePackList.setTexturePack((TexturePackBase)list3[0]);
 				GuiTexturePacks.func_35308_g(this.parentTexturePackGui).renderEngine.refreshTextures();
 			}
 

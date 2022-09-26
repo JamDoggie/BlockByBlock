@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.helpers;
+using System;
 using System.Collections;
 using System.Text;
 
@@ -7,6 +8,8 @@ namespace net.minecraft.src
 
 	using Keyboard = org.lwjgl.input.Keyboard;
 	using Mouse = org.lwjgl.input.Mouse;
+
+	// PORTING TODO: OpenGL code.
 
 	public class GuiChat : GuiScreen
 	{
@@ -134,7 +137,7 @@ namespace net.minecraft.src
 				ChatClickData chatClickData4 = this.mc.ingameGUI.func_50012_a(Mouse.getX(), Mouse.getY());
 				if (chatClickData4 != null)
 				{
-					URI uRI5 = chatClickData4.getURIFromChatLine();
+					Uri uRI5 = chatClickData4.getURIFromChatLine();
 					if (uRI5 != null)
 					{
 						this.field_50065_j = uRI5;
@@ -156,14 +159,12 @@ namespace net.minecraft.src
 				{
 					try
 					{
-						Type class3 = Type.GetType("java.awt.Desktop");
-						object object4 = class3.GetMethod("getDesktop", new Type[0]).invoke((object)null, new object[0]);
-						class3.GetMethod("browse", new Type[]{typeof(URI)}).invoke(object4, new object[]{this.field_50065_j});
-					}
-					catch (Exception throwable5)
+                        SystemHelpers.OpenUrl(this.field_50065_j.ToString());
+                    }
+					catch (OpenURLException e)
 					{
-						Console.WriteLine(throwable5.ToString());
-						Console.Write(throwable5.StackTrace);
+						Console.WriteLine(e.ToString());
+						Console.Write(e.StackTrace);
 					}
 				}
 

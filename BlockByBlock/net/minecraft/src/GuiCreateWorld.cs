@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace net.minecraft.src
 {
 
 	using Keyboard = org.lwjgl.input.Keyboard;
+
+	// PORTING TODO: OpenGL code; input
 
 	public class GuiCreateWorld : GuiScreen
 	{
@@ -100,9 +103,12 @@ namespace net.minecraft.src
 			this.worldTypeButton.displayString = stringTranslate1.translateKey("selectWorld.mapType") + " " + stringTranslate1.translateKey(WorldType.worldTypes[this.field_46030_z].TranslateName);
 		}
 
+		static Regex specialCharactersRegex = new Regex("[\\./\"]|COM");
+
 		public static string func_25097_a(ISaveFormat iSaveFormat0, string string1)
 		{
-			for (string1 = string1.replaceAll("[\\./\"]|COM", "_"); iSaveFormat0.getWorldInfo(string1) != null; string1 = string1 + "-")
+			
+			for (string1 = specialCharactersRegex.Replace(string1, "_"); iSaveFormat0.getWorldInfo(string1) != null; string1 = string1 + "-")
 			{
 			}
 
@@ -131,7 +137,7 @@ namespace net.minecraft.src
 					}
 
 					this.createClicked = true;
-					long j2 = (new Random()).nextLong();
+					long j2 = (new Random()).NextInt64();
 					string string4 = this.textboxSeed.Text;
 					if (!MathHelper.stringNullOrLengthZero(string4))
 					{

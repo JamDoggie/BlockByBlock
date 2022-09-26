@@ -6,6 +6,8 @@
 	using Mouse = org.lwjgl.input.Mouse;
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code; input
+
 	public abstract class GuiSlot
 	{
 		private readonly Minecraft mc;

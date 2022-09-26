@@ -4,8 +4,8 @@
 	{
 		public ItemCloth(int i1) : base(i1)
 		{
-			this.MaxDamage = 0;
-			this.HasSubtypes = true;
+			setMaxDamage(0);
+			setHasSubtypes(true);
 		}
 
 		public override int getIconFromDamage(int i1)

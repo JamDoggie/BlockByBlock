@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using TextCopy;
 
 namespace net.minecraft.src
 {
@@ -10,6 +11,7 @@ namespace net.minecraft.src
 	using Mouse = org.lwjgl.input.Mouse;
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code; input
 	public class GuiScreen : Gui
 	{
 		protected internal Minecraft mc;
@@ -41,37 +43,17 @@ namespace net.minecraft.src
 
 		}
 
-		public static string ClipboardString
+		public static string? ClipboardString
 		{
 			get
 			{
-				try
-				{
-					Transferable transferable0 = Toolkit.getDefaultToolkit().getSystemClipboard().getContents((object)null);
-					if (transferable0 != null && transferable0.isDataFlavorSupported(DataFlavor.stringFlavor))
-					{
-						return (string)transferable0.getTransferData(DataFlavor.stringFlavor);
-					}
-				}
-				catch (Exception)
-				{
-				}
-    
-				return "";
+				return ClipboardService.GetText();
 			}
 		}
 
-		public static void func_50050_a(string string0)
+		public static void setClipboardString(string string0)
 		{
-			try
-			{
-				StringSelection stringSelection1 = new StringSelection(string0);
-				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection1, (ClipboardOwner)null);
-			}
-			catch (Exception)
-			{
-			}
-
+			ClipboardService.SetText(string0);
 		}
 
 		protected internal virtual void mouseClicked(int i1, int i2, int i3)

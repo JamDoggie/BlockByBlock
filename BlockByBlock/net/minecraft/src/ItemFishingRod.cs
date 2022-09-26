@@ -4,8 +4,8 @@
 	{
 		public ItemFishingRod(int i1) : base(i1)
 		{
-			this.MaxDamage = 64;
-			this.MaxStackSize = 1;
+			setMaxDamage(64);
+			setMaxStackSize(1);
 		}
 
 		public override bool Full3D
@@ -31,7 +31,7 @@
 			}
 			else
 			{
-				world2.playSoundAtEntity(entityPlayer3, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+				world2.playSoundAtEntity(entityPlayer3, "random.bow", 0.5F, 0.4F / (itemRand.NextSingle() * 0.4F + 0.8F));
 				if (!world2.isRemote)
 				{
 					world2.spawnEntityInWorld(new EntityFishHook(world2, entityPlayer3));

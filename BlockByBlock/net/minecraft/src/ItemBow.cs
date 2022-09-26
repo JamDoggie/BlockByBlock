@@ -5,7 +5,7 @@
 		public ItemBow(int i1) : base(i1)
 		{
 			this.maxStackSize = 1;
-			this.MaxDamage = 384;
+			this.setMaxDamage(384);
 		}
 
 		public override void onPlayerStoppedUsing(ItemStack itemStack1, World world2, EntityPlayer entityPlayer3, int i4)
@@ -50,7 +50,7 @@
 				}
 
 				itemStack1.damageItem(1, entityPlayer3);
-				world2.playSoundAtEntity(entityPlayer3, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f7 * 0.5F);
+				world2.playSoundAtEntity(entityPlayer3, "random.bow", 1.0F, 1.0F / (itemRand.NextSingle() * 0.4F + 1.2F) + f7 * 0.5F);
 				if (!z5)
 				{
 					entityPlayer3.inventory.consumeInventoryItem(Item.arrow.shiftedIndex);

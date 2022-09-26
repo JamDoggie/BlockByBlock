@@ -104,7 +104,7 @@
 			base.onUpdate();
 		}
 
-		protected internal override void updateEntityActionState()
+		public override void updateEntityActionState()
 		{
 			base.updateEntityActionState();
 			if (!this.worldObj.isRemote)
@@ -135,7 +135,7 @@
 										this.worldObj.playAuxSFX(2001, i1 + i6, i2 + i5, i3 + i7, Block.silverfish.blockID + (this.worldObj.getBlockMetadata(i1 + i6, i2 + i5, i3 + i7) << 12));
 										this.worldObj.setBlockWithNotify(i1 + i6, i2 + i5, i3 + i7, 0);
 										Block.silverfish.onBlockDestroyedByPlayer(this.worldObj, i1 + i6, i2 + i5, i3 + i7, 0);
-										if (this.rand.nextBoolean())
+										if (this.rand.NextBool())
 										{
 											z4 = true;
 											break;

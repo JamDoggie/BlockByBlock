@@ -2,6 +2,8 @@
 {
 	using Keyboard = org.lwjgl.input.Keyboard;
 
+	// PORTING TODO: OpenGL code; input
+
 	public class GuiScreenServerList : GuiScreen
 	{
 		private static string field_52009_d = "";
@@ -31,7 +33,7 @@
 			this.serverTextField.MaxStringLength = 128;
 			this.serverTextField.func_50033_b(true);
 			this.serverTextField.Text = field_52009_d;
-			((GuiButton)this.controlList[0]).enabled = this.serverTextField.Text.Length > 0 && this.serverTextField.Text.Split(":", true).length > 0;
+			((GuiButton)this.controlList[0]).enabled = this.serverTextField.Text.Length > 0 && this.serverTextField.Text.Split(":", true).Length > 0;
 		}
 
 		public override void onGuiClosed()
@@ -65,7 +67,7 @@
 				this.actionPerformed((GuiButton)this.controlList[0]);
 			}
 
-			((GuiButton)this.controlList[0]).enabled = this.serverTextField.Text.Length > 0 && this.serverTextField.Text.Split(":", true).length > 0;
+			((GuiButton)this.controlList[0]).enabled = this.serverTextField.Text.Length > 0 && this.serverTextField.Text.Split(":", true).Length > 0;
 		}
 
 		protected internal override void mouseClicked(int i1, int i2, int i3)

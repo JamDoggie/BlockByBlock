@@ -14,7 +14,7 @@
 			}
 
 			this.particleScale *= 0.75F;
-			this.particleMaxAge = (int)(8.0D / (MathHelper.NextDouble * 0.8D + 0.2D));
+			this.particleMaxAge = (int)(8.0D / (portinghelpers.MathHelper.NextDouble * 0.8D + 0.2D));
 			this.noClip = false;
 		}
 

@@ -4,7 +4,7 @@
 	{
 		public ItemMonsterPlacer(int i1) : base(i1)
 		{
-			this.HasSubtypes = true;
+			setHasSubtypes(true);
 		}
 
 		public override string getItemDisplayName(ItemStack itemStack1)
@@ -73,7 +73,7 @@
 				Entity entity8 = EntityList.createEntityByID(i1, world0);
 				if (entity8 != null)
 				{
-					entity8.setLocationAndAngles(d2, d4, d6, world0.rand.nextFloat() * 360.0F, 0.0F);
+					entity8.setLocationAndAngles(d2, d4, d6, world0.rand.NextSingle() * 360.0F, 0.0F);
 					world0.spawnEntityInWorld(entity8);
 					((EntityLiving)entity8).playLivingSound();
 				}

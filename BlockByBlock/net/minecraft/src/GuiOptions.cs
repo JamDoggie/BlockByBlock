@@ -24,7 +24,7 @@
 			for (int i5 = 0; i5 < i4; ++i5)
 			{
 				EnumOptions enumOptions6 = enumOptions3[i5];
-				if (!enumOptions6.getEnumFloat())
+				if (!enumOptions6.EnumFloat)
 				{
 					GuiSmallButton guiSmallButton7 = new GuiSmallButton(enumOptions6.returnEnumOrdinal(), this.width / 2 - 155 + i2 % 2 * 160, this.height / 6 + 24 * (i2 >> 1), enumOptions6, this.options.getKeyBinding(enumOptions6));
 					if (enumOptions6 == EnumOptions.DIFFICULTY && this.mc.theWorld != null && this.mc.theWorld.WorldInfo.HardcoreModeEnabled)

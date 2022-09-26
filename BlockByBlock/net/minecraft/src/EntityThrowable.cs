@@ -72,9 +72,9 @@ namespace net.minecraft.src
 			d1 /= (double)f9;
 			d3 /= (double)f9;
 			d5 /= (double)f9;
-			d1 += this.rand.nextGaussian() * (double)0.0075F * (double)f8;
-			d3 += this.rand.nextGaussian() * (double)0.0075F * (double)f8;
-			d5 += this.rand.nextGaussian() * (double)0.0075F * (double)f8;
+			d1 += this.rand.NextGaussian() * (double)0.0075F * (double)f8;
+			d3 += this.rand.NextGaussian() * (double)0.0075F * (double)f8;
+			d5 += this.rand.NextGaussian() * (double)0.0075F * (double)f8;
 			d1 *= (double)f7;
 			d3 *= (double)f7;
 			d5 *= (double)f7;
@@ -127,9 +127,9 @@ namespace net.minecraft.src
 				}
 
 				this.inGround = false;
-				this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
-				this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
-				this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
+				this.motionX *= (double)(this.rand.NextSingle() * 0.2F);
+				this.motionY *= (double)(this.rand.NextSingle() * 0.2F);
+				this.motionZ *= (double)(this.rand.NextSingle() * 0.2F);
 				this.ticksInGround = 0;
 				this.ticksInAir = 0;
 			}

@@ -2,41 +2,17 @@
 {
 	public class EnumOSMappingHelper
 	{
-		public static readonly int[] enumOSMappingArray = new int[(EnumOS2[])Enum.GetValues(typeof(EnumOS2)).Length];
+		public static readonly int[] enumOSMappingArray = new int[((EnumOS2[])Enum.GetValues(typeof(EnumOS2))).Length];
 
 		static EnumOSMappingHelper()
 		{
-			try
-			{
-				enumOSMappingArray[EnumOS2.linux.ordinal()] = 1;
-			}
-			catch (NoSuchFieldError)
-			{
-			}
+			enumOSMappingArray[(int)EnumOS2.linux] = 1;
 
-			try
-			{
-				enumOSMappingArray[EnumOS2.solaris.ordinal()] = 2;
-			}
-			catch (NoSuchFieldError)
-			{
-			}
+			enumOSMappingArray[(int)EnumOS2.solaris] = 2;
 
-			try
-			{
-				enumOSMappingArray[EnumOS2.windows.ordinal()] = 3;
-			}
-			catch (NoSuchFieldError)
-			{
-			}
+			enumOSMappingArray[(int)EnumOS2.windows] = 3;
 
-			try
-			{
-				enumOSMappingArray[EnumOS2.macos.ordinal()] = 4;
-			}
-			catch (NoSuchFieldError)
-			{
-			}
+			enumOSMappingArray[(int)EnumOS2.macos] = 4;
 
 		}
 	}

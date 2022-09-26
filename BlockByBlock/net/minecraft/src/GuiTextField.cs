@@ -4,6 +4,8 @@ namespace net.minecraft.src
 {
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	public class GuiTextField : Gui
 	{
 		private readonly FontRenderer fontRenderer;
@@ -166,7 +168,7 @@ namespace net.minecraft.src
 				if (!z4)
 				{
 					int i7 = this.text.Length;
-					i3 = this.text.IndexOf(32, i3);
+					i3 = this.text.IndexOf((char)32, i3);
 					if (i3 == -1)
 					{
 						i3 = i7;
@@ -239,13 +241,13 @@ namespace net.minecraft.src
 					this.func_50032_g(0);
 					return true;
 				case '\u0003':
-					GuiScreen.func_50050_a(this.func_50039_c());
+					GuiScreen.setClipboardString(this.func_50039_c());
 					return true;
 				case '\u0016':
 					this.func_50031_b(GuiScreen.ClipboardString);
 					return true;
 				case '\u0018':
-					GuiScreen.func_50050_a(this.func_50039_c());
+					GuiScreen.setClipboardString(this.func_50039_c());
 					this.func_50031_b("");
 					return true;
 				default:

@@ -6,7 +6,7 @@ namespace net.minecraft.src
 	{
 		protected internal ItemMap(int i1) : base(i1)
 		{
-			this.MaxStackSize = 1;
+			setMaxStackSize(1);
 		}
 
 		public static MapData getMPMapData(short s0, World world1)

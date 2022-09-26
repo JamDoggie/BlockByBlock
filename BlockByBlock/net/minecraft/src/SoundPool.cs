@@ -12,7 +12,7 @@ namespace net.minecraft.src
 		public int numberOfSoundPoolEntries = 0;
 		public bool isGetRandomSound = true;
 
-		public virtual SoundPoolEntry addSound(string string1, File file2)
+		public virtual SoundPoolEntry addSound(string string1, FileInfo file2)
 		{
 			try
 			{
@@ -26,23 +26,23 @@ namespace net.minecraft.src
 					}
 				}
 
-				string1 = string1.replaceAll("/", ".");
+				string1 = string1.Replace("/", ".");
 				if (!this.nameToSoundPoolEntriesMapping.Contains(string1))
 				{
 					this.nameToSoundPoolEntriesMapping[string1] = new ArrayList();
 				}
 
-				SoundPoolEntry soundPoolEntry4 = new SoundPoolEntry(string3, file2.toURI().toURL());
+				SoundPoolEntry soundPoolEntry4 = new SoundPoolEntry(string3, new Uri(file2.FullName));
 				((System.Collections.IList)this.nameToSoundPoolEntriesMapping[string1]).Add(soundPoolEntry4);
 				this.allSoundPoolEntries.Add(soundPoolEntry4);
 				++this.numberOfSoundPoolEntries;
 				return soundPoolEntry4;
 			}
-			catch (MalformedURLException malformedURLException5)
+			catch (UriFormatException malformedURLException5)
 			{
 				Console.WriteLine(malformedURLException5.ToString());
 				Console.Write(malformedURLException5.StackTrace);
-				throw new Exception(malformedURLException5);
+				throw malformedURLException5;
 			}
 		}
 

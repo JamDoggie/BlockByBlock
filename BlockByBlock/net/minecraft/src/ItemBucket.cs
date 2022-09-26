@@ -109,11 +109,11 @@
 						{
 							if (world2.worldProvider.isHellWorld && this.isFull == Block.waterMoving.blockID)
 							{
-								world2.playSoundEffect(d5 + 0.5D, d7 + 0.5D, d9 + 0.5D, "random.fizz", 0.5F, 2.6F + (world2.rand.nextFloat() - world2.rand.nextFloat()) * 0.8F);
+								world2.playSoundEffect(d5 + 0.5D, d7 + 0.5D, d9 + 0.5D, "random.fizz", 0.5F, 2.6F + (world2.rand.NextSingle() - world2.rand.NextSingle()) * 0.8F);
 
 								for (int i16 = 0; i16 < 8; ++i16)
 								{
-									world2.spawnParticle("largesmoke", (double)i13 + MathHelper.NextDouble, (double)i14 + MathHelper.NextDouble, (double)i15 + MathHelper.NextDouble, 0.0D, 0.0D, 0.0D);
+									world2.spawnParticle("largesmoke", (double)i13 + portinghelpers.MathHelper.NextDouble, (double)i14 + portinghelpers.MathHelper.NextDouble, (double)i15 + portinghelpers.MathHelper.NextDouble, 0.0D, 0.0D, 0.0D);
 								}
 							}
 							else

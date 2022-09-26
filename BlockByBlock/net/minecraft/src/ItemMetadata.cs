@@ -6,14 +6,14 @@
 
 		public ItemMetadata(int i1, Block block2) : base(i1)
 		{
-			this.blockObj = block2;
-			this.MaxDamage = 0;
-			this.HasSubtypes = true;
+			blockObj = block2;
+			setMaxDamage(0);
+			setHasSubtypes(true);
 		}
 
 		public override int getIconFromDamage(int i1)
 		{
-			return this.blockObj.getBlockTextureFromSideAndMetadata(2, i1);
+			return blockObj.getBlockTextureFromSideAndMetadata(2, i1);
 		}
 
 		public override int getMetadata(int i1)

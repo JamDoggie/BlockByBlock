@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
+using BlockByBlock.helpers;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -9,12 +12,14 @@ namespace net.minecraft.src
 	using GL11 = org.lwjgl.opengl.GL11;
 	using GL12 = org.lwjgl.opengl.GL12;
 
+	// PORTING TODO: OpenGL code
+
 	public class GuiIngame : Gui
 	{
 		private static RenderItem itemRenderer = new RenderItem();
 		private System.Collections.IList chatMessageList = new ArrayList();
 		private System.Collections.IList field_50016_f = new ArrayList();
-		private Random rand = new Random();
+		private RandomExtended rand = new RandomExtended();
 		private Minecraft mc;
 		private int updateCounter = 0;
 		private string recordPlaying = "";
@@ -24,6 +29,8 @@ namespace net.minecraft.src
 		private bool field_50018_o = false;
 		public float damageGuiPartialTime;
 		internal float prevVignetteBrightness = 1.0F;
+
+		private Process process = Process.GetCurrentProcess();
 
 		public GuiIngame(Minecraft minecraft1)
 		{
@@ -93,7 +100,8 @@ namespace net.minecraft.src
 
 				i12 = this.mc.thePlayer.Health;
 				i13 = this.mc.thePlayer.prevHealth;
-				this.rand.setSeed((long)(this.updateCounter * 312871));
+				//this.rand.setSeed((long)(this.updateCounter * 312871)); PORTING TODO: RandomExtended.setSeed
+				rand = new RandomExtended((long)(this.updateCounter * 312871));
 				bool z14 = false;
 				FoodStats foodStats15 = this.mc.thePlayer.FoodStats;
 				i16 = foodStats15.FoodLevel;
@@ -336,9 +344,9 @@ namespace net.minecraft.src
 				fontRenderer8.drawStringWithShadow(this.mc.EntityDebug, 2, 22, 0xFFFFFF);
 				fontRenderer8.drawStringWithShadow(this.mc.debugInfoEntities(), 2, 32, 0xFFFFFF);
 				fontRenderer8.drawStringWithShadow(this.mc.WorldProviderName, 2, 42, 0xFFFFFF);
-				long j35 = Runtime.getRuntime().maxMemory();
-				long j36 = Runtime.getRuntime().totalMemory();
-				long j41 = Runtime.getRuntime().freeMemory();
+				long j35 = 69420;
+				long j36 = process.PrivateMemorySize64;
+				long j41 = 69420;
 				long j42 = j36 - j41;
 				string string44 = "Used memory: " + j42 * 100L / j35 + "% (" + j42 / 1024L / 1024L + "MB) of " + j35 / 1024L / 1024L + "MB";
 				this.drawString(fontRenderer8, string44, i6 - fontRenderer8.getStringWidth(string44) - 2, 2, 14737632);
@@ -383,7 +391,7 @@ namespace net.minecraft.src
 					i13 = 0xFFFFFF;
 					if (this.recordIsPlaying)
 					{
-						i13 = Color.HSBtoRGB(f33 / 50.0F, 0.7F, 0.6F) & 0xFFFFFF;
+						i13 = ColorHelpers.ColorFromHSV(f33 / 50.0F, 0.7F, 0.6F).ToArgb() & 0xFFFFFF;
 					}
 
 					fontRenderer8.drawString(this.recordPlaying, -fontRenderer8.getStringWidth(this.recordPlaying) / 2, -4, i13 + (i12 << 24));

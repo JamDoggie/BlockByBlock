@@ -4,8 +4,8 @@
 	{
 		public ItemFlintAndSteel(int i1) : base(i1)
 		{
-			this.maxStackSize = 1;
-			this.MaxDamage = 64;
+			maxStackSize = 1;
+			setMaxDamage(64);
 		}
 
 		public override bool onItemUse(ItemStack itemStack1, EntityPlayer entityPlayer2, World world3, int i4, int i5, int i6, int i7)
@@ -49,7 +49,7 @@
 				int i8 = world3.getBlockId(i4, i5, i6);
 				if (i8 == 0)
 				{
-					world3.playSoundEffect((double)i4 + 0.5D, (double)i5 + 0.5D, (double)i6 + 0.5D, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+					world3.playSoundEffect((double)i4 + 0.5D, (double)i5 + 0.5D, (double)i6 + 0.5D, "fire.ignite", 1.0F, itemRand.NextSingle() * 0.4F + 0.8F);
 					world3.setBlockWithNotify(i4, i5, i6, Block.fire.blockID);
 				}
 

@@ -21,8 +21,8 @@
 			}
 			if (z2)
 			{
-				this.MaxDamage = 0;
-				this.HasSubtypes = true;
+				setMaxDamage(0);
+				setHasSubtypes(true);
 			}
 
 		}

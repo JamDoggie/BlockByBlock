@@ -13,31 +13,52 @@ namespace net.minecraft.src
 		private static System.Collections.IDictionary stringToIDMapping = new Hashtable();
 		public static Hashtable entityEggs = new Hashtable();
 
-		private static void addMapping(Type class0, string string1, int i2)
+		private static void addMapping(Type entType, string entName, int id)
 		{
-			stringToClassMapping[string1] = class0;
-			classToStringMapping[class0] = string1;
-			IDtoClassMapping[i2] = class0;
-			classToIDMapping[class0] = i2;
-			stringToIDMapping[string1] = i2;
+			stringToClassMapping[entName] = entType;
+			classToStringMapping[entType] = entName;
+			IDtoClassMapping[id] = entType;
+			classToIDMapping[entType] = id;
+			stringToIDMapping[entName] = id;
 		}
 
-		private static void addMapping(Type class0, string string1, int i2, int i3, int i4)
+		private static void addMapping(Type entType, string entName, int id, int eggColor1, int eggColor2)
 		{
-			addMapping(class0, string1, i2);
-			entityEggs[i2] = new EntityEggInfo(i2, i3, i4);
+			addMapping(entType, entName, id);
+			entityEggs[id] = new EntityEggInfo(id, eggColor1, eggColor2);
 		}
 
-		public static Entity createEntityByName(string string0, World world1)
+		public static Entity? createEntityByName(string entName, World world)
 		{
-			Entity entity2 = null;
+			Entity? entity = null;
 
 			try
 			{
-				Type class3 = (Type)stringToClassMapping[string0];
-				if (class3 != null)
+				Type? type = stringToClassMapping[entName] as Type;
+				if (type != null)
 				{
-					entity2 = (Entity)class3.GetConstructor(new Type[]{typeof(World)}).newInstance(new object[]{world1});
+					entity = Activator.CreateInstance(type, world) as Entity; // Creates an instance of the entity, passing in the world as a parameter to the constructor.
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.ToString());
+				Console.Write(e.StackTrace);
+			}
+
+			return entity;
+		}
+
+		public static Entity? createEntityFromNBT(NBTTagCompound nBTTagCompound, World world)
+		{
+			Entity? entity = null;
+
+			try
+			{
+				Type? type = stringToClassMapping[nBTTagCompound.getString("id")] as Type;
+				if (type != null)
+				{
+					entity = Activator.CreateInstance(type, world) as Entity; // Creates an instance of the entity, passing in the world as a parameter to the constructor.
 				}
 			}
 			catch (Exception exception4)
@@ -46,49 +67,28 @@ namespace net.minecraft.src
 				Console.Write(exception4.StackTrace);
 			}
 
-			return entity2;
-		}
-
-		public static Entity createEntityFromNBT(NBTTagCompound nBTTagCompound0, World world1)
-		{
-			Entity entity2 = null;
-
-			try
+			if (entity != null)
 			{
-				Type class3 = (Type)stringToClassMapping[nBTTagCompound0.getString("id")];
-				if (class3 != null)
-				{
-					entity2 = (Entity)class3.GetConstructor(new Type[]{typeof(World)}).newInstance(new object[]{world1});
-				}
-			}
-			catch (Exception exception4)
-			{
-				Console.WriteLine(exception4.ToString());
-				Console.Write(exception4.StackTrace);
-			}
-
-			if (entity2 != null)
-			{
-				entity2.readFromNBT(nBTTagCompound0);
+				entity.readFromNBT(nBTTagCompound);
 			}
 			else
 			{
-				Console.WriteLine("Skipping Entity with id " + nBTTagCompound0.getString("id"));
+				Console.WriteLine("Skipping Entity with id " + nBTTagCompound.getString("id"));
 			}
 
-			return entity2;
+			return entity;
 		}
 
-		public static Entity createEntityByID(int i0, World world1)
+		public static Entity? createEntityByID(int id, World world)
 		{
-			Entity entity2 = null;
+			Entity? entity = null;
 
 			try
 			{
-				Type class3 = (Type)IDtoClassMapping[i0];
-				if (class3 != null)
+				Type? type = IDtoClassMapping[id] as Type;
+				if (type != null)
 				{
-					entity2 = (Entity)class3.GetConstructor(new Type[]{typeof(World)}).newInstance(new object[]{world1});
+					entity = Activator.CreateInstance(type, world) as Entity; // Creates an instance of the entity, passing in the world as a parameter to the constructor.
 				}
 			}
 			catch (Exception exception4)
@@ -97,12 +97,12 @@ namespace net.minecraft.src
 				Console.Write(exception4.StackTrace);
 			}
 
-			if (entity2 == null)
+			if (entity == null)
 			{
-				Console.WriteLine("Skipping Entity with id " + i0);
+				Console.WriteLine("Skipping Entity with id " + id);
 			}
 
-			return entity2;
+			return entity;
 		}
 
 		public static int getEntityID(Entity entity0)

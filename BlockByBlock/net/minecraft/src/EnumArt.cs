@@ -95,7 +95,7 @@ namespace net.minecraft.src
 		private readonly int ordinalValue;
 		private static int nextOrdinal = 0;
 
-		public static readonly int maxArtTitleLength = "SkullAndRoses".length();
+		public static readonly int maxArtTitleLength = "SkullAndRoses".Length;
 		public readonly string title;
 		public readonly int sizeX;
 		public readonly int sizeY;

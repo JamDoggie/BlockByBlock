@@ -15,10 +15,10 @@ namespace net.minecraft.src
 			this.setSize(0.5F, 0.5F);
 			this.yOffset = this.height / 2.0F;
 			this.setPosition(d2, d4, d6);
-			this.rotationYaw = (float)(MathHelper.NextDouble * 360.0D);
-			this.motionX = (double)((float)(MathHelper.NextDouble * (double)0.2F - (double)0.1F) * 2.0F);
-			this.motionY = (double)((float)(MathHelper.NextDouble * 0.2D) * 2.0F);
-			this.motionZ = (double)((float)(MathHelper.NextDouble * (double)0.2F - (double)0.1F) * 2.0F);
+			this.rotationYaw = (float)(portinghelpers.MathHelper.NextDouble * 360.0D);
+			this.motionX = (double)((float)(portinghelpers.MathHelper.NextDouble * (double)0.2F - (double)0.1F) * 2.0F);
+			this.motionY = (double)((float)(portinghelpers.MathHelper.NextDouble * 0.2D) * 2.0F);
+			this.motionZ = (double)((float)(portinghelpers.MathHelper.NextDouble * (double)0.2F - (double)0.1F) * 2.0F);
 			this.xpValue = i8;
 		}
 
@@ -77,9 +77,9 @@ namespace net.minecraft.src
 			if (this.worldObj.getBlockMaterial(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)) == Material.lava)
 			{
 				this.motionY = (double)0.2F;
-				this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-				this.motionZ = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-				this.worldObj.playSoundAtEntity(this, "random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
+				this.motionX = (double)((this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F);
+				this.motionZ = (double)((this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F);
+				this.worldObj.playSoundAtEntity(this, "random.fizz", 0.4F, 2.0F + this.rand.NextSingle() * 0.4F);
 			}
 
 			this.pushOutOfBlocks(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
@@ -173,7 +173,7 @@ namespace net.minecraft.src
 				if (this.field_35126_c == 0 && entityPlayer1.xpCooldown == 0)
 				{
 					entityPlayer1.xpCooldown = 2;
-					this.worldObj.playSoundAtEntity(this, "random.orb", 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
+					this.worldObj.playSoundAtEntity(this, "random.orb", 0.1F, 0.5F * ((this.rand.NextSingle() - this.rand.NextSingle()) * 0.7F + 1.8F));
 					entityPlayer1.onItemPickup(this, 1);
 					entityPlayer1.addExperience(this.xpValue);
 					this.setDead();

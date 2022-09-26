@@ -161,7 +161,7 @@ namespace net.minecraft.client
 		public SoundManager sndManager = new SoundManager();
 		public MouseHelper mouseHelper;
 		public TexturePackList texturePackList;
-		public File mcDataDir;
+		public DirectoryInfo mcDataDir;
 		private ISaveFormat saveLoader;
 		public static long[] frameTimes = new long[512];
 		public static long[] tickTimes = new long[512];
@@ -173,7 +173,7 @@ namespace net.minecraft.client
 		private int serverPort;
 		private TextureWaterFX textureWaterFX = new TextureWaterFX();
 		private TextureLavaFX textureLavaFX = new TextureLavaFX();
-		private static File minecraftDir = null;
+		private static DirectoryInfo minecraftDir = null;
 		public volatile bool running = true;
 		public string debug = "";
 		internal long debugUpdateTime = DateTimeHelper.CurrentUnixTimeMillis();
@@ -426,7 +426,7 @@ namespace net.minecraft.client
 			tessellator9.draw();
 		}
 
-		public static File MinecraftDir
+		public static DirectoryInfo MinecraftDir
 		{
 			get
 			{

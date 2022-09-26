@@ -186,7 +186,7 @@ namespace net.minecraft.src
 			{
 				if (this.timeWolfIsShaking == 0.0F)
 				{
-					this.worldObj.playSoundAtEntity(this, "mob.wolf.shake", this.SoundVolume, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+					this.worldObj.playSoundAtEntity(this, "mob.wolf.shake", this.SoundVolume, (this.rand.NextSingle() - this.rand.NextSingle()) * 0.2F + 1.0F);
 				}
 
 				this.prevTimeWolfIsShaking = this.timeWolfIsShaking;
@@ -206,8 +206,8 @@ namespace net.minecraft.src
 
 					for (int i3 = 0; i3 < i2; ++i3)
 					{
-						float f4 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
-						float f5 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
+						float f4 = (this.rand.NextSingle() * 2.0F - 1.0F) * this.width * 0.5F;
+						float f5 = (this.rand.NextSingle() * 2.0F - 1.0F) * this.width * 0.5F;
 						this.worldObj.spawnParticle("splash", this.posX + (double)f4, (double)(f1 + 0.8F), this.posZ + (double)f5, this.motionX, this.motionY, this.motionZ);
 					}
 				}

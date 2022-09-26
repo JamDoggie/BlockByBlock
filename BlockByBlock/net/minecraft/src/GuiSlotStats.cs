@@ -3,11 +3,13 @@
 
 	using Mouse = org.lwjgl.input.Mouse;
 
+	// PORTING TODO: OpenGL code; input
+
 	internal abstract class GuiSlotStats : GuiSlot
 	{
 		protected internal int field_27268_b;
-		protected internal System.Collections.IList field_27273_c;
-		protected internal System.Collections.IComparer field_27272_d;
+		protected internal List<StatCrafting> field_27273_c;
+		protected internal IComparer<StatCrafting> field_27272_d;
 		protected internal int field_27271_e;
 		protected internal int field_27270_f;
 		internal readonly GuiStats field_27269_g;
@@ -127,7 +129,7 @@
 
 		protected internal StatCrafting func_27264_b(int i1)
 		{
-			return (StatCrafting)this.field_27273_c[i1];
+			return this.field_27273_c[i1];
 		}
 
 		protected internal abstract string func_27263_a(int i1);

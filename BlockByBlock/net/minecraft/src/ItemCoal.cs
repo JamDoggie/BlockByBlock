@@ -4,8 +4,8 @@
 	{
 		public ItemCoal(int i1) : base(i1)
 		{
-			this.HasSubtypes = true;
-			this.MaxDamage = 0;
+			setHasSubtypes(true);
+			setMaxDamage(0);
 		}
 
 		public override string getItemNameIS(ItemStack itemStack1)

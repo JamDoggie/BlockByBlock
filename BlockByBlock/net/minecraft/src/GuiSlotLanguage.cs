@@ -7,15 +7,15 @@ namespace net.minecraft.src
 	internal class GuiSlotLanguage : GuiSlot
 	{
 		private ArrayList field_44013_b;
-		private SortedDictionary field_44014_c;
+		private Dictionary<string,string> languageList;
 		internal readonly GuiLanguage field_44015_a;
 
 		public GuiSlotLanguage(GuiLanguage guiLanguage1) : base(guiLanguage1.mc, guiLanguage1.width, guiLanguage1.height, 32, guiLanguage1.height - 65 + 4, 18)
 		{
 			this.field_44015_a = guiLanguage1;
-			this.field_44014_c = StringTranslate.Instance.LanguageList;
+			this.languageList = StringTranslate.Instance.LanguageList;
 			this.field_44013_b = new ArrayList();
-			System.Collections.IEnumerator iterator2 = this.field_44014_c.Keys.GetEnumerator();
+			System.Collections.IEnumerator iterator2 = this.languageList.Keys.GetEnumerator();
 
 			while (iterator2.MoveNext())
 			{
@@ -63,7 +63,7 @@ namespace net.minecraft.src
 		protected internal override void drawSlot(int i1, int i2, int i3, int i4, Tessellator tessellator5)
 		{
 			this.field_44015_a.fontRenderer.BidiFlag = true;
-			this.field_44015_a.drawCenteredString(this.field_44015_a.fontRenderer, (string)this.field_44014_c[this.field_44013_b[i1]], this.field_44015_a.width / 2, i3 + 1, 0xFFFFFF);
+			this.field_44015_a.drawCenteredString(this.field_44015_a.fontRenderer, this.languageList[this.field_44013_b[i1] as string], this.field_44015_a.width / 2, i3 + 1, 0xFFFFFF);
 			this.field_44015_a.fontRenderer.BidiFlag = StringTranslate.isBidrectional(GuiLanguage.func_44005_a(this.field_44015_a).language);
 		}
 	}

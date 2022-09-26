@@ -6,12 +6,14 @@ namespace net.minecraft.src
 
 	using Minecraft = net.minecraft.client.Minecraft;
 
-	internal class ThreadConnectToServer : Thread
+	internal class ThreadConnectToServer
 	{
 		internal readonly Minecraft mc;
 		internal readonly string ip;
 		internal readonly int port;
 		internal readonly GuiConnecting connectingGui;
+
+		public Thread thread;
 
 		internal ThreadConnectToServer(GuiConnecting guiConnecting1, Minecraft minecraft2, string string3, int i4)
 		{
@@ -19,9 +21,16 @@ namespace net.minecraft.src
 			this.mc = minecraft2;
 			this.ip = string3;
 			this.port = i4;
+
+			thread = new Thread(() => run());
 		}
 
-		public virtual void run()
+		public virtual void startThread()
+        {
+			thread.Start();
+        }
+
+		private virtual void run()
 		{
 			try
 			{

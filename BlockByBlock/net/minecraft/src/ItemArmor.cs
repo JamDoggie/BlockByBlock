@@ -14,7 +14,7 @@
 			this.armorType = i4;
 			this.renderIndex = i3;
 			this.damageReduceAmount = enumArmorMaterial2.getDamageReductionAmount(i4);
-			this.MaxDamage = enumArmorMaterial2.getDurability(i4);
+			this.setMaxDamage(enumArmorMaterial2.getDurability(i4));
 			this.maxStackSize = 1;
 		}
 
@@ -22,7 +22,7 @@
 		{
 			get
 			{
-				return this.material.getEnchantability();
+				return this.material.Enchantability;
 			}
 		}
 

@@ -17,7 +17,7 @@ namespace net.minecraft.src
 		public EntityTNTPrimed(World world1, double d2, double d4, double d6) : this(world1)
 		{
 			this.setPosition(d2, d4, d6);
-			float f8 = (float)(MathHelper.NextDouble * (double)(float)Math.PI * 2.0D);
+			float f8 = (float)(portinghelpers.MathHelper.NextDouble * (double)(float)Math.PI * 2.0D);
 			this.motionX = (double)(-((float)Math.Sin((double)f8)) * 0.02F);
 			this.motionY = (double)0.2F;
 			this.motionZ = (double)(-((float)Math.Cos((double)f8)) * 0.02F);
@@ -83,12 +83,12 @@ namespace net.minecraft.src
 			this.worldObj.createExplosion((Entity)null, this.posX, this.posY, this.posZ, f1);
 		}
 
-		protected internal override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
+		public override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
 		{
 			nBTTagCompound1.setByte("Fuse", (sbyte)this.fuse);
 		}
 
-		protected internal override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
+		public override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
 		{
 			this.fuse = nBTTagCompound1.getByte("Fuse");
 		}

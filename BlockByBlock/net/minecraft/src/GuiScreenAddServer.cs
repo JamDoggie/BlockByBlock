@@ -2,6 +2,8 @@
 {
 	using Keyboard = org.lwjgl.input.Keyboard;
 
+	// PORTING TODO: OpenGL code; input
+
 	public class GuiScreenAddServer : GuiScreen
 	{
 		private GuiScreen parentGui;
@@ -34,7 +36,7 @@
 			this.serverAddress = new GuiTextField(this.fontRenderer, this.width / 2 - 100, 116, 200, 20);
 			this.serverAddress.MaxStringLength = 128;
 			this.serverAddress.Text = this.serverNBTStorage.host;
-			((GuiButton)this.controlList[0]).enabled = this.serverAddress.Text.Length > 0 && this.serverAddress.Text.Split(":", true).length > 0 && this.serverName.Text.Length > 0;
+			((GuiButton)this.controlList[0]).enabled = this.serverAddress.Text.Length > 0 && this.serverAddress.Text.Split(":", true).Length > 0 && this.serverName.Text.Length > 0;
 		}
 
 		public override void onGuiClosed()
@@ -83,7 +85,7 @@
 				this.actionPerformed((GuiButton)this.controlList[0]);
 			}
 
-			((GuiButton)this.controlList[0]).enabled = this.serverAddress.Text.Length > 0 && this.serverAddress.Text.Split(":", true).length > 0 && this.serverName.Text.Length > 0;
+			((GuiButton)this.controlList[0]).enabled = this.serverAddress.Text.Length > 0 && this.serverAddress.Text.Split(":", true).Length > 0 && this.serverName.Text.Length > 0;
 			if (((GuiButton)this.controlList[0]).enabled)
 			{
 				string string3 = this.serverAddress.Text.Trim();

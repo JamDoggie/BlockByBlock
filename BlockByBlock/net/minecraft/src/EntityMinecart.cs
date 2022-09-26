@@ -161,9 +161,9 @@ namespace net.minecraft.src
 							ItemStack itemStack5 = entityMinecart3.getStackInSlot(i4);
 							if (itemStack5 != null)
 							{
-								float f6 = this.rand.nextFloat() * 0.8F + 0.1F;
-								float f7 = this.rand.nextFloat() * 0.8F + 0.1F;
-								float f8 = this.rand.nextFloat() * 0.8F + 0.1F;
+								float f6 = this.rand.NextSingle() * 0.8F + 0.1F;
+								float f7 = this.rand.NextSingle() * 0.8F + 0.1F;
+								float f8 = this.rand.NextSingle() * 0.8F + 0.1F;
 
 								while (itemStack5.stackSize > 0)
 								{
@@ -176,9 +176,9 @@ namespace net.minecraft.src
 									itemStack5.stackSize -= i9;
 									EntityItem entityItem10 = new EntityItem(this.worldObj, this.posX + (double)f6, this.posY + (double)f7, this.posZ + (double)f8, new ItemStack(itemStack5.itemID, i9, itemStack5.ItemDamage));
 									float f11 = 0.05F;
-									entityItem10.motionX = (double)((float)this.rand.nextGaussian() * f11);
-									entityItem10.motionY = (double)((float)this.rand.nextGaussian() * f11 + 0.2F);
-									entityItem10.motionZ = (double)((float)this.rand.nextGaussian() * f11);
+									entityItem10.motionX = (double)((float)this.rand.NextGaussian() * f11);
+									entityItem10.motionY = (double)((float)this.rand.NextGaussian() * f11 + 0.2F);
+									entityItem10.motionZ = (double)((float)this.rand.NextGaussian() * f11);
 									this.worldObj.spawnEntityInWorld(entityItem10);
 								}
 							}
@@ -219,9 +219,9 @@ namespace net.minecraft.src
 				ItemStack itemStack2 = this.getStackInSlot(i1);
 				if (itemStack2 != null)
 				{
-					float f3 = this.rand.nextFloat() * 0.8F + 0.1F;
-					float f4 = this.rand.nextFloat() * 0.8F + 0.1F;
-					float f5 = this.rand.nextFloat() * 0.8F + 0.1F;
+					float f3 = this.rand.NextSingle() * 0.8F + 0.1F;
+					float f4 = this.rand.NextSingle() * 0.8F + 0.1F;
+					float f5 = this.rand.NextSingle() * 0.8F + 0.1F;
 
 					while (itemStack2.stackSize > 0)
 					{
@@ -239,9 +239,9 @@ namespace net.minecraft.src
 						}
 
 						float f8 = 0.05F;
-						entityItem7.motionX = (double)((float)this.rand.nextGaussian() * f8);
-						entityItem7.motionY = (double)((float)this.rand.nextGaussian() * f8 + 0.2F);
-						entityItem7.motionZ = (double)((float)this.rand.nextGaussian() * f8);
+						entityItem7.motionX = (double)((float)this.rand.NextGaussian() * f8);
+						entityItem7.motionY = (double)((float)this.rand.NextGaussian() * f8 + 0.2F);
+						entityItem7.motionZ = (double)((float)this.rand.NextGaussian() * f8);
 						this.worldObj.spawnEntityInWorld(entityItem7);
 					}
 				}
@@ -805,7 +805,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		protected internal override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
+		public override void writeEntityToNBT(NBTTagCompound nBTTagCompound1)
 		{
 			nBTTagCompound1.setInteger("Type", this.minecartType);
 			if (this.minecartType == 2)
@@ -831,10 +831,10 @@ namespace net.minecraft.src
 
 				nBTTagCompound1.setTag("Items", nBTTagList2);
 			}
-
+            
 		}
 
-		protected internal override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
+		public override void readEntityFromNBT(NBTTagCompound nBTTagCompound1)
 		{
 			this.minecartType = nBTTagCompound1.getInteger("Type");
 			if (this.minecartType == 2)

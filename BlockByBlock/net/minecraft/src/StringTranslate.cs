@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -10,7 +11,7 @@ namespace net.minecraft.src
 	{
 		private static StringTranslate instance = new StringTranslate();
 		private Properties translateTable = new Properties();
-		private SortedDictionary languageList;
+		private Dictionary<string,string> languageList;
 		private string currentLanguage;
 		private bool isUnicode;
 
@@ -28,15 +29,18 @@ namespace net.minecraft.src
 			}
 		}
 
-		private void loadLanguageList()
+        /// <summary>
+        /// Loads all of the display names per language. Ex. en_US=English, fr_FR=Francais, etc.
+        /// </summary>
+        private void loadLanguageList()
 		{
-			SortedDictionary treeMap1 = new SortedDictionary();
+			Dictionary<string, string> treeMap1 = new();
 
 			try
 			{
-				StreamReader bufferedReader2 = new StreamReader(typeof(StringTranslate).getResourceAsStream("/lang/languages.txt"), Encoding.UTF8);
+				StreamReader bufferedReader2 = new StreamReader(GameEnv.GetResourceAsStream("/lang/languages.txt"), Encoding.UTF8);
 
-				for (string string3 = bufferedReader2.ReadLine(); !string.ReferenceEquals(string3, null); string3 = bufferedReader2.ReadLine())
+				for (string? string3 = bufferedReader2.ReadLine(); string3 != null; string3 = bufferedReader2.ReadLine())
 				{
 					string[] string4 = string3.Split("=", true);
 					if (string4 != null && string4.Length == 2)
@@ -55,7 +59,7 @@ namespace net.minecraft.src
 			this.languageList = treeMap1;
 		}
 
-		public virtual SortedDictionary LanguageList
+		public virtual Dictionary<string,string> LanguageList
 		{
 			get
 			{

@@ -6,11 +6,11 @@
 		public int primaryColor;
 		public int secondaryColor;
 
-		public EntityEggInfo(int i1, int i2, int i3)
+		public EntityEggInfo(int i1, int color1, int color2)
 		{
 			this.spawnedID = i1;
-			this.primaryColor = i2;
-			this.secondaryColor = i3;
+			this.primaryColor = color1;
+			this.secondaryColor = color2;
 		}
 	}
 

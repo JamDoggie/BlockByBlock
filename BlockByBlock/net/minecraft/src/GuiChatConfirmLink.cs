@@ -11,9 +11,9 @@
 			this.field_50056_a = chatClickData5;
 		}
 
-		public override void func_50052_d()
+		public override void copyLink()
 		{
-			func_50050_a(this.field_50056_a.func_50088_a());
+			setClipboardString(this.field_50056_a.func_50088_a());
 		}
 	}
 

@@ -2,6 +2,8 @@
 {
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	internal class GuiSlotServer : GuiSlot
 	{
 		internal readonly GuiMultiplayer parentGui;
@@ -63,7 +65,7 @@
 					serverNBTStorage6.motd = "";
 					serverNBTStorage6.playerCount = "";
 					GuiMultiplayer.incrementThreadsPending();
-					(new ThreadPollServers(this, serverNBTStorage6)).Start();
+					(new ThreadPollServers(this, serverNBTStorage6)).startThread();
 				}
 			}
 

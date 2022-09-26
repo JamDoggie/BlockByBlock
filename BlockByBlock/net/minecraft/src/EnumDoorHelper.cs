@@ -2,43 +2,17 @@
 {
 	internal class EnumDoorHelper
 	{
-		internal static readonly int[] doorEnum = new int[(EnumDoor[])Enum.GetValues(typeof(EnumDoor)).Length];
+		internal static readonly int[] doorEnum = new int[((EnumDoor[])Enum.GetValues(typeof(EnumDoor))).Length];
 
 		static EnumDoorHelper()
 		{
-			try
-			{
-				doorEnum[EnumDoor.OPENING.ordinal()] = 1;
-			}
-			catch (NoSuchFieldError)
-			{
-			}
+				doorEnum[(int)EnumDoor.OPENING] = 1;
 
-			try
-			{
-				doorEnum[EnumDoor.WOOD_DOOR.ordinal()] = 2;
-			}
-			catch (NoSuchFieldError)
-			{
-			}
+				doorEnum[(int)EnumDoor.WOOD_DOOR] = 2;
 
-			try
-			{
-				doorEnum[EnumDoor.GRATES.ordinal()] = 3;
-			}
-			catch (NoSuchFieldError)
-			{
-			}
+				doorEnum[(int)EnumDoor.GRATES] = 3;
 
-			try
-			{
-				doorEnum[EnumDoor.IRON_DOOR.ordinal()] = 4;
-			}
-			catch (NoSuchFieldError)
-			{
-			}
-
+				doorEnum[(int)EnumDoor.IRON_DOOR] = 4;
 		}
 	}
-
 }
