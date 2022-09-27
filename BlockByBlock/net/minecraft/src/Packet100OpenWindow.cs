@@ -13,24 +13,20 @@
 			netHandler1.handleOpenWindow(this);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.windowId = dataInputStream1.readByte() & 255;
-			this.inventoryType = dataInputStream1.readByte() & 255;
+			this.windowId = dataInputStream1.ReadByte() & 255;
+			this.inventoryType = dataInputStream1.ReadByte() & 255;
 			this.windowTitle = readString(dataInputStream1, 32);
-			this.slotsCount = dataInputStream1.readByte() & 255;
+			this.slotsCount = dataInputStream1.ReadByte() & 255;
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeByte(this.windowId & 255);
-			dataOutputStream1.writeByte(this.inventoryType & 255);
+			dataOutputStream1.Write((byte)(this.windowId & 255));
+			dataOutputStream1.Write((byte)(this.inventoryType & 255));
 			writeString(this.windowTitle, dataOutputStream1);
-			dataOutputStream1.writeByte(this.slotsCount & 255);
+			dataOutputStream1.Write((byte)(this.slotsCount & 255));
 		}
 
 		public override int PacketSize

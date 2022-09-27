@@ -2,6 +2,8 @@
 {
 	using GLContext = org.lwjgl.opengl.GLContext;
 
+	// PORTING TODO: OpenGL code
+
 	public class OpenGlCapsChecker
 	{
 		private static bool tryCheckOcclusionCapable = true;

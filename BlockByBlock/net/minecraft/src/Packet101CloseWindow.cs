@@ -19,18 +19,14 @@
 			netHandler1.handleCloseWindow(this);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.windowId = dataInputStream1.readByte();
+			this.windowId = dataInputStream1.ReadByte();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeByte(this.windowId);
+			dataOutputStream1.Write((byte)windowId);
 		}
 
 		public override int PacketSize

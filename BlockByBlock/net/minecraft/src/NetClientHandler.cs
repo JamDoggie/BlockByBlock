@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Net;
+using System.Net.Sockets;
 
 namespace net.minecraft.src
 {
@@ -25,10 +26,15 @@ namespace net.minecraft.src
 
 		static HttpClient httpClient = new HttpClient();
 
-		public NetClientHandler(Minecraft minecraft1, string string2, int i3)
+		public NetClientHandler(Minecraft minecraft1, string address, int port)
 		{
 			this.mc = minecraft1;
-			Socket socket4 = new Socket(InetAddress.getByName(string2), i3);
+            
+			IPHostEntry host = Dns.GetHostEntry(address);
+			IPAddress ip = host.AddressList[0];
+			IPEndPoint endPoint = new IPEndPoint(ip, port);
+            
+			Socket socket4 = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 			this.netManager = new NetworkManager(socket4, "Client", this);
 		}
 

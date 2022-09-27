@@ -164,20 +164,14 @@ namespace net.minecraft.src
 			}
 		}
 
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public abstract void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException;
 		public abstract void readPacketData(BinaryReader dataInputStream1);
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public abstract void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException;
+        
 		public abstract void writePacketData(BinaryWriter dataOutputStream1);
 
 		public abstract void processPacket(NetHandler netHandler1);
 
 		public abstract int PacketSize {get;}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: protected ItemStack readItemStack(java.io.DataInputStream dataInputStream1) throws java.io.IOException
+        
 		protected internal virtual ItemStack readItemStack(BinaryReader dataInputStream1)
 		{
 			ItemStack itemStack2 = null;

@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -8,7 +9,7 @@ namespace net.minecraft.src
 		private NoiseGeneratorPerlin[] generatorCollection;
 		private int octaves;
 
-		public NoiseGeneratorOctaves(Random random1, int i2)
+		public NoiseGeneratorOctaves(RandomExtended random1, int i2)
 		{
 			this.octaves = i2;
 			this.generatorCollection = new NoiseGeneratorPerlin[i2];

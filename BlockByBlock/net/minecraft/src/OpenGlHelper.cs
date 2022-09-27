@@ -4,6 +4,8 @@
 	using GL13 = org.lwjgl.opengl.GL13;
 	using GLContext = org.lwjgl.opengl.GLContext;
 
+	// PORTING TODO: OpenGL code
+
 	public class OpenGlHelper
 	{
 		public static int defaultTexUnit;

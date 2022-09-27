@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -10,11 +11,11 @@ namespace net.minecraft.src
 		public double yCoord;
 		public double zCoord;
 
-		public NoiseGeneratorPerlin() : this(new Random())
+		public NoiseGeneratorPerlin() : this(new RandomExtended())
 		{
 		}
 
-		public NoiseGeneratorPerlin(Random random1)
+		public NoiseGeneratorPerlin(RandomExtended random1)
 		{
 			this.permutations = new int[512];
 			this.xCoord = random1.NextDouble() * 256.0D;

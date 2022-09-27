@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Sockets;
 using System.Threading;
 
 namespace net.minecraft.src
@@ -29,8 +30,8 @@ namespace net.minecraft.src
         {
 			thread.Start();
         }
-
-		private virtual void run()
+        
+		protected virtual void run()
 		{
 			try
 			{
@@ -42,16 +43,7 @@ namespace net.minecraft.src
 
 				GuiConnecting.getNetClientHandler(this.connectingGui).addToSendQueue(new Packet2Handshake(this.mc.session.username, this.ip, this.port));
 			}
-			catch (UnknownHostException)
-			{
-				if (GuiConnecting.isCancelled(this.connectingGui))
-				{
-					return;
-				}
-
-				this.mc.displayGuiScreen(new GuiDisconnected("connect.failed", "disconnect.genericReason", new object[]{"Unknown host \'" + this.ip + "\'"}));
-			}
-			catch (ConnectException connectException3)
+			catch (SocketException connectException3)
 			{
 				if (GuiConnecting.isCancelled(this.connectingGui))
 				{
