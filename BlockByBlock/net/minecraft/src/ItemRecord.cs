@@ -22,7 +22,7 @@
 				else
 				{
 					((BlockJukeBox)Block.jukebox).insertRecord(world3, i4, i5, i6, this.shiftedIndex);
-					world3.playAuxSFXAtEntity((EntityPlayer)null, 1005, i4, i5, i6, this.shiftedIndex);
+					world3.playAuxSFXAtEntity(null, 1005, i4, i5, i6, this.shiftedIndex);
 					--itemStack1.stackSize;
 					return true;
 				}

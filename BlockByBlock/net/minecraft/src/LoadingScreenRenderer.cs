@@ -7,6 +7,8 @@ namespace net.minecraft.src
 	using Display = org.lwjgl.opengl.Display;
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	public class LoadingScreenRenderer : IProgressUpdate
 	{
 		private string field_1004_a = "";
@@ -140,7 +142,7 @@ namespace net.minecraft.src
     
 						try
 						{
-							Thread.yield();
+							Thread.Yield();
 						}
 						catch (Exception)
 						{

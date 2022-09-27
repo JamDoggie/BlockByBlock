@@ -9,12 +9,12 @@
 
 		protected internal ItemTool(int i1, int i2, EnumToolMaterial enumToolMaterial3, Block[] block4) : base(i1)
 		{
-			this.toolMaterial = enumToolMaterial3;
-			this.blocksEffectiveAgainst = block4;
-			this.maxStackSize = 1;
-			this.MaxDamage = enumToolMaterial3.getMaxUses();
-			this.efficiencyOnProperMaterial = enumToolMaterial3.getEfficiencyOnProperMaterial();
-			this.damageVsEntity = i2 + enumToolMaterial3.getDamageVsEntity();
+			toolMaterial = enumToolMaterial3;
+			blocksEffectiveAgainst = block4;
+			maxStackSize = 1;
+			setMaxDamage(enumToolMaterial3.MaxUses);
+			efficiencyOnProperMaterial = enumToolMaterial3.EfficiencyOnProperMaterial;
+			damageVsEntity = i2 + enumToolMaterial3.DamageVsEntity;
 		}
 
 		public override float getStrVsBlock(ItemStack itemStack1, Block block2)
@@ -59,7 +59,7 @@
 		{
 			get
 			{
-				return this.toolMaterial.getEnchantability();
+				return toolMaterial.Enchantability;
 			}
 		}
 	}

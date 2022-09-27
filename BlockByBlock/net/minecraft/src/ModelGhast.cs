@@ -1,9 +1,12 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
 
 	using GL11 = org.lwjgl.opengl.GL11;
+
+	// PORTING TODO: OpenGL code
 
 	public class ModelGhast : ModelBase
 	{
@@ -16,7 +19,7 @@ namespace net.minecraft.src
 			this.body = new ModelRenderer(this, 0, 0);
 			this.body.addBox(-8.0F, -8.0F, -8.0F, 16, 16, 16);
 			this.body.rotationPointY += (float)(24 + b1);
-			Random random2 = new Random(1660L);
+			RandomExtended random2 = new RandomExtended(1660L);
 
 			for (int i3 = 0; i3 < this.tentacles.Length; ++i3)
 			{

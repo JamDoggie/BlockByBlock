@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -9,7 +10,7 @@ namespace net.minecraft.src
 
 		protected internal virtual void generateRavine(long j1, int i3, int i4, sbyte[] b5, double d6, double d8, double d10, float f12, float f13, float f14, int i15, int i16, double d17)
 		{
-			Random random19 = new Random(j1);
+			RandomExtended random19 = new RandomExtended(j1);
 			double d20 = (double)(i3 * 16 + 8);
 			double d22 = (double)(i4 * 16 + 8);
 			float f24 = 0.0F;
@@ -33,7 +34,7 @@ namespace net.minecraft.src
 			{
 				if (i28 == 0 || random19.Next(3) == 0)
 				{
-					f27 = 1.0F + random19.nextFloat() * random19.nextFloat() * 1.0F;
+					f27 = 1.0F + random19.NextSingle() * random19.NextSingle() * 1.0F;
 				}
 
 				this.field_35627_a[i28] = f27 * f27;
@@ -43,8 +44,8 @@ namespace net.minecraft.src
 			{
 				double d54 = 1.5D + (double)(MathHelper.sin((float)i15 * (float)Math.PI / (float)i16) * f12 * 1.0F);
 				double d30 = d54 * d17;
-				d54 *= (double)random19.nextFloat() * 0.25D + 0.75D;
-				d30 *= (double)random19.nextFloat() * 0.25D + 0.75D;
+				d54 *= (double)random19.NextSingle() * 0.25D + 0.75D;
+				d30 *= (double)random19.NextSingle() * 0.25D + 0.75D;
 				float f32 = MathHelper.cos(f14);
 				float f33 = MathHelper.sin(f14);
 				d6 += (double)(MathHelper.cos(f13) * f32);
@@ -55,8 +56,8 @@ namespace net.minecraft.src
 				f13 += f24 * 0.05F;
 				f25 *= 0.8F;
 				f24 *= 0.5F;
-				f25 += (random19.nextFloat() - random19.nextFloat()) * random19.nextFloat() * 2.0F;
-				f24 += (random19.nextFloat() - random19.nextFloat()) * random19.nextFloat() * 4.0F;
+				f25 += (random19.NextSingle() - random19.NextSingle()) * random19.NextSingle() * 2.0F;
+				f24 += (random19.NextSingle() - random19.NextSingle()) * random19.NextSingle() * 4.0F;
 				if (z53 || random19.Next(4) != 0)
 				{
 					double d34 = d6 - d20;
@@ -202,10 +203,10 @@ namespace net.minecraft.src
 
 				for (int i14 = 0; i14 < b13; ++i14)
 				{
-					float f15 = this.rand.nextFloat() * (float)Math.PI * 2.0F;
-					float f16 = (this.rand.nextFloat() - 0.5F) * 2.0F / 8.0F;
-					float f17 = (this.rand.nextFloat() * 2.0F + this.rand.nextFloat()) * 2.0F;
-					this.generateRavine(this.rand.nextLong(), i4, i5, b6, d7, d9, d11, f17, f15, f16, 0, 0, 3.0D);
+					float f15 = this.rand.NextSingle() * (float)Math.PI * 2.0F;
+					float f16 = (this.rand.NextSingle() - 0.5F) * 2.0F / 8.0F;
+					float f17 = (this.rand.NextSingle() * 2.0F + this.rand.NextSingle()) * 2.0F;
+					this.generateRavine(this.rand.NextInt64(), i4, i5, b6, d7, d9, d11, f17, f15, f16, 0, 0, 3.0D);
 				}
 
 			}

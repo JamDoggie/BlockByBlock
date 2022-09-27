@@ -4,6 +4,8 @@
 	using Minecraft = net.minecraft.client.Minecraft;
 	using MinecraftApplet = net.minecraft.client.MinecraftApplet;
 
+	// PORTING TODO: Java window code
+
 	public class MinecraftAppletImpl : Minecraft
 	{
 		internal readonly MinecraftApplet mainFrame;

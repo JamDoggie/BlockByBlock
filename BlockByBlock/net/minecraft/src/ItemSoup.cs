@@ -4,7 +4,7 @@
 	{
 		public ItemSoup(int i1, int i2) : base(i1, i2, false)
 		{
-			this.MaxStackSize = 1;
+			setMaxStackSize(1);
 		}
 
 		public override ItemStack onFoodEaten(ItemStack itemStack1, World world2, EntityPlayer entityPlayer3)

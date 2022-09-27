@@ -4,7 +4,7 @@
 	{
 		public ItemSign(int i1) : base(i1)
 		{
-			this.maxStackSize = 1;
+			maxStackSize = 1;
 		}
 
 		public override bool onItemUse(ItemStack itemStack1, EntityPlayer entityPlayer2, World world3, int i4, int i5, int i6, int i7)

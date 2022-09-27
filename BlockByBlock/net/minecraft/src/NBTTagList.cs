@@ -6,7 +6,7 @@ namespace net.minecraft.src
 
 	public class NBTTagList : NBTBase
 	{
-		private System.Collections.IList tagList = new ArrayList();
+		private List<NBTBase> tagList = new();
 		private sbyte tagType;
 
 		public NBTTagList() : base("")
@@ -17,42 +17,38 @@ namespace net.minecraft.src
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: void write(java.io.DataOutput dataOutput1) throws java.io.IOException
-		internal override void write(DataOutput dataOutput1)
+		internal override void write(BinaryWriter dataOutput1)
 		{
-			if (this.tagList.Count > 0)
+			if (tagList.Count > 0)
 			{
-				this.tagType = ((NBTBase)this.tagList[0]).Id;
+				tagType = ((NBTBase)this.tagList[0]).Id;
 			}
 			else
 			{
-				this.tagType = 1;
+				tagType = 1;
 			}
 
-			dataOutput1.writeByte(this.tagType);
-			dataOutput1.writeInt(this.tagList.Count);
+			dataOutput1.Write(tagType);
+			dataOutput1.Write(tagList.Count);
 
-			for (int i2 = 0; i2 < this.tagList.Count; ++i2)
+			for (int i2 = 0; i2 < tagList.Count; ++i2)
 			{
-				((NBTBase)this.tagList[i2]).write(dataOutput1);
+				((NBTBase)tagList[i2]).write(dataOutput1);
 			}
 
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: void load(java.io.DataInput dataInput1) throws java.io.IOException
-		internal override void load(DataInput dataInput1)
+        
+		internal override void load(BinaryReader dataInput1)
 		{
-			this.tagType = dataInput1.readByte();
-			int i2 = dataInput1.readInt();
-			this.tagList = new ArrayList();
+			tagType = dataInput1.ReadSByte();
+			int i2 = dataInput1.ReadInt32();
+			tagList = new();
 
 			for (int i3 = 0; i3 < i2; ++i3)
 			{
-				NBTBase nBTBase4 = NBTBase.newTag(this.tagType, (string)null);
+				NBTBase nBTBase4 = newTag(tagType, null);
 				nBTBase4.load(dataInput1);
-				this.tagList.Add(nBTBase4);
+				tagList.Add(nBTBase4);
 			}
 
 		}

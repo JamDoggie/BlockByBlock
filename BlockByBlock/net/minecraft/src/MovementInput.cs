@@ -7,7 +7,7 @@
 		public bool jump = false;
 		public bool sneak = false;
 
-		public virtual void func_52013_a()
+		public virtual void func_52013_a() // Nice.
 		{
 		}
 	}

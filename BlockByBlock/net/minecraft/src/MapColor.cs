@@ -22,8 +22,8 @@
 
 		private MapColor(int i1, int i2)
 		{
-			this.colorIndex = i1;
-			this.colorValue = i2;
+			colorIndex = i1;
+			colorValue = i2;
 			mapColorArray[i1] = this;
 		}
 	}

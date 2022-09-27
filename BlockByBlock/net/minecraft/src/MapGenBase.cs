@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -6,16 +7,17 @@ namespace net.minecraft.src
 	public class MapGenBase
 	{
 		protected internal int range = 8;
-		protected internal Random rand = new Random();
+		protected internal RandomExtended rand = new RandomExtended();
 		protected internal World worldObj;
 
 		public virtual void generate(IChunkProvider iChunkProvider1, World world2, int i3, int i4, sbyte[] b5)
 		{
 			int i6 = this.range;
-			this.worldObj = world2;
-			this.rand.setSeed(world2.Seed);
-			long j7 = this.rand.nextLong();
-			long j9 = this.rand.nextLong();
+			worldObj = world2;
+			//rand.setSeed(world2.Seed); // PORTING TODO: RandomExtended.setSeed
+			rand = new RandomExtended(world2.Seed);
+			long j7 = rand.NextInt64();
+			long j9 = rand.NextInt64();
 
 			for (int i11 = i3 - i6; i11 <= i3 + i6; ++i11)
 			{
@@ -23,8 +25,9 @@ namespace net.minecraft.src
 				{
 					long j13 = (long)i11 * j7;
 					long j15 = (long)i12 * j9;
-					this.rand.setSeed(j13 ^ j15 ^ world2.Seed);
-					this.recursiveGenerate(world2, i11, i12, i3, i4, b5);
+                    //this.rand.setSeed(j13 ^ j15 ^ world2.Seed); // PORTING TODO: RandomExtended.setSeed 
+                    rand = new RandomExtended(j13 ^ j15 ^ world2.Seed);
+                    this.recursiveGenerate(world2, i11, i12, i3, i4, b5);
 				}
 			}
 

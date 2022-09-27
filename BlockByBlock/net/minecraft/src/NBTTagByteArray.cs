@@ -17,21 +17,23 @@ namespace net.minecraft.src
 			this.byteArray = b2;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: void write(java.io.DataOutput dataOutput1) throws java.io.IOException
-		internal override void write(DataOutput dataOutput1)
+		internal override void write(BinaryWriter dataOutput1)
 		{
-			dataOutput1.writeInt(this.byteArray.Length);
-			dataOutput1.write(this.byteArray);
+			dataOutput1.Write(this.byteArray.Length);
+            
+			foreach (sbyte b in byteArray)
+				dataOutput1.Write(b);
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: void load(java.io.DataInput dataInput1) throws java.io.IOException
-		internal override void load(DataInput dataInput1)
+        
+		internal override void load(BinaryReader dataInput1)
 		{
-			int i2 = dataInput1.readInt();
-			this.byteArray = new sbyte[i2];
-			dataInput1.readFully(this.byteArray);
+			int len = dataInput1.ReadInt32();
+			sbyte[] sbytes = new sbyte[len];
+			
+			for(int i = 0; i < len; i++)
+            {
+				sbytes[i] = dataInput1.ReadSByte();
+            }
 		}
 
 		public override sbyte Id
@@ -61,7 +63,7 @@ namespace net.minecraft.src
 
 		public override int GetHashCode()
 		{
-			return base.GetHashCode() ^ Arrays.hashCode(this.byteArray);
+			return base.GetHashCode() ^ byteArray.GetHashCode();
 		}
 	}
 

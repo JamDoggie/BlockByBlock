@@ -13,20 +13,17 @@ namespace net.minecraft.src
 			this.field_27370_a = string1;
 		}
 
-		public virtual string getMD5String(string string1)
+		public virtual string getMD5String(string str)
 		{
-			try
+			using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) // PORTING TODO: Likely Java parity issue.
+																									 // May need to use IKVM for full Java parity with world seeds.
+																									 // This doesn't *seem* to be used for world gen though, so idk.
 			{
-				string string2 = this.field_27370_a + string1;
-				MessageDigest messageDigest3 = MessageDigest.getInstance("MD5");
-				messageDigest3.update(string2.GetBytes(), 0, string2.Length);
-				return (new BigInteger(1, messageDigest3.digest())).toString(16);
-			}
-			catch (NoSuchAlgorithmException noSuchAlgorithmException4)
-			{
-				throw new Exception(noSuchAlgorithmException4);
+				byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(str);
+				byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+				return Convert.ToHexString(hashBytes);
 			}
 		}
 	}
-
 }

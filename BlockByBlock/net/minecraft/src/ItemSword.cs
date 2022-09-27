@@ -9,8 +9,8 @@
 		{
 			this.toolMaterial = enumToolMaterial2;
 			this.maxStackSize = 1;
-			this.MaxDamage = enumToolMaterial2.getMaxUses();
-			this.weaponDamage = 4 + enumToolMaterial2.getDamageVsEntity();
+			setMaxDamage(enumToolMaterial2.MaxUses);
+			this.weaponDamage = 4 + enumToolMaterial2.DamageVsEntity;
 		}
 
 		public override float getStrVsBlock(ItemStack itemStack1, Block block2)
@@ -68,7 +68,7 @@
 		{
 			get
 			{
-				return this.toolMaterial.getEnchantability();
+				return toolMaterial.Enchantability;
 			}
 		}
 	}

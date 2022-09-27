@@ -1,6 +1,8 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 using System.Collections;
 using System.IO;
+using System.Net;
 
 namespace net.minecraft.src
 {
@@ -19,10 +21,10 @@ namespace net.minecraft.src
 		private System.Collections.IDictionary playerInfoMap = new Hashtable();
 		public System.Collections.IList playerNames = new ArrayList();
 		public int currentServerMaxPlayers = 20;
-		internal Random rand = new Random();
+		internal RandomExtended rand = new RandomExtended();
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public NetClientHandler(net.minecraft.client.Minecraft minecraft1, String string2, int i3) throws UnknownHostException, java.io.IOException
+		static HttpClient httpClient = new HttpClient();
+
 		public NetClientHandler(Minecraft minecraft1, string string2, int i3)
 		{
 			this.mc = minecraft1;
@@ -379,14 +381,14 @@ namespace net.minecraft.src
 			int i3 = packet52MultiBlockChange1.zPosition * 16;
 			if (packet52MultiBlockChange1.metadataArray != null)
 			{
-				DataInputStream dataInputStream4 = new DataInputStream(new MemoryStream(packet52MultiBlockChange1.metadataArray));
+				BinaryReader dataInputStream4 = new BinaryReader(new MemoryStream((byte[])(Array)packet52MultiBlockChange1.metadataArray));
 
 				try
 				{
 					for (int i5 = 0; i5 < packet52MultiBlockChange1.size; ++i5)
 					{
-						short s6 = dataInputStream4.readShort();
-						short s7 = dataInputStream4.readShort();
+						short s6 = dataInputStream4.ReadInt16();
+						short s7 = dataInputStream4.ReadInt16();
 						int i8 = (s7 & 4095) >> 4;
 						int i9 = s7 & 15;
 						int i10 = s6 >> 12 & 15;
@@ -477,11 +479,11 @@ namespace net.minecraft.src
 			{
 				if (entity2 is EntityXPOrb)
 				{
-					this.worldClient.playSoundAtEntity(entity2, "random.orb", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+					this.worldClient.playSoundAtEntity(entity2, "random.orb", 0.2F, ((this.rand.NextSingle() - this.rand.NextSingle()) * 0.7F + 1.0F) * 2.0F);
 				}
 				else
 				{
-					this.worldClient.playSoundAtEntity(entity2, "random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+					this.worldClient.playSoundAtEntity(entity2, "random.pop", 0.2F, ((this.rand.NextSingle() - this.rand.NextSingle()) * 0.7F + 1.0F) * 2.0F);
 				}
 
 				this.mc.effectRenderer.addEffect(new EntityPickupFX(this.mc.theWorld, entity2, (Entity)object3, -0.5F));
@@ -551,7 +553,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public override void handleHandshake(Packet2Handshake packet2Handshake1)
+		public override async void handleHandshake(Packet2Handshake packet2Handshake1)
 		{
 			bool z2 = true;
 			string string3 = packet2Handshake1.username;
@@ -586,17 +588,22 @@ namespace net.minecraft.src
 			{
 				try
 				{
-					URL uRL4 = new URL("http://session.minecraft.net/game/joinserver.jsp?user=" + this.mc.session.username + "&sessionId=" + this.mc.session.sessionId + "&serverId=" + packet2Handshake1.username);
-					StreamReader bufferedReader5 = new StreamReader(uRL4.openStream());
-					string string6 = bufferedReader5.ReadLine();
-					bufferedReader5.Close();
-					if (string6.Equals("ok", StringComparison.OrdinalIgnoreCase))
+					Uri uRL4 = new Uri("http://session.minecraft.net/game/joinserver.jsp?user=" + this.mc.session.username + "&sessionId=" + this.mc.session.sessionId + "&serverId=" + packet2Handshake1.username);
+                    //StreamReader bufferedReader5 = new StreamReader(uRL4.openStream());
+
+                    // Get stream from uri using HTTPClient
+                    var response = httpClient.GetAsync(uRL4).Result;
+
+					string httpContent = await response.Content.ReadAsStringAsync();
+                    string firstLine = httpContent.Split(new char[] { '\n' })[0];
+
+                    if (firstLine.Equals("ok", StringComparison.OrdinalIgnoreCase))
 					{
 						this.addToSendQueue(new Packet1Login(this.mc.session.username, 29));
 					}
 					else
 					{
-						this.netManager.networkShutdown("disconnect.loginFailedInfo", new object[]{string6});
+						this.netManager.networkShutdown("disconnect.loginFailedInfo", new object[]{ firstLine });
 					}
 				}
 				catch (Exception exception7)

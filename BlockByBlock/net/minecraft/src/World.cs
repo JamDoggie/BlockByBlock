@@ -3806,10 +3806,11 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual Random setRandomSeed(int i1, int i2, int i3)
+		public virtual RandomExtended setRandomSeed(int i1, int i2, int i3)
 		{
 			long j4 = (long)i1 * 341873128712L + (long)i2 * 132897987541L + this.WorldInfo.Seed + (long)i3;
-			this.rand.setSeed(j4);
+			//this.rand.setSeed(j4); // RandomExtended.setSeed
+			rand = new RandomExtended(j4);
 			return this.rand;
 		}
 

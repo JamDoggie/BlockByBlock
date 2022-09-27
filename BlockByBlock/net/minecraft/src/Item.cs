@@ -1,11 +1,12 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
 
 	public class Item
 	{
-		protected internal static Random itemRand = new Random();
+		protected internal static RandomExtended itemRand = new RandomExtended();
 		public static Item[] itemsList = new Item[32000];
 		public static Item shovelSteel = (new ItemSpade(0, EnumToolMaterial.IRON)).setIconCoord(2, 5).setItemName("shovelIron");
 		public static Item pickaxeSteel = (new ItemPickaxe(1, EnumToolMaterial.IRON)).setIconCoord(2, 6).setItemName("pickaxeIron");

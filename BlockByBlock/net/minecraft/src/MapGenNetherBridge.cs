@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using BlockByBlock.java_extensions;
+using System.Collections;
 
 namespace net.minecraft.src
 {
@@ -26,7 +27,8 @@ namespace net.minecraft.src
 		{
 			int i3 = i1 >> 4;
 			int i4 = i2 >> 4;
-			this.rand.setSeed((long)(i3 ^ i4 << 4) ^ this.worldObj.Seed);
+			//this.rand.setSeed((long)(i3 ^ i4 << 4) ^ this.worldObj.Seed); // RandomExtended.setSeed
+			rand = new RandomExtended((long)(i3 ^ i4 << 4) ^ this.worldObj.Seed);
 			this.rand.Next();
 			return this.rand.Next(3) != 0 ? false : (i1 != (i3 << 4) + 4 + this.rand.Next(8) ? false : i2 == (i4 << 4) + 4 + this.rand.Next(8));
 		}

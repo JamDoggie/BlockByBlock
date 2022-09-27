@@ -37,10 +37,10 @@ namespace net.minecraft.src
 
 		public ItemStack(int i1, int i2, int i3)
 		{
-			this.stackSize = 0;
-			this.itemID = i1;
-			this.stackSize = i2;
-			this.itemDamage = i3;
+			stackSize = 0;
+			itemID = i1;
+			stackSize = i2;
+			itemDamage = i3;
 		}
 
 		public static ItemStack loadItemStackFromNBT(NBTTagCompound nBTTagCompound0)

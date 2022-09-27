@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -7,7 +8,7 @@ namespace net.minecraft.src
 	{
 		protected internal virtual void generateLargeCaveNode(long j1, int i3, int i4, sbyte[] b5, double d6, double d8, double d10)
 		{
-			this.generateCaveNode(j1, i3, i4, b5, d6, d8, d10, 1.0F + this.rand.nextFloat() * 6.0F, 0.0F, 0.0F, -1, -1, 0.5D);
+			this.generateCaveNode(j1, i3, i4, b5, d6, d8, d10, 1.0F + rand.NextSingle() * 6.0F, 0.0F, 0.0F, -1, -1, 0.5D);
 		}
 
 		protected internal virtual void generateCaveNode(long j1, int i3, int i4, sbyte[] b5, double d6, double d8, double d10, float f12, float f13, float f14, int i15, int i16, double d17)
@@ -16,7 +17,7 @@ namespace net.minecraft.src
 			double d21 = (double)(i4 * 16 + 8);
 			float f23 = 0.0F;
 			float f24 = 0.0F;
-			Random random25 = new Random(j1);
+			RandomExtended random25 = new RandomExtended(j1);
 			if (i16 <= 0)
 			{
 				int i26 = this.range * 16 - 16;
@@ -54,12 +55,12 @@ namespace net.minecraft.src
 				f13 += f23 * 0.1F;
 				f24 *= 0.9F;
 				f23 *= 0.75F;
-				f24 += (random25.nextFloat() - random25.nextFloat()) * random25.nextFloat() * 2.0F;
-				f23 += (random25.nextFloat() - random25.nextFloat()) * random25.nextFloat() * 4.0F;
+				f24 += (random25.NextSingle() - random25.NextSingle()) * random25.NextSingle() * 2.0F;
+				f23 += (random25.NextSingle() - random25.NextSingle()) * random25.NextSingle() * 4.0F;
 				if (!z54 && i15 == i27 && f12 > 1.0F && i16 > 0)
 				{
-					this.generateCaveNode(random25.nextLong(), i3, i4, b5, d6, d8, d10, random25.nextFloat() * 0.5F + 0.5F, f13 - (float)Math.PI / 2F, f14 / 3.0F, i15, i16, 1.0D);
-					this.generateCaveNode(random25.nextLong(), i3, i4, b5, d6, d8, d10, random25.nextFloat() * 0.5F + 0.5F, f13 + (float)Math.PI / 2F, f14 / 3.0F, i15, i16, 1.0D);
+					this.generateCaveNode(random25.NextInt64(), i3, i4, b5, d6, d8, d10, random25.NextSingle() * 0.5F + 0.5F, f13 - (float)Math.PI / 2F, f14 / 3.0F, i15, i16, 1.0D);
+					this.generateCaveNode(random25.NextInt64(), i3, i4, b5, d6, d8, d10, random25.NextSingle() * 0.5F + 0.5F, f13 + (float)Math.PI / 2F, f14 / 3.0F, i15, i16, 1.0D);
 					return;
 				}
 
@@ -213,21 +214,21 @@ namespace net.minecraft.src
 				int i15 = 1;
 				if (this.rand.Next(4) == 0)
 				{
-					this.generateLargeCaveNode(this.rand.nextLong(), i4, i5, b6, d9, d11, d13);
+					this.generateLargeCaveNode(this.rand.NextInt64(), i4, i5, b6, d9, d11, d13);
 					i15 += this.rand.Next(4);
 				}
 
 				for (int i16 = 0; i16 < i15; ++i16)
 				{
-					float f17 = this.rand.nextFloat() * (float)Math.PI * 2.0F;
-					float f18 = (this.rand.nextFloat() - 0.5F) * 2.0F / 8.0F;
-					float f19 = this.rand.nextFloat() * 2.0F + this.rand.nextFloat();
+					float f17 = this.rand.NextSingle() * (float)Math.PI * 2.0F;
+					float f18 = (this.rand.NextSingle() - 0.5F) * 2.0F / 8.0F;
+					float f19 = this.rand.NextSingle() * 2.0F + this.rand.NextSingle();
 					if (this.rand.Next(10) == 0)
 					{
-						f19 *= this.rand.nextFloat() * this.rand.nextFloat() * 3.0F + 1.0F;
+						f19 *= this.rand.NextSingle() * this.rand.NextSingle() * 3.0F + 1.0F;
 					}
 
-					this.generateCaveNode(this.rand.nextLong(), i4, i5, b6, d9, d11, d13, f19, f17, f18, 0, 0, 1.0D);
+					this.generateCaveNode(this.rand.NextInt64(), i4, i5, b6, d9, d11, d13, f19, f17, f18, 0, 0, 1.0D);
 				}
 			}
 

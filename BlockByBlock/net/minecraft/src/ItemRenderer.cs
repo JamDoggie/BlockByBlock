@@ -5,7 +5,9 @@
 	using GL11 = org.lwjgl.opengl.GL11;
 	using GL12 = org.lwjgl.opengl.GL12;
 
-	public class ItemRenderer
+    // PORTING TODO: OpenGL code
+
+    public class ItemRenderer
 	{
 		private Minecraft mc;
 		private ItemStack itemToRender = null;

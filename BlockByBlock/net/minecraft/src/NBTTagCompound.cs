@@ -14,10 +14,8 @@ namespace net.minecraft.src
 		public NBTTagCompound(string string1) : base(string1)
 		{
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: void write(java.io.DataOutput dataOutput1) throws java.io.IOException
-		internal override void write(DataOutput dataOutput1)
+        
+		internal override void write(BinaryWriter dataOutput1)
 		{
 			System.Collections.IEnumerator iterator2 = this.tagMap.Values.GetEnumerator();
 
@@ -27,17 +25,15 @@ namespace net.minecraft.src
 				NBTBase.writeNamedTag(nBTBase3, dataOutput1);
 			}
 
-			dataOutput1.writeByte(0);
+			dataOutput1.Write((sbyte)0);
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: void load(java.io.DataInput dataInput1) throws java.io.IOException
-		internal override void load(DataInput dataInput1)
+        
+		internal override void load(BinaryReader dataInput1)
 		{
 			this.tagMap.Clear();
 
 			NBTBase nBTBase2;
-			while ((nBTBase2 = NBTBase.readNamedTag(dataInput1)).getId() != 0)
+			while ((nBTBase2 = NBTBase.readNamedTag(dataInput1)).Id != 0)
 			{
 				this.tagMap[nBTBase2.Name] = nBTBase2;
 			}
@@ -132,12 +128,12 @@ namespace net.minecraft.src
 
 		public virtual sbyte getByte(string string1)
 		{
-			return !this.tagMap.Contains(string1) ? 0 : ((NBTTagByte)this.tagMap[string1]).data;
+			return !this.tagMap.Contains(string1) ? (sbyte)0 : ((NBTTagByte)this.tagMap[string1]).data;
 		}
 
 		public virtual short getShort(string string1)
 		{
-			return !this.tagMap.Contains(string1) ? 0 : ((NBTTagShort)this.tagMap[string1]).data;
+			return !this.tagMap.Contains(string1) ? (short)0 : ((NBTTagShort)this.tagMap[string1]).data;
 		}
 
 		public virtual int getInteger(string string1)
@@ -214,7 +210,7 @@ namespace net.minecraft.src
 			if (base.Equals(object1))
 			{
 				NBTTagCompound nBTTagCompound2 = (NBTTagCompound)object1;
-				return this.tagMap.SetOfKeyValuePairs().Equals(nBTTagCompound2.tagMap.SetOfKeyValuePairs());
+				return tagMap.Keys.Equals(nBTTagCompound2.tagMap.Keys) && this.tagMap.Values.Equals(nBTTagCompound2.tagMap.Values);
 			}
 			else
 			{

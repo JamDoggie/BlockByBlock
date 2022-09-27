@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 using System.Collections;
 using System.IO;
 
@@ -31,19 +32,19 @@ namespace net.minecraft.src
 				{
 					try
 					{
-						File file4 = this.saveHandler.getMapFileFromName(string2);
-						if (file4 != null && file4.exists())
+						FileInfo file4 = saveHandler.getMapFileFromName(string2);
+						if (file4 != null && file4.Exists)
 						{
 							try
 							{
-								worldSavedData3 = (WorldSavedData)class1.GetConstructor(new Type[]{typeof(string)}).newInstance(new object[]{string2});
-							}
+                                worldSavedData3 = (WorldSavedData)Activator.CreateInstance(class1, new object[] { string2 });
+                            }
 							catch (Exception exception7)
 							{
 								throw new Exception("Failed to instantiate " + class1.ToString(), exception7);
 							}
 
-							FileStream fileInputStream5 = new FileStream(file4, FileMode.Open, FileAccess.Read);
+							FileStream fileInputStream5 = new FileStream(file4.FullName, FileMode.Open, FileAccess.Read);
 							NBTTagCompound nBTTagCompound6 = CompressedStreamTools.readCompressed(fileInputStream5);
 							fileInputStream5.Close();
 							worldSavedData3.readFromNBT(nBTTagCompound6.getCompoundTag("data"));
@@ -76,7 +77,7 @@ namespace net.minecraft.src
 			{
 				if (this.loadedDataMap.Contains(string1))
 				{
-					this.loadedDataList.Remove(this.loadedDataMap.Remove(string1));
+					this.loadedDataList.Remove(loadedDataMap.RemoveAndReturn(string1));
 				}
 
 				this.loadedDataMap[string1] = worldSavedData2;
@@ -104,14 +105,14 @@ namespace net.minecraft.src
 			{
 				try
 				{
-					File file2 = this.saveHandler.getMapFileFromName(worldSavedData1.mapName);
+					FileInfo file2 = saveHandler.getMapFileFromName(worldSavedData1.mapName);
 					if (file2 != null)
 					{
 						NBTTagCompound nBTTagCompound3 = new NBTTagCompound();
 						worldSavedData1.writeToNBT(nBTTagCompound3);
 						NBTTagCompound nBTTagCompound4 = new NBTTagCompound();
 						nBTTagCompound4.setCompoundTag("data", nBTTagCompound3);
-						FileStream fileOutputStream5 = new FileStream(file2, FileMode.Create, FileAccess.Write);
+						FileStream fileOutputStream5 = new FileStream(file2.FullName, FileMode.Create, FileAccess.Write);
 						CompressedStreamTools.writeCompressed(nBTTagCompound4, fileOutputStream5);
 						fileOutputStream5.Close();
 					}
@@ -135,12 +136,12 @@ namespace net.minecraft.src
 					return;
 				}
 
-				File file1 = this.saveHandler.getMapFileFromName("idcounts");
-				if (file1 != null && file1.exists())
+				FileInfo file1 = saveHandler.getMapFileFromName("idcounts");
+				if (file1 != null && file1.Exists)
 				{
-					DataInputStream dataInputStream2 = new DataInputStream(new FileStream(file1, FileMode.Open, FileAccess.Read));
-					NBTTagCompound nBTTagCompound3 = CompressedStreamTools.read((DataInput)dataInputStream2);
-					dataInputStream2.close();
+					BinaryReader dataInputStream2 = new BinaryReader(new FileStream(file1.FullName, FileMode.Open, FileAccess.Read));
+					NBTTagCompound nBTTagCompound3 = CompressedStreamTools.read(dataInputStream2);
+					dataInputStream2.Dispose();
 					System.Collections.IEnumerator iterator4 = nBTTagCompound3.Tags.GetEnumerator();
 
 					while (iterator4.MoveNext())
@@ -185,7 +186,7 @@ namespace net.minecraft.src
 			{
 				try
 				{
-					File file3 = this.saveHandler.getMapFileFromName("idcounts");
+					FileInfo file3 = saveHandler.getMapFileFromName("idcounts");
 					if (file3 != null)
 					{
 						NBTTagCompound nBTTagCompound4 = new NBTTagCompound();
@@ -198,9 +199,9 @@ namespace net.minecraft.src
 							nBTTagCompound4.setShort(string6, s7);
 						}
 
-						DataOutputStream dataOutputStream9 = new DataOutputStream(new FileStream(file3, FileMode.Create, FileAccess.Write));
-						CompressedStreamTools.write(nBTTagCompound4, (DataOutput)dataOutputStream9);
-						dataOutputStream9.close();
+						BinaryWriter dataOutputStream9 = new BinaryWriter(new FileStream(file3.FullName, FileMode.Create, FileAccess.Write));
+						CompressedStreamTools.write(nBTTagCompound4, dataOutputStream9);
+						dataOutputStream9.Dispose();
 					}
 				}
 				catch (Exception exception8)

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
 
 	public class MapGenVillage : MapGenStructure
 	{
-		public static System.Collections.IList villageSpawnBiomes = Arrays.asList(new BiomeGenBase[]{BiomeGenBase.plains, BiomeGenBase.desert});
+		public static System.Collections.IList villageSpawnBiomes = new BiomeGenBase[]{BiomeGenBase.plains, BiomeGenBase.desert}.ToList();
 		private readonly int terrainType;
 
 		public MapGenVillage(int i1)
@@ -31,7 +32,7 @@ namespace net.minecraft.src
 
 			int i7 = i1 / b3;
 			int i8 = i2 / b3;
-			Random random9 = this.worldObj.setRandomSeed(i7, i8, 10387312);
+			RandomExtended random9 = this.worldObj.setRandomSeed(i7, i8, 10387312);
 			i7 *= b3;
 			i8 *= b3;
 			i7 += random9.Next(b3 - b4);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 using System.Collections;
 using System.Linq;
 
@@ -59,14 +60,12 @@ namespace net.minecraft.src
 				{
 					do
 					{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-						if (!iterator4.hasNext())
+						if (!iterator4.MoveNext())
 						{
 							return false;
 						}
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-						structureStart5 = (StructureStart)iterator4.next();
+						structureStart5 = (StructureStart)iterator4.Current;
 					} while (!structureStart5.SizeableStructure);
 				} while (!structureStart5.BoundingBox.intersectsWith(i1, i3, i1, i3));
 
@@ -86,13 +85,15 @@ namespace net.minecraft.src
 		public virtual ChunkPosition getNearestInstance(World world1, int i2, int i3, int i4)
 		{
 			this.worldObj = world1;
-			this.rand.setSeed(world1.Seed);
-			long j5 = this.rand.nextLong();
-			long j7 = this.rand.nextLong();
+			//this.rand.setSeed(world1.Seed); // RandomExtended.setSeed
+			rand = new RandomExtended(world1.Seed);
+			long j5 = this.rand.NextInt64();
+			long j7 = this.rand.NextInt64();
 			long j9 = (long)(i2 >> 4) * j5;
 			long j11 = (long)(i4 >> 4) * j7;
-			this.rand.setSeed(j9 ^ j11 ^ world1.Seed);
-			this.recursiveGenerate(world1, i2 >> 4, i4 >> 4, 0, 0, (sbyte[])null);
+            //this.rand.setSeed(j9 ^ j11 ^ world1.Seed); // RandomExtended.setSeed
+            rand = new RandomExtended(j9 ^ j11 ^ world1.Seed);
+            this.recursiveGenerate(world1, i2 >> 4, i4 >> 4, 0, 0, (sbyte[])null);
 			double d13 = double.MaxValue;
 			ChunkPosition chunkPosition15 = null;
 			System.Collections.IEnumerator iterator16 = this.coordMap.Values.GetEnumerator();

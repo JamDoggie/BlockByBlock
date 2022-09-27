@@ -7,8 +7,8 @@
 
 		public ItemSeeds(int i1, int i2, int i3) : base(i1)
 		{
-			this.blockType = i2;
-			this.soilBlockID = i3;
+			blockType = i2;
+			soilBlockID = i3;
 		}
 
 		public override bool onItemUse(ItemStack itemStack1, EntityPlayer entityPlayer2, World world3, int i4, int i5, int i6, int i7)

@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class NBTTagString : NBTBase
@@ -17,19 +19,15 @@
 				throw new System.ArgumentException("Empty string not allowed");
 			}
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: void write(java.io.DataOutput dataOutput1) throws java.io.IOException
-		internal override void write(DataOutput dataOutput1)
+        
+		internal override void write(BinaryWriter dataOutput1)
 		{
-			dataOutput1.writeUTF(this.data);
+			dataOutput1.WriteUTF(data);
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: void load(java.io.DataInput dataInput1) throws java.io.IOException
-		internal override void load(DataInput dataInput1)
+        
+		internal override void load(BinaryReader dataInput1)
 		{
-			this.data = dataInput1.readUTF();
+			this.data = dataInput1.ReadUTF();
 		}
 
 		public override sbyte Id

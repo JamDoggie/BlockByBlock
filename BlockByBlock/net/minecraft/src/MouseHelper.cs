@@ -7,6 +7,8 @@ namespace net.minecraft.src
 	using Cursor = org.lwjgl.input.Cursor;
 	using Mouse = org.lwjgl.input.Mouse;
 
+	// PORTING TODO: OpenGL code; input;
+    //				Java input code
 	public class MouseHelper
 	{
 		private Component windowComponent;

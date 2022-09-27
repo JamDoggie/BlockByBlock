@@ -16,29 +16,25 @@ namespace net.minecraft.src
 			this.field_48181_a = i2;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: void write(java.io.DataOutput dataOutput1) throws java.io.IOException
-		internal override void write(DataOutput dataOutput1)
+		internal override void write(BinaryWriter dataOutput1)
 		{
-			dataOutput1.writeInt(this.field_48181_a.Length);
+			dataOutput1.Write(this.field_48181_a.Length);
 
 			for (int i2 = 0; i2 < this.field_48181_a.Length; ++i2)
 			{
-				dataOutput1.writeInt(this.field_48181_a[i2]);
+				dataOutput1.Write(this.field_48181_a[i2]);
 			}
 
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: void load(java.io.DataInput dataInput1) throws java.io.IOException
-		internal override void load(DataInput dataInput1)
+		internal override void load(BinaryReader dataInput1)
 		{
-			int i2 = dataInput1.readInt();
+			int i2 = dataInput1.ReadInt32();
 			this.field_48181_a = new int[i2];
 
 			for (int i3 = 0; i3 < i2; ++i3)
 			{
-				this.field_48181_a[i3] = dataInput1.readInt();
+				this.field_48181_a[i3] = dataInput1.ReadInt32();
 			}
 
 		}
@@ -78,7 +74,7 @@ namespace net.minecraft.src
 
 		public override int GetHashCode()
 		{
-			return base.GetHashCode() ^ Arrays.hashCode(this.field_48181_a);
+			return base.GetHashCode() ^ field_48181_a.GetHashCode();
 		}
 	}
 

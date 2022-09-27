@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 using System.Collections;
 using System.Linq;
 
@@ -15,8 +16,8 @@ namespace net.minecraft.src
 		{
 			if (!this.ranBiomeCheck)
 			{
-				Random random3 = new Random();
-				random3.setSeed(this.worldObj.Seed);
+				RandomExtended random3 = new RandomExtended(worldObj.Seed);
+
 				double d4 = random3.NextDouble() * Math.PI * 2.0D;
 
 				for (int i6 = 0; i6 < this.structureCoords.Length; ++i6)
@@ -89,7 +90,7 @@ namespace net.minecraft.src
 		protected internal override StructureStart getStructureStart(int i1, int i2)
 		{
 			StructureStrongholdStart structureStrongholdStart3;
-			for (structureStrongholdStart3 = new StructureStrongholdStart(this.worldObj, this.rand, i1, i2); structureStrongholdStart3.Components.Count == 0 || ((ComponentStrongholdStairs2)structureStrongholdStart3.Components.ToList()[0]).portalRoom == null; structureStrongholdStart3 = new StructureStrongholdStart(this.worldObj, this.rand, i1, i2))
+			for (structureStrongholdStart3 = new StructureStrongholdStart(this.worldObj, this.rand, i1, i2); structureStrongholdStart3.Components.Count() == 0 || ((ComponentStrongholdStairs2)structureStrongholdStart3.Components.ToList()[0]).portalRoom == null; structureStrongholdStart3 = new StructureStrongholdStart(this.worldObj, this.rand, i1, i2))
 			{
 			}
 

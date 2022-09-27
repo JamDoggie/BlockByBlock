@@ -4,8 +4,8 @@
 	{
 		public ItemShears(int i1) : base(i1)
 		{
-			this.MaxStackSize = 1;
-			this.MaxDamage = 238;
+			setMaxStackSize(1);
+			setMaxDamage(238);
 		}
 
 		public override bool onBlockDestroyed(ItemStack itemStack1, int i2, int i3, int i4, int i5, EntityLiving entityLiving6)

@@ -9,9 +9,9 @@ namespace net.minecraft.src
 
 		public ItemPotion(int i1) : base(i1)
 		{
-			this.MaxStackSize = 1;
-			this.HasSubtypes = true;
-			this.MaxDamage = 0;
+			setMaxStackSize(1);
+			setHasSubtypes(true);
+			setMaxDamage(0);
 		}
 
 		public virtual System.Collections.IList getEffects(ItemStack itemStack1)
@@ -75,7 +75,7 @@ namespace net.minecraft.src
 			if (isSplash(itemStack1.ItemDamage))
 			{
 				--itemStack1.stackSize;
-				world2.playSoundAtEntity(entityPlayer3, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+				world2.playSoundAtEntity(entityPlayer3, "random.bow", 0.5F, 0.4F / (itemRand.NextSingle() * 0.4F + 0.8F));
 				if (!world2.isRemote)
 				{
 					world2.spawnEntityInWorld(new EntityPotion(world2, entityPlayer3, itemStack1.ItemDamage));
@@ -125,22 +125,15 @@ namespace net.minecraft.src
 			System.Collections.IList list2 = this.getEffects(i1);
 			if (list2 != null && list2.Count > 0)
 			{
-				System.Collections.IEnumerator iterator3 = list2.GetEnumerator();
-
-				PotionEffect potionEffect4;
-				do
-				{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					if (!iterator3.hasNext())
-					{
-						return false;
-					}
-
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					potionEffect4 = (PotionEffect)iterator3.next();
-				} while (!Potion.potionTypes[potionEffect4.PotionID].Instant);
-
-				return true;
+				foreach (PotionEffect potionEffect in list2)
+                {
+                    if (Potion.potionTypes[potionEffect.PotionID].Instant)
+                    {
+						return true;
+                    }
+                }
+                
+				return false;
 			}
 			else
 			{
