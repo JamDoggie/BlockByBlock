@@ -2,7 +2,7 @@
 {
 	public class WorldProviderEnd : WorldProvider
 	{
-		public override void registerWorldChunkManager()
+		protected internal override void registerWorldChunkManager()
 		{
 			this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.sky, 0.5F, 0.0F);
 			this.worldType = 1;

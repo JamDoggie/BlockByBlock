@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -14,7 +15,7 @@ namespace net.minecraft.src
 			this.field_48197_a = i2;
 		}
 
-		public override bool generate(World world1, Random random2, int i3, int i4, int i5)
+		public override bool generate(World world1, RandomExtended random2, int i3, int i4, int i5)
 		{
 			int i15;
 			for (bool z6 = false; ((i15 = world1.getBlockId(i3, i4, i5)) == 0 || i15 == Block.leaves.blockID) && i4 > 0; --i4)

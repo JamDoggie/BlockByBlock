@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -14,9 +15,9 @@ namespace net.minecraft.src
 			this.numberOfBlocks = i2;
 		}
 
-		public override bool generate(World world1, Random random2, int i3, int i4, int i5)
+		public override bool generate(World world1, RandomExtended random2, int i3, int i4, int i5)
 		{
-			float f6 = random2.nextFloat() * (float)Math.PI;
+			float f6 = random2.NextSingle() * (float)Math.PI;
 			double d7 = (double)((float)(i3 + 8) + MathHelper.sin(f6) * (float)this.numberOfBlocks / 8.0F);
 			double d9 = (double)((float)(i3 + 8) - MathHelper.sin(f6) * (float)this.numberOfBlocks / 8.0F);
 			double d11 = (double)((float)(i5 + 8) + MathHelper.cos(f6) * (float)this.numberOfBlocks / 8.0F);

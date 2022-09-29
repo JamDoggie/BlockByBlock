@@ -1,11 +1,12 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
 
 	public class WorldGenSwamp : WorldGenerator
 	{
-		public override bool generate(World world1, Random random2, int i3, int i4, int i5)
+		public override bool generate(World world1, RandomExtended random2, int i3, int i4, int i5)
 		{
 			int i6;
 			for (i6 = random2.Next(4) + 5; world1.getBlockMaterial(i3, i4 - 1, i5) == Material.water; --i4)

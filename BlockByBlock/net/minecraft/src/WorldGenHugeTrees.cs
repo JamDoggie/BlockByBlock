@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -16,7 +17,7 @@ namespace net.minecraft.src
 			this.leavesMetadata = i4;
 		}
 
-		public override bool generate(World world1, Random random2, int i3, int i4, int i5)
+		public override bool generate(World world1, RandomExtended random2, int i3, int i4, int i5)
 		{
 			int i6 = random2.Next(3) + this.field_48195_a;
 			bool z7 = true;
@@ -76,7 +77,7 @@ namespace net.minecraft.src
 
 						for (int i14 = i4 + i6 - 2 - random2.Next(4); i14 > i4 + i6 / 2; i14 -= 2 + random2.Next(4))
 						{
-							float f15 = random2.nextFloat() * (float)Math.PI * 2.0F;
+							float f15 = random2.NextSingle() * (float)Math.PI * 2.0F;
 							i11 = i3 + (int)(0.5F + MathHelper.cos(f15) * 4.0F);
 							i12 = i5 + (int)(0.5F + MathHelper.sin(f15) * 4.0F);
 							this.func_48192_a(world1, i11, i12, i14, 0, random2);
@@ -181,7 +182,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		private void func_48192_a(World world1, int i2, int i3, int i4, int i5, Random random6)
+		private void func_48192_a(World world1, int i2, int i3, int i4, int i5, RandomExtended random6)
 		{
 			sbyte b7 = 2;
 

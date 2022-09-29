@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using BlockByBlock.helpers;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace net.minecraft.src
 {
 
 	using GL11 = org.lwjgl.opengl.GL11;
+
+	// PORTING TODO: OpenGL code
 
 	public class WorldRenderer
 	{
@@ -98,7 +101,7 @@ namespace net.minecraft.src
 
 				Chunk.isLit = false;
 				HashSet<object> hashSet21 = new HashSet<object>();
-				hashSet21.addAll(this.tileEntityRenderers);
+				hashSet21.AddAll(this.tileEntityRenderers);
 				this.tileEntityRenderers.Clear();
 				sbyte b8 = 1;
 				ChunkCache chunkCache9 = new ChunkCache(this.worldObj, i1 - b8, i2 - b8, i3 - b8, i4 + b8, i5 + b8, i6 + b8);
@@ -186,7 +189,7 @@ namespace net.minecraft.src
 				}
 
 				HashSet<object> hashSet22 = new HashSet<object>();
-				hashSet22.addAll(this.tileEntityRenderers);
+				hashSet22.AddAll(this.tileEntityRenderers);
 				hashSet22.RemoveAll(hashSet21);
 				this.tileEntities.AddRange(hashSet22);
 				hashSet21.RemoveAll(this.tileEntityRenderers);

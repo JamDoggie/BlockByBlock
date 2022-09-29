@@ -15,10 +15,10 @@ namespace net.minecraft.src
 
 		public void registerWorld(World world1)
 		{
-			this.worldObj = world1;
-			this.terrainType = world1.WorldInfo.TerrainType;
-			this.registerWorldChunkManager();
-			this.generateLightBrightnessTable();
+			worldObj = world1;
+			terrainType = world1.WorldInfo.TerrainType;
+			registerWorldChunkManager();
+			generateLightBrightnessTable();
 		}
 
 		protected internal virtual void generateLightBrightnessTable()

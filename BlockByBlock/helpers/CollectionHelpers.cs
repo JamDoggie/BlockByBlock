@@ -16,6 +16,14 @@ namespace BlockByBlock.helpers
             }
         }
 
+        public static void AddRange(this IList collection, HashSet<object> items)
+        {
+            foreach (var item in items)
+            {
+                collection.Add(item);
+            }
+        }
+
         public static object? RemoveAndReturn(this IList collection, int index)
         {
             var item = collection[index];
@@ -26,6 +34,31 @@ namespace BlockByBlock.helpers
         public static void RemoveAll(this IList collection, IList list)
         {
             foreach(object o in list)
+            {
+                collection.Remove(o);
+            }
+        }
+
+        public static void RemoveAll(this IList collection, HashSet<object> list)
+        {
+            foreach (object o in list)
+            {
+                collection.Remove(o);
+            }
+        }
+
+        // HashSet
+        public static void AddAll(this HashSet<object> collection, IEnumerable items)
+        {
+            foreach (var item in items)
+            {
+                collection.Add(item);
+            }
+        }
+
+        public static void RemoveAll(this HashSet<object> collection, IEnumerable list)
+        {
+            foreach (object o in list)
             {
                 collection.Remove(o);
             }

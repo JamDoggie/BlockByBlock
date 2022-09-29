@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -12,7 +13,7 @@ namespace net.minecraft.src
 			this.replaceID = i1;
 		}
 
-		public override bool generate(World world1, Random random2, int i3, int i4, int i5)
+		public override bool generate(World world1, RandomExtended random2, int i3, int i4, int i5)
 		{
 			if (world1.isAirBlock(i3, i4, i5) && world1.getBlockId(i3, i4 - 1, i5) == this.replaceID)
 			{
@@ -53,7 +54,7 @@ namespace net.minecraft.src
 				}
 
 				EntityEnderCrystal entityEnderCrystal13 = new EntityEnderCrystal(world1);
-				entityEnderCrystal13.setLocationAndAngles((double)((float)i3 + 0.5F), (double)(i4 + i6), (double)((float)i5 + 0.5F), random2.nextFloat() * 360.0F, 0.0F);
+				entityEnderCrystal13.setLocationAndAngles((double)((float)i3 + 0.5F), (double)(i4 + i6), (double)((float)i5 + 0.5F), random2.NextSingle() * 360.0F, 0.0F);
 				world1.spawnEntityInWorld(entityEnderCrystal13);
 				world1.setBlockWithNotify(i3, i4 + i6, i5, Block.bedrock.blockID);
 				return true;

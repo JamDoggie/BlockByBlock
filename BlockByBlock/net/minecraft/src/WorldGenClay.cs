@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -13,7 +14,7 @@ namespace net.minecraft.src
 			this.numberOfBlocks = i1;
 		}
 
-		public override bool generate(World world1, Random random2, int i3, int i4, int i5)
+		public override bool generate(World world1, RandomExtended random2, int i3, int i4, int i5)
 		{
 			if (world1.getBlockMaterial(i3, i4, i5) != Material.water)
 			{
