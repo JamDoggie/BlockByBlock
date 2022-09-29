@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using BlockByBlock;
+using System.IO;
 
 namespace net.minecraft.src
 {
@@ -19,9 +20,7 @@ namespace net.minecraft.src
 		public virtual void closeTexturePackFile()
 		{
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void func_6485_a(net.minecraft.client.Minecraft minecraft1) throws java.io.IOException
+        
 		public virtual void func_6485_a(Minecraft minecraft1)
 		{
 		}
@@ -36,7 +35,7 @@ namespace net.minecraft.src
 
 		public virtual Stream getResourceAsStream(string string1)
 		{
-			return typeof(TexturePackBase).getResourceAsStream(string1);
+			return GameEnv.GetResourceAsStream(string1);
 		}
 	}
 

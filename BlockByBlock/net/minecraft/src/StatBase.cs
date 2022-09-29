@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace net.minecraft.src
 {
@@ -10,9 +11,9 @@ namespace net.minecraft.src
 		public bool isIndependent;
 		public string statGuid;
 		private readonly IStatType type;
-		private static NumberFormat numberFormat = NumberFormat.getIntegerInstance(Locale.US);
+		private static CultureInfo numberFormat = new CultureInfo("en-US");
 		public static IStatType simpleStatType = new StatTypeSimple();
-		private static DecimalFormat decimalFormat = new DecimalFormat("########0.00");
+		private static string decimalFormat = "########0.00";
 		public static IStatType timeStatType = new StatTypeTime();
 		public static IStatType distanceStatType = new StatTypeDistance();
 
@@ -75,7 +76,7 @@ namespace net.minecraft.src
 			return StatCollector.translateToLocal(this.statName);
 		}
 
-		internal static NumberFormat NumberFormat
+		internal static CultureInfo NumberFormat
 		{
 			get
 			{
@@ -83,7 +84,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		internal static DecimalFormat DecimalFormat
+		internal static string DecimalFormat
 		{
 			get
 			{

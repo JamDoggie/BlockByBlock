@@ -11,19 +11,19 @@ namespace net.minecraft.src
 
 		public StructureVillagePieceWeight(Type class1, int i2, int i3)
 		{
-			this.villagePieceClass = class1;
-			this.villagePieceWeight = i2;
-			this.villagePiecesLimit = i3;
+			villagePieceClass = class1;
+			villagePieceWeight = i2;
+			villagePiecesLimit = i3;
 		}
 
 		public virtual bool canSpawnMoreVillagePiecesOfType(int i1)
 		{
-			return this.villagePiecesLimit == 0 || this.villagePiecesSpawned < this.villagePiecesLimit;
+			return villagePiecesLimit == 0 || villagePiecesSpawned < villagePiecesLimit;
 		}
 
 		public virtual bool canSpawnMoreVillagePieces()
 		{
-			return this.villagePiecesLimit == 0 || this.villagePiecesSpawned < this.villagePiecesLimit;
+			return villagePiecesLimit == 0 || villagePiecesSpawned < villagePiecesLimit;
 		}
 	}
 

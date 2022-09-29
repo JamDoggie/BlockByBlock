@@ -7,22 +7,18 @@
 		public int experienceTotal;
 		public int experienceLevel;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.experience = dataInputStream1.readFloat();
-			this.experienceLevel = dataInputStream1.readShort();
-			this.experienceTotal = dataInputStream1.readShort();
+			experience = dataInputStream1.ReadSingle();
+			experienceLevel = dataInputStream1.ReadInt16();
+			experienceTotal = dataInputStream1.ReadInt16();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeFloat(this.experience);
-			dataOutputStream1.writeShort(this.experienceLevel);
-			dataOutputStream1.writeShort(this.experienceTotal);
+			dataOutputStream1.Write(experience);
+			dataOutputStream1.Write((short)experienceLevel);
+			dataOutputStream1.Write((short)experienceTotal);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

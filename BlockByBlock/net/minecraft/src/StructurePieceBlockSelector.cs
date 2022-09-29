@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -8,7 +9,7 @@ namespace net.minecraft.src
 		protected internal int selectedBlockId;
 		protected internal int selectedBlockMetaData;
 
-		public abstract void selectBlocks(Random random1, int i2, int i3, int i4, bool z5);
+		public abstract void selectBlocks(RandomExtended random1, int i2, int i3, int i4, bool z5);
 
 		public virtual int SelectedBlockId
 		{

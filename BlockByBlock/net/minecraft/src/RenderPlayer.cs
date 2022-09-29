@@ -243,7 +243,7 @@
 					itemStack21 = new ItemStack(Item.stick);
 				}
 
-				EnumAction enumAction22 = null;
+				EnumAction? enumAction22 = null;
 				if (entityPlayer1.ItemInUseCount > 0)
 				{
 					enumAction22 = itemStack21.ItemUseAction;

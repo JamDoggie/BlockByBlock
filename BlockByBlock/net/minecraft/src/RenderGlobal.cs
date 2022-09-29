@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -15,7 +16,7 @@ namespace net.minecraft.src
 		public System.Collections.IList tileEntities = new ArrayList();
 		private World worldObj;
 		private RenderEngine renderEngine;
-		private System.Collections.IList worldRenderersToUpdate = new ArrayList();
+		private List<WorldRenderer> worldRenderersToUpdate = new();
 		private WorldRenderer[] sortedWorldRenderers;
 		private WorldRenderer[] worldRenderers;
 		private int renderChunksWide;
@@ -133,16 +134,16 @@ namespace net.minecraft.src
 
 		private void renderStars()
 		{
-			Random random1 = new Random(10842L);
+			RandomExtended random1 = new RandomExtended(10842L);
 			Tessellator tessellator2 = Tessellator.instance;
 			tessellator2.startDrawingQuads();
 
 			for (int i3 = 0; i3 < 1500; ++i3)
 			{
-				double d4 = (double)(random1.nextFloat() * 2.0F - 1.0F);
-				double d6 = (double)(random1.nextFloat() * 2.0F - 1.0F);
-				double d8 = (double)(random1.nextFloat() * 2.0F - 1.0F);
-				double d10 = (double)(0.25F + random1.nextFloat() * 0.25F);
+				double d4 = (double)(random1.NextSingle() * 2.0F - 1.0F);
+				double d6 = (double)(random1.NextSingle() * 2.0F - 1.0F);
+				double d8 = (double)(random1.NextSingle() * 2.0F - 1.0F);
+				double d10 = (double)(0.25F + random1.NextSingle() * 0.25F);
 				double d12 = d4 * d4 + d6 * d6 + d8 * d8;
 				if (d12 < 1.0D && d12 > 0.01D)
 				{
@@ -1241,7 +1242,7 @@ namespace net.minecraft.src
 				sbyte b4 = 2;
 				RenderSorter renderSorter5 = new RenderSorter(entityLiving1);
 				WorldRenderer[] worldRenderer6 = new WorldRenderer[b4];
-				ArrayList arrayList7 = null;
+				List<WorldRenderer> arrayList7 = null;
 				int i8 = this.worldRenderersToUpdate.Count;
 				int i9 = 0;
 
@@ -1288,12 +1289,12 @@ namespace net.minecraft.src
 
 					if (arrayList7 == null)
 					{
-						arrayList7 = new ArrayList();
+						arrayList7 = new();
 					}
 
 					++i9;
 					arrayList7.Add(worldRenderer11);
-					this.worldRenderersToUpdate[i10] = (object)null;
+					worldRenderersToUpdate[i10] = null;
 					label169Continue:;
 				}
 				label169Break:
@@ -1850,7 +1851,7 @@ namespace net.minecraft.src
 
 		public virtual void playAuxSFX(EntityPlayer entityPlayer1, int i2, int i3, int i4, int i5, int i6)
 		{
-			Random random7 = this.worldObj.rand;
+			RandomExtended random7 = this.worldObj.rand;
 			int i8;
 			double d10;
 			double d12;
@@ -1874,17 +1875,17 @@ namespace net.minecraft.src
 				this.worldObj.playSoundEffect((double)i3, (double)i4, (double)i5, "random.bow", 1.0F, 1.2F);
 				break;
 			case 1003:
-				if (MathHelper.NextDouble < 0.5D)
+				if (portinghelpers.MathHelper.NextDouble < 0.5D)
 				{
-					this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "random.door_open", 1.0F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+					this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "random.door_open", 1.0F, this.worldObj.rand.NextSingle() * 0.1F + 0.9F);
 				}
 				else
 				{
-					this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "random.door_close", 1.0F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+					this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "random.door_close", 1.0F, this.worldObj.rand.NextSingle() * 0.1F + 0.9F);
 				}
 				break;
 			case 1004:
-				this.worldObj.playSoundEffect((double)((float)i3 + 0.5F), (double)((float)i4 + 0.5F), (double)((float)i5 + 0.5F), "random.fizz", 0.5F, 2.6F + (random7.nextFloat() - random7.nextFloat()) * 0.8F);
+				this.worldObj.playSoundEffect((double)((float)i3 + 0.5F), (double)((float)i4 + 0.5F), (double)((float)i5 + 0.5F), "random.fizz", 0.5F, 2.6F + (random7.NextSingle() - random7.NextSingle()) * 0.8F);
 				break;
 			case 1005:
 				if (Item.itemsList[i6] is ItemRecord)
@@ -1897,19 +1898,19 @@ namespace net.minecraft.src
 				}
 				break;
 			case 1007:
-				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "mob.ghast.charge", 10.0F, (random7.nextFloat() - random7.nextFloat()) * 0.2F + 1.0F);
+				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "mob.ghast.charge", 10.0F, (random7.NextSingle() - random7.NextSingle()) * 0.2F + 1.0F);
 				break;
 			case 1008:
-				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "mob.ghast.fireball", 10.0F, (random7.nextFloat() - random7.nextFloat()) * 0.2F + 1.0F);
+				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "mob.ghast.fireball", 10.0F, (random7.NextSingle() - random7.NextSingle()) * 0.2F + 1.0F);
 				break;
 			case 1010:
-				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "mob.zombie.wood", 2.0F, (random7.nextFloat() - random7.nextFloat()) * 0.2F + 1.0F);
+				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "mob.zombie.wood", 2.0F, (random7.NextSingle() - random7.NextSingle()) * 0.2F + 1.0F);
 				break;
 			case 1011:
-				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "mob.zombie.metal", 2.0F, (random7.nextFloat() - random7.nextFloat()) * 0.2F + 1.0F);
+				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "mob.zombie.metal", 2.0F, (random7.NextSingle() - random7.NextSingle()) * 0.2F + 1.0F);
 				break;
 			case 1012:
-				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "mob.zombie.woodbreak", 2.0F, (random7.nextFloat() - random7.nextFloat()) * 0.2F + 1.0F);
+				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "mob.zombie.woodbreak", 2.0F, (random7.NextSingle() - random7.NextSingle()) * 0.2F + 1.0F);
 				break;
 			case 2000:
 				i8 = i6 % 3 - 1;
@@ -1924,9 +1925,9 @@ namespace net.minecraft.src
 					double d40 = d10 + (double)i8 * 0.01D + (random7.NextDouble() - 0.5D) * (double)i35 * 0.5D;
 					d21 = d12 + (random7.NextDouble() - 0.5D) * 0.5D;
 					d23 = d36 + (double)i35 * 0.01D + (random7.NextDouble() - 0.5D) * (double)i8 * 0.5D;
-					d25 = (double)i8 * d39 + random7.nextGaussian() * 0.01D;
-					d27 = -0.03D + random7.nextGaussian() * 0.01D;
-					d29 = (double)i35 * d39 + random7.nextGaussian() * 0.01D;
+					d25 = (double)i8 * d39 + random7.NextGaussian() * 0.01D;
+					d27 = -0.03D + random7.NextGaussian() * 0.01D;
+					d29 = (double)i35 * d39 + random7.NextGaussian() * 0.01D;
 					this.spawnParticle("smoke", d40, d21, d23, d25, d27, d29);
 				}
 
@@ -1949,7 +1950,7 @@ namespace net.minecraft.src
 
 				for (i15 = 0; i15 < 8; ++i15)
 				{
-					this.spawnParticle(string14, d33, d10, d12, random7.nextGaussian() * 0.15D, random7.NextDouble() * 0.2D, random7.nextGaussian() * 0.15D);
+					this.spawnParticle(string14, d33, d10, d12, random7.NextGaussian() * 0.15D, random7.NextDouble() * 0.2D, random7.NextGaussian() * 0.15D);
 				}
 
 				i15 = Item.potion.getColorFromDamage(i6, 0);
@@ -1972,13 +1973,13 @@ namespace net.minecraft.src
 					EntityFX entityFX31 = this.func_40193_b(string19, d33 + d25 * 0.1D, d10 + 0.3D, d12 + d29 * 0.1D, d25, d27, d29);
 					if (entityFX31 != null)
 					{
-						float f32 = 0.75F + random7.nextFloat() * 0.25F;
+						float f32 = 0.75F + random7.NextSingle() * 0.25F;
 						entityFX31.func_40097_b(f16 * f32, f17 * f32, f18 * f32);
 						entityFX31.multiplyVelocity((float)d21);
 					}
 				}
 
-				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "random.glass", 1.0F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+				this.worldObj.playSoundEffect((double)i3 + 0.5D, (double)i4 + 0.5D, (double)i5 + 0.5D, "random.glass", 1.0F, this.worldObj.rand.NextSingle() * 0.1F + 0.9F);
 				break;
 			case 2003:
 				d33 = (double)i3 + 0.5D;
@@ -1988,7 +1989,7 @@ namespace net.minecraft.src
 
 				for (i15 = 0; i15 < 8; ++i15)
 				{
-					this.spawnParticle(string14, d33, d10, d12, random7.nextGaussian() * 0.15D, random7.NextDouble() * 0.2D, random7.nextGaussian() * 0.15D);
+					this.spawnParticle(string14, d33, d10, d12, random7.NextGaussian() * 0.15D, random7.NextDouble() * 0.2D, random7.NextGaussian() * 0.15D);
 				}
 
 				for (double d37 = 0.0D; d37 < Math.PI * 2D; d37 += 0.15707963267948966D)
@@ -2001,9 +2002,9 @@ namespace net.minecraft.src
 			case 2004:
 				for (i8 = 0; i8 < 20; ++i8)
 				{
-					double d9 = (double)i3 + 0.5D + ((double)this.worldObj.rand.nextFloat() - 0.5D) * 2.0D;
-					double d11 = (double)i4 + 0.5D + ((double)this.worldObj.rand.nextFloat() - 0.5D) * 2.0D;
-					double d13 = (double)i5 + 0.5D + ((double)this.worldObj.rand.nextFloat() - 0.5D) * 2.0D;
+					double d9 = (double)i3 + 0.5D + ((double)this.worldObj.rand.NextSingle() - 0.5D) * 2.0D;
+					double d11 = (double)i4 + 0.5D + ((double)this.worldObj.rand.NextSingle() - 0.5D) * 2.0D;
+					double d13 = (double)i5 + 0.5D + ((double)this.worldObj.rand.NextSingle() - 0.5D) * 2.0D;
 					this.worldObj.spawnParticle("smoke", d9, d11, d13, 0.0D, 0.0D, 0.0D);
 					this.worldObj.spawnParticle("flame", d9, d11, d13, 0.0D, 0.0D, 0.0D);
 				}

@@ -11,7 +11,7 @@ namespace net.minecraft.src
 		{
 			if (pathPoint1.index >= 0)
 			{
-				throw new System.InvalidOperationException("OW KNOWS!");
+				throw new System.InvalidOperationException("OW KNOWS!"); // 🤨 what
 			}
 			else
 			{

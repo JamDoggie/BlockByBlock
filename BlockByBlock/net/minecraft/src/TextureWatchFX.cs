@@ -5,6 +5,8 @@ namespace net.minecraft.src
 
 	using Minecraft = net.minecraft.client.Minecraft;
 
+	// PORTING TODO: Java image stuff.
+
 	public class TextureWatchFX : TextureFX
 	{
 		private Minecraft mc;
@@ -44,7 +46,7 @@ namespace net.minecraft.src
 				d1 = (double)(-f3 * (float)Math.PI * 2.0F);
 				if (!this.mc.theWorld.worldProvider.func_48217_e())
 				{
-					d1 = MathHelper.NextDouble * (double)(float)Math.PI * 2.0D;
+					d1 = portinghelpers.MathHelper.NextDouble * (double)(float)Math.PI * 2.0D;
 				}
 			}
 

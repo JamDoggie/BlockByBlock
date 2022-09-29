@@ -5,28 +5,36 @@ namespace net.minecraft.src
 {
 
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	public class ThreadCheckHasPaid : Thread
+    
+	public class ThreadCheckHasPaid
 	{
+		private static readonly HttpClient http = new HttpClient();
+
 		internal readonly Minecraft mc;
+
+		private Thread thread;
 
 		public ThreadCheckHasPaid(Minecraft minecraft1)
 		{
 			this.mc = minecraft1;
+			thread = new Thread(() => run());
 		}
+
+		public virtual void Start()
+        {
+			thread.Start();
+        }
 
 		public virtual void run()
 		{
 			try
 			{
-				HttpURLConnection httpURLConnection1 = (HttpURLConnection)(new URL("https://login.minecraft.net/session?name=" + this.mc.session.username + "&session=" + this.mc.session.sessionId)).openConnection();
-				httpURLConnection1.connect();
-				if (httpURLConnection1.getResponseCode() == 400 && this == null)
+				HttpRequestMessage request = new(HttpMethod.Get, new Uri("https://login.minecraft.net/session?name=" + this.mc.session.username + "&session=" + this.mc.session.sessionId));
+				HttpResponseMessage response = http.Send(request);
+				if (response.StatusCode == System.Net.HttpStatusCode.BadRequest && this == null)
 				{
 					Minecraft.hasPaidCheckTime = DateTimeHelper.CurrentUnixTimeMillis();
 				}
-
-				httpURLConnection1.disconnect();
 			}
 			catch (Exception exception2)
 			{

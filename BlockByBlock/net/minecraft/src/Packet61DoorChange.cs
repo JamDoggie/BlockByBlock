@@ -9,26 +9,22 @@
 		public int posY;
 		public int posZ;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.sfxID = dataInputStream1.readInt();
-			this.posX = dataInputStream1.readInt();
-			this.posY = dataInputStream1.readByte() & 255;
-			this.posZ = dataInputStream1.readInt();
-			this.auxData = dataInputStream1.readInt();
+			sfxID = dataInputStream1.ReadInt32();
+			posX = dataInputStream1.ReadInt32();
+			posY = dataInputStream1.ReadSByte() & 255;
+			posZ = dataInputStream1.ReadInt32();
+			auxData = dataInputStream1.ReadInt32();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.sfxID);
-			dataOutputStream1.writeInt(this.posX);
-			dataOutputStream1.writeByte(this.posY & 255);
-			dataOutputStream1.writeInt(this.posZ);
-			dataOutputStream1.writeInt(this.auxData);
+			dataOutputStream1.Write(sfxID);
+			dataOutputStream1.Write(posX);
+			dataOutputStream1.Write((byte)(posY & 255));
+			dataOutputStream1.Write(posZ);
+			dataOutputStream1.Write(auxData);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -9,7 +10,7 @@ namespace net.minecraft.src
 	public class RenderItem : Render
 	{
 		private new RenderBlocks renderBlocks = new RenderBlocks();
-		private Random random = new Random();
+		private RandomExtended random = new RandomExtended();
 		public bool field_27004_a = true;
 		public float zLevel = 0.0F;
 
@@ -21,7 +22,8 @@ namespace net.minecraft.src
 
 		public virtual void doRenderItem(EntityItem entityItem1, double d2, double d4, double d6, float f8, float f9)
 		{
-			this.random.setSeed(187L);
+			//this.random.setSeed(187L); // RandomExtended.setSeed
+			random = new RandomExtended(187L);
 			ItemStack itemStack10 = entityItem1.item;
 			GL11.glPushMatrix();
 			float f11 = MathHelper.sin(((float)entityItem1.age + f9) / 10.0F + entityItem1.field_804_d) * 0.1F + 0.1F;
@@ -66,9 +68,9 @@ namespace net.minecraft.src
 					GL11.glPushMatrix();
 					if (i22 > 0)
 					{
-						f23 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.2F / f21;
-						f18 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.2F / f21;
-						f19 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.2F / f21;
+						f23 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.2F / f21;
+						f18 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.2F / f21;
+						f19 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.2F / f21;
 						GL11.glTranslatef(f23, f18, f19);
 					}
 
@@ -149,9 +151,9 @@ namespace net.minecraft.src
 				GL11.glPushMatrix();
 				if (i11 > 0)
 				{
-					float f12 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.3F;
-					float f13 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.3F;
-					float f14 = (this.random.nextFloat() * 2.0F - 1.0F) * 0.3F;
+					float f12 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.3F;
+					float f13 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.3F;
+					float f14 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.3F;
 					GL11.glTranslatef(f12, f13, f14);
 				}
 

@@ -1,45 +1,52 @@
-﻿using System;
+﻿using BlockByBlock.helpers;
+using System;
 using System.Threading;
 
 namespace net.minecraft.src
 {
 
-	internal class ThreadDownloadImage : Thread
+	internal class ThreadDownloadImage
 	{
 		internal readonly string location;
 		internal readonly ImageBuffer buffer;
 		internal readonly ThreadDownloadImageData imageData;
 
+		public Thread thread;
+
+		// PORTING TODO: Java image stuff
+
 		internal ThreadDownloadImage(ThreadDownloadImageData threadDownloadImageData1, string string2, ImageBuffer imageBuffer3)
 		{
-			this.imageData = threadDownloadImageData1;
-			this.location = string2;
-			this.buffer = imageBuffer3;
+			imageData = threadDownloadImageData1;
+			location = string2;
+			buffer = imageBuffer3;
+			thread = new Thread(() => run());
 		}
+
+		public virtual void Start()
+        {
+			thread.Start();
+        }
 
 		public virtual void run()
 		{
-			HttpURLConnection httpURLConnection1 = null;
-
 			try
 			{
-				URL uRL2 = new URL(this.location);
-				httpURLConnection1 = (HttpURLConnection)uRL2.openConnection();
-				httpURLConnection1.setDoInput(true);
-				httpURLConnection1.setDoOutput(false);
-				httpURLConnection1.connect();
-				if (httpURLConnection1.getResponseCode() / 100 == 4)
+				Uri uRL2 = new Uri(location);
+				HttpResponseMessage response = SystemHelpers.httpClient.Send(new HttpRequestMessage(HttpMethod.Get, uRL2));
+				
+				if ((int)response.StatusCode / 100 == 4)
 				{
 					return;
 				}
 
-				if (this.buffer == null)
+				if (buffer == null)
 				{
-					this.imageData.image = ImageIO.read(httpURLConnection1.getInputStream());
+					imageData.image = ImageIO.read(httpURLConnection1.getInputStream());
 				}
 				else
 				{
-					this.imageData.image = this.buffer.parseUserSkin(ImageIO.read(httpURLConnection1.getInputStream()));
+					imageData.image = buffer.parseUserSkin(ImageIO.read(httpURLConnection1.getInputStream()));
 				}
 			}
 			catch (Exception exception6)
@@ -47,11 +54,6 @@ namespace net.minecraft.src
 				Console.WriteLine(exception6.ToString());
 				Console.Write(exception6.StackTrace);
 			}
-			finally
-			{
-				httpURLConnection1.disconnect();
-			}
-
 		}
 	}
 

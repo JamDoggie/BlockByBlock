@@ -37,7 +37,7 @@
 			}
 		}
 
-		public virtual string StepSound
+		public virtual string StepSoundName
 		{
 			get
 			{

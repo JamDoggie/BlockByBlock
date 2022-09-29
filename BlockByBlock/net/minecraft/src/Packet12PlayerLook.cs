@@ -5,32 +5,28 @@
 	{
 		public Packet12PlayerLook()
 		{
-			this.rotating = true;
+			rotating = true;
 		}
 
 		public Packet12PlayerLook(float f1, float f2, bool z3)
 		{
-			this.yaw = f1;
-			this.pitch = f2;
-			this.onGround = z3;
-			this.rotating = true;
+			yaw = f1;
+			pitch = f2;
+			onGround = z3;
+			rotating = true;
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+        
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.yaw = dataInputStream1.readFloat();
-			this.pitch = dataInputStream1.readFloat();
+			yaw = dataInputStream1.ReadSingle();
+			pitch = dataInputStream1.ReadSingle();
 			base.readPacketData(dataInputStream1);
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeFloat(this.yaw);
-			dataOutputStream1.writeFloat(this.pitch);
+			dataOutputStream1.Write(yaw);
+			dataOutputStream1.Write(pitch);
 			base.writePacketData(dataOutputStream1);
 		}
 

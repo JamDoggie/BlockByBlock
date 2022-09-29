@@ -10,6 +10,8 @@ namespace BlockByBlock.helpers
 {
     public static class SystemHelpers
     {
+        public static readonly HttpClient httpClient = new HttpClient();
+
         public static void OpenUrl(string url)
         {
             try

@@ -6,6 +6,9 @@ namespace net.minecraft.src
 	using Sys = org.lwjgl.Sys;
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+	//				 This whole class will probably not be port-able. I'll have to make my own crash report window later.
+
 	public class PanelCrashReport : Panel
 	{
 		public PanelCrashReport(UnexpectedThrowable unexpectedThrowable1)

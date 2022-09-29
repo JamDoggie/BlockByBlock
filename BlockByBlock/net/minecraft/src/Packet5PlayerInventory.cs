@@ -7,25 +7,21 @@
 		public int slot;
 		public int itemID;
 		public int itemDamage;
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+        
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.entityID = dataInputStream1.readInt();
-			this.slot = dataInputStream1.readShort();
-			this.itemID = dataInputStream1.readShort();
-			this.itemDamage = dataInputStream1.readShort();
+			entityID = dataInputStream1.ReadInt32();
+			slot = dataInputStream1.ReadInt16();
+			itemID = dataInputStream1.ReadInt16();
+			itemDamage = dataInputStream1.ReadInt16();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.entityID);
-			dataOutputStream1.writeShort(this.slot);
-			dataOutputStream1.writeShort(this.itemID);
-			dataOutputStream1.writeShort(this.itemDamage);
+			dataOutputStream1.Write(entityID);
+			dataOutputStream1.Write((short)slot);
+			dataOutputStream1.Write((short)itemID);
+			dataOutputStream1.Write((short)itemDamage);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

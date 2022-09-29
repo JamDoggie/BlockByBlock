@@ -37,7 +37,7 @@
 					this.field_1132_h[i1 + i2 * 16] = f4 / ((float)i3 * 1.0600001F);
 					if (i2 >= 19)
 					{
-						this.field_1132_h[i1 + i2 * 16] = (float)(MathHelper.NextDouble * MathHelper.NextDouble * MathHelper.NextDouble * 4.0D + MathHelper.NextDouble * (double)0.1F + (double)0.2F);
+						this.field_1132_h[i1 + i2 * 16] = (float)(portinghelpers.MathHelper.NextDouble * portinghelpers.MathHelper.NextDouble * portinghelpers.MathHelper.NextDouble * 4.0D + portinghelpers.MathHelper.NextDouble * (double)0.1F + (double)0.2F);
 					}
 				}
 			}

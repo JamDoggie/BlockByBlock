@@ -4,7 +4,9 @@
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
-	public class TileEntityRendererPiston : TileEntitySpecialRenderer
+    // PORTING TODO: OpenGL code
+
+    public class TileEntityRendererPiston : TileEntitySpecialRenderer
 	{
 		private RenderBlocks blockRenderer;
 

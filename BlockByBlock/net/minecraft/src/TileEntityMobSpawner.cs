@@ -35,9 +35,9 @@
 			this.yaw2 = this.yaw;
 			if (this.anyPlayerInRange())
 			{
-				double d1 = (double)((float)this.xCoord + this.worldObj.rand.nextFloat());
-				double d3 = (double)((float)this.yCoord + this.worldObj.rand.nextFloat());
-				double d5 = (double)((float)this.zCoord + this.worldObj.rand.nextFloat());
+				double d1 = (double)((float)this.xCoord + this.worldObj.rand.NextSingle());
+				double d3 = (double)((float)this.yCoord + this.worldObj.rand.NextSingle());
+				double d5 = (double)((float)this.zCoord + this.worldObj.rand.NextSingle());
 				this.worldObj.spawnParticle("smoke", d1, d3, d5, 0.0D, 0.0D, 0.0D);
 				this.worldObj.spawnParticle("flame", d1, d3, d5, 0.0D, 0.0D, 0.0D);
 
@@ -81,7 +81,7 @@
 							double d11 = (double)this.xCoord + (this.worldObj.rand.NextDouble() - this.worldObj.rand.NextDouble()) * 4.0D;
 							double d13 = (double)(this.yCoord + this.worldObj.rand.Next(3) - 1);
 							double d15 = (double)this.zCoord + (this.worldObj.rand.NextDouble() - this.worldObj.rand.NextDouble()) * 4.0D;
-							entityLiving9.setLocationAndAngles(d11, d13, d15, this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+							entityLiving9.setLocationAndAngles(d11, d13, d15, this.worldObj.rand.NextSingle() * 360.0F, 0.0F);
 							if (entityLiving9.CanSpawnHere)
 							{
 								this.worldObj.spawnEntityInWorld(entityLiving9);

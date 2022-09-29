@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Kajabity.Tools.Java;
 
 namespace net.minecraft.src
 {
@@ -10,15 +11,15 @@ namespace net.minecraft.src
 	public class StringTranslate
 	{
 		private static StringTranslate instance = new StringTranslate();
-		private Properties translateTable = new Properties();
+		private JavaProperties translateTable = new JavaProperties();
 		private Dictionary<string,string> languageList;
 		private string currentLanguage;
 		private bool isUnicode;
 
 		private StringTranslate()
 		{
-			this.loadLanguageList();
-			this.Language = "en_US";
+			loadLanguageList();
+			Language = "en_US";
 		}
 
 		public static StringTranslate Instance
@@ -56,22 +57,20 @@ namespace net.minecraft.src
 				return;
 			}
 
-			this.languageList = treeMap1;
+			languageList = treeMap1;
 		}
 
 		public virtual Dictionary<string,string> LanguageList
 		{
 			get
 			{
-				return this.languageList;
+				return languageList;
 			}
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: private void loadLanguage(java.util.Properties properties1, String string2) throws java.io.IOException
-		private void loadLanguage(Properties properties1, string string2)
+        
+		private void loadLanguage(JavaProperties properties1, string string2)
 		{
-			StreamReader bufferedReader3 = new StreamReader(typeof(StringTranslate).getResourceAsStream("/lang/" + string2 + ".lang"), Encoding.UTF8);
+			StreamReader bufferedReader3 = new StreamReader(GameEnv.GetResourceAsStream("/lang/" + string2 + ".lang"), Encoding.UTF8);
 
 			for (string string4 = bufferedReader3.ReadLine(); !string.ReferenceEquals(string4, null); string4 = bufferedReader3.ReadLine())
 			{
@@ -81,7 +80,7 @@ namespace net.minecraft.src
 					string[] string5 = string4.Split("=", true);
 					if (string5 != null && string5.Length == 2)
 					{
-						properties1.setProperty(string5[0], string5[1]);
+						properties1.SetProperty(string5[0], string5[1]);
 					}
 				}
 			}
@@ -92,25 +91,25 @@ namespace net.minecraft.src
 		{
 			set
 			{
-				if (!value.Equals(this.currentLanguage))
+				if (!value.Equals(currentLanguage))
 				{
-					Properties properties2 = new Properties();
+					JavaProperties properties2 = new JavaProperties();
     
 					try
 					{
-						this.loadLanguage(properties2, "en_US");
+						loadLanguage(properties2, "en_US");
 					}
 					catch (IOException)
 					{
 					}
     
-					this.isUnicode = false;
+					isUnicode = false;
 					if (!"en_US".Equals(value))
 					{
 						try
 						{
-							this.loadLanguage(properties2, value);
-							System.Collections.IEnumerator enumeration3 = properties2.propertyNames();
+							loadLanguage(properties2, value);
+							System.Collections.IEnumerator enumeration3 = properties2.PropertyNames();
     
 							while (true)
 							{
@@ -119,15 +118,13 @@ namespace net.minecraft.src
 									object object5;
 									do
 									{
-	//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-										if (!enumeration3.hasMoreElements() || this.isUnicode)
+										if (!enumeration3.MoveNext() || isUnicode)
 										{
 											goto label47Break;
 										}
     
-	//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-										object object4 = enumeration3.nextElement();
-										object5 = properties2.get(object4);
+										string object4 = (string)enumeration3.Current;
+										object5 = properties2.GetProperty(object4);
 									} while (object5 == null);
     
 									string string6 = object5.ToString();
@@ -136,7 +133,7 @@ namespace net.minecraft.src
 									{
 										if (string6[i7] >= (char)256)
 										{
-											this.isUnicode = true;
+											isUnicode = true;
 											break;
 										}
 									}
@@ -153,8 +150,8 @@ namespace net.minecraft.src
 						}
 					}
     
-					this.currentLanguage = value;
-					this.translateTable = properties2;
+					currentLanguage = value;
+					translateTable = properties2;
 				}
 			}
 		}
@@ -163,7 +160,7 @@ namespace net.minecraft.src
 		{
 			get
 			{
-				return this.currentLanguage;
+				return currentLanguage;
 			}
 		}
 
@@ -171,24 +168,24 @@ namespace net.minecraft.src
 		{
 			get
 			{
-				return this.isUnicode;
+				return isUnicode;
 			}
 		}
 
 		public virtual string translateKey(string string1)
 		{
-			return this.translateTable.getProperty(string1, string1);
+			return translateTable.GetProperty(string1, string1);
 		}
 
 		public virtual string translateKeyFormat(string string1, params object[] object2)
 		{
-			string string3 = this.translateTable.getProperty(string1, string1);
-			return String.format(string3, object2);
+			string string3 = translateTable.GetProperty(string1, string1);
+			return string.Format(string3, object2);
 		}
 
 		public virtual string translateNamedKey(string string1)
 		{
-			return this.translateTable.getProperty(string1 + ".name", "");
+			return translateTable.GetProperty(string1 + ".name", "");
 		}
 
 		public static bool isBidrectional(string string0)

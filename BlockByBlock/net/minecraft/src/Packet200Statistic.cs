@@ -11,20 +11,16 @@
 			netHandler1.handleStatistic(this);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.statisticId = dataInputStream1.readInt();
-			this.amount = dataInputStream1.readByte();
+			statisticId = dataInputStream1.ReadInt32();
+			amount = dataInputStream1.ReadSByte();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.statisticId);
-			dataOutputStream1.writeByte(this.amount);
+			dataOutputStream1.Write(statisticId);
+			dataOutputStream1.Write((sbyte)amount);
 		}
 
 		public override int PacketSize

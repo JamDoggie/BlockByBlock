@@ -16,6 +16,7 @@
 //-------------------------------------------------------------------------------------------
 using net.minecraft.src;
 using System.IO;
+using System.Runtime.InteropServices;
 
 public class ByteBuffer
 {
@@ -95,7 +96,7 @@ public class ByteBuffer
 		return this;
 	}
 
-	public long limit()
+	public long getLimit()
 	{
 		if (mode == Mode.Write)
 			return stream.Capacity;
@@ -103,6 +104,11 @@ public class ByteBuffer
 			return stream.Length;
 	}
 
+	public void limit(int newLimit)
+    {
+		stream.Capacity = newLimit;
+    }
+    
 	public long position()
 	{
 		return stream.Position;
@@ -116,7 +122,7 @@ public class ByteBuffer
 
 	public long remaining()
 	{
-		return this.limit() - this.position();
+		return this.getLimit() - this.position();
 	}
 
 	public bool hasRemaining()
@@ -135,6 +141,12 @@ public class ByteBuffer
 		return this;
 	}
 
+	public ByteBuffer get(sbyte[] dst)
+	{
+        stream.Read((byte[])((Array)dst), 0, dst.Length);
+		return this;
+	}
+
 	public ByteBuffer Put(byte b)
 	{
 		stream.WriteByte(b);
@@ -144,6 +156,34 @@ public class ByteBuffer
 	public ByteBuffer Put(byte[] src, int offset, int length)
 	{
 		stream.Write(src, offset, length);
+		return this;
+	}
+
+	public ByteBuffer Put(sbyte[] src, int offset, int length)
+	{
+        stream.Write((byte[])((Array)src), offset, length);
+		return this;
+	}
+
+	public ByteBuffer Put(sbyte[] src)
+	{
+		stream.Write((byte[])((Array)src), 0, src.Length);
+		return this;
+	}
+
+	public ByteBuffer Put(int[] src)
+	{
+		ReadOnlySpan<int> intSpan = new ReadOnlySpan<int>(src);
+		ReadOnlySpan<byte> bytes = MemoryMarshal.Cast<int, byte>(intSpan);
+		stream.Write(bytes);
+		return this;
+	}
+    
+	public ByteBuffer Put(int[] src, int length)
+	{
+		ReadOnlySpan<int> intSpan = new ReadOnlySpan<int>(src).Slice(0, length);
+		ReadOnlySpan<byte> bytes = MemoryMarshal.Cast<int, byte>(intSpan);
+		stream.Write(bytes);
 		return this;
 	}
 
@@ -248,6 +288,12 @@ public class ByteBuffer
 	}
 
 	//methods using the internal BinaryWriter:
+	public ByteBuffer putSByte(sbyte value)
+	{
+		writer.Write(value);
+		return this;
+	}
+
 	public ByteBuffer putChar(char value)
 	{
 		writer.Write(value);
@@ -335,5 +381,10 @@ public class ByteBuffer
 	public FloatBuffer asFloatBuffer()
 	{
 		return (FloatBuffer)this;
+	}
+    
+	public ShortBuffer asShortBuffer()
+	{
+		return (ShortBuffer)this;
 	}
 }

@@ -2,6 +2,9 @@
 {
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code. Pretty much all of the classes that start with "Render"
+	// have OpenGL code in them (shocking, I know), so I'm not copying this comment to every one of them.
+
 	public abstract class Render
 	{
 		protected internal RenderManager renderManager;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock;
+using System;
 using System.IO;
 
 namespace net.minecraft.src
@@ -8,15 +9,17 @@ namespace net.minecraft.src
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code, and Java image stuff
+
 	public class TexturePackFolder : TexturePackBase
 	{
 		private int field_48191_e = -1;
 		private BufferedImage field_48189_f;
-		private File field_48190_g;
+		private string field_48190_g;
 
-		public TexturePackFolder(File file1)
+		public TexturePackFolder(string file1)
 		{
-			this.texturePackFileName = file1.getName();
+			this.texturePackFileName = file1;
 			this.field_48190_g = file1;
 		}
 
@@ -30,8 +33,6 @@ namespace net.minecraft.src
 			return string1;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void func_6485_a(net.minecraft.client.Minecraft minecraft1) throws java.io.IOException
 		public override void func_6485_a(Minecraft minecraft1)
 		{
 			Stream inputStream2 = null;
@@ -40,7 +41,7 @@ namespace net.minecraft.src
 			{
 				try
 				{
-					inputStream2 = this.getResourceAsStream("pack.txt");
+					inputStream2 = getResourceAsStream("pack.txt");
 					StreamReader bufferedReader3 = new StreamReader(inputStream2);
 					this.firstDescriptionLine = this.func_48188_b(bufferedReader3.ReadLine());
 					this.secondDescriptionLine = this.func_48188_b(bufferedReader3.ReadLine());
@@ -120,17 +121,17 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				File file2 = new File(this.field_48190_g, string1.Substring(1));
-				if (file2.exists())
+				FileInfo file2 = new FileInfo(field_48190_g + "/" + string1.Substring(1));
+				if (file2.Exists)
 				{
-					return new BufferedInputStream(new FileStream(file2, FileMode.Open, FileAccess.Read));
+					return new FileStream(file2.FullName, FileMode.Open, FileAccess.Read);
 				}
 			}
 			catch (Exception)
 			{
 			}
 
-			return typeof(TexturePackBase).getResourceAsStream(string1);
+			return GameEnv.GetResourceAsStream(string1);
 		}
 	}
 

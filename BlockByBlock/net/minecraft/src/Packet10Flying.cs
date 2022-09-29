@@ -19,26 +19,22 @@
 
 		public Packet10Flying(bool z1)
 		{
-			this.onGround = z1;
+			onGround = z1;
 		}
 
 		public override void processPacket(NetHandler netHandler1)
 		{
 			netHandler1.handleFlying(this);
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+        
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.onGround = dataInputStream1.read() != 0;
+			onGround = dataInputStream1.ReadSByte() != 0;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.write(this.onGround ? 1 : 0);
+			dataOutputStream1.Write(onGround ? (sbyte)1 : (sbyte)0);
 		}
 
 		public override int PacketSize

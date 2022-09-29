@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -25,7 +26,7 @@ namespace net.minecraft.src
 			new StructureNetherBridgePieceWeight(typeof(ComponentNetherBridgeNetherStalkRoom), 5, 2)
 		};
 
-		private static ComponentNetherBridgePiece createNextComponentRandom(StructureNetherBridgePieceWeight structureNetherBridgePieceWeight0, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		private static ComponentNetherBridgePiece createNextComponentRandom(StructureNetherBridgePieceWeight structureNetherBridgePieceWeight0, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			Type class8 = structureNetherBridgePieceWeight0.field_40699_a;
 			object object9 = null;
@@ -85,7 +86,7 @@ namespace net.minecraft.src
 			return (ComponentNetherBridgePiece)object9;
 		}
 
-		internal static ComponentNetherBridgePiece createNextComponent(StructureNetherBridgePieceWeight structureNetherBridgePieceWeight0, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		internal static ComponentNetherBridgePiece createNextComponent(StructureNetherBridgePieceWeight structureNetherBridgePieceWeight0, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			return createNextComponentRandom(structureNetherBridgePieceWeight0, list1, random2, i3, i4, i5, i6, i7);
 		}

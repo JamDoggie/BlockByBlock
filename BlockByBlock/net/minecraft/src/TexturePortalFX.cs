@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -6,13 +7,11 @@ namespace net.minecraft.src
 	public class TexturePortalFX : TextureFX
 	{
 		private int portalTickCounter = 0;
-//JAVA TO C# CONVERTER NOTE: The following call to the 'RectangularArrays' helper class reproduces the rectangular array initialization that is automatic in Java:
-//ORIGINAL LINE: private sbyte[][] portalTextureData = new sbyte[32][1024];
 		private sbyte[][] portalTextureData = RectangularArrays.RectangularSbyteArray(32, 1024);
 
 		public TexturePortalFX() : base(Block.portal.blockIndexInTexture)
 		{
-			Random random1 = new Random(100L);
+			RandomExtended random1 = new RandomExtended(100L);
 
 			for (int i2 = 0; i2 < 32; ++i2)
 			{
@@ -56,7 +55,7 @@ namespace net.minecraft.src
 							f5 += f12 * 0.5F;
 						}
 
-						f5 += random1.nextFloat() * 0.1F;
+						f5 += random1.NextSingle() * 0.1F;
 						i6 = (int)(f5 * 100.0F + 155.0F);
 						int i13 = (int)(f5 * f5 * 200.0F + 55.0F);
 						int i14 = (int)(f5 * f5 * f5 * f5 * 255.0F);

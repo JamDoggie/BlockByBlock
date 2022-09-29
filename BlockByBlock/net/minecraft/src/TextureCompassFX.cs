@@ -5,6 +5,8 @@ namespace net.minecraft.src
 
 	using Minecraft = net.minecraft.client.Minecraft;
 
+	// PORTING TODO: Java image stuff.
+
 	public class TextureCompassFX : TextureFX
 	{
 		private Minecraft mc;

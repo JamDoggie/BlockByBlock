@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -148,7 +149,7 @@ namespace net.minecraft.src
 					f5 = (f4 - 0.8F) / 0.2F;
 				}
 
-				Random random6 = new Random(432L);
+				RandomExtended random6 = new RandomExtended(432L);
 				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				GL11.glShadeModel(GL11.GL_SMOOTH);
 				GL11.glEnable(GL11.GL_BLEND);
@@ -161,15 +162,15 @@ namespace net.minecraft.src
 
 				for (int i7 = 0; (float)i7 < (f4 + f4 * f4) / 2.0F * 60.0F; ++i7)
 				{
-					GL11.glRotatef(random6.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(random6.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-					GL11.glRotatef(random6.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
-					GL11.glRotatef(random6.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(random6.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-					GL11.glRotatef(random6.nextFloat() * 360.0F + f4 * 90.0F, 0.0F, 0.0F, 1.0F);
+					GL11.glRotatef(random6.NextSingle() * 360.0F, 1.0F, 0.0F, 0.0F);
+					GL11.glRotatef(random6.NextSingle() * 360.0F, 0.0F, 1.0F, 0.0F);
+					GL11.glRotatef(random6.NextSingle() * 360.0F, 0.0F, 0.0F, 1.0F);
+					GL11.glRotatef(random6.NextSingle() * 360.0F, 1.0F, 0.0F, 0.0F);
+					GL11.glRotatef(random6.NextSingle() * 360.0F, 0.0F, 1.0F, 0.0F);
+					GL11.glRotatef(random6.NextSingle() * 360.0F + f4 * 90.0F, 0.0F, 0.0F, 1.0F);
 					tessellator3.startDrawing(6);
-					float f8 = random6.nextFloat() * 20.0F + 5.0F + f5 * 10.0F;
-					float f9 = random6.nextFloat() * 2.0F + 1.0F + f5 * 2.0F;
+					float f8 = random6.NextSingle() * 20.0F + 5.0F + f5 * 10.0F;
+					float f9 = random6.NextSingle() * 2.0F + 1.0F + f5 * 2.0F;
 					tessellator3.setColorRGBA_I(0xFFFFFF, (int)(255.0F * (1.0F - f5)));
 					tessellator3.addVertex(0.0D, 0.0D, 0.0D);
 					tessellator3.setColorRGBA_I(16711935, 0);

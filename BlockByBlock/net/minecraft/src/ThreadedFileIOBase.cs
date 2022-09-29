@@ -4,19 +4,54 @@ using System.Threading;
 
 namespace net.minecraft.src
 {
-
-	public class ThreadedFileIOBase : ThreadStart
+    
+	public class ThreadedFileIOBase
 	{
 		public static readonly ThreadedFileIOBase threadedIOInstance = new ThreadedFileIOBase();
-		private System.Collections.IList threadedIOQueue = Collections.synchronizedList(new ArrayList());
-		private volatile long writeQueuedCounter = 0L;
-		private volatile long savedIOCounter = 0L;
+		private ArrayList threadedIOQueue = ArrayList.Synchronized(new ArrayList());
+
+		private long writeCounterBacking = 0L;
+		private object writeCounterLock = new();
+		private long writeQueuedCounter
+        {
+			get
+            {
+				lock (writeCounterLock)
+					return writeCounterBacking;
+            }
+
+			set
+            {
+				lock (writeCounterLock)
+					writeCounterBacking = value;
+            }
+        }
+
+		private long savedIOCounterBacking = 0L;
+		private object savedIOLock = new();
+		private long savedIOCounter
+		{
+			get
+			{
+				lock (savedIOLock)
+					return savedIOCounterBacking;
+
+			}
+
+			set
+			{
+				lock (savedIOLock)
+					savedIOCounterBacking = value;
+			}
+		}
+
 		private volatile bool isThreadWaiting = false;
 
 		private ThreadedFileIOBase()
 		{
-			Thread thread1 = new Thread(this, "File IO Thread");
-			thread1.setPriority(1);
+			Thread thread1 = new Thread(() => run());
+			thread1.Name = "File IO Thread";
+			thread1.Priority = ThreadPriority.Lowest;
 			thread1.Start();
 		}
 
@@ -24,47 +59,47 @@ namespace net.minecraft.src
 		{
 			while (true)
 			{
-				this.processQueue();
+				processQueue();
 			}
 		}
 
 		private void processQueue()
 		{
-			for (int i1 = 0; i1 < this.threadedIOQueue.Count; ++i1)
+			for (int i1 = 0; i1 < threadedIOQueue.Count; ++i1)
 			{
-				IThreadedFileIO iThreadedFileIO2 = (IThreadedFileIO)this.threadedIOQueue[i1];
+				IThreadedFileIO iThreadedFileIO2 = (IThreadedFileIO)threadedIOQueue[i1];
 				bool z3 = iThreadedFileIO2.writeNextIO();
 				if (!z3)
 				{
-					this.threadedIOQueue.RemoveAt(i1--);
-					++this.savedIOCounter;
+					threadedIOQueue.RemoveAt(i1--);
+					++savedIOCounter;
 				}
 
 				try
 				{
-					if (!this.isThreadWaiting)
+					if (!isThreadWaiting)
 					{
-						Thread.Sleep(10L);
+						Thread.Sleep(10);
 					}
 					else
 					{
-						Thread.Sleep(0L);
+						Thread.Sleep(0);
 					}
 				}
-				catch (InterruptedException interruptedException6)
+				catch (ThreadInterruptedException interruptedException6)
 				{
 					Console.WriteLine(interruptedException6.ToString());
 					Console.Write(interruptedException6.StackTrace);
 				}
 			}
 
-			if (this.threadedIOQueue.Count == 0)
+			if (threadedIOQueue.Count == 0)
 			{
 				try
 				{
-					Thread.Sleep(25L);
+					Thread.Sleep(25);
 				}
-				catch (InterruptedException interruptedException5)
+				catch (ThreadInterruptedException interruptedException5)
 				{
 					Console.WriteLine(interruptedException5.ToString());
 					Console.Write(interruptedException5.StackTrace);
@@ -75,25 +110,23 @@ namespace net.minecraft.src
 
 		public virtual void queueIO(IThreadedFileIO iThreadedFileIO1)
 		{
-			if (!this.threadedIOQueue.Contains(iThreadedFileIO1))
+			if (!threadedIOQueue.Contains(iThreadedFileIO1))
 			{
-				++this.writeQueuedCounter;
-				this.threadedIOQueue.Add(iThreadedFileIO1);
+				++writeQueuedCounter;
+				threadedIOQueue.Add(iThreadedFileIO1);
 			}
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void waitForFinish() throws InterruptedException
+        
 		public virtual void waitForFinish()
 		{
-			this.isThreadWaiting = true;
+			isThreadWaiting = true;
 
-			while (this.writeQueuedCounter != this.savedIOCounter)
+			while (writeQueuedCounter != savedIOCounter)
 			{
-				Thread.Sleep(10L);
+				Thread.Sleep(10);
 			}
 
-			this.isThreadWaiting = false;
+			isThreadWaiting = false;
 		}
 	}
 

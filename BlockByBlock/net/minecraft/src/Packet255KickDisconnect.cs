@@ -11,21 +11,17 @@
 
 		public Packet255KickDisconnect(string string1)
 		{
-			this.reason = string1;
+			reason = string1;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.reason = readString(dataInputStream1, 256);
+			reason = readString(dataInputStream1, 256);
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			writeString(this.reason, dataOutputStream1);
+			writeString(reason, dataOutputStream1);
 		}
 
 		public override void processPacket(NetHandler netHandler1)
@@ -37,7 +33,7 @@
 		{
 			get
 			{
-				return this.reason.Length;
+				return reason.Length;
 			}
 		}
 	}

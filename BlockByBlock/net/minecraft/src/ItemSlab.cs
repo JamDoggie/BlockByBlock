@@ -49,7 +49,7 @@
 				{
 					if (world3.checkIfAABBIsClear(Block.stairDouble.getCollisionBoundingBoxFromPool(world3, i4, i5, i6)) && world3.setBlockAndMetadataWithNotify(i4, i5, i6, Block.stairDouble.blockID, i10))
 					{
-						world3.playSoundEffect((double)((float)i4 + 0.5F), (double)((float)i5 + 0.5F), (double)((float)i6 + 0.5F), Block.stairDouble.stepSound.StepSound, (Block.stairDouble.stepSound.Volume + 1.0F) / 2.0F, Block.stairDouble.stepSound.Pitch * 0.8F);
+						world3.playSoundEffect((double)((float)i4 + 0.5F), (double)((float)i5 + 0.5F), (double)((float)i6 + 0.5F), Block.stairDouble.stepSound.StepSoundName, (Block.stairDouble.stepSound.Volume + 1.0F) / 2.0F, Block.stairDouble.stepSound.Pitch * 0.8F);
 						--itemStack1.stackSize;
 					}
 
@@ -101,7 +101,7 @@
 			{
 				if (world2.checkIfAABBIsClear(Block.stairDouble.getCollisionBoundingBoxFromPool(world2, i3, i4, i5)) && world2.setBlockAndMetadataWithNotify(i3, i4, i5, Block.stairDouble.blockID, i9))
 				{
-					world2.playSoundEffect((double)((float)i3 + 0.5F), (double)((float)i4 + 0.5F), (double)((float)i5 + 0.5F), Block.stairDouble.stepSound.StepSound, (Block.stairDouble.stepSound.Volume + 1.0F) / 2.0F, Block.stairDouble.stepSound.Pitch * 0.8F);
+					world2.playSoundEffect((double)((float)i3 + 0.5F), (double)((float)i4 + 0.5F), (double)((float)i5 + 0.5F), Block.stairDouble.stepSound.StepSoundName, (Block.stairDouble.stepSound.Volume + 1.0F) / 2.0F, Block.stairDouble.stepSound.Pitch * 0.8F);
 					--itemStack0.stackSize;
 				}
 

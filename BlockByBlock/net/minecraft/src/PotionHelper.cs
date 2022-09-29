@@ -160,7 +160,7 @@ namespace net.minecraft.src
 		{
 			if (i1 < string0.Length && i2 >= 0 && i1 < i2)
 			{
-				int i4 = string0.IndexOf(124, i1);
+				int i4 = string0.IndexOf((char)124, i1);
 				int i5;
 				int i17;
 				if (i4 >= 0 && i4 < i2)
@@ -178,7 +178,7 @@ namespace net.minecraft.src
 				}
 				else
 				{
-					i5 = string0.IndexOf(38, i1);
+					i5 = string0.IndexOf((char)38, i1);
 					if (i5 >= 0 && i5 < i2)
 					{
 						i17 = func_40355_a(string0, i1, i5 - 1, i3);
@@ -319,9 +319,9 @@ namespace net.minecraft.src
 			}
 		}
 
-		public static System.Collections.IList getPotionEffects(int i0, bool z1)
+		public static List<PotionEffect> getPotionEffects(int i0, bool z1)
 		{
-			ArrayList arrayList2 = null;
+			List<PotionEffect> arrayList2 = null;
 			Potion[] potion3 = Potion.potionTypes;
 			int i4 = potion3.Length;
 
@@ -364,7 +364,7 @@ namespace net.minecraft.src
 
 							if (arrayList2 == null)
 							{
-								arrayList2 = new ArrayList();
+								arrayList2 = new List<PotionEffect>();
 							}
 
 							arrayList2.Add(new PotionEffect(potion6.Id, i8, i9));

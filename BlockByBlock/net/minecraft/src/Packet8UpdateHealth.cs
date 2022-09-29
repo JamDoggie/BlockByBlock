@@ -6,23 +6,19 @@
 		public int healthMP;
 		public int food;
 		public float foodSaturation;
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+        
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.healthMP = dataInputStream1.readShort();
-			this.food = dataInputStream1.readShort();
-			this.foodSaturation = dataInputStream1.readFloat();
+			healthMP = dataInputStream1.ReadInt16();
+			food = dataInputStream1.ReadInt16();
+			foodSaturation = dataInputStream1.ReadSingle();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeShort(this.healthMP);
-			dataOutputStream1.writeShort(this.food);
-			dataOutputStream1.writeFloat(this.foodSaturation);
+			dataOutputStream1.Write((short)healthMP);
+			dataOutputStream1.Write((short)food);
+			dataOutputStream1.Write(foodSaturation);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

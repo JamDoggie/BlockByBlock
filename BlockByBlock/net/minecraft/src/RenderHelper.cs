@@ -47,7 +47,7 @@
 		private static FloatBuffer setColorBuffer(float f0, float f1, float f2, float f3)
 		{
 			colorBuffer.clear();
-			colorBuffer.put(f0).put(f1).put(f2).put(f3);
+			colorBuffer.putFloat(f0).putFloat(f1).putFloat(f2).putFloat(f3);
 			colorBuffer.flip();
 			return colorBuffer;
 		}

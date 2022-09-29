@@ -5,21 +5,17 @@
 	{
 		public int collectedEntityId;
 		public int collectorEntityId;
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+        
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.collectedEntityId = dataInputStream1.readInt();
-			this.collectorEntityId = dataInputStream1.readInt();
+			collectedEntityId = dataInputStream1.ReadInt32();
+			collectorEntityId = dataInputStream1.ReadInt32();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.collectedEntityId);
-			dataOutputStream1.writeInt(this.collectorEntityId);
+			dataOutputStream1.Write(collectedEntityId);
+			dataOutputStream1.Write(collectorEntityId);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

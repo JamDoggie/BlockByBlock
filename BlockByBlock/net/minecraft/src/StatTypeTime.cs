@@ -9,7 +9,7 @@
 			double d6 = d4 / 60.0D;
 			double d8 = d6 / 24.0D;
 			double d10 = d8 / 365.0D;
-			return d10 > 0.5D ? StatBase.DecimalFormat.format(d10) + " y" : (d8 > 0.5D ? StatBase.DecimalFormat.format(d8) + " d" : (d6 > 0.5D ? StatBase.DecimalFormat.format(d6) + " h" : (d4 > 0.5D ? StatBase.DecimalFormat.format(d4) + " m" : d2 + " s")));
+			return d10 > 0.5D ? d10.ToString(StatBase.DecimalFormat) + " y" : (d8 > 0.5D ? d8.ToString(StatBase.DecimalFormat) + " d" : (d6 > 0.5D ? d6.ToString(StatBase.DecimalFormat) + " h" : (d4 > 0.5D ? d4.ToString(StatBase.DecimalFormat) + " m" : d2 + " s")));
 		}
 	}
 

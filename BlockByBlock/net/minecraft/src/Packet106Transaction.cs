@@ -13,9 +13,9 @@
 
 		public Packet106Transaction(int i1, short s2, bool z3)
 		{
-			this.windowId = i1;
-			this.shortWindowId = s2;
-			this.accepted = z3;
+			windowId = i1;
+			shortWindowId = s2;
+			accepted = z3;
 		}
 
 		public override void processPacket(NetHandler netHandler1)
@@ -23,22 +23,18 @@
 			netHandler1.handleTransaction(this);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.windowId = dataInputStream1.readByte();
-			this.shortWindowId = dataInputStream1.readShort();
-			this.accepted = dataInputStream1.readByte() != 0;
+			windowId = dataInputStream1.ReadSByte();
+			shortWindowId = dataInputStream1.ReadInt16();
+			accepted = dataInputStream1.ReadByte() != 0;
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeByte(this.windowId);
-			dataOutputStream1.writeShort(this.shortWindowId);
-			dataOutputStream1.writeByte(this.accepted ? 1 : 0);
+			dataOutputStream1.Write((sbyte)windowId);
+			dataOutputStream1.Write(shortWindowId);
+			dataOutputStream1.Write(accepted ? (byte)1 : (byte)0);
 		}
 
 		public override int PacketSize

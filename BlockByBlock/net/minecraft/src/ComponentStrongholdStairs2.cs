@@ -9,7 +9,7 @@ namespace net.minecraft.src
 	{
 		public StructureStrongholdPieceWeight field_35038_a;
 		public ComponentStrongholdPortalRoom portalRoom;
-		public ArrayList field_35037_b = new ArrayList();
+		public List<StructureComponent> field_35037_b = new();
         
 		public ComponentStrongholdStairs2(int i1, RandomExtended random2, int i3, int i4) : base(0, random2, i3, i4)
 		{

@@ -10,7 +10,7 @@ namespace net.minecraft.src
 		public StructureNetherBridgePieceWeight field_40037_a;
 		public System.Collections.IList field_40035_b = new ArrayList();
 		public System.Collections.IList field_40036_c;
-		public ArrayList field_40034_d = new ArrayList();
+		public List<StructureComponent> field_40034_d = new();
 
 		public ComponentNetherBridgeStartPiece(RandomExtended random1, int i2, int i3) : base(random1, i2, i3)
 		{

@@ -15,33 +15,29 @@
 
 		public Packet26EntityExpOrb(EntityXPOrb entityXPOrb1)
 		{
-			this.entityId = entityXPOrb1.entityId;
-			this.posX = MathHelper.floor_double(entityXPOrb1.posX * 32.0D);
-			this.posY = MathHelper.floor_double(entityXPOrb1.posY * 32.0D);
-			this.posZ = MathHelper.floor_double(entityXPOrb1.posZ * 32.0D);
-			this.xpValue = entityXPOrb1.XpValue;
+			entityId = entityXPOrb1.entityId;
+			posX = MathHelper.floor_double(entityXPOrb1.posX * 32.0D);
+			posY = MathHelper.floor_double(entityXPOrb1.posY * 32.0D);
+			posZ = MathHelper.floor_double(entityXPOrb1.posZ * 32.0D);
+			xpValue = entityXPOrb1.XpValue;
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+        
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.entityId = dataInputStream1.readInt();
-			this.posX = dataInputStream1.readInt();
-			this.posY = dataInputStream1.readInt();
-			this.posZ = dataInputStream1.readInt();
-			this.xpValue = dataInputStream1.readShort();
+			entityId = dataInputStream1.ReadInt32();
+			posX = dataInputStream1.ReadInt32();
+			posY = dataInputStream1.ReadInt32();
+			posZ = dataInputStream1.ReadInt32();
+			xpValue = dataInputStream1.ReadInt16();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.entityId);
-			dataOutputStream1.writeInt(this.posX);
-			dataOutputStream1.writeInt(this.posY);
-			dataOutputStream1.writeInt(this.posZ);
-			dataOutputStream1.writeShort(this.xpValue);
+			dataOutputStream1.Write(entityId);
+			dataOutputStream1.Write(posX);
+			dataOutputStream1.Write(posY);
+			dataOutputStream1.Write(posZ);
+			dataOutputStream1.Write((short)xpValue);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

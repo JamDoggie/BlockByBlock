@@ -7,20 +7,16 @@
 		public int bedState;
 		public int gameMode;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.bedState = dataInputStream1.readByte();
-			this.gameMode = dataInputStream1.readByte();
+			bedState = dataInputStream1.ReadSByte();
+			gameMode = dataInputStream1.ReadSByte();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeByte(this.bedState);
-			dataOutputStream1.writeByte(this.gameMode);
+			dataOutputStream1.Write((sbyte)bedState);
+			dataOutputStream1.Write((sbyte)gameMode);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

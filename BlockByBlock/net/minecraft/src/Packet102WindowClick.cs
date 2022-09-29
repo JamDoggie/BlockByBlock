@@ -31,9 +31,9 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			window_Id = dataInputStream1.ReadByte();
+			window_Id = dataInputStream1.ReadSByte();
 			inventorySlot = dataInputStream1.ReadInt16();
-			mouseClick = dataInputStream1.ReadByte();
+			mouseClick = dataInputStream1.ReadSByte();
 			action = dataInputStream1.ReadInt16();
 			holdingShift = dataInputStream1.ReadBoolean();
 			itemStack = this.readItemStack(dataInputStream1);
@@ -41,9 +41,9 @@
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write((byte)window_Id);
+			dataOutputStream1.Write((sbyte)window_Id);
 			dataOutputStream1.Write((short)inventorySlot);
-			dataOutputStream1.Write((byte)mouseClick);
+			dataOutputStream1.Write((sbyte)mouseClick);
 			dataOutputStream1.Write(action);
 			dataOutputStream1.Write(holdingShift);
 			this.writeItemStack(this.itemStack, dataOutputStream1);

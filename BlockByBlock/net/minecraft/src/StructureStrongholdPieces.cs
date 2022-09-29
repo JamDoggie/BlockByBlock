@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -59,7 +60,7 @@ namespace net.minecraft.src
 			return z0;
 		}
 
-		private static ComponentStronghold getStrongholdComponentFromWeightedPiece(Type class0, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		private static ComponentStronghold getStrongholdComponentFromWeightedPiece(Type class0, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			object object8 = null;
 			if (class0 == typeof(ComponentStrongholdStraight))
@@ -110,7 +111,7 @@ namespace net.minecraft.src
 			return (ComponentStronghold)object8;
 		}
 
-		private static ComponentStronghold getNextComponent(ComponentStrongholdStairs2 componentStrongholdStairs20, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		private static ComponentStronghold getNextComponent(ComponentStrongholdStairs2 componentStrongholdStairs20, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			if (!canAddStructurePieces())
 			{
@@ -175,7 +176,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		private static StructureComponent getNextValidComponent(ComponentStrongholdStairs2 componentStrongholdStairs20, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		private static StructureComponent getNextValidComponent(ComponentStrongholdStairs2 componentStrongholdStairs20, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			if (i7 > 50)
 			{
@@ -198,7 +199,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		internal static StructureComponent getNextValidComponentAccess(ComponentStrongholdStairs2 componentStrongholdStairs20, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		internal static StructureComponent getNextValidComponentAccess(ComponentStrongholdStairs2 componentStrongholdStairs20, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			return getNextValidComponent(componentStrongholdStairs20, list1, random2, i3, i4, i5, i6, i7);
 		}

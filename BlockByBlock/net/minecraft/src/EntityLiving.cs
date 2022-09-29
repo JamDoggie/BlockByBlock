@@ -1033,7 +1033,7 @@ namespace net.minecraft.src
 				if (i3 > 0)
 				{
 					StepSound stepSound4 = Block.blocksList[i3].stepSound;
-					this.worldObj.playSoundAtEntity(this, stepSound4.StepSound, stepSound4.Volume * 0.5F, stepSound4.Pitch * 0.75F);
+					this.worldObj.playSoundAtEntity(this, stepSound4.StepSoundName, stepSound4.Volume * 0.5F, stepSound4.Pitch * 0.75F);
 				}
 			}
 

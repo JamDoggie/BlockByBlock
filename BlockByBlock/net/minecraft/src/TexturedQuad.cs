@@ -8,10 +8,10 @@
 
 		public TexturedQuad(PositionTextureVertex[] positionTextureVertex1)
 		{
-			this.nVertices = 0;
-			this.invertNormal = false;
-			this.vertexPositions = positionTextureVertex1;
-			this.nVertices = positionTextureVertex1.Length;
+			nVertices = 0;
+			invertNormal = false;
+			vertexPositions = positionTextureVertex1;
+			nVertices = positionTextureVertex1.Length;
 		}
 
 		public TexturedQuad(PositionTextureVertex[] positionTextureVertex1, int i2, int i3, int i4, int i5, float f6, float f7) : this(positionTextureVertex1)

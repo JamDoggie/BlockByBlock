@@ -271,9 +271,9 @@ namespace net.minecraft.src
 				b6[i7 * 4 + 3] = (sbyte)i8;
 			}
 
-			this.imageData.clear();
-			this.imageData.put(b6);
-			this.imageData.position(0).limit(b6.Length);
+			imageData.clear();
+			imageData.Put(b6);
+			imageData.position(0).limit(b6.Length);
 			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, i3, i4, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.imageData);
 			if (useMipmaps)
 			{
@@ -358,7 +358,7 @@ namespace net.minecraft.src
 			}
 
 			this.imageData.clear();
-			this.imageData.put(b5);
+			this.imageData.Put(b5);
 			this.imageData.position(0).limit(b5.Length);
 			GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, i2, i3, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.imageData);
 		}
@@ -367,7 +367,7 @@ namespace net.minecraft.src
 		{
 			this.textureNameToImageMap.removeObject(i1);
 			this.singleIntBuffer.clear();
-			this.singleIntBuffer.put(i1);
+			this.singleIntBuffer.putInt(i1);
 			this.singleIntBuffer.flip();
 			GL11.glDeleteTextures(this.singleIntBuffer);
 		}
@@ -442,7 +442,7 @@ namespace net.minecraft.src
 				textureFX3.anaglyphEnabled = this.options.anaglyph;
 				textureFX3.onTick();
 				this.imageData.clear();
-				this.imageData.put(textureFX3.imageData);
+				this.imageData.Put(textureFX3.imageData);
 				this.imageData.position(0).limit(textureFX3.imageData.Length);
 				if (textureFX3.iconIndex != i1)
 				{
@@ -463,8 +463,8 @@ namespace net.minecraft.src
 
 		private int alphaBlend(int i1, int i2)
 		{
-			int i3 = (i1 & 0xFF000000) >> 24 & 255;
-			int i4 = (i2 & 0xFF000000) >> 24 & 255;
+			int i3 = (int)((i1 & 0xFF000000) >> 24 & 255);
+			int i4 = (int)((i2 & 0xFF000000) >> 24 & 255);
 			short s5 = 255;
 			short s15;
 			short s16;
@@ -601,9 +601,7 @@ namespace net.minecraft.src
 			}
 
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: private java.awt.image.BufferedImage readTextureImage(java.io.InputStream inputStream1) throws java.io.IOException
+        
 		private BufferedImage readTextureImage(Stream inputStream1)
 		{
 			BufferedImage bufferedImage2 = ImageIO.read(inputStream1);

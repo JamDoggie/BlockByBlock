@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
 
 	public class StructureVillagePieces
 	{
-		public static ArrayList getStructureVillageWeightedPieceList(Random random0, int i1)
+		public static List<StructureVillagePieceWeight> getStructureVillageWeightedPieceList(Random random0, int i1)
 		{
-			ArrayList arrayList2 = new ArrayList();
+			List<StructureVillagePieceWeight> arrayList2 = new();
 			arrayList2.Add(new StructureVillagePieceWeight(typeof(ComponentVillageHouse4_Garden), 4, MathHelper.getRandomIntegerInRange(random0, 2 + i1, 4 + i1 * 2)));
 			arrayList2.Add(new StructureVillagePieceWeight(typeof(ComponentVillageChurch), 20, MathHelper.getRandomIntegerInRange(random0, 0 + i1, 1 + i1)));
 			arrayList2.Add(new StructureVillagePieceWeight(typeof(ComponentVillageHouse1), 20, MathHelper.getRandomIntegerInRange(random0, 0 + i1, 2 + i1)));
@@ -18,14 +19,13 @@ namespace net.minecraft.src
 			arrayList2.Add(new StructureVillagePieceWeight(typeof(ComponentVillageField2), 3, MathHelper.getRandomIntegerInRange(random0, 2 + i1, 4 + i1 * 2)));
 			arrayList2.Add(new StructureVillagePieceWeight(typeof(ComponentVillageHouse2), 15, MathHelper.getRandomIntegerInRange(random0, 0, 1 + i1)));
 			arrayList2.Add(new StructureVillagePieceWeight(typeof(ComponentVillageHouse3), 8, MathHelper.getRandomIntegerInRange(random0, 0 + i1, 3 + i1 * 2)));
-			System.Collections.IEnumerator iterator3 = arrayList2.GetEnumerator();
 
-			while (iterator3.MoveNext())
-			{
-				if (((StructureVillagePieceWeight)iterator3.Current).villagePiecesLimit == 0)
+			for (int i = arrayList2.Count - 1; i >= 0; i--)
+            {
+				StructureVillagePieceWeight pieceWeight = arrayList2[i];
+				if (pieceWeight.villagePiecesLimit == 0)
 				{
-//JAVA TO C# CONVERTER TODO TASK: .NET enumerators are read-only:
-					iterator3.remove();
+					arrayList2.Remove(pieceWeight);
 				}
 			}
 
@@ -50,7 +50,7 @@ namespace net.minecraft.src
 			return z1 ? i2 : -1;
 		}
 
-		private static ComponentVillage getVillageComponentFromWeightedPiece(StructureVillagePieceWeight structureVillagePieceWeight0, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		private static ComponentVillage getVillageComponentFromWeightedPiece(StructureVillagePieceWeight structureVillagePieceWeight0, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			Type class8 = structureVillagePieceWeight0.villagePieceClass;
 			object object9 = null;
@@ -94,7 +94,7 @@ namespace net.minecraft.src
 			return (ComponentVillage)object9;
 		}
 
-		private static ComponentVillage getNextVillageComponent(ComponentVillageStartPiece componentVillageStartPiece0, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		private static ComponentVillage getNextVillageComponent(ComponentVillageStartPiece componentVillageStartPiece0, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			int i8 = getAvailablePieceWeight(componentVillageStartPiece0.structureVillageWeightedPieceList);
 			if (i8 <= 0)
@@ -150,7 +150,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		private static StructureComponent getNextVillageStructureComponent(ComponentVillageStartPiece componentVillageStartPiece0, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		private static StructureComponent getNextVillageStructureComponent(ComponentVillageStartPiece componentVillageStartPiece0, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			if (i7 > 50)
 			{
@@ -182,7 +182,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		private static StructureComponent getNextComponentVillagePath(ComponentVillageStartPiece componentVillageStartPiece0, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		private static StructureComponent getNextComponentVillagePath(ComponentVillageStartPiece componentVillageStartPiece0, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			if (i7 > 3 + componentVillageStartPiece0.terrainType)
 			{
@@ -215,12 +215,12 @@ namespace net.minecraft.src
 			}
 		}
 
-		internal static StructureComponent getNextStructureComponent(ComponentVillageStartPiece componentVillageStartPiece0, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		internal static StructureComponent getNextStructureComponent(ComponentVillageStartPiece componentVillageStartPiece0, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			return getNextVillageStructureComponent(componentVillageStartPiece0, list1, random2, i3, i4, i5, i6, i7);
 		}
 
-		internal static StructureComponent getNextStructureComponentVillagePath(ComponentVillageStartPiece componentVillageStartPiece0, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		internal static StructureComponent getNextStructureComponentVillagePath(ComponentVillageStartPiece componentVillageStartPiece0, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			return getNextComponentVillagePath(componentVillageStartPiece0, list1, random2, i3, i4, i5, i6, i7);
 		}

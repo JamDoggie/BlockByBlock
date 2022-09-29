@@ -107,14 +107,12 @@ namespace net.minecraft.src
 						{
 							do
 							{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-								if (!iterator2.hasNext())
+								if (!iterator2.MoveNext())
 								{
 									return false;
 								}
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-								EntityPlayer entityPlayer3 = (EntityPlayer)iterator2.next();
+								EntityPlayer entityPlayer3 = (EntityPlayer)iterator2.Current;
 								this.field_48576_f = this.field_48582_a.villageCollectionObj.findNearestVillage((int)entityPlayer3.posX, (int)entityPlayer3.posY, (int)entityPlayer3.posZ, 1);
 							} while (this.field_48576_f == null);
 						} while (this.field_48576_f.NumVillageDoors < 10);
@@ -127,9 +125,9 @@ namespace net.minecraft.src
 
 				for (int i7 = 0; i7 < 10; ++i7)
 				{
-					this.field_48577_g = chunkCoordinates4.posX + (int)((double)(MathHelper.cos(this.field_48582_a.rand.nextFloat() * (float)Math.PI * 2.0F) * f5) * 0.9D);
+					this.field_48577_g = chunkCoordinates4.posX + (int)((double)(MathHelper.cos(this.field_48582_a.rand.NextSingle() * (float)Math.PI * 2.0F) * f5) * 0.9D);
 					this.field_48583_h = chunkCoordinates4.posY;
-					this.field_48584_i = chunkCoordinates4.posZ + (int)((double)(MathHelper.sin(this.field_48582_a.rand.nextFloat() * (float)Math.PI * 2.0F) * f5) * 0.9D);
+					this.field_48584_i = chunkCoordinates4.posZ + (int)((double)(MathHelper.sin(this.field_48582_a.rand.NextSingle() * (float)Math.PI * 2.0F) * f5) * 0.9D);
 					z6 = false;
 					System.Collections.IEnumerator iterator8 = this.field_48582_a.villageCollectionObj.func_48554_b().GetEnumerator();
 
@@ -183,7 +181,7 @@ namespace net.minecraft.src
 					return false;
 				}
 
-				entityZombie2.setLocationAndAngles(vec3D1.xCoord, vec3D1.yCoord, vec3D1.zCoord, this.field_48582_a.rand.nextFloat() * 360.0F, 0.0F);
+				entityZombie2.setLocationAndAngles(vec3D1.xCoord, vec3D1.yCoord, vec3D1.zCoord, this.field_48582_a.rand.NextSingle() * 360.0F, 0.0F);
 				this.field_48582_a.spawnEntityInWorld(entityZombie2);
 				ChunkCoordinates chunkCoordinates3 = this.field_48576_f.Center;
 				entityZombie2.setHomeArea(chunkCoordinates3.posX, chunkCoordinates3.posY, chunkCoordinates3.posZ, this.field_48576_f.VillageRadius);

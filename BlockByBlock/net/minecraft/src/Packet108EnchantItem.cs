@@ -21,20 +21,16 @@
 			netHandler1.handleEnchantItem(this);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.windowId = dataInputStream1.readByte();
-			this.enchantment = dataInputStream1.readByte();
+			windowId = dataInputStream1.ReadSByte();
+			enchantment = dataInputStream1.ReadSByte();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeByte(this.windowId);
-			dataOutputStream1.writeByte(this.enchantment);
+			dataOutputStream1.Write((sbyte)windowId);
+			dataOutputStream1.Write((sbyte)enchantment);
 		}
 
 		public override int PacketSize

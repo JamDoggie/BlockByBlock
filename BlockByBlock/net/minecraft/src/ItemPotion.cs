@@ -19,13 +19,13 @@ namespace net.minecraft.src
 			return this.getEffects(itemStack1.ItemDamage);
 		}
 
-		public virtual System.Collections.IList getEffects(int i1)
+		public virtual List<PotionEffect> getEffects(int i1)
 		{
-			System.Collections.IList list2 = (System.Collections.IList)this.effectCache[i1];
+			List<PotionEffect>? list2 = effectCache[i1] as List<PotionEffect>;
 			if (list2 == null)
 			{
 				list2 = PotionHelper.getPotionEffects(i1, false);
-				this.effectCache[i1] = list2;
+				effectCache[i1] = list2;
 			}
 
 			return list2;

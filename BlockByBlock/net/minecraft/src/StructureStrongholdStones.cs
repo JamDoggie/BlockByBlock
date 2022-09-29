@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -9,33 +10,33 @@ namespace net.minecraft.src
 		{
 		}
 
-		public override void selectBlocks(Random random1, int i2, int i3, int i4, bool z5)
+		public override void selectBlocks(RandomExtended random1, int i2, int i3, int i4, bool z5)
 		{
 			if (!z5)
 			{
-				this.selectedBlockId = 0;
-				this.selectedBlockMetaData = 0;
+				selectedBlockId = 0;
+				selectedBlockMetaData = 0;
 			}
 			else
 			{
-				this.selectedBlockId = Block.stoneBrick.blockID;
-				float f6 = random1.nextFloat();
+				selectedBlockId = Block.stoneBrick.blockID;
+				float f6 = random1.NextSingle();
 				if (f6 < 0.2F)
 				{
-					this.selectedBlockMetaData = 2;
+					selectedBlockMetaData = 2;
 				}
 				else if (f6 < 0.5F)
 				{
-					this.selectedBlockMetaData = 1;
+					selectedBlockMetaData = 1;
 				}
 				else if (f6 < 0.55F)
 				{
-					this.selectedBlockId = Block.silverfish.blockID;
-					this.selectedBlockMetaData = 2;
+					selectedBlockId = Block.silverfish.blockID;
+					selectedBlockMetaData = 2;
 				}
 				else
 				{
-					this.selectedBlockMetaData = 0;
+					selectedBlockMetaData = 0;
 				}
 			}
 

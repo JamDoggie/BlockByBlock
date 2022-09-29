@@ -17,11 +17,11 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				return String.format(string1, new object[]{GameSettings.getKeyDisplayString(this.mc.gameSettings.keyBindInventory.keyCode)});
+				return string.Format(string1, new object[]{GameSettings.getKeyDisplayString(this.mc.gameSettings.keyBindInventory.keyCode)});
 			}
 			catch (Exception exception3)
 			{
-				return "Error: " + exception3.getLocalizedMessage();
+				return "Error: " + exception3.Message;
 			}
 		}
 	}

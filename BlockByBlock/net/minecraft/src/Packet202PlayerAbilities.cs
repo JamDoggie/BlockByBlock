@@ -14,30 +14,26 @@
 
 		public Packet202PlayerAbilities(PlayerCapabilities playerCapabilities1)
 		{
-			this.field_50072_a = playerCapabilities1.disableDamage;
-			this.field_50070_b = playerCapabilities1.isFlying;
-			this.field_50071_c = playerCapabilities1.allowFlying;
-			this.field_50069_d = playerCapabilities1.isCreativeMode;
+			field_50072_a = playerCapabilities1.disableDamage;
+			field_50070_b = playerCapabilities1.isFlying;
+			field_50071_c = playerCapabilities1.allowFlying;
+			field_50069_d = playerCapabilities1.isCreativeMode;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.field_50072_a = dataInputStream1.readBoolean();
-			this.field_50070_b = dataInputStream1.readBoolean();
-			this.field_50071_c = dataInputStream1.readBoolean();
-			this.field_50069_d = dataInputStream1.readBoolean();
+			field_50072_a = dataInputStream1.ReadBoolean();
+			field_50070_b = dataInputStream1.ReadBoolean();
+			field_50071_c = dataInputStream1.ReadBoolean();
+			field_50069_d = dataInputStream1.ReadBoolean();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeBoolean(this.field_50072_a);
-			dataOutputStream1.writeBoolean(this.field_50070_b);
-			dataOutputStream1.writeBoolean(this.field_50071_c);
-			dataOutputStream1.writeBoolean(this.field_50069_d);
+			dataOutputStream1.Write(field_50072_a);
+			dataOutputStream1.Write(field_50070_b);
+			dataOutputStream1.Write(field_50071_c);
+			dataOutputStream1.Write(field_50069_d);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

@@ -8,24 +8,20 @@
 		public sbyte effectAmp;
 		public short duration;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.entityId = dataInputStream1.readInt();
-			this.effectId = dataInputStream1.readByte();
-			this.effectAmp = dataInputStream1.readByte();
-			this.duration = dataInputStream1.readShort();
+			entityId = dataInputStream1.ReadInt32();
+			effectId = dataInputStream1.ReadSByte();
+			effectAmp = dataInputStream1.ReadSByte();
+			duration = dataInputStream1.ReadInt16();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.entityId);
-			dataOutputStream1.writeByte(this.effectId);
-			dataOutputStream1.writeByte(this.effectAmp);
-			dataOutputStream1.writeShort(this.duration);
+			dataOutputStream1.Write(entityId);
+			dataOutputStream1.Write(effectId);
+			dataOutputStream1.Write(effectAmp);
+			dataOutputStream1.Write(duration);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

@@ -1,11 +1,12 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
 
 	public class Particle
 	{
-		private static Random rand = new Random();
+		private static RandomExtended rand = new RandomExtended();
 		public double posX;
 		public double posY;
 		public double prevPosX;

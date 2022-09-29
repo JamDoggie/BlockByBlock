@@ -18,43 +18,39 @@
 
 		public Packet20NamedEntitySpawn(EntityPlayer entityPlayer1)
 		{
-			this.entityId = entityPlayer1.entityId;
-			this.name = entityPlayer1.username;
-			this.xPosition = MathHelper.floor_double(entityPlayer1.posX * 32.0D);
-			this.yPosition = MathHelper.floor_double(entityPlayer1.posY * 32.0D);
-			this.zPosition = MathHelper.floor_double(entityPlayer1.posZ * 32.0D);
-			this.rotation = (sbyte)((int)(entityPlayer1.rotationYaw * 256.0F / 360.0F));
-			this.pitch = (sbyte)((int)(entityPlayer1.rotationPitch * 256.0F / 360.0F));
+			entityId = entityPlayer1.entityId;
+			name = entityPlayer1.username;
+			xPosition = MathHelper.floor_double(entityPlayer1.posX * 32.0D);
+			yPosition = MathHelper.floor_double(entityPlayer1.posY * 32.0D);
+			zPosition = MathHelper.floor_double(entityPlayer1.posZ * 32.0D);
+			rotation = (sbyte)((int)(entityPlayer1.rotationYaw * 256.0F / 360.0F));
+			pitch = (sbyte)((int)(entityPlayer1.rotationPitch * 256.0F / 360.0F));
 			ItemStack itemStack2 = entityPlayer1.inventory.CurrentItem;
-			this.currentItem = itemStack2 == null ? 0 : itemStack2.itemID;
+			currentItem = itemStack2 == null ? 0 : itemStack2.itemID;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.entityId = dataInputStream1.readInt();
-			this.name = readString(dataInputStream1, 16);
-			this.xPosition = dataInputStream1.readInt();
-			this.yPosition = dataInputStream1.readInt();
-			this.zPosition = dataInputStream1.readInt();
-			this.rotation = dataInputStream1.readByte();
-			this.pitch = dataInputStream1.readByte();
-			this.currentItem = dataInputStream1.readShort();
+			entityId = dataInputStream1.ReadInt32();
+			name = readString(dataInputStream1, 16);
+			xPosition = dataInputStream1.ReadInt32();
+			yPosition = dataInputStream1.ReadInt32();
+			zPosition = dataInputStream1.ReadInt32();
+			rotation = dataInputStream1.ReadSByte();
+			pitch = dataInputStream1.ReadSByte();
+			currentItem = dataInputStream1.ReadInt16();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.entityId);
-			writeString(this.name, dataOutputStream1);
-			dataOutputStream1.writeInt(this.xPosition);
-			dataOutputStream1.writeInt(this.yPosition);
-			dataOutputStream1.writeInt(this.zPosition);
-			dataOutputStream1.writeByte(this.rotation);
-			dataOutputStream1.writeByte(this.pitch);
-			dataOutputStream1.writeShort(this.currentItem);
+			dataOutputStream1.Write(entityId);
+			writeString(name, dataOutputStream1);
+			dataOutputStream1.Write(xPosition);
+			dataOutputStream1.Write(yPosition);
+			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.Write(rotation);
+			dataOutputStream1.Write(pitch);
+			dataOutputStream1.Write((short)currentItem);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

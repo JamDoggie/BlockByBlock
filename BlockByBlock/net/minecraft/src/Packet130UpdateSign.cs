@@ -15,40 +15,36 @@
 
 		public Packet130UpdateSign(int i1, int i2, int i3, string[] string4)
 		{
-			this.isChunkDataPacket = true;
-			this.xPosition = i1;
-			this.yPosition = i2;
-			this.zPosition = i3;
-			this.signLines = string4;
+			isChunkDataPacket = true;
+			xPosition = i1;
+			yPosition = i2;
+			zPosition = i3;
+			signLines = string4;
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+        
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.xPosition = dataInputStream1.readInt();
-			this.yPosition = dataInputStream1.readShort();
-			this.zPosition = dataInputStream1.readInt();
-			this.signLines = new string[4];
+			xPosition = dataInputStream1.ReadInt32();
+			yPosition = dataInputStream1.ReadInt16();
+			zPosition = dataInputStream1.ReadInt32();
+			signLines = new string[4];
 
 			for (int i2 = 0; i2 < 4; ++i2)
 			{
-				this.signLines[i2] = readString(dataInputStream1, 15);
+				signLines[i2] = readString(dataInputStream1, 15);
 			}
 
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.xPosition);
-			dataOutputStream1.writeShort(this.yPosition);
-			dataOutputStream1.writeInt(this.zPosition);
+			dataOutputStream1.Write(xPosition);
+			dataOutputStream1.Write((short)yPosition);
+			dataOutputStream1.Write(zPosition);
 
 			for (int i2 = 0; i2 < 4; ++i2)
 			{
-				writeString(this.signLines[i2], dataOutputStream1);
+				writeString(signLines[i2], dataOutputStream1);
 			}
 
 		}

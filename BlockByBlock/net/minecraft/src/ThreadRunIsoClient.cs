@@ -3,31 +3,37 @@ using System.Threading;
 
 namespace net.minecraft.src
 {
-	internal class ThreadRunIsoClient : Thread
+	internal class ThreadRunIsoClient
 	{
 		internal readonly CanvasIsomPreview field_1197_a;
 
+		public Thread thread;
+
 		internal ThreadRunIsoClient(CanvasIsomPreview canvasIsomPreview1)
 		{
-			this.field_1197_a = canvasIsomPreview1;
+			field_1197_a = canvasIsomPreview1;
+			thread = new Thread(() => run());
 		}
+
+		public virtual void Start()
+        {
+			thread.Start();
+        }
 
 		public virtual void run()
 		{
-			while (CanvasIsomPreview.isRunning(this.field_1197_a))
+			while (CanvasIsomPreview.isRunning(field_1197_a))
 			{
-				this.field_1197_a.render();
+				field_1197_a.render();
 
 				try
 				{
-					Thread.Sleep(1L);
+					Thread.Sleep(1);
 				}
 				catch (Exception)
 				{
 				}
 			}
-
 		}
 	}
-
 }

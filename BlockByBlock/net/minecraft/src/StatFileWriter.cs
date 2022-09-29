@@ -18,32 +18,32 @@ namespace net.minecraft.src
 		private bool field_27189_c = false;
 		private StatsSyncher statsSyncher;
 
-		public StatFileWriter(Session session1, File file2)
+		public StatFileWriter(Session session1, DirectoryInfo mcDirectory)
 		{
-			File file3 = new File(file2, "stats");
-			if (!file3.exists())
+			DirectoryInfo statsFolder = new DirectoryInfo(mcDirectory + "/stats");
+			if (!statsFolder.Exists)
 			{
-				file3.mkdir();
+				statsFolder.Create();
 			}
-
-			File[] file4 = file2.listFiles();
+            
+			FileInfo[] file4 = mcDirectory.GetFiles();
 			int i5 = file4.Length;
 
 			for (int i6 = 0; i6 < i5; ++i6)
 			{
-				File file7 = file4[i6];
-				if (file7.getName().StartsWith("stats_") && file7.getName().EndsWith(".dat"))
+				FileInfo file7 = file4[i6];
+				if (file7.Name.StartsWith("stats_") && file7.Extension.EndsWith(".dat"))
 				{
-					File file8 = new File(file3, file7.getName());
-					if (!file8.exists())
+					FileInfo file8 = new FileInfo(statsFolder.FullName + '/' + file7.Name);
+					if (!file8.Exists)
 					{
-						Console.WriteLine("Relocating " + file7.getName());
-						file7.renameTo(file8);
+						Console.WriteLine("Relocating " + file7.Name);
+						file7.MoveTo(file8.FullName);
 					}
 				}
 			}
 
-			this.statsSyncher = new StatsSyncher(session1, this, file3);
+			this.statsSyncher = new StatsSyncher(session1, this, statsFolder);
 		}
 
 		public virtual void readStat(StatBase statBase1, int i2)
@@ -131,9 +131,9 @@ namespace net.minecraft.src
 				{
 					JsonNode jsonNode7 = (JsonNode)iterator6.Current;
 					System.Collections.IDictionary map8 = jsonNode7.Fields;
-					DictionaryEntry map$Entry9 = (DictionaryEntry)map8.SetOfKeyValuePairs().GetEnumerator().next();
-					int i10 = int.Parse(((JsonStringNode)map$Entry9.Key).Text);
-					int i11 = int.Parse(((JsonNode)map$Entry9.Value).Text);
+					DictionaryEntry mapEntry = map8.GetEnumerator().Entry;
+					int i10 = int.Parse(((JsonStringNode)mapEntry.Key).Text);
+					int i11 = int.Parse(((JsonNode)mapEntry.Value).Text);
 					StatBase statBase12 = StatList.getOneShotStat(i10);
 					if (statBase12 == null)
 					{

@@ -47,9 +47,9 @@
 					{
 						this.blue[i1 + i2 * 16] = 0.0F;
 					}
-
+                    
 					this.alpha[i1 + i2 * 16] -= 0.1F;
-					if (MathHelper.NextDouble < 0.05D)
+					if (portinghelpers.MathHelper.NextDouble < 0.05D)
 					{
 						this.alpha[i1 + i2 * 16] = 0.5F;
 					}

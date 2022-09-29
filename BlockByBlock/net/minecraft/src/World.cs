@@ -190,7 +190,7 @@ namespace net.minecraft.src
 			this.editingBlocks = false;
 			this.lockTimestamp = DateTimeHelper.CurrentUnixTimeMillis();
 			this.autosavePeriod = 40;
-			this.rand = new Random();
+			this.rand = new RandomExtended();
 			this.isNewWorld = false;
 			this.worldAccesses = new ArrayList();
 			this.villageCollectionObj = new VillageCollection(this);
@@ -259,7 +259,7 @@ namespace net.minecraft.src
 				this.findingSpawnPoint = true;
 				WorldChunkManager worldChunkManager1 = this.worldProvider.worldChunkMgr;
 				System.Collections.IList list2 = worldChunkManager1.BiomesToSpawnIn;
-				Random random3 = new Random(this.Seed);
+				RandomExtended random3 = new RandomExtended(this.Seed);
 				ChunkPosition chunkPosition4 = worldChunkManager1.findBiomePosition(0, 0, 256, list2, random3);
 				int i5 = 0;
 				int i6 = this.worldProvider.AverageGroundLevel;
@@ -1607,7 +1607,7 @@ namespace net.minecraft.src
 				{
 					if (i4 > 0)
 					{
-						nextTickListEntry6.ScheduledTime = (long)i5 + this.worldInfo.WorldTime;
+						nextTickListEntry6.setScheduledTime((long)i5 + this.worldInfo.WorldTime);
 					}
 
 					if (!this.scheduledTickSet.Contains(nextTickListEntry6))
@@ -1625,7 +1625,7 @@ namespace net.minecraft.src
 			NextTickListEntry nextTickListEntry6 = new NextTickListEntry(i1, i2, i3, i4);
 			if (i4 > 0)
 			{
-				nextTickListEntry6.ScheduledTime = (long)i5 + this.worldInfo.WorldTime;
+				nextTickListEntry6.setScheduledTime((long)i5 + this.worldInfo.WorldTime);
 			}
 
 			if (!this.scheduledTickSet.Contains(nextTickListEntry6))

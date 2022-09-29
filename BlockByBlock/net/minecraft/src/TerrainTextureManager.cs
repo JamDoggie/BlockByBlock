@@ -3,6 +3,8 @@
 namespace net.minecraft.src
 {
 
+	// PORTING TODO: Java image stuff
+
 	public class TerrainTextureManager
 	{
 		private float[] texCols = new float[768];
@@ -17,7 +19,7 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				BufferedImage bufferedImage1 = ImageIO.read(typeof(TerrainTextureManager).getResource("/terrain.png"));
+				BufferedImage bufferedImage1 = ImageIO.read(GameEnv.getResource("/terrain.png"));
 				int[] i2 = new int[65536];
 				bufferedImage1.getRGB(0, 0, 256, 256, i2, 0, 256);
 

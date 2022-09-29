@@ -666,11 +666,11 @@ namespace net.minecraft.src
 			if (this.worldObj.getBlockId(i1, i2 + 1, i3) == Block.snow.blockID)
 			{
 				stepSound5 = Block.snow.stepSound;
-				this.worldObj.playSoundAtEntity(this, stepSound5.StepSound, stepSound5.Volume * 0.15F, stepSound5.Pitch);
+				this.worldObj.playSoundAtEntity(this, stepSound5.StepSoundName, stepSound5.Volume * 0.15F, stepSound5.Pitch);
 			}
 			else if (!Block.blocksList[i4].blockMaterial.Liquid)
 			{
-				this.worldObj.playSoundAtEntity(this, stepSound5.StepSound, stepSound5.Volume * 0.15F, stepSound5.Pitch);
+				this.worldObj.playSoundAtEntity(this, stepSound5.StepSoundName, stepSound5.Volume * 0.15F, stepSound5.Pitch);
 			}
 
 		}

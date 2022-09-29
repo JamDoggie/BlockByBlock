@@ -5,31 +5,27 @@
 	{
 		public short itemID;
 		public short uniqueID;
-		public sbyte[] itemData;
+		public byte[] itemData;
 
 		public Packet131MapData()
 		{
-			this.isChunkDataPacket = true;
+			isChunkDataPacket = true;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.itemID = dataInputStream1.readShort();
-			this.uniqueID = dataInputStream1.readShort();
-			this.itemData = new sbyte[dataInputStream1.readByte() & 255];
-			dataInputStream1.readFully(this.itemData);
-		}
+			itemID = dataInputStream1.ReadInt16();
+			uniqueID = dataInputStream1.ReadInt16();
+			itemData = new byte[dataInputStream1.ReadByte() & 255];
+            dataInputStream1.Read(itemData, 0, itemData.Length);
+        }
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeShort(this.itemID);
-			dataOutputStream1.writeShort(this.uniqueID);
-			dataOutputStream1.writeByte(this.itemData.Length);
-			dataOutputStream1.write(this.itemData);
+			dataOutputStream1.Write(itemID);
+			dataOutputStream1.Write(uniqueID);
+			dataOutputStream1.Write((byte)itemData.Length);
+			dataOutputStream1.Write(itemData);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

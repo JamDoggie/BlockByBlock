@@ -8,22 +8,22 @@ namespace net.minecraft.src
 
 	public class ScreenShotHelper
 	{
-		private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+		private static string dateFormat = "yyyy-MM-dd_HH.mm.ss";
 		private static ByteBuffer buffer;
 		private static sbyte[] pixelData;
 		private static int[] imageData;
 
-		public static string saveScreenshot(File file0, int i1, int i2)
+		public static string saveScreenshot(DirectoryInfo mcDirectory, int i1, int i2)
 		{
-			return func_35879_a(file0, (string)null, i1, i2);
+			return func_35879_a(mcDirectory, null, i1, i2);
 		}
 
-		public static string func_35879_a(File file0, string string1, int i2, int i3)
+		public static string func_35879_a(DirectoryInfo mcDirectory, string string1, int i2, int i3)
 		{
 			try
 			{
-				File file4 = new File(file0, "screenshots");
-				file4.mkdir();
+				DirectoryInfo screenshotsDirectory = new DirectoryInfo(mcDirectory + "/screenshots");
+				screenshotsDirectory.Create();
 				if (buffer == null || buffer.capacity() < i2 * i3)
 				{
 					buffer = BufferUtils.createByteBuffer(i2 * i3 * 3);
@@ -40,18 +40,18 @@ namespace net.minecraft.src
 				buffer.clear();
 				GL11.glReadPixels(0, 0, i2, i3, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, buffer);
 				buffer.clear();
-				string string5 = "" + dateFormat.format(DateTime.Now);
-				File file6;
+				string string5 = DateTime.Now.ToString(dateFormat);
+				FileInfo file6;
 				int i7;
 				if (string.ReferenceEquals(string1, null))
 				{
-					for (i7 = 1; (file6 = new File(file4, string5 + (i7 == 1 ? "" : "_" + i7) + ".png")).exists(); ++i7)
-					{
+					for (i7 = 1; (file6 = new FileInfo(screenshotsDirectory.FullName + '/' + string5 + (i7 == 1 ? "" : "_" + i7) + ".png")).Exists; ++i7)
+					{ // ????
 					}
 				}
 				else
 				{
-					file6 = new File(file4, string1);
+					file6 = new FileInfo(screenshotsDirectory.FullName + '/' + string1);
 				}
 
 				buffer.get(pixelData);
@@ -72,7 +72,7 @@ namespace net.minecraft.src
 				BufferedImage bufferedImage15 = new BufferedImage(i2, i3, 1);
 				bufferedImage15.setRGB(0, 0, i2, i3, imageData, 0, i2);
 				ImageIO.write(bufferedImage15, "png", file6);
-				return "Saved screenshot as " + file6.getName();
+				return "Saved screenshot as " + file6.Name;
 			}
 			catch (Exception exception14)
 			{

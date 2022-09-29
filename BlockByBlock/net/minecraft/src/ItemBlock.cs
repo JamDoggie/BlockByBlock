@@ -81,7 +81,7 @@
 						Block.blocksList[this.blockID].onBlockPlacedBy(world3, i4, i5, i6, entityPlayer2);
 					}
 
-					world3.playSoundEffect((double)((float)i4 + 0.5F), (double)((float)i5 + 0.5F), (double)((float)i6 + 0.5F), block9.stepSound.StepSound, (block9.stepSound.Volume + 1.0F) / 2.0F, block9.stepSound.Pitch * 0.8F);
+					world3.playSoundEffect((double)((float)i4 + 0.5F), (double)((float)i5 + 0.5F), (double)((float)i6 + 0.5F), block9.stepSound.StepSoundName, (block9.stepSound.Volume + 1.0F) / 2.0F, block9.stepSound.Pitch * 0.8F);
 					--itemStack1.stackSize;
 				}
 

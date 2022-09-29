@@ -5,46 +5,42 @@
 	{
 		public int xPosition;
 		public int zPosition;
-		public sbyte[] metadataArray;
+		public byte[] metadataArray;
 		public int size;
 		private static sbyte[] field_48168_e = new sbyte[0];
 
 		public Packet52MultiBlockChange()
 		{
-			this.isChunkDataPacket = true;
+			isChunkDataPacket = true;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.xPosition = dataInputStream1.readInt();
-			this.zPosition = dataInputStream1.readInt();
-			this.size = dataInputStream1.readShort() & 65535;
-			int i2 = dataInputStream1.readInt();
+			xPosition = dataInputStream1.ReadInt32();
+			zPosition = dataInputStream1.ReadInt32();
+			size = dataInputStream1.ReadInt16() & 65535;
+			int i2 = dataInputStream1.ReadInt32();
 			if (i2 > 0)
 			{
-				this.metadataArray = new sbyte[i2];
-				dataInputStream1.readFully(this.metadataArray);
+				metadataArray = new byte[i2];
+				dataInputStream1.Read(metadataArray);
 			}
 
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.xPosition);
-			dataOutputStream1.writeInt(this.zPosition);
-			dataOutputStream1.writeShort((short)this.size);
-			if (this.metadataArray != null)
+			dataOutputStream1.Write(xPosition);
+			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.Write((short)size);
+			if (metadataArray != null)
 			{
-				dataOutputStream1.writeInt(this.metadataArray.Length);
-				dataOutputStream1.write(this.metadataArray);
+				dataOutputStream1.Write(metadataArray.Length);
+				dataOutputStream1.Write(metadataArray);
 			}
 			else
 			{
-				dataOutputStream1.writeInt(0);
+				dataOutputStream1.Write(0);
 			}
 
 		}
@@ -58,7 +54,7 @@
 		{
 			get
 			{
-				return 10 + this.size * 4;
+				return 10 + size * 4;
 			}
 		}
 	}

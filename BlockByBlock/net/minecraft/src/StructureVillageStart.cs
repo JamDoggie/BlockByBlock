@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -8,14 +9,14 @@ namespace net.minecraft.src
 	{
 		private bool hasMoreThanTwoComponents = false;
 
-		public StructureVillageStart(World world1, Random random2, int i3, int i4, int i5)
+		public StructureVillageStart(World world1, RandomExtended random2, int i3, int i4, int i5)
 		{
-			ArrayList arrayList7 = StructureVillagePieces.getStructureVillageWeightedPieceList(random2, i5);
+			List<StructureVillagePieceWeight> arrayList7 = StructureVillagePieces.getStructureVillageWeightedPieceList(random2, i5);
 			ComponentVillageStartPiece componentVillageStartPiece8 = new ComponentVillageStartPiece(world1.WorldChunkManager, 0, random2, (i3 << 4) + 2, (i4 << 4) + 2, arrayList7, i5);
-			this.components.AddLast(componentVillageStartPiece8);
+			components.Add(componentVillageStartPiece8);
 			componentVillageStartPiece8.buildComponent(componentVillageStartPiece8, this.components, random2);
-			ArrayList arrayList9 = componentVillageStartPiece8.field_35106_f;
-			ArrayList arrayList10 = componentVillageStartPiece8.field_35108_e;
+			List<StructureComponent> arrayList9 = componentVillageStartPiece8.field_35106_f;
+			List<StructureComponent> arrayList10 = componentVillageStartPiece8.field_35108_e;
 
 			int i11;
 			while (arrayList9.Count > 0 || arrayList10.Count > 0)

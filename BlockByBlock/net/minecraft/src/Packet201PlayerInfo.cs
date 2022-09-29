@@ -7,22 +7,18 @@
 		public bool isConnected;
 		public int ping;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.playerName = readString(dataInputStream1, 16);
-			this.isConnected = dataInputStream1.readByte() != 0;
-			this.ping = dataInputStream1.readShort();
+			playerName = readString(dataInputStream1, 16);
+			isConnected = dataInputStream1.ReadByte() != 0;
+			ping = dataInputStream1.ReadInt16();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			writeString(this.playerName, dataOutputStream1);
-			dataOutputStream1.writeByte(this.isConnected ? 1 : 0);
-			dataOutputStream1.writeShort(this.ping);
+			writeString(playerName, dataOutputStream1);
+			dataOutputStream1.Write(isConnected ? (byte)1 : (byte)0);
+			dataOutputStream1.Write((short)ping);
 		}
 
 		public override void processPacket(NetHandler netHandler1)
@@ -34,7 +30,7 @@
 		{
 			get
 			{
-				return this.playerName.Length + 2 + 1 + 2;
+				return playerName.Length + 2 + 1 + 2;
 			}
 		}
 	}

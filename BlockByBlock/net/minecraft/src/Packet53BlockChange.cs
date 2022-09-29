@@ -11,29 +11,25 @@
 
 		public Packet53BlockChange()
 		{
-			this.isChunkDataPacket = true;
+			isChunkDataPacket = true;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.xPosition = dataInputStream1.readInt();
-			this.yPosition = dataInputStream1.read();
-			this.zPosition = dataInputStream1.readInt();
-			this.type = dataInputStream1.read();
-			this.metadata = dataInputStream1.read();
+			xPosition = dataInputStream1.ReadInt32();
+			yPosition = dataInputStream1.ReadSByte();
+			zPosition = dataInputStream1.ReadInt32();
+			type = dataInputStream1.ReadSByte();
+			metadata = dataInputStream1.ReadSByte();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.xPosition);
-			dataOutputStream1.write(this.yPosition);
-			dataOutputStream1.writeInt(this.zPosition);
-			dataOutputStream1.write(this.type);
-			dataOutputStream1.write(this.metadata);
+			dataOutputStream1.Write(xPosition);
+			dataOutputStream1.Write((sbyte)yPosition);
+			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.Write((sbyte)type);
+			dataOutputStream1.Write((sbyte)metadata);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

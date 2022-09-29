@@ -12,22 +12,18 @@
 			this.isChunkDataPacket = false;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.xPosition = dataInputStream1.readInt();
-			this.yPosition = dataInputStream1.readInt();
-			this.mode = dataInputStream1.read() != 0;
+			xPosition = dataInputStream1.ReadInt32();
+			yPosition = dataInputStream1.ReadInt32();
+			mode = dataInputStream1.ReadSByte() != 0;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.xPosition);
-			dataOutputStream1.writeInt(this.yPosition);
-			dataOutputStream1.write(this.mode ? 1 : 0);
+			dataOutputStream1.Write(xPosition);
+			dataOutputStream1.Write(yPosition);
+			dataOutputStream1.Write(mode ? (sbyte)1 : (sbyte)0);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

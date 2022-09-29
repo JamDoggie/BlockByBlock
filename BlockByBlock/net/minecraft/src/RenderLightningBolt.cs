@@ -1,5 +1,5 @@
 ﻿using System;
-
+using BlockByBlock.java_extensions;
 namespace net.minecraft.src
 {
 
@@ -18,7 +18,7 @@ namespace net.minecraft.src
 			double[] d12 = new double[8];
 			double d13 = 0.0D;
 			double d15 = 0.0D;
-			Random random17 = new Random(entityLightningBolt1.boltVertex);
+			RandomExtended random17 = new RandomExtended(entityLightningBolt1.boltVertex);
 
 			for (int i18 = 7; i18 >= 0; --i18)
 			{
@@ -30,7 +30,7 @@ namespace net.minecraft.src
 
 			for (int i45 = 0; i45 < 4; ++i45)
 			{
-				Random random46 = new Random(entityLightningBolt1.boltVertex);
+				RandomExtended random46 = new RandomExtended(entityLightningBolt1.boltVertex);
 
 				for (int i19 = 0; i19 < 3; ++i19)
 				{

@@ -13,27 +13,23 @@
 
 		public Packet7UseEntity(int i1, int i2, int i3)
 		{
-			this.playerEntityId = i1;
-			this.targetEntity = i2;
-			this.isLeftClick = i3;
+			playerEntityId = i1;
+			targetEntity = i2;
+			isLeftClick = i3;
+		}
+        
+		public override void readPacketData(BinaryReader dataInputStream1)
+		{
+			playerEntityId = dataInputStream1.ReadInt32();
+			targetEntity = dataInputStream1.ReadInt32();
+			isLeftClick = dataInputStream1.ReadSByte();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			this.playerEntityId = dataInputStream1.readInt();
-			this.targetEntity = dataInputStream1.readInt();
-			this.isLeftClick = dataInputStream1.readByte();
-		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
-		{
-			dataOutputStream1.writeInt(this.playerEntityId);
-			dataOutputStream1.writeInt(this.targetEntity);
-			dataOutputStream1.writeByte(this.isLeftClick);
+			dataOutputStream1.Write(playerEntityId);
+			dataOutputStream1.Write(targetEntity);
+			dataOutputStream1.Write((sbyte)isLeftClick);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

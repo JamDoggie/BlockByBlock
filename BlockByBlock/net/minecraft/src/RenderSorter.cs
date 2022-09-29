@@ -1,7 +1,7 @@
 ﻿namespace net.minecraft.src
 {
 
-	public class RenderSorter : System.Collections.IComparer
+	public class RenderSorter : IComparer<WorldRenderer>
 	{
 		private EntityLiving baseEntity;
 
@@ -10,7 +10,7 @@
 			this.baseEntity = entityLiving1;
 		}
 
-		public virtual int doCompare(WorldRenderer worldRenderer1, WorldRenderer worldRenderer2)
+		public virtual int doCompare(WorldRenderer? worldRenderer1, WorldRenderer? worldRenderer2)
 		{
 			if (worldRenderer1.isInFrustum && !worldRenderer2.isInFrustum)
 			{
@@ -28,9 +28,9 @@
 			}
 		}
 
-		public virtual int Compare(object object1, object object2)
+		public virtual int Compare(WorldRenderer? object1, WorldRenderer? object2)
 		{
-			return this.doCompare((WorldRenderer)object1, (WorldRenderer)object2);
+			return this.doCompare(object1, object2);
 		}
 	}
 

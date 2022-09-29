@@ -9,26 +9,22 @@
 		public int instrumentType;
 		public int pitch;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.xLocation = dataInputStream1.readInt();
-			this.yLocation = dataInputStream1.readShort();
-			this.zLocation = dataInputStream1.readInt();
-			this.instrumentType = dataInputStream1.read();
-			this.pitch = dataInputStream1.read();
+			xLocation = dataInputStream1.ReadInt32();
+			yLocation = dataInputStream1.ReadInt16();
+			zLocation = dataInputStream1.ReadInt32();
+			instrumentType = dataInputStream1.ReadSByte();
+			pitch = dataInputStream1.ReadSByte();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.xLocation);
-			dataOutputStream1.writeShort(this.yLocation);
-			dataOutputStream1.writeInt(this.zLocation);
-			dataOutputStream1.write(this.instrumentType);
-			dataOutputStream1.write(this.pitch);
+			dataOutputStream1.Write(xLocation);
+			dataOutputStream1.Write((short)yLocation);
+			dataOutputStream1.Write(zLocation);
+			dataOutputStream1.Write((sbyte)instrumentType);
+			dataOutputStream1.Write((sbyte)pitch);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

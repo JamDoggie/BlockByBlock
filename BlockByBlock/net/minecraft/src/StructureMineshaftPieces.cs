@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -20,7 +21,7 @@ namespace net.minecraft.src
 			new StructurePieceTreasure(Item.pumpkinSeeds.shiftedIndex, 0, 2, 4, 10)
 		};
 
-		private static StructureComponent getRandomComponent(System.Collections.IList list0, Random random1, int i2, int i3, int i4, int i5, int i6)
+		private static StructureComponent getRandomComponent(System.Collections.IList list0, RandomExtended random1, int i2, int i3, int i4, int i5, int i6)
 		{
 			int i7 = random1.Next(100);
 			StructureBoundingBox structureBoundingBox8;
@@ -52,7 +53,7 @@ namespace net.minecraft.src
 			return null;
 		}
 
-		private static StructureComponent getNextMineShaftComponent(StructureComponent structureComponent0, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		private static StructureComponent getNextMineShaftComponent(StructureComponent structureComponent0, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			if (i7 > 8)
 			{
@@ -75,7 +76,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		internal static StructureComponent getNextComponent(StructureComponent structureComponent0, System.Collections.IList list1, Random random2, int i3, int i4, int i5, int i6, int i7)
+		internal static StructureComponent getNextComponent(StructureComponent structureComponent0, System.Collections.IList list1, RandomExtended random2, int i3, int i4, int i5, int i6, int i7)
 		{
 			return getNextMineShaftComponent(structureComponent0, list1, random2, i3, i4, i5, i6, i7);
 		}

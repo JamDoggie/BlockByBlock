@@ -640,7 +640,7 @@ namespace net.minecraft.src
 			entityLiving10.serverPosX = packet24MobSpawn1.xPosition;
 			entityLiving10.serverPosY = packet24MobSpawn1.yPosition;
 			entityLiving10.serverPosZ = packet24MobSpawn1.zPosition;
-			entityLiving10.rotationYawHead = (float)(packet24MobSpawn1.field_48169_h * 360) / 256.0F;
+			entityLiving10.rotationYawHead = (float)(packet24MobSpawn1.headYaw * 360) / 256.0F;
 			Entity[] entity11 = entityLiving10.Parts;
 			if (entity11 != null)
 			{

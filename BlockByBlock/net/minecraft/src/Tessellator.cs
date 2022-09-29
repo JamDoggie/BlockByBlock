@@ -5,8 +5,11 @@
 	using GL11 = org.lwjgl.opengl.GL11;
 	using GLContext = org.lwjgl.opengl.GLContext;
 	using GL15 = org.lwjgl.opengl.GL15;
+    using BlockByBlock.helpers;
 
-	public class Tessellator
+    // PORTING TODO: OpenGL code, and lots of it.
+
+    public class Tessellator
 	{
 		private static bool convertQuadsToTriangles = false;
 		private static bool tryVBO = false;
@@ -42,221 +45,221 @@
 
 		private Tessellator(int i1)
 		{
-			this.bufferSize = i1;
-			this.byteBuffer = GLAllocation.createDirectByteBuffer(i1 * 4);
-			this.intBuffer = this.byteBuffer.asIntBuffer();
-			this.floatBuffer = this.byteBuffer.asFloatBuffer();
-			this.shortBuffer = this.byteBuffer.asShortBuffer();
-			this.rawBuffer = new int[i1];
-			this.useVBO = tryVBO && GLContext.getCapabilities().GL_ARB_vertex_buffer_object;
-			if (this.useVBO)
+			bufferSize = i1;
+			byteBuffer = GLAllocation.createDirectByteBuffer(i1 * 4);
+			intBuffer = byteBuffer.asIntBuffer();
+			floatBuffer = byteBuffer.asFloatBuffer();
+			shortBuffer = byteBuffer.asShortBuffer();
+			rawBuffer = new int[i1];
+			useVBO = tryVBO && GLContext.getCapabilities().GL_ARB_vertex_buffer_object;
+			if (useVBO)
 			{
-				this.vertexBuffers = GLAllocation.createDirectIntBuffer(this.vboCount);
-				ARBVertexBufferObject.glGenBuffersARB(this.vertexBuffers);
+				vertexBuffers = GLAllocation.createDirectIntBuffer(vboCount);
+				ARBVertexBufferObject.glGenBuffersARB(vertexBuffers);
 			}
 
 		}
 
 		public virtual int draw()
 		{
-			if (!this.isDrawing)
+			if (!isDrawing)
 			{
 				throw new System.InvalidOperationException("Not tesselating!");
 			}
 			else
 			{
-				this.isDrawing = false;
-				if (this.vertexCount > 0)
+				isDrawing = false;
+				if (vertexCount > 0)
 				{
-					this.intBuffer.clear();
-					this.intBuffer.put(this.rawBuffer, 0, this.rawBufferIndex);
-					this.byteBuffer.position(0);
-					this.byteBuffer.limit(this.rawBufferIndex * 4);
-					if (this.useVBO)
+					intBuffer.clear();
+					intBuffer.Put(rawBuffer, rawBufferIndex);
+					byteBuffer.position(0);
+					byteBuffer.limit(rawBufferIndex * 4);
+					if (useVBO)
 					{
-						this.vboIndex = (this.vboIndex + 1) % this.vboCount;
-						ARBVertexBufferObject.glBindBufferARB(GL15.GL_ARRAY_BUFFER, this.vertexBuffers.get(this.vboIndex));
-						ARBVertexBufferObject.glBufferDataARB(GL15.GL_ARRAY_BUFFER, this.byteBuffer, GL15.GL_STREAM_DRAW);
+						vboIndex = (vboIndex + 1) % vboCount;
+						ARBVertexBufferObject.glBindBufferARB(GL15.GL_ARRAY_BUFFER, vertexBuffers.get(vboIndex));
+						ARBVertexBufferObject.glBufferDataARB(GL15.GL_ARRAY_BUFFER, byteBuffer, GL15.GL_STREAM_DRAW);
 					}
 
-					if (this.hasTexture)
+					if (hasTexture)
 					{
-						if (this.useVBO)
+						if (useVBO)
 						{
 							GL11.glTexCoordPointer(2, GL11.GL_FLOAT, 32, 12L);
 						}
 						else
 						{
-							this.floatBuffer.position(3);
-							GL11.glTexCoordPointer(2, 32, this.floatBuffer);
+							floatBuffer.position(3);
+							GL11.glTexCoordPointer(2, 32, floatBuffer);
 						}
 
 						GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 					}
 
-					if (this.hasBrightness)
+					if (hasBrightness)
 					{
 						OpenGlHelper.ClientActiveTexture = OpenGlHelper.lightmapTexUnit;
-						if (this.useVBO)
+						if (useVBO)
 						{
 							GL11.glTexCoordPointer(2, GL11.GL_SHORT, 32, 28L);
 						}
 						else
 						{
-							this.shortBuffer.position(14);
-							GL11.glTexCoordPointer(2, 32, this.shortBuffer);
+							shortBuffer.position(14);
+							GL11.glTexCoordPointer(2, 32, shortBuffer);
 						}
 
 						GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 						OpenGlHelper.ClientActiveTexture = OpenGlHelper.defaultTexUnit;
 					}
 
-					if (this.hasColor)
+					if (hasColor)
 					{
-						if (this.useVBO)
+						if (useVBO)
 						{
 							GL11.glColorPointer(4, GL11.GL_UNSIGNED_BYTE, 32, 20L);
 						}
 						else
 						{
-							this.byteBuffer.position(20);
-							GL11.glColorPointer(4, true, 32, this.byteBuffer);
+							byteBuffer.position(20);
+							GL11.glColorPointer(4, true, 32, byteBuffer);
 						}
 
 						GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
 					}
 
-					if (this.hasNormals)
+					if (hasNormals)
 					{
-						if (this.useVBO)
+						if (useVBO)
 						{
 							GL11.glNormalPointer(GL11.GL_UNSIGNED_BYTE, 32, 24L);
 						}
 						else
 						{
-							this.byteBuffer.position(24);
-							GL11.glNormalPointer(32, this.byteBuffer);
+							byteBuffer.position(24);
+							GL11.glNormalPointer(32, byteBuffer);
 						}
 
 						GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
 					}
 
-					if (this.useVBO)
+					if (useVBO)
 					{
 						GL11.glVertexPointer(3, GL11.GL_FLOAT, 32, 0L);
 					}
 					else
 					{
-						this.floatBuffer.position(0);
-						GL11.glVertexPointer(3, 32, this.floatBuffer);
+						floatBuffer.position(0);
+						GL11.glVertexPointer(3, 32, floatBuffer);
 					}
 
 					GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-					if (this.drawMode == 7 && convertQuadsToTriangles)
+					if (drawMode == 7 && convertQuadsToTriangles)
 					{
-						GL11.glDrawArrays(GL11.GL_TRIANGLES, GL11.GL_POINTS, this.vertexCount);
+						GL11.glDrawArrays(GL11.GL_TRIANGLES, GL11.GL_POINTS, vertexCount);
 					}
 					else
 					{
-						GL11.glDrawArrays(this.drawMode, GL11.GL_POINTS, this.vertexCount);
+						GL11.glDrawArrays(drawMode, GL11.GL_POINTS, vertexCount);
 					}
 
 					GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
-					if (this.hasTexture)
+					if (hasTexture)
 					{
 						GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 					}
 
-					if (this.hasBrightness)
+					if (hasBrightness)
 					{
 						OpenGlHelper.ClientActiveTexture = OpenGlHelper.lightmapTexUnit;
 						GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 						OpenGlHelper.ClientActiveTexture = OpenGlHelper.defaultTexUnit;
 					}
 
-					if (this.hasColor)
+					if (hasColor)
 					{
 						GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
 					}
 
-					if (this.hasNormals)
+					if (hasNormals)
 					{
 						GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
 					}
 				}
 
-				int i1 = this.rawBufferIndex * 4;
-				this.reset();
+				int i1 = rawBufferIndex * 4;
+				reset();
 				return i1;
 			}
 		}
 
 		private void reset()
 		{
-			this.vertexCount = 0;
-			this.byteBuffer.clear();
-			this.rawBufferIndex = 0;
-			this.addedVertices = 0;
+			vertexCount = 0;
+			byteBuffer.clear();
+			rawBufferIndex = 0;
+			addedVertices = 0;
 		}
 
 		public virtual void startDrawingQuads()
 		{
-			this.startDrawing(7);
+			startDrawing(7);
 		}
 
 		public virtual void startDrawing(int i1)
 		{
-			if (this.isDrawing)
+			if (isDrawing)
 			{
 				throw new System.InvalidOperationException("Already tesselating!");
 			}
 			else
 			{
-				this.isDrawing = true;
-				this.reset();
-				this.drawMode = i1;
-				this.hasNormals = false;
-				this.hasColor = false;
-				this.hasTexture = false;
-				this.hasBrightness = false;
-				this.isColorDisabled = false;
+				isDrawing = true;
+				reset();
+				drawMode = i1;
+				hasNormals = false;
+				hasColor = false;
+				hasTexture = false;
+				hasBrightness = false;
+				isColorDisabled = false;
 			}
 		}
 
 		public virtual void setTextureUV(double d1, double d3)
 		{
-			this.hasTexture = true;
-			this.textureU = d1;
-			this.textureV = d3;
+			hasTexture = true;
+			textureU = d1;
+			textureV = d3;
 		}
 
 		public virtual int Brightness
 		{
 			set
 			{
-				this.hasBrightness = true;
-				this.brightness = value;
+				hasBrightness = true;
+				brightness = value;
 			}
 		}
 
 		public virtual void setColorOpaque_F(float f1, float f2, float f3)
 		{
-			this.setColorOpaque((int)(f1 * 255.0F), (int)(f2 * 255.0F), (int)(f3 * 255.0F));
+			setColorOpaque((int)(f1 * 255.0F), (int)(f2 * 255.0F), (int)(f3 * 255.0F));
 		}
 
 		public virtual void setColorRGBA_F(float f1, float f2, float f3, float f4)
 		{
-			this.setColorRGBA((int)(f1 * 255.0F), (int)(f2 * 255.0F), (int)(f3 * 255.0F), (int)(f4 * 255.0F));
+			setColorRGBA((int)(f1 * 255.0F), (int)(f2 * 255.0F), (int)(f3 * 255.0F), (int)(f4 * 255.0F));
 		}
 
 		public virtual void setColorOpaque(int i1, int i2, int i3)
 		{
-			this.setColorRGBA(i1, i2, i3, 255);
+			setColorRGBA(i1, i2, i3, 255);
 		}
 
 		public virtual void setColorRGBA(int i1, int i2, int i3, int i4)
 		{
-			if (!this.isColorDisabled)
+			if (!isColorDisabled)
 			{
 				if (i1 > 255)
 				{
@@ -298,14 +301,14 @@
 					i4 = 0;
 				}
 
-				this.hasColor = true;
-				if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN)
+				hasColor = true;
+				if (BitConverter.IsLittleEndian)
 				{
-					this.color = i4 << 24 | i3 << 16 | i2 << 8 | i1;
+					color = i4 << 24 | i3 << 16 | i2 << 8 | i1;
 				}
 				else
 				{
-					this.color = i1 << 24 | i2 << 16 | i3 << 8 | i4;
+					color = i1 << 24 | i2 << 16 | i3 << 8 | i4;
 				}
 
 			}
@@ -313,72 +316,72 @@
 
 		public virtual void addVertexWithUV(double d1, double d3, double d5, double d7, double d9)
 		{
-			this.setTextureUV(d7, d9);
-			this.addVertex(d1, d3, d5);
+			setTextureUV(d7, d9);
+			addVertex(d1, d3, d5);
 		}
 
 		public virtual void addVertex(double d1, double d3, double d5)
 		{
-			++this.addedVertices;
-			if (this.drawMode == 7 && convertQuadsToTriangles && this.addedVertices % 4 == 0)
+			++addedVertices;
+			if (drawMode == 7 && convertQuadsToTriangles && addedVertices % 4 == 0)
 			{
 				for (int i7 = 0; i7 < 2; ++i7)
 				{
 					int i8 = 8 * (3 - i7);
-					if (this.hasTexture)
+					if (hasTexture)
 					{
-						this.rawBuffer[this.rawBufferIndex + 3] = this.rawBuffer[this.rawBufferIndex - i8 + 3];
-						this.rawBuffer[this.rawBufferIndex + 4] = this.rawBuffer[this.rawBufferIndex - i8 + 4];
+						rawBuffer[rawBufferIndex + 3] = rawBuffer[rawBufferIndex - i8 + 3];
+						rawBuffer[rawBufferIndex + 4] = rawBuffer[rawBufferIndex - i8 + 4];
 					}
 
-					if (this.hasBrightness)
+					if (hasBrightness)
 					{
-						this.rawBuffer[this.rawBufferIndex + 7] = this.rawBuffer[this.rawBufferIndex - i8 + 7];
+						rawBuffer[rawBufferIndex + 7] = rawBuffer[rawBufferIndex - i8 + 7];
 					}
 
-					if (this.hasColor)
+					if (hasColor)
 					{
-						this.rawBuffer[this.rawBufferIndex + 5] = this.rawBuffer[this.rawBufferIndex - i8 + 5];
+						rawBuffer[rawBufferIndex + 5] = rawBuffer[rawBufferIndex - i8 + 5];
 					}
 
-					this.rawBuffer[this.rawBufferIndex + 0] = this.rawBuffer[this.rawBufferIndex - i8 + 0];
-					this.rawBuffer[this.rawBufferIndex + 1] = this.rawBuffer[this.rawBufferIndex - i8 + 1];
-					this.rawBuffer[this.rawBufferIndex + 2] = this.rawBuffer[this.rawBufferIndex - i8 + 2];
-					++this.vertexCount;
-					this.rawBufferIndex += 8;
+					rawBuffer[rawBufferIndex + 0] = rawBuffer[rawBufferIndex - i8 + 0];
+					rawBuffer[rawBufferIndex + 1] = rawBuffer[rawBufferIndex - i8 + 1];
+					rawBuffer[rawBufferIndex + 2] = rawBuffer[rawBufferIndex - i8 + 2];
+					++vertexCount;
+					rawBufferIndex += 8;
 				}
 			}
 
-			if (this.hasTexture)
+			if (hasTexture)
 			{
-				this.rawBuffer[this.rawBufferIndex + 3] = Float.floatToRawIntBits((float)this.textureU);
-				this.rawBuffer[this.rawBufferIndex + 4] = Float.floatToRawIntBits((float)this.textureV);
+				rawBuffer[rawBufferIndex + 3] = JTypes.FloatToRawIntBits((float)textureU);
+				rawBuffer[rawBufferIndex + 4] = JTypes.FloatToRawIntBits((float)textureV);
 			}
 
-			if (this.hasBrightness)
+			if (hasBrightness)
 			{
-				this.rawBuffer[this.rawBufferIndex + 7] = this.brightness;
+				rawBuffer[rawBufferIndex + 7] = brightness;
 			}
 
-			if (this.hasColor)
+			if (hasColor)
 			{
-				this.rawBuffer[this.rawBufferIndex + 5] = this.color;
+				rawBuffer[rawBufferIndex + 5] = color;
 			}
 
-			if (this.hasNormals)
+			if (hasNormals)
 			{
-				this.rawBuffer[this.rawBufferIndex + 6] = this.normal;
+				rawBuffer[rawBufferIndex + 6] = normal;
 			}
 
-			this.rawBuffer[this.rawBufferIndex + 0] = Float.floatToRawIntBits((float)(d1 + this.xOffset));
-			this.rawBuffer[this.rawBufferIndex + 1] = Float.floatToRawIntBits((float)(d3 + this.yOffset));
-			this.rawBuffer[this.rawBufferIndex + 2] = Float.floatToRawIntBits((float)(d5 + this.zOffset));
-			this.rawBufferIndex += 8;
-			++this.vertexCount;
-			if (this.vertexCount % 4 == 0 && this.rawBufferIndex >= this.bufferSize - 32)
+			rawBuffer[rawBufferIndex + 0] = JTypes.FloatToRawIntBits((float)(d1 + xOffset));
+			rawBuffer[rawBufferIndex + 1] = JTypes.FloatToRawIntBits((float)(d3 + yOffset));
+			rawBuffer[rawBufferIndex + 2] = JTypes.FloatToRawIntBits((float)(d5 + zOffset));
+			rawBufferIndex += 8;
+			++vertexCount;
+			if (vertexCount % 4 == 0 && rawBufferIndex >= bufferSize - 32)
 			{
-				this.draw();
-				this.isDrawing = true;
+				draw();
+				isDrawing = true;
 			}
 
 		}
@@ -390,7 +393,7 @@
 				int i2 = value >> 16 & 255;
 				int i3 = value >> 8 & 255;
 				int i4 = value & 255;
-				this.setColorOpaque(i2, i3, i4);
+				setColorOpaque(i2, i3, i4);
 			}
 		}
 
@@ -399,35 +402,35 @@
 			int i3 = i1 >> 16 & 255;
 			int i4 = i1 >> 8 & 255;
 			int i5 = i1 & 255;
-			this.setColorRGBA(i3, i4, i5, i2);
+			setColorRGBA(i3, i4, i5, i2);
 		}
 
 		public virtual void disableColor()
 		{
-			this.isColorDisabled = true;
+			isColorDisabled = true;
 		}
 
 		public virtual void setNormal(float f1, float f2, float f3)
 		{
-			this.hasNormals = true;
+			hasNormals = true;
 			sbyte b4 = (sbyte)((int)(f1 * 127.0F));
 			sbyte b5 = (sbyte)((int)(f2 * 127.0F));
 			sbyte b6 = (sbyte)((int)(f3 * 127.0F));
-			this.normal = b4 & 255 | (b5 & 255) << 8 | (b6 & 255) << 16;
+			normal = b4 & 255 | (b5 & 255) << 8 | (b6 & 255) << 16;
 		}
 
 		public virtual void setTranslation(double d1, double d3, double d5)
 		{
-			this.xOffset = d1;
-			this.yOffset = d3;
-			this.zOffset = d5;
+			xOffset = d1;
+			yOffset = d3;
+			zOffset = d5;
 		}
 
 		public virtual void addTranslation(float f1, float f2, float f3)
 		{
-			this.xOffset += (double)f1;
-			this.yOffset += (double)f2;
-			this.zOffset += (double)f3;
+			xOffset += (double)f1;
+			yOffset += (double)f2;
+			zOffset += (double)f3;
 		}
 	}
 

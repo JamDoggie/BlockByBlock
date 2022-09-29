@@ -1,6 +1,8 @@
-﻿using System;
+﻿using BlockByBlock.helpers;
+using System;
 using System.IO;
 using System.Threading;
+using System.Xml.Serialization;
 
 namespace net.minecraft.src
 {
@@ -12,59 +14,67 @@ namespace net.minecraft.src
 	using Node = org.w3c.dom.Node;
 	using NodeList = org.w3c.dom.NodeList;
 
-	public class ThreadDownloadResources : Thread
+	public class ThreadDownloadResources
 	{
-		public File resourcesFolder;
+		public DirectoryInfo resourcesFolder;
 		private Minecraft mc;
 		private bool closing = false;
 
-		public ThreadDownloadResources(File file1, Minecraft minecraft2)
+		public Thread thread;
+
+		public ThreadDownloadResources(DirectoryInfo mcDirectory, Minecraft minecraft2)
 		{
-			this.mc = minecraft2;
-			this.setName("Resource download thread");
-			this.setDaemon(true);
-			this.resourcesFolder = new File(file1, "resources/");
-			if (!this.resourcesFolder.exists() && !this.resourcesFolder.mkdirs())
+			thread = new Thread(() => run());
+			mc = minecraft2;
+			thread.Name = "Resource download thread";
+			thread.IsBackground = true;
+			resourcesFolder = new DirectoryInfo(mcDirectory + "/resources/");
+			if (!resourcesFolder.Exists)
 			{
-				throw new Exception("The working directory could not be created: " + this.resourcesFolder);
+				resourcesFolder.Create();
+
+				if (!resourcesFolder.Exists)
+				{
+					throw new Exception("The working directory could not be created: " + resourcesFolder);
+				}
 			}
 		}
+
+		public virtual void Start() => thread.Start();
 
 		public virtual void run()
 		{
 			try
 			{
-				URL uRL1 = new URL("http://s3.amazonaws.com/MinecraftResources/");
-				DocumentBuilderFactory documentBuilderFactory2 = DocumentBuilderFactory.newInstance();
-				DocumentBuilder documentBuilder3 = documentBuilderFactory2.newDocumentBuilder();
-				Document document4 = documentBuilder3.parse(uRL1.openStream());
-				NodeList nodeList5 = document4.getElementsByTagName("Contents");
+				Uri uri = new Uri("http://s3.amazonaws.com/MinecraftResources/");
 
+				XmlSerializer serializer = new XmlSerializer(typeof(MinecraftResourcesFile));
+				MinecraftResourcesFile? resourcesFile = (MinecraftResourcesFile?)serializer.Deserialize(SystemHelpers.httpClient.GetStreamAsync(uri).Result);
+
+				if (resourcesFile == null)
+					throw new Exception("Could not download resources file.");
+                
 				for (int i6 = 0; i6 < 2; ++i6)
 				{
-					for (int i7 = 0; i7 < nodeList5.getLength(); ++i7)
+					foreach (MinecraftResource resource in resourcesFile.Contents)
 					{
-						Node node8 = nodeList5.item(i7);
-						if (node8.getNodeType() == 1)
-						{
-							Element element9 = (Element)node8;
-							string string10 = ((Element)element9.getElementsByTagName("Key").item(0)).getChildNodes().item(0).getNodeValue();
-							long j11 = long.Parse(((Element)element9.getElementsByTagName("Size").item(0)).getChildNodes().item(0).getNodeValue());
-							if (j11 > 0L)
+                        string resourceKey = resource.Key;
+						long size = resource.Size;
+                        
+						if (size > 0L)
+                        {
+							downloadAndInstallResource(uri, resourceKey, size, i6);
+							if (closing)
 							{
-								this.downloadAndInstallResource(uRL1, string10, j11, i6);
-								if (this.closing)
-								{
-									return;
-								}
+								return;
 							}
 						}
-					}
+                    }
 				}
 			}
 			catch (Exception exception13)
 			{
-				this.loadResource(this.resourcesFolder, "");
+				loadResource(resourcesFolder, "");
 				Console.WriteLine(exception13.ToString());
 				Console.Write(exception13.StackTrace);
 			}
@@ -73,40 +83,54 @@ namespace net.minecraft.src
 
 		public virtual void reloadResources()
 		{
-			this.loadResource(this.resourcesFolder, "");
+			loadResource(resourcesFolder, "");
 		}
 
-		private void loadResource(File file1, string string2)
+		private void loadResource(DirectoryInfo baseDir, string string2)
 		{
-			File[] file3 = file1.listFiles();
+			FileInfo[] files = baseDir.GetFiles();
+			DirectoryInfo[] dirs = baseDir.GetDirectories();
+			string[] dirContents = new string[files.Length + dirs.Length];
 
-			for (int i4 = 0; i4 < file3.Length; ++i4)
+			for (int i = 0; i < files.Length; i++)
+				dirContents[i] = files[i].Name;
+
+			for (int i = 0; i < dirs.Length; i++)
+				dirContents[i + files.Length] = dirs[i].Name;
+
+			for (int i = 0; i < dirContents.Length; ++i)
 			{
-				if (file3[i4].isDirectory())
+				if (Directory.Exists(dirContents[i]))
 				{
-					this.loadResource(file3[i4], string2 + file3[i4].getName() + "/");
+					DirectoryInfo dir = new DirectoryInfo(dirContents[i]);
+					loadResource(dir, string2 + dir.Name + "/");
 				}
 				else
 				{
-					try
+					if (File.Exists(dirContents[i]))
 					{
-						this.mc.installResource(string2 + file3[i4].getName(), file3[i4]);
-					}
-					catch (Exception)
-					{
-						Console.WriteLine("Failed to add " + string2 + file3[i4].getName());
+						FileInfo file = new FileInfo(dirContents[i]);
+
+						try
+						{
+							mc.installResource(string2 + file.Name, file);
+						}
+						catch (Exception)
+						{
+							Console.WriteLine("Failed to add " + string2 + file.Name);
+						}
 					}
 				}
 			}
 
 		}
 
-		private void downloadAndInstallResource(URL uRL1, string string2, long j3, int i5)
+		private void downloadAndInstallResource(Uri uri, string resourceKey, long fileSize, int i5)
 		{
 			try
 			{
-				int i6 = string2.IndexOf("/", StringComparison.Ordinal);
-				string string7 = string2.Substring(0, i6);
+				int i6 = resourceKey.IndexOf("/", StringComparison.Ordinal);
+				string string7 = resourceKey.Substring(0, i6);
 				if (!string7.Equals("sound") && !string7.Equals("newsound"))
 				{
 					if (i5 != 1)
@@ -119,19 +143,19 @@ namespace net.minecraft.src
 					return;
 				}
 
-				File file8 = new File(this.resourcesFolder, string2);
-				if (!file8.exists() || file8.length() != j3)
+				FileInfo file = new FileInfo(resourcesFolder.FullName + '/' + resourceKey);
+				if (!file.Exists || file.Length != fileSize)
 				{
-					file8.getParentFile().mkdirs();
-					string string9 = string2.replaceAll(" ", "%20");
-					this.downloadResource(new URL(uRL1, string9), file8, j3);
-					if (this.closing)
+					file.Directory?.Create();
+					string webSafeResourceName = resourceKey.Replace(" ", "%20");
+					downloadResource(new Uri(uri, webSafeResourceName), file, fileSize);
+					if (closing)
 					{
 						return;
 					}
 				}
 
-				this.mc.installResource(string2, file8);
+				mc.installResource(resourceKey, file);
 			}
 			catch (Exception exception10)
 			{
@@ -141,34 +165,74 @@ namespace net.minecraft.src
 
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: private void downloadResource(java.net.URL uRL1, java.io.File file2, long j3) throws java.io.IOException
-		private void downloadResource(URL uRL1, File file2, long j3)
+		private void downloadResource(Uri uri, FileInfo resource, long expectedFileSize)
 		{
-			sbyte[] b5 = new sbyte[4096];
-			DataInputStream dataInputStream6 = new DataInputStream(uRL1.openStream());
-			DataOutputStream dataOutputStream7 = new DataOutputStream(new FileStream(file2, FileMode.Create, FileAccess.Write));
+			byte[] b5 = new byte[4096];
+
+			BinaryReader reader = new BinaryReader(SystemHelpers.httpClient.GetStreamAsync(uri).Result);
+			BinaryWriter writer = new BinaryWriter(new FileStream(resource.FullName, FileMode.Create, FileAccess.Write));
 			bool z8 = false;
 
 			do
 			{
 				int i9;
-				if ((i9 = dataInputStream6.read(b5)) < 0)
+				if ((i9 = reader.Read(b5)) <= 0)
 				{
-					dataInputStream6.close();
-					dataOutputStream7.close();
+					reader.Close();
+					writer.Close();
 					return;
 				}
 
-				dataOutputStream7.write(b5, 0, i9);
-			} while (!this.closing);
+				writer.Write(b5, 0, i9);
+			} while (!closing);
 
 		}
 
 		public virtual void closeMinecraft()
 		{
-			this.closing = true;
+			closing = true;
 		}
 	}
 
+    // NOTE: this is not a vanilla Minecraft class. This is used to parse the XML file retrived from Mojang's servers when downloading game resources.
+    [XmlRoot("ListBucketResult", Namespace = "http://s3.amazonaws.com/doc/2006-03-01/")]
+    public class MinecraftResourcesFile
+	{
+        [XmlElement("Name")]
+        public string Name { get; set; }
+
+        [XmlElement("Prefix")]
+        public string Prefix { get; set; }
+
+        [XmlElement("Marker")]
+        public string Marker { get; set; }
+
+        [XmlElement("MaxKeys")]
+        public int MaxKeys { get; set; }
+
+        [XmlElement("IsTruncated")]
+        public bool IsTruncated { get; set; }
+
+        [XmlElement("Contents")]
+        public List<MinecraftResource> Contents { get; set; }
+    }
+
+    // NOTE: this is not a vanilla Minecraft class. This is used to parse the XML file retrived from Mojang's servers when downloading game resources.
+    public class MinecraftResource
+    {
+        [XmlElement("Key")]
+        public string Key { get; set; }
+
+        [XmlElement("LastModified")]
+        public DateTime LastModified { get; set; }
+
+        [XmlElement("ETag")]
+        public string ETag { get; set; }
+
+        [XmlElement("Size")]
+        public long Size { get; set; }
+
+        [XmlElement("StorageClass")]
+        public string StorageClass { get; set; }
+    }
 }

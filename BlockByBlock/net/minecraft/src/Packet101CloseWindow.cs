@@ -11,7 +11,7 @@
 
 		public Packet101CloseWindow(int i1)
 		{
-			this.windowId = i1;
+			windowId = i1;
 		}
 
 		public override void processPacket(NetHandler netHandler1)
@@ -21,12 +21,12 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.windowId = dataInputStream1.ReadByte();
+			windowId = dataInputStream1.ReadSByte();
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write((byte)windowId);
+			dataOutputStream1.Write((sbyte)windowId);
 		}
 
 		public override int PacketSize

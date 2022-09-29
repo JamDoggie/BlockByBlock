@@ -2,6 +2,8 @@
 {
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	public class TextureFX
 	{
 		public sbyte[] imageData = new sbyte[1024];

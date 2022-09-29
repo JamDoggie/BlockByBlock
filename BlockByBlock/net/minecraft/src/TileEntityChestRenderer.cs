@@ -3,6 +3,8 @@
 	using GL11 = org.lwjgl.opengl.GL11;
 	using GL12 = org.lwjgl.opengl.GL12;
 
+	// PORTING TODO: OpenGL code
+
 	public class TileEntityChestRenderer : TileEntitySpecialRenderer
 	{
 		private ModelChest chestModel = new ModelChest();

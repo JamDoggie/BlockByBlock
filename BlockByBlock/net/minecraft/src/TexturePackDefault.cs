@@ -7,6 +7,8 @@ namespace net.minecraft.src
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code, and Java image stuff
+
 	public class TexturePackDefault : TexturePackBase
 	{
 		private int texturePackName = -1;

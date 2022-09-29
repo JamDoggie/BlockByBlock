@@ -27,11 +27,11 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual IList SaveList
+		public virtual List<SaveFormatComparator> SaveList
 		{
 			get
 			{
-				ArrayList arrayList1 = new ArrayList();
+				List<SaveFormatComparator> arrayList1 = new();
     
 				for (int i2 = 0; i2 < 5; ++i2)
 				{

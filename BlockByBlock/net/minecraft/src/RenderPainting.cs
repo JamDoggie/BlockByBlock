@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -8,11 +9,12 @@ namespace net.minecraft.src
 
 	public class RenderPainting : Render
 	{
-		private Random rand = new Random();
+		private RandomExtended rand = new RandomExtended();
 
 		public virtual void func_158_a(EntityPainting entityPainting1, double d2, double d4, double d6, float f8, float f9)
 		{
-			this.rand.setSeed(187L);
+			//this.rand.setSeed(187L); // PORTING TODO: RandomExtended.setSeed
+			rand = new RandomExtended(187L);
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float)d2, (float)d4, (float)d6);
 			GL11.glRotatef(f8, 0.0F, 1.0F, 0.0F);

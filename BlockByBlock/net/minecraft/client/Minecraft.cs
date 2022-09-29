@@ -197,7 +197,7 @@ namespace net.minecraft.client
 			this.tempDisplayHeight = i5;
 			this.fullscreen = z6;
 			this.mcApplet = minecraftApplet3;
-			Packet3Chat.field_52010_b = 32767;
+			Packet3Chat.maxMessageLength = 32767;
 			new ThreadClientSleep(this, "Timer hack thread");
 			this.mcCanvas = canvas2;
 			this.displayWidth = i4;
@@ -2019,7 +2019,7 @@ namespace net.minecraft.client
 
 		}
 
-		public virtual void installResource(string string1, File file2)
+		public virtual void installResource(string string1, FileInfo file2)
 		{
 			int i3 = string1.IndexOf("/", StringComparison.Ordinal);
 			string string4 = string1.Substring(0, i3);

@@ -18,10 +18,10 @@ namespace net.minecraft.src
 
 		internal ThreadConnectToServer(GuiConnecting guiConnecting1, Minecraft minecraft2, string string3, int i4)
 		{
-			this.connectingGui = guiConnecting1;
-			this.mc = minecraft2;
-			this.ip = string3;
-			this.port = i4;
+			connectingGui = guiConnecting1;
+			mc = minecraft2;
+			ip = string3;
+			port = i4;
 
 			thread = new Thread(() => run());
 		}

@@ -3,7 +3,7 @@
 
 	public class Packet3Chat : Packet
 	{
-		public static int field_52010_b = 119;
+		public static int maxMessageLength = 119;
 		public string message;
 
 		public Packet3Chat()
@@ -12,26 +12,22 @@
 
 		public Packet3Chat(string string1)
 		{
-			if (string1.Length > field_52010_b)
+			if (string1.Length > maxMessageLength)
 			{
-				string1 = string1.Substring(0, field_52010_b);
+				string1 = string1.Substring(0, maxMessageLength);
 			}
 
-			this.message = string1;
+			message = string1;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.message = readString(dataInputStream1, field_52010_b);
+			message = readString(dataInputStream1, maxMessageLength);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			writeString(this.message, dataOutputStream1);
+			writeString(message, dataOutputStream1);
 		}
 
 		public override void processPacket(NetHandler netHandler1)
@@ -43,7 +39,7 @@
 		{
 			get
 			{
-				return 2 + this.message.Length * 2;
+				return 2 + message.Length * 2;
 			}
 		}
 	}

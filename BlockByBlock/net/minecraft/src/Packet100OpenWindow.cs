@@ -15,25 +15,25 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.windowId = dataInputStream1.ReadByte() & 255;
-			this.inventoryType = dataInputStream1.ReadByte() & 255;
-			this.windowTitle = readString(dataInputStream1, 32);
-			this.slotsCount = dataInputStream1.ReadByte() & 255;
+			windowId = dataInputStream1.ReadSByte() & 255;
+			inventoryType = dataInputStream1.ReadSByte() & 255;
+			windowTitle = readString(dataInputStream1, 32);
+			slotsCount = dataInputStream1.ReadSByte() & 255;
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write((byte)(this.windowId & 255));
-			dataOutputStream1.Write((byte)(this.inventoryType & 255));
-			writeString(this.windowTitle, dataOutputStream1);
-			dataOutputStream1.Write((byte)(this.slotsCount & 255));
+			dataOutputStream1.Write((byte)(windowId & 255));
+			dataOutputStream1.Write((byte)(inventoryType & 255));
+			writeString(windowTitle, dataOutputStream1);
+			dataOutputStream1.Write((byte)(slotsCount & 255));
 		}
 
 		public override int PacketSize
 		{
 			get
 			{
-				return 3 + this.windowTitle.Length;
+				return 3 + windowTitle.Length;
 			}
 		}
 	}

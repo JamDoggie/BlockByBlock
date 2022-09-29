@@ -9,7 +9,7 @@ namespace net.minecraft.src
 
 		internal ThreadMonitorConnection(NetworkManager networkManager1, CancellationTokenSource source) : base(networkManager1, source)
 		{
-			this.netManager = networkManager1;
+			netManager = networkManager1;
 		}
 
 		protected virtual void run()
@@ -17,10 +17,10 @@ namespace net.minecraft.src
 			try
 			{
 				Thread.Sleep(2000);
-				if (NetworkManager.getIsRunning(this.netManager))
+				if (NetworkManager.getIsRunning(netManager))
 				{
-					NetworkManager.getWriteThread(this.netManager).thread.Interrupt();
-					this.netManager.networkShutdown("disconnect.closed", new object[0]);
+					NetworkManager.getWriteThread(netManager).thread.Interrupt();
+					netManager.networkShutdown("disconnect.closed", new object[0]);
 				}
 			}
 			catch (Exception exception2)

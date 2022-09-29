@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.helpers;
+using System;
 using System.Collections;
 
 namespace net.minecraft.src
@@ -47,19 +48,12 @@ namespace net.minecraft.src
 
 		private void removeAnnihilatedVillages()
 		{
-			System.Collections.IEnumerator iterator1 = this.villageList.GetEnumerator();
-
-			while (iterator1.MoveNext())
-			{
-				Village village2 = (Village)iterator1.Current;
-				if (village2.Annihilated)
-				{
-//JAVA TO C# CONVERTER TODO TASK: .NET enumerators are read-only:
-					iterator1.remove();
-				}
-			}
-
-		}
+            for (int i = villageList.Count - 1; i >= 0; i--)
+            {
+                if (((Village)villageList[i]).Annihilated)
+                    villageList.RemoveAt(i);
+            }
+        }
 
 		public virtual System.Collections.IList func_48554_b()
 		{
@@ -166,30 +160,26 @@ namespace net.minecraft.src
 			VillageDoorInfo villageDoorInfo5;
 			do
 			{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				if (!iterator4.hasNext())
+				if (!iterator4.MoveNext())
 				{
 					iterator4 = this.villageList.GetEnumerator();
 
 					VillageDoorInfo villageDoorInfo6;
 					do
 					{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-						if (!iterator4.hasNext())
+						if (!iterator4.MoveNext())
 						{
 							return null;
 						}
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-						Village village7 = (Village)iterator4.next();
+						Village village7 = (Village)iterator4.Current;
 						villageDoorInfo6 = village7.getVillageDoorAt(i1, i2, i3);
 					} while (villageDoorInfo6 == null);
 
 					return villageDoorInfo6;
 				}
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				villageDoorInfo5 = (VillageDoorInfo)iterator4.next();
+				villageDoorInfo5 = (VillageDoorInfo)iterator4.Current;
 			} while (villageDoorInfo5.posX != i1 || villageDoorInfo5.posZ != i3 || Math.Abs(villageDoorInfo5.posY - i2) > 1);
 
 			return villageDoorInfo5;
@@ -260,14 +250,12 @@ namespace net.minecraft.src
 			ChunkCoordinates chunkCoordinates5;
 			do
 			{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				if (!iterator4.hasNext())
+				if (!iterator4.MoveNext())
 				{
 					return false;
 				}
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				chunkCoordinates5 = (ChunkCoordinates)iterator4.next();
+				chunkCoordinates5 = (ChunkCoordinates)iterator4.Current;
 			} while (chunkCoordinates5.posX != i1 || chunkCoordinates5.posY != i2 || chunkCoordinates5.posZ != i3);
 
 			return true;

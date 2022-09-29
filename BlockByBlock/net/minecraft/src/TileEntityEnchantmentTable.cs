@@ -1,4 +1,6 @@
 ﻿using System;
+using BlockByBlock.helpers;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -15,7 +17,7 @@ namespace net.minecraft.src
 		public float bookRotation2;
 		public float bookRotationPrev;
 		public float bookRotation;
-		private static Random rand = new Random();
+		private static RandomExtended rand = new RandomExtended();
 
 		public override void updateEntity()
 		{

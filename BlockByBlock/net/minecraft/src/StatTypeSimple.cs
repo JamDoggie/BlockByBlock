@@ -4,7 +4,7 @@
 	{
 		public string format(int i1)
 		{
-			return StatBase.NumberFormat.format((long)i1);
+			return ((long)i1).ToString(StatBase.NumberFormat.NumberFormat);
 		}
 	}
 

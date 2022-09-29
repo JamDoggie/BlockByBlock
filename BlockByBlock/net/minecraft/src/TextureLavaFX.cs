@@ -46,7 +46,7 @@
 					}
 
 					this.field_1144_j[i1 + i2 * 16] -= 0.06F;
-					if (MathHelper.NextDouble < 0.005D)
+					if (portinghelpers.MathHelper.NextDouble < 0.005D)
 					{
 						this.field_1144_j[i1 + i2 * 16] = 1.5F;
 					}

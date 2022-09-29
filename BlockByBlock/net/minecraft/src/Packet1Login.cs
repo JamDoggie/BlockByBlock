@@ -9,8 +9,8 @@
 		public int serverMode;
 		public int field_48170_e;
 		public sbyte difficultySetting;
-		public sbyte worldHeight;
-		public sbyte maxPlayers;
+		public byte worldHeight;
+		public byte maxPlayers;
 
 		public Packet1Login()
 		{
@@ -18,50 +18,46 @@
 
 		public Packet1Login(string string1, int i2)
 		{
-			this.username = string1;
-			this.protocolVersion = i2;
+			username = string1;
+			protocolVersion = i2;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.protocolVersion = dataInputStream1.readInt();
-			this.username = readString(dataInputStream1, 16);
+			protocolVersion = dataInputStream1.ReadInt32();
+			username = readString(dataInputStream1, 16);
 			string string2 = readString(dataInputStream1, 16);
-			this.terrainType = WorldType.parseWorldType(string2);
-			if (this.terrainType == null)
+			terrainType = WorldType.parseWorldType(string2);
+			if (terrainType == null)
 			{
-				this.terrainType = WorldType.DEFAULT;
+				terrainType = WorldType.DEFAULT;
 			}
 
-			this.serverMode = dataInputStream1.readInt();
-			this.field_48170_e = dataInputStream1.readInt();
-			this.difficultySetting = dataInputStream1.readByte();
-			this.worldHeight = dataInputStream1.readByte();
-			this.maxPlayers = dataInputStream1.readByte();
+			serverMode = dataInputStream1.ReadInt32();
+			field_48170_e = dataInputStream1.ReadInt32();
+			difficultySetting = dataInputStream1.ReadSByte();
+			worldHeight = dataInputStream1.ReadByte();
+			maxPlayers = dataInputStream1.ReadByte();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.protocolVersion);
-			writeString(this.username, dataOutputStream1);
-			if (this.terrainType == null)
+			dataOutputStream1.Write(protocolVersion);
+			writeString(username, dataOutputStream1);
+			if (terrainType == null)
 			{
 				writeString("", dataOutputStream1);
 			}
 			else
 			{
-				writeString(this.terrainType.func_48628_a(), dataOutputStream1);
+				writeString(terrainType.func_48628_a(), dataOutputStream1);
 			}
 
-			dataOutputStream1.writeInt(this.serverMode);
-			dataOutputStream1.writeInt(this.field_48170_e);
-			dataOutputStream1.writeByte(this.difficultySetting);
-			dataOutputStream1.writeByte(this.worldHeight);
-			dataOutputStream1.writeByte(this.maxPlayers);
+			dataOutputStream1.Write(serverMode);
+			dataOutputStream1.Write(field_48170_e);
+			dataOutputStream1.Write(difficultySetting);
+			dataOutputStream1.Write(worldHeight);
+			dataOutputStream1.Write(maxPlayers);
 		}
 
 		public override void processPacket(NetHandler netHandler1)
@@ -74,12 +70,12 @@
 			get
 			{
 				int i1 = 0;
-				if (this.terrainType != null)
+				if (terrainType != null)
 				{
-					i1 = this.terrainType.func_48628_a().Length;
+					i1 = terrainType.func_48628_a().Length;
 				}
     
-				return 4 + this.username.Length + 4 + 7 + 7 + i1;
+				return 4 + username.Length + 4 + 7 + 7 + i1;
 			}
 		}
 	}

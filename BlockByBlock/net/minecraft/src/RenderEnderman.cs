@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -16,7 +17,7 @@ namespace net.minecraft.src
 		}
 
 		private ModelEnderman endermanModel;
-		private Random rnd = new Random();
+		private RandomExtended rnd = new RandomExtended();
 
 		public RenderEnderman() : base(new ModelEnderman(), 0.5F)
 		{
@@ -35,8 +36,8 @@ namespace net.minecraft.src
 			if (entityEnderman1.isAttacking)
 			{
 				double d10 = 0.02D;
-				d2 += this.rnd.nextGaussian() * d10;
-				d6 += this.rnd.nextGaussian() * d10;
+				d2 += this.rnd.NextGaussian() * d10;
+				d6 += this.rnd.NextGaussian() * d10;
 			}
 
 			base.doRenderLiving(entityEnderman1, d2, d4, d6, f8, f9);

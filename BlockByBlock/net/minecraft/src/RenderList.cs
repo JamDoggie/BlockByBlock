@@ -17,14 +17,14 @@
 
 		public virtual void func_861_a(int i1, int i2, int i3, double d4, double d6, double d8)
 		{
-			this.field_1235_h = true;
-			this.field_1236_g.clear();
-			this.field_1242_a = i1;
-			this.field_1241_b = i2;
-			this.field_1240_c = i3;
-			this.field_1239_d = d4;
-			this.field_1238_e = d6;
-			this.field_1237_f = d8;
+			field_1235_h = true;
+			field_1236_g.clear();
+			field_1242_a = i1;
+			field_1241_b = i2;
+			field_1240_c = i3;
+			field_1239_d = d4;
+			field_1238_e = d6;
+			field_1237_f = d8;
 		}
 
 		public virtual bool func_862_a(int i1, int i2, int i3)
@@ -34,7 +34,7 @@
 
 		public virtual void func_858_a(int i1)
 		{
-			this.field_1236_g.put(i1);
+			this.field_1236_g.putInt(i1);
 			if (this.field_1236_g.remaining() == 0)
 			{
 				this.func_860_a();

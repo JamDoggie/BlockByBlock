@@ -142,7 +142,7 @@
 					this.curBlockDamageMP += block6.blockStrength(this.mc.thePlayer);
 					if (this.stepSoundTickCounter % 4.0F == 0.0F && block6 != null)
 					{
-						this.mc.sndManager.playSound(block6.stepSound.StepSound, (float)i1 + 0.5F, (float)i2 + 0.5F, (float)i3 + 0.5F, (block6.stepSound.Volume + 1.0F) / 8.0F, block6.stepSound.Pitch * 0.5F);
+						this.mc.sndManager.playSound(block6.stepSound.StepSoundName, (float)i1 + 0.5F, (float)i2 + 0.5F, (float)i3 + 0.5F, (block6.stepSound.Volume + 1.0F) / 8.0F, block6.stepSound.Pitch * 0.5F);
 					}
 
 					++this.stepSoundTickCounter;

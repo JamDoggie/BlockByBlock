@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
 
 	public abstract class StructureStart
 	{
-		protected internal LinkedList components = new LinkedList();
+		protected internal List<StructureComponent> components = new List<StructureComponent>();
 		protected internal StructureBoundingBox boundingBox;
 
 		public virtual StructureBoundingBox BoundingBox
@@ -17,29 +18,25 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual LinkedList Components
+		public virtual List<StructureComponent> Components
 		{
 			get
 			{
-				return this.components;
+				return components;
 			}
 		}
 
-		public virtual void generateStructure(World world1, Random random2, StructureBoundingBox structureBoundingBox3)
+		public virtual void generateStructure(World world1, RandomExtended random2, StructureBoundingBox structureBoundingBox3)
 		{
-			System.Collections.IEnumerator iterator4 = this.components.GetEnumerator();
-
-			while (iterator4.MoveNext())
-			{
-				StructureComponent structureComponent5 = (StructureComponent)iterator4.Current;
-				if (structureComponent5.BoundingBox.intersectsWith(structureBoundingBox3) && !structureComponent5.addComponentParts(world1, random2, structureBoundingBox3))
-				{
-//JAVA TO C# CONVERTER TODO TASK: .NET enumerators are read-only:
-					iterator4.remove();
-				}
-			}
-
-		}
+            for (int i = components.Count - 1; i >= 0; i--)
+            {
+                StructureComponent structureComponent5 = components[i];
+                if (structureComponent5.BoundingBox.intersectsWith(structureBoundingBox3) && !structureComponent5.addComponentParts(world1, random2, structureBoundingBox3))
+                {
+                    components.Remove(structureComponent5);
+                }
+            }
+        }
 
 		protected internal virtual void updateBoundingBox()
 		{

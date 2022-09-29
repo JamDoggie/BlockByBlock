@@ -6,6 +6,8 @@ namespace net.minecraft.src
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	public class TileEntityRenderer
 	{
 		private System.Collections.IDictionary specialRendererMap = new Hashtable();

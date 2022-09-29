@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.helpers;
+using System;
 using System.Collections;
 
 namespace net.minecraft.src
@@ -8,7 +9,7 @@ namespace net.minecraft.src
 	{
 		public static bool profilingEnabled = false;
 		private static System.Collections.IList sectionList = new ArrayList();
-		private static System.Collections.IList timestampList = new ArrayList();
+		private static List<long> timestampList = new();
 		private static string profilingSection = "";
 		private static System.Collections.IDictionary profilingMap = new Hashtable();
 
@@ -28,7 +29,7 @@ namespace net.minecraft.src
 
 				profilingSection = profilingSection + string0;
 				sectionList.Add(profilingSection);
-				timestampList.Add(System.nanoTime());
+				timestampList.Add(JTime.NanoTime());
 			}
 		}
 
@@ -36,7 +37,7 @@ namespace net.minecraft.src
 		{
 			if (profilingEnabled)
 			{
-				long j0 = System.nanoTime();
+				long j0 = JTime.NanoTime();
 				long j2 = ((long?)timestampList.RemoveAndReturn(timestampList.Count - 1)).Value;
 				sectionList.RemoveAt(sectionList.Count - 1);
 				long j4 = j0 - j2;

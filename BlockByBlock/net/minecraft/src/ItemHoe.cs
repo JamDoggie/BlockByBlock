@@ -25,7 +25,7 @@
 				else
 				{
 					Block block10 = Block.tilledField;
-					world3.playSoundEffect((double)((float)i4 + 0.5F), (double)((float)i5 + 0.5F), (double)((float)i6 + 0.5F), block10.stepSound.StepSound, (block10.stepSound.Volume + 1.0F) / 2.0F, block10.stepSound.Pitch * 0.8F);
+					world3.playSoundEffect((double)((float)i4 + 0.5F), (double)((float)i5 + 0.5F), (double)((float)i6 + 0.5F), block10.stepSound.StepSoundName, (block10.stepSound.Volume + 1.0F) / 2.0F, block10.stepSound.Pitch * 0.8F);
 					if (world3.isRemote)
 					{
 						return true;

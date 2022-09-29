@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.helpers;
+
+namespace net.minecraft.src
 {
 	public class Timer
 	{
@@ -17,14 +19,14 @@
 		{
 			this.ticksPerSecond = f1;
 			this.lastSyncSysClock = DateTimeHelper.CurrentUnixTimeMillis();
-			this.lastSyncHRClock = System.nanoTime() / 1000000L;
+			this.lastSyncHRClock = JTime.NanoTime() / 1000000L;
 		}
 
 		public virtual void updateTimer()
 		{
 			long j1 = DateTimeHelper.CurrentUnixTimeMillis();
 			long j3 = j1 - this.lastSyncSysClock;
-			long j5 = System.nanoTime() / 1000000L;
+			long j5 = JTime.NanoTime() / 1000000L;
 			double d7 = (double)j5 / 1000.0D;
 			if (j3 > 1000L)
 			{

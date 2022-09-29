@@ -63,7 +63,7 @@ namespace net.minecraft.src
 				for (int i33 = 0; i33 < i6; ++i33)
 				{
 					EnumCreatureType enumCreatureType34 = enumCreatureType32[i33];
-					if ((!enumCreatureType34.getPeacefulCreature() || z2) && (enumCreatureType34.getPeacefulCreature() || z1) && world0.countEntities(enumCreatureType34.getCreatureClass()) <= enumCreatureType34.getMaxNumberOfCreature() * eligibleChunksForSpawning.Count / 256)
+					if ((!enumCreatureType34.PeacefulCreature || z2) && (enumCreatureType34.PeacefulCreature || z1) && world0.countEntities(enumCreatureType34.CreatureClass) <= enumCreatureType34.MaxNumberOfCreature * eligibleChunksForSpawning.Count / 256)
 					{
 						System.Collections.IEnumerator iterator35 = eligibleChunksForSpawning.Keys.GetEnumerator();
 
@@ -79,14 +79,12 @@ namespace net.minecraft.src
 									ChunkCoordIntPair chunkCoordIntPair36;
 									do
 									{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-										if (!iterator35.hasNext())
+										if (!iterator35.MoveNext())
 										{
 											goto label126Continue;
 										}
-
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-										chunkCoordIntPair36 = (ChunkCoordIntPair)iterator35.next();
+                                        
+										chunkCoordIntPair36 = (ChunkCoordIntPair)iterator35.Current;
 									} while (((bool?)eligibleChunksForSpawning[chunkCoordIntPair36]).Value);
 
 									ChunkPosition chunkPosition37 = getRandomSpawningPointInChunk(world0, chunkCoordIntPair36.chunkXPos, chunkCoordIntPair36.chunkZPos);
@@ -94,7 +92,7 @@ namespace net.minecraft.src
 									i13 = chunkPosition37.y;
 									i14 = chunkPosition37.z;
 								} while (world0.isBlockNormalCube(i12, i13, i14));
-							} while (world0.getBlockMaterial(i12, i13, i14) != enumCreatureType34.getCreatureMaterial());
+							} while (world0.getBlockMaterial(i12, i13, i14) != enumCreatureType34.CreatureMaterial);
 
 							int i15 = 0;
 
@@ -136,8 +134,8 @@ namespace net.minecraft.src
 												EntityLiving entityLiving38;
 												try
 												{
-													entityLiving38 = (EntityLiving)spawnListEntry21.entityClass.GetConstructor(new Type[]{typeof(World)}).newInstance(new object[]{world0});
-												}
+                                                    entityLiving38 = (EntityLiving)Activator.CreateInstance(spawnListEntry21.entityClass, new object[] { world0 });
+                                                }
 												catch (Exception exception30)
 												{
 													Console.WriteLine(exception30.ToString());
@@ -145,7 +143,7 @@ namespace net.minecraft.src
 													return i3;
 												}
 
-												entityLiving38.setLocationAndAngles((double)f23, (double)f24, (double)f25, world0.rand.nextFloat() * 360.0F, 0.0F);
+												entityLiving38.setLocationAndAngles((double)f23, (double)f24, (double)f25, world0.rand.NextSingle() * 360.0F, 0.0F);
 												if (entityLiving38.CanSpawnHere)
 												{
 													++i15;
@@ -177,7 +175,7 @@ namespace net.minecraft.src
 
 		public static bool canCreatureTypeSpawnAtLocation(EnumCreatureType enumCreatureType0, World world1, int i2, int i3, int i4)
 		{
-			if (enumCreatureType0.getCreatureMaterial() == Material.water)
+			if (enumCreatureType0.CreatureMaterial == Material.water)
 			{
 				return world1.getBlockMaterial(i2, i3, i4).Liquid && !world1.isBlockNormalCube(i2, i3 + 1, i4);
 			}
@@ -219,7 +217,7 @@ namespace net.minecraft.src
 			System.Collections.IList list7 = biomeGenBase1.getSpawnableList(EnumCreatureType.creature);
 			if (list7.Count > 0)
 			{
-				while (random6.nextFloat() < biomeGenBase1.SpawningChance)
+				while (random6.NextSingle() < biomeGenBase1.SpawningChance)
 				{
 					SpawnListEntry spawnListEntry8 = (SpawnListEntry)WeightedRandom.getRandomItem(world0.rand, (System.Collections.ICollection)list7);
 					int i9 = spawnListEntry8.minGroupCount + random6.Next(1 + spawnListEntry8.maxGroupCount - spawnListEntry8.minGroupCount);
@@ -244,8 +242,8 @@ namespace net.minecraft.src
 								EntityLiving entityLiving21;
 								try
 								{
-									entityLiving21 = (EntityLiving)spawnListEntry8.entityClass.GetConstructor(new Type[]{typeof(World)}).newInstance(new object[]{world0});
-								}
+                                    entityLiving21 = (EntityLiving)Activator.CreateInstance(spawnListEntry8.entityClass, new object[] { world0 });
+                                }
 								catch (Exception exception23)
 								{
 									Console.WriteLine(exception23.ToString());
@@ -253,7 +251,7 @@ namespace net.minecraft.src
 									continue;
 								}
 
-								entityLiving21.setLocationAndAngles((double)f18, (double)f19, (double)f20, random6.nextFloat() * 360.0F, 0.0F);
+								entityLiving21.setLocationAndAngles((double)f18, (double)f19, (double)f20, random6.NextSingle() * 360.0F, 0.0F);
 								world0.spawnEntityInWorld(entityLiving21);
 								creatureSpecificInit(entityLiving21, world0, f18, f19, f20);
 								z15 = true;

@@ -1,11 +1,12 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
 
 	public class Teleporter
 	{
-		private Random random = new Random();
+		private RandomExtended random = new RandomExtended();
 
 		public virtual void placeInPortal(World world1, Entity entity2)
 		{

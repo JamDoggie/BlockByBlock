@@ -19,34 +19,34 @@ namespace net.minecraft.src
 
 		public Village(World world1)
 		{
-			this.worldObj = world1;
+			worldObj = world1;
 		}
 
 		public virtual void tick(int i1)
 		{
-			this.tickCounter = i1;
-			this.removeDeadAndOutOfRangeDoors();
-			this.removeDeadAndOldAgressors();
+			tickCounter = i1;
+			removeDeadAndOutOfRangeDoors();
+			removeDeadAndOldAgressors();
 			if (i1 % 20 == 0)
 			{
-				this.updateNumVillagers();
+				updateNumVillagers();
 			}
 
 			if (i1 % 30 == 0)
 			{
-				this.updateNumIronGolems();
+				updateNumIronGolems();
 			}
 
-			int i2 = this.numVillagers / 16;
-			if (this.numIronGolems < i2 && this.villageDoorInfoList.Count > 20 && this.worldObj.rand.Next(7000) == 0)
+			int i2 = numVillagers / 16;
+			if (numIronGolems < i2 && villageDoorInfoList.Count > 20 && worldObj.rand.Next(7000) == 0)
 			{
-				Vec3D vec3D3 = this.tryGetIronGolemSpawningLocation(MathHelper.floor_float((float)this.center.posX), MathHelper.floor_float((float)this.center.posY), MathHelper.floor_float((float)this.center.posZ), 2, 4, 2);
+				Vec3D vec3D3 = tryGetIronGolemSpawningLocation(MathHelper.floor_float((float)center.posX), MathHelper.floor_float((float)center.posY), MathHelper.floor_float((float)center.posZ), 2, 4, 2);
 				if (vec3D3 != null)
 				{
-					EntityIronGolem entityIronGolem4 = new EntityIronGolem(this.worldObj);
+					EntityIronGolem entityIronGolem4 = new EntityIronGolem(worldObj);
 					entityIronGolem4.setPosition(vec3D3.xCoord, vec3D3.yCoord, vec3D3.zCoord);
-					this.worldObj.spawnEntityInWorld(entityIronGolem4);
-					++this.numIronGolems;
+					worldObj.spawnEntityInWorld(entityIronGolem4);
+					++numIronGolems;
 				}
 			}
 
@@ -56,10 +56,10 @@ namespace net.minecraft.src
 		{
 			for (int i7 = 0; i7 < 10; ++i7)
 			{
-				int i8 = i1 + this.worldObj.rand.Next(16) - 8;
-				int i9 = i2 + this.worldObj.rand.Next(6) - 3;
-				int i10 = i3 + this.worldObj.rand.Next(16) - 8;
-				if (this.isInRange(i8, i9, i10) && this.isValidIronGolemSpawningLocation(i8, i9, i10, i4, i5, i6))
+				int i8 = i1 + worldObj.rand.Next(16) - 8;
+				int i9 = i2 + worldObj.rand.Next(6) - 3;
+				int i10 = i3 + worldObj.rand.Next(16) - 8;
+				if (isInRange(i8, i9, i10) && isValidIronGolemSpawningLocation(i8, i9, i10, i4, i5, i6))
 				{
 					return Vec3D.createVector((double)i8, (double)i9, (double)i10);
 				}
@@ -70,7 +70,7 @@ namespace net.minecraft.src
 
 		private bool isValidIronGolemSpawningLocation(int i1, int i2, int i3, int i4, int i5, int i6)
 		{
-			if (!this.worldObj.isBlockNormalCube(i1, i2 - 1, i3))
+			if (!worldObj.isBlockNormalCube(i1, i2 - 1, i3))
 			{
 				return false;
 			}
@@ -85,7 +85,7 @@ namespace net.minecraft.src
 					{
 						for (int i11 = i8; i11 < i8 + i6; ++i11)
 						{
-							if (this.worldObj.isBlockNormalCube(i9, i10, i11))
+							if (worldObj.isBlockNormalCube(i9, i10, i11))
 							{
 								return false;
 							}
@@ -99,21 +99,21 @@ namespace net.minecraft.src
 
 		private void updateNumIronGolems()
 		{
-			System.Collections.IList list1 = this.worldObj.getEntitiesWithinAABB(typeof(EntityIronGolem), AxisAlignedBB.getBoundingBoxFromPool((double)(this.center.posX - this.villageRadius), (double)(this.center.posY - 4), (double)(this.center.posZ - this.villageRadius), (double)(this.center.posX + this.villageRadius), (double)(this.center.posY + 4), (double)(this.center.posZ + this.villageRadius)));
-			this.numIronGolems = list1.Count;
+			System.Collections.IList list1 = worldObj.getEntitiesWithinAABB(typeof(EntityIronGolem), AxisAlignedBB.getBoundingBoxFromPool((double)(center.posX - villageRadius), (double)(center.posY - 4), (double)(center.posZ - villageRadius), (double)(center.posX + villageRadius), (double)(center.posY + 4), (double)(center.posZ + villageRadius)));
+			numIronGolems = list1.Count;
 		}
 
 		private void updateNumVillagers()
 		{
-			System.Collections.IList list1 = this.worldObj.getEntitiesWithinAABB(typeof(EntityVillager), AxisAlignedBB.getBoundingBoxFromPool((double)(this.center.posX - this.villageRadius), (double)(this.center.posY - 4), (double)(this.center.posZ - this.villageRadius), (double)(this.center.posX + this.villageRadius), (double)(this.center.posY + 4), (double)(this.center.posZ + this.villageRadius)));
-			this.numVillagers = list1.Count;
+			System.Collections.IList list1 = worldObj.getEntitiesWithinAABB(typeof(EntityVillager), AxisAlignedBB.getBoundingBoxFromPool((double)(center.posX - villageRadius), (double)(center.posY - 4), (double)(center.posZ - villageRadius), (double)(center.posX + villageRadius), (double)(center.posY + 4), (double)(center.posZ + villageRadius)));
+			numVillagers = list1.Count;
 		}
 
 		public virtual ChunkCoordinates Center
 		{
 			get
 			{
-				return this.center;
+				return center;
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace net.minecraft.src
 		{
 			get
 			{
-				return this.villageRadius;
+				return villageRadius;
 			}
 		}
 
@@ -129,7 +129,7 @@ namespace net.minecraft.src
 		{
 			get
 			{
-				return this.villageDoorInfoList.Count;
+				return villageDoorInfoList.Count;
 			}
 		}
 
@@ -137,7 +137,7 @@ namespace net.minecraft.src
 		{
 			get
 			{
-				return this.tickCounter - this.lastAddDoorTimestamp;
+				return tickCounter - lastAddDoorTimestamp;
 			}
 		}
 
@@ -145,20 +145,20 @@ namespace net.minecraft.src
 		{
 			get
 			{
-				return this.numVillagers;
+				return numVillagers;
 			}
 		}
 
 		public virtual bool isInRange(int i1, int i2, int i3)
 		{
-			return this.center.getDistanceSquared(i1, i2, i3) < (float)(this.villageRadius * this.villageRadius);
+			return center.getDistanceSquared(i1, i2, i3) < (float)(villageRadius * villageRadius);
 		}
 
 		public virtual System.Collections.IList VillageDoorInfoList
 		{
 			get
 			{
-				return this.villageDoorInfoList;
+				return villageDoorInfoList;
 			}
 		}
 
@@ -166,7 +166,7 @@ namespace net.minecraft.src
 		{
 			VillageDoorInfo villageDoorInfo4 = null;
 			int i5 = int.MaxValue;
-			System.Collections.IEnumerator iterator6 = this.villageDoorInfoList.GetEnumerator();
+			System.Collections.IEnumerator iterator6 = villageDoorInfoList.GetEnumerator();
 
 			while (iterator6.MoveNext())
 			{
@@ -186,7 +186,7 @@ namespace net.minecraft.src
 		{
 			VillageDoorInfo villageDoorInfo4 = null;
 			int i5 = int.MaxValue;
-			System.Collections.IEnumerator iterator6 = this.villageDoorInfoList.GetEnumerator();
+			System.Collections.IEnumerator iterator6 = villageDoorInfoList.GetEnumerator();
 
 			while (iterator6.MoveNext())
 			{
@@ -213,25 +213,23 @@ namespace net.minecraft.src
 
 		public virtual VillageDoorInfo getVillageDoorAt(int i1, int i2, int i3)
 		{
-			if (this.center.getDistanceSquared(i1, i2, i3) > (float)(this.villageRadius * this.villageRadius))
+			if (center.getDistanceSquared(i1, i2, i3) > (float)(villageRadius * villageRadius))
 			{
 				return null;
 			}
 			else
 			{
-				System.Collections.IEnumerator iterator4 = this.villageDoorInfoList.GetEnumerator();
+				System.Collections.IEnumerator iterator4 = villageDoorInfoList.GetEnumerator();
 
 				VillageDoorInfo villageDoorInfo5;
 				do
 				{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					if (!iterator4.hasNext())
+					if (!iterator4.MoveNext())
 					{
 						return null;
 					}
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					villageDoorInfo5 = (VillageDoorInfo)iterator4.next();
+					villageDoorInfo5 = (VillageDoorInfo)iterator4.Current;
 				} while (villageDoorInfo5.posX != i1 || villageDoorInfo5.posZ != i3 || Math.Abs(villageDoorInfo5.posY - i2) > 1);
 
 				return villageDoorInfo5;
@@ -240,41 +238,39 @@ namespace net.minecraft.src
 
 		public virtual void addVillageDoorInfo(VillageDoorInfo villageDoorInfo1)
 		{
-			this.villageDoorInfoList.Add(villageDoorInfo1);
-			this.centerHelper.posX += villageDoorInfo1.posX;
-			this.centerHelper.posY += villageDoorInfo1.posY;
-			this.centerHelper.posZ += villageDoorInfo1.posZ;
-			this.updateVillageRadiusAndCenter();
-			this.lastAddDoorTimestamp = villageDoorInfo1.lastActivityTimestamp;
+			villageDoorInfoList.Add(villageDoorInfo1);
+			centerHelper.posX += villageDoorInfo1.posX;
+			centerHelper.posY += villageDoorInfo1.posY;
+			centerHelper.posZ += villageDoorInfo1.posZ;
+			updateVillageRadiusAndCenter();
+			lastAddDoorTimestamp = villageDoorInfo1.lastActivityTimestamp;
 		}
 
 		public virtual bool Annihilated
 		{
 			get
 			{
-				return this.villageDoorInfoList.Count == 0;
+				return villageDoorInfoList.Count == 0;
 			}
 		}
 
 		public virtual void addOrRenewAgressor(EntityLiving entityLiving1)
 		{
-			System.Collections.IEnumerator iterator2 = this.villageAgressors.GetEnumerator();
+			System.Collections.IEnumerator iterator2 = villageAgressors.GetEnumerator();
 
 			VillageAgressor villageAgressor3;
 			do
 			{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				if (!iterator2.hasNext())
+				if (!iterator2.MoveNext())
 				{
-					this.villageAgressors.Add(new VillageAgressor(this, entityLiving1, this.tickCounter));
+					villageAgressors.Add(new VillageAgressor(this, entityLiving1, tickCounter));
 					return;
 				}
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				villageAgressor3 = (VillageAgressor)iterator2.next();
+				villageAgressor3 = (VillageAgressor)iterator2.Current;
 			} while (villageAgressor3.agressor != entityLiving1);
 
-			villageAgressor3.agressionTime = this.tickCounter;
+			villageAgressor3.agressionTime = tickCounter;
 		}
 
 		public virtual EntityLiving findNearestVillageAggressor(EntityLiving entityLiving1)
@@ -282,9 +278,9 @@ namespace net.minecraft.src
 			double d2 = double.MaxValue;
 			VillageAgressor villageAgressor4 = null;
 
-			for (int i5 = 0; i5 < this.villageAgressors.Count; ++i5)
+			for (int i5 = 0; i5 < villageAgressors.Count; ++i5)
 			{
-				VillageAgressor villageAgressor6 = (VillageAgressor)this.villageAgressors[i5];
+				VillageAgressor villageAgressor6 = (VillageAgressor)villageAgressors[i5];
 				double d7 = villageAgressor6.agressor.getDistanceSqToEntity(entityLiving1);
 				if (d7 <= d2)
 				{
@@ -298,94 +294,87 @@ namespace net.minecraft.src
 
 		private void removeDeadAndOldAgressors()
 		{
-			System.Collections.IEnumerator iterator1 = this.villageAgressors.GetEnumerator();
+			for (int i = villageAgressors.Count - 1; i >= 0; i--)
+            {
+                VillageAgressor villageAgressor = (VillageAgressor)villageAgressors[i];
 
-			while (true)
-			{
-				VillageAgressor villageAgressor2;
-				do
-				{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					if (!iterator1.hasNext())
-					{
-						return;
-					}
+                if (!villageAgressor.agressor.EntityAlive || Math.Abs(tickCounter - villageAgressor.agressionTime) > 300)
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					villageAgressor2 = (VillageAgressor)iterator1.next();
-				} while (villageAgressor2.agressor.EntityAlive && Math.Abs(this.tickCounter - villageAgressor2.agressionTime) <= 300);
-
-//JAVA TO C# CONVERTER TODO TASK: .NET enumerators are read-only:
-				iterator1.remove();
-			}
+                    villageAgressors.RemoveAt(i);
+            }
 		}
 
 		private void removeDeadAndOutOfRangeDoors()
 		{
 			bool z1 = false;
-			bool z2 = this.worldObj.rand.Next(50) == 0;
-			System.Collections.IEnumerator iterator3 = this.villageDoorInfoList.GetEnumerator();
+			bool z2 = worldObj.rand.Next(50) == 0;
+			System.Collections.IEnumerator iterator3 = villageDoorInfoList.GetEnumerator();
+
+			List<VillageDoorInfo> toRemove = new();
 
 			while (true)
 			{
 				VillageDoorInfo villageDoorInfo4;
 				do
 				{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					if (!iterator3.hasNext())
+					if (!iterator3.MoveNext())
 					{
 						if (z1)
 						{
-							this.updateVillageRadiusAndCenter();
+							updateVillageRadiusAndCenter();
 						}
 
 						return;
 					}
-
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					villageDoorInfo4 = (VillageDoorInfo)iterator3.next();
+                    
+					villageDoorInfo4 = (VillageDoorInfo)iterator3.Current;
 					if (z2)
 					{
 						villageDoorInfo4.resetDoorOpeningRestrictionCounter();
 					}
-				} while (this.isBlockDoor(villageDoorInfo4.posX, villageDoorInfo4.posY, villageDoorInfo4.posZ) && Math.Abs(this.tickCounter - villageDoorInfo4.lastActivityTimestamp) <= 1200);
+				} while (isBlockDoor(villageDoorInfo4.posX, villageDoorInfo4.posY, villageDoorInfo4.posZ) && Math.Abs(tickCounter - villageDoorInfo4.lastActivityTimestamp) <= 1200);
 
-				this.centerHelper.posX -= villageDoorInfo4.posX;
-				this.centerHelper.posY -= villageDoorInfo4.posY;
-				this.centerHelper.posZ -= villageDoorInfo4.posZ;
+				centerHelper.posX -= villageDoorInfo4.posX;
+				centerHelper.posY -= villageDoorInfo4.posY;
+				centerHelper.posZ -= villageDoorInfo4.posZ;
 				z1 = true;
 				villageDoorInfo4.isDetachedFromVillageFlag = true;
-//JAVA TO C# CONVERTER TODO TASK: .NET enumerators are read-only:
-				iterator3.remove();
+
+				toRemove.Add(iterator3.Current as VillageDoorInfo);
 			}
-		}
+
+            foreach (VillageDoorInfo door in toRemove) // PORTING TODO: make this more elegant later, I'm too tired rn to trust myself with properly porting this absolute unit of a method.
+            {
+                villageDoorInfoList.Remove(door);
+            }
+        }
 
 		private bool isBlockDoor(int i1, int i2, int i3)
 		{
-			int i4 = this.worldObj.getBlockId(i1, i2, i3);
+			int i4 = worldObj.getBlockId(i1, i2, i3);
 			return i4 <= 0 ? false : i4 == Block.doorWood.blockID;
 		}
 
 		private void updateVillageRadiusAndCenter()
 		{
-			int i1 = this.villageDoorInfoList.Count;
+			int i1 = villageDoorInfoList.Count;
 			if (i1 == 0)
 			{
-				this.center.set(0, 0, 0);
-				this.villageRadius = 0;
+				center.set(0, 0, 0);
+				villageRadius = 0;
 			}
 			else
 			{
-				this.center.set(this.centerHelper.posX / i1, this.centerHelper.posY / i1, this.centerHelper.posZ / i1);
+				center.set(centerHelper.posX / i1, centerHelper.posY / i1, centerHelper.posZ / i1);
 				int i2 = 0;
 
 				VillageDoorInfo villageDoorInfo4;
-				for (System.Collections.IEnumerator iterator3 = this.villageDoorInfoList.GetEnumerator(); iterator3.MoveNext(); i2 = Math.Max(villageDoorInfo4.getDistanceSquared(this.center.posX, this.center.posY, this.center.posZ), i2))
+				for (System.Collections.IEnumerator iterator3 = villageDoorInfoList.GetEnumerator(); iterator3.MoveNext(); i2 = Math.Max(villageDoorInfo4.getDistanceSquared(center.posX, center.posY, center.posZ), i2))
 				{
 					villageDoorInfo4 = (VillageDoorInfo)iterator3.Current;
 				}
 
-				this.villageRadius = Math.Max(32, (int)Math.Sqrt((double)i2) + 1);
+				villageRadius = Math.Max(32, (int)Math.Sqrt((double)i2) + 1);
 			}
 		}
 	}

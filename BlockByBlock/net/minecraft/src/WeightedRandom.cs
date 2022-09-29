@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -18,7 +19,7 @@ namespace net.minecraft.src
 			return i1;
 		}
 
-		public static WeightedRandomChoice getRandomItem(Random random0, System.Collections.ICollection collection1, int i2)
+		public static WeightedRandomChoice getRandomItem(RandomExtended random0, System.Collections.ICollection collection1, int i2)
 		{
 			if (i2 <= 0)
 			{
@@ -32,14 +33,12 @@ namespace net.minecraft.src
 				WeightedRandomChoice weightedRandomChoice5;
 				do
 				{
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					if (!iterator4.hasNext())
+					if (!iterator4.MoveNext())
 					{
 						return null;
 					}
 
-//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					weightedRandomChoice5 = (WeightedRandomChoice)iterator4.next();
+					weightedRandomChoice5 = (WeightedRandomChoice)iterator4.Current;
 					i3 -= weightedRandomChoice5.itemWeight;
 				} while (i3 >= 0);
 
@@ -47,7 +46,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public static WeightedRandomChoice getRandomItem(Random random0, System.Collections.ICollection collection1)
+		public static WeightedRandomChoice getRandomItem(RandomExtended random0, System.Collections.ICollection collection1)
 		{
 			return getRandomItem(random0, collection1, getTotalWeight(collection1));
 		}
@@ -67,7 +66,7 @@ namespace net.minecraft.src
 			return i1;
 		}
 
-		public static WeightedRandomChoice getRandomItem(Random random0, WeightedRandomChoice[] weightedRandomChoice1, int i2)
+		public static WeightedRandomChoice getRandomItem(RandomExtended random0, WeightedRandomChoice[] weightedRandomChoice1, int i2)
 		{
 			if (i2 <= 0)
 			{
@@ -93,7 +92,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public static WeightedRandomChoice getRandomItem(Random random0, WeightedRandomChoice[] weightedRandomChoice1)
+		public static WeightedRandomChoice getRandomItem(RandomExtended random0, WeightedRandomChoice[] weightedRandomChoice1)
 		{
 			return getRandomItem(random0, weightedRandomChoice1, getTotalWeight(weightedRandomChoice1));
 		}

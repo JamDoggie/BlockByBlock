@@ -13,40 +13,36 @@
 		public int type;
 		public int throwerEntityId;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.entityId = dataInputStream1.readInt();
-			this.type = dataInputStream1.readByte();
-			this.xPosition = dataInputStream1.readInt();
-			this.yPosition = dataInputStream1.readInt();
-			this.zPosition = dataInputStream1.readInt();
-			this.throwerEntityId = dataInputStream1.readInt();
-			if (this.throwerEntityId > 0)
+			entityId = dataInputStream1.ReadInt32();
+			type = dataInputStream1.ReadSByte();
+			xPosition = dataInputStream1.ReadInt32();
+			yPosition = dataInputStream1.ReadInt32();
+			zPosition = dataInputStream1.ReadInt32();
+			throwerEntityId = dataInputStream1.ReadInt32();
+			if (throwerEntityId > 0)
 			{
-				this.speedX = dataInputStream1.readShort();
-				this.speedY = dataInputStream1.readShort();
-				this.speedZ = dataInputStream1.readShort();
+				speedX = dataInputStream1.ReadInt16();
+				speedY = dataInputStream1.ReadInt16();
+				speedZ = dataInputStream1.ReadInt16();
 			}
 
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.entityId);
-			dataOutputStream1.writeByte(this.type);
-			dataOutputStream1.writeInt(this.xPosition);
-			dataOutputStream1.writeInt(this.yPosition);
-			dataOutputStream1.writeInt(this.zPosition);
-			dataOutputStream1.writeInt(this.throwerEntityId);
-			if (this.throwerEntityId > 0)
+			dataOutputStream1.Write(entityId);
+			dataOutputStream1.Write((sbyte)type);
+			dataOutputStream1.Write(xPosition);
+			dataOutputStream1.Write(yPosition);
+			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.Write(throwerEntityId);
+			if (throwerEntityId > 0)
 			{
-				dataOutputStream1.writeShort(this.speedX);
-				dataOutputStream1.writeShort(this.speedY);
-				dataOutputStream1.writeShort(this.speedZ);
+				dataOutputStream1.Write((short)speedX);
+				dataOutputStream1.Write((short)speedY);
+				dataOutputStream1.Write((short)speedZ);
 			}
 
 		}
@@ -60,7 +56,7 @@
 		{
 			get
 			{
-				return 21 + this.throwerEntityId > 0 ? 6 : 0;
+				return 21 + throwerEntityId > 0 ? 6 : 0;
 			}
 		}
 	}

@@ -45,14 +45,12 @@ namespace net.minecraft.src
 			StructureComponent structureComponent3;
 			do
 			{
-				// JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				if (!iterator2.hasNext())
+				if (!iterator2.MoveNext())
 				{
 					return null;
 				}
 
-				// JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-				structureComponent3 = (StructureComponent)iterator2.next();
+				structureComponent3 = (StructureComponent)iterator2.Current;
 			} while (structureComponent3.BoundingBox == null || !structureComponent3.BoundingBox.intersectsWith(structureBoundingBox1));
 
 			return structureComponent3;
@@ -460,7 +458,7 @@ namespace net.minecraft.src
 				{
 					for (int i16 = i7; i16 <= i10; ++i16)
 					{
-						if (random3.nextFloat() <= f4 && (!z13 || this.getBlockIdAtCurrentPosition(world1, i15, i14, i16, structureBoundingBox2) != 0))
+						if (random3.NextSingle() <= f4 && (!z13 || this.getBlockIdAtCurrentPosition(world1, i15, i14, i16, structureBoundingBox2) != 0))
 						{
 							if (i14 != i6 && i14 != i9 && i15 != i5 && i15 != i8 && i16 != i7 && i16 != i10)
 							{
@@ -479,7 +477,7 @@ namespace net.minecraft.src
 
 		protected internal virtual void randomlyPlaceBlock(World world1, StructureBoundingBox structureBoundingBox2, RandomExtended random3, float f4, int i5, int i6, int i7, int i8, int i9)
 		{
-			if (random3.nextFloat() < f4)
+			if (random3.NextSingle() < f4)
 			{
 				this.placeBlockAtCurrentPosition(world1, i8, i9, i5, i6, i7, structureBoundingBox2);
 			}

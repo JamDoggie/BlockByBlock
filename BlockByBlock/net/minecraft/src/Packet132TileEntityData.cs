@@ -13,33 +13,29 @@
 
 		public Packet132TileEntityData()
 		{
-			this.isChunkDataPacket = true;
+			isChunkDataPacket = true;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.xPosition = dataInputStream1.readInt();
-			this.yPosition = dataInputStream1.readShort();
-			this.zPosition = dataInputStream1.readInt();
-			this.actionType = dataInputStream1.readByte();
-			this.customParam1 = dataInputStream1.readInt();
-			this.customParam2 = dataInputStream1.readInt();
-			this.customParam3 = dataInputStream1.readInt();
+			xPosition = dataInputStream1.ReadInt32();
+			yPosition = dataInputStream1.ReadInt16();
+			zPosition = dataInputStream1.ReadInt32();
+			actionType = dataInputStream1.ReadSByte();
+			customParam1 = dataInputStream1.ReadInt32();
+			customParam2 = dataInputStream1.ReadInt32();
+			customParam3 = dataInputStream1.ReadInt32();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.writeInt(this.xPosition);
-			dataOutputStream1.writeShort(this.yPosition);
-			dataOutputStream1.writeInt(this.zPosition);
-			dataOutputStream1.writeByte((sbyte)this.actionType);
-			dataOutputStream1.writeInt(this.customParam1);
-			dataOutputStream1.writeInt(this.customParam2);
-			dataOutputStream1.writeInt(this.customParam3);
+			dataOutputStream1.Write(xPosition);
+			dataOutputStream1.Write((short)yPosition);
+			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.Write((sbyte)actionType);
+			dataOutputStream1.Write(customParam1);
+			dataOutputStream1.Write(customParam2);
+			dataOutputStream1.Write(customParam3);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

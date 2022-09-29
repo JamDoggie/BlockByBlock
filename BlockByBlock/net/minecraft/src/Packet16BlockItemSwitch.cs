@@ -11,21 +11,17 @@
 
 		public Packet16BlockItemSwitch(int i1)
 		{
-			this.id = i1;
+			id = i1;
+		}
+        
+		public override void readPacketData(BinaryReader dataInputStream1)
+		{
+			id = dataInputStream1.ReadInt16();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			this.id = dataInputStream1.readShort();
-		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
-		{
-			dataOutputStream1.writeShort(this.id);
+			dataOutputStream1.Write((short)id);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

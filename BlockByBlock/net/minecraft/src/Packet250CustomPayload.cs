@@ -5,31 +5,27 @@
 	{
 		public string channel;
 		public int length;
-		public sbyte[] data;
+		public byte[] data;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.channel = readString(dataInputStream1, 16);
-			this.length = dataInputStream1.readShort();
-			if (this.length > 0 && this.length < 32767)
+			channel = readString(dataInputStream1, 16);
+			length = dataInputStream1.ReadInt16();
+			if (length > 0 && length < 32767)
 			{
-				this.data = new sbyte[this.length];
-				dataInputStream1.readFully(this.data);
+				data = new byte[length];
+				dataInputStream1.Read(data);
 			}
 
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			writeString(this.channel, dataOutputStream1);
-			dataOutputStream1.writeShort((short)this.length);
-			if (this.data != null)
+			writeString(channel, dataOutputStream1);
+			dataOutputStream1.Write((short)length);
+			if (data != null)
 			{
-				dataOutputStream1.write(this.data);
+				dataOutputStream1.Write(data);
 			}
 
 		}
@@ -43,7 +39,7 @@
 		{
 			get
 			{
-				return 2 + this.channel.Length * 2 + 2 + this.length;
+				return 2 + channel.Length * 2 + 2 + length;
 			}
 		}
 	}

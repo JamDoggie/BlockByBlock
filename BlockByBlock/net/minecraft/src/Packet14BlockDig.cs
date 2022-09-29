@@ -15,33 +15,29 @@
 
 		public Packet14BlockDig(int i1, int i2, int i3, int i4, int i5)
 		{
-			this.status = i1;
-			this.xPosition = i2;
-			this.yPosition = i3;
-			this.zPosition = i4;
-			this.face = i5;
+			status = i1;
+			xPosition = i2;
+			yPosition = i3;
+			zPosition = i4;
+			face = i5;
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void readPacketData(java.io.DataInputStream dataInputStream1) throws java.io.IOException
-		public override void readPacketData(DataInputStream dataInputStream1)
+        
+		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.status = dataInputStream1.read();
-			this.xPosition = dataInputStream1.readInt();
-			this.yPosition = dataInputStream1.read();
-			this.zPosition = dataInputStream1.readInt();
-			this.face = dataInputStream1.read();
+			status = dataInputStream1.ReadSByte();
+			xPosition = dataInputStream1.ReadInt32();
+			yPosition = dataInputStream1.ReadSByte();
+			zPosition = dataInputStream1.ReadInt32();
+			face = dataInputStream1.ReadSByte();
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void writePacketData(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
-		public override void writePacketData(DataOutputStream dataOutputStream1)
+        
+		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.write(this.status);
-			dataOutputStream1.writeInt(this.xPosition);
-			dataOutputStream1.write(this.yPosition);
-			dataOutputStream1.writeInt(this.zPosition);
-			dataOutputStream1.write(this.face);
+			dataOutputStream1.Write((sbyte)status);
+			dataOutputStream1.Write(xPosition);
+			dataOutputStream1.Write((sbyte)yPosition);
+			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.Write((sbyte)face);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

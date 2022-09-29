@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BlockByBlock;
+using ICSharpCode.SharpZipLib.Zip;
+using System;
 using System.IO;
 
 namespace net.minecraft.src
@@ -8,17 +10,19 @@ namespace net.minecraft.src
 
 	using GL11 = org.lwjgl.opengl.GL11;
 
+	// PORTING TODO: OpenGL code
+
 	public class TexturePackCustom : TexturePackBase
 	{
 		private ZipFile texturePackZipFile;
 		private int texturePackName = -1;
 		private BufferedImage texturePackThumbnail;
-		private File texturePackFile;
+		private FileInfo texturePackFile;
 
-		public TexturePackCustom(File file1)
+		public TexturePackCustom(FileInfo file1)
 		{
-			this.texturePackFileName = file1.getName();
-			this.texturePackFile = file1;
+			texturePackFileName = file1.Name;
+			texturePackFile = file1;
 		}
 
 		private string truncateString(string string1)
@@ -30,9 +34,7 @@ namespace net.minecraft.src
 
 			return string1;
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void func_6485_a(net.minecraft.client.Minecraft minecraft1) throws java.io.IOException
+        
 		public override void func_6485_a(Minecraft minecraft1)
 		{
 			ZipFile zipFile2 = null;
@@ -40,11 +42,11 @@ namespace net.minecraft.src
 
 			try
 			{
-				zipFile2 = new ZipFile(this.texturePackFile);
+				zipFile2 = new ZipFile(texturePackFile.FullName);
 
 				try
 				{
-					inputStream3 = zipFile2.getInputStream(zipFile2.getEntry("pack.txt"));
+					inputStream3 = zipFile2.GetInputStream(zipFile2.GetEntry("pack.txt"));
 					StreamReader bufferedReader4 = new StreamReader(inputStream3);
 					this.firstDescriptionLine = this.truncateString(bufferedReader4.ReadLine());
 					this.secondDescriptionLine = this.truncateString(bufferedReader4.ReadLine());
@@ -57,15 +59,15 @@ namespace net.minecraft.src
 
 				try
 				{
-					inputStream3 = zipFile2.getInputStream(zipFile2.getEntry("pack.png"));
+					inputStream3 = zipFile2.GetInputStream(zipFile2.GetEntry("pack.png"));
 					this.texturePackThumbnail = ImageIO.read(inputStream3);
 					inputStream3.Close();
 				}
 				catch (Exception)
 				{
 				}
-
-				zipFile2.close();
+                
+				zipFile2.Close();
 			}
 			catch (Exception exception21)
 			{
@@ -84,7 +86,7 @@ namespace net.minecraft.src
 
 				try
 				{
-					zipFile2.close();
+					zipFile2.Close();
 				}
 				catch (Exception)
 				{
@@ -126,7 +128,7 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				this.texturePackZipFile = new ZipFile(this.texturePackFile);
+				texturePackZipFile = new ZipFile(texturePackFile.FullName);
 			}
 			catch (Exception)
 			{
@@ -138,7 +140,7 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				this.texturePackZipFile.close();
+				this.texturePackZipFile.Close();
 			}
 			catch (Exception)
 			{
@@ -151,17 +153,17 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				ZipEntry zipEntry2 = this.texturePackZipFile.getEntry(string1.Substring(1));
+				ZipEntry zipEntry2 = this.texturePackZipFile.GetEntry(string1.Substring(1));
 				if (zipEntry2 != null)
 				{
-					return this.texturePackZipFile.getInputStream(zipEntry2);
+					return this.texturePackZipFile.GetInputStream(zipEntry2);
 				}
 			}
 			catch (Exception)
 			{
 			}
 
-			return typeof(TexturePackBase).getResourceAsStream(string1);
+			return GameEnv.GetResourceAsStream(string1);
 		}
 	}
 

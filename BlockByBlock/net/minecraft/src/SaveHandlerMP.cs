@@ -25,7 +25,7 @@
 		{
 		}
 
-		public virtual File getMapFileFromName(string string1)
+		public virtual FileInfo getMapFileFromName(string string1)
 		{
 			return null;
 		}
