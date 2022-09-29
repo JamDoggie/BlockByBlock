@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 using System.Collections;
 
 namespace net.minecraft.src
@@ -13,22 +14,22 @@ namespace net.minecraft.src
 
 		protected internal WorldChunkManager()
 		{
-			this.biomeCache = new BiomeCache(this);
-			this.biomesToSpawnIn = new ArrayList();
-			this.biomesToSpawnIn.Add(BiomeGenBase.forest);
-			this.biomesToSpawnIn.Add(BiomeGenBase.plains);
-			this.biomesToSpawnIn.Add(BiomeGenBase.taiga);
-			this.biomesToSpawnIn.Add(BiomeGenBase.taigaHills);
-			this.biomesToSpawnIn.Add(BiomeGenBase.forestHills);
-			this.biomesToSpawnIn.Add(BiomeGenBase.jungle);
-			this.biomesToSpawnIn.Add(BiomeGenBase.jungleHills);
+			biomeCache = new BiomeCache(this);
+			biomesToSpawnIn = new ArrayList();
+			biomesToSpawnIn.Add(BiomeGenBase.forest);
+			biomesToSpawnIn.Add(BiomeGenBase.plains);
+			biomesToSpawnIn.Add(BiomeGenBase.taiga);
+			biomesToSpawnIn.Add(BiomeGenBase.taigaHills);
+			biomesToSpawnIn.Add(BiomeGenBase.forestHills);
+			biomesToSpawnIn.Add(BiomeGenBase.jungle);
+			biomesToSpawnIn.Add(BiomeGenBase.jungleHills);
 		}
 
 		public WorldChunkManager(long j1, WorldType worldType3) : this()
 		{
 			GenLayer[] genLayer4 = GenLayer.func_48425_a(j1, worldType3);
-			this.genBiomes = genLayer4[0];
-			this.biomeIndexLayer = genLayer4[1];
+			genBiomes = genLayer4[0];
+			biomeIndexLayer = genLayer4[1];
 		}
 
 		public WorldChunkManager(World world1) : this(world1.Seed, world1.WorldInfo.TerrainType)
@@ -173,7 +174,7 @@ namespace net.minecraft.src
 			return true;
 		}
 
-		public virtual ChunkPosition findBiomePosition(int i1, int i2, int i3, System.Collections.IList list4, Random random5)
+		public virtual ChunkPosition findBiomePosition(int i1, int i2, int i3, System.Collections.IList list4, RandomExtended random5)
 		{
 			int i6 = i1 - i3 >> 2;
 			int i7 = i2 - i3 >> 2;

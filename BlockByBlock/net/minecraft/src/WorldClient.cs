@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace net.minecraft.src
@@ -6,7 +7,7 @@ namespace net.minecraft.src
 
 	public class WorldClient : World
 	{
-		private LinkedList blocksToReceive = new LinkedList();
+		private IList blocksToReceive = new ArrayList();
 		private NetClientHandler sendQueue;
 		private ChunkProviderClient field_20915_C;
 		private IntHashMap entityHashSet = new IntHashMap();
@@ -28,8 +29,11 @@ namespace net.minecraft.src
 			int i1;
 			for (i1 = 0; i1 < 10 && this.entitySpawnQueue.Count > 0; ++i1)
 			{
-				Entity entity2 = (Entity)this.entitySpawnQueue.GetEnumerator().next();
-				this.entitySpawnQueue.remove(entity2);
+				IEnumerator iterator = entitySpawnQueue.GetEnumerator();
+				iterator.MoveNext();
+
+				Entity entity2 = (Entity)iterator.Current;
+				this.entitySpawnQueue.Remove(entity2);
 				if (!this.loadedEntityList.Contains(entity2))
 				{
 					this.spawnEntityInWorld(entity2);
@@ -40,14 +44,13 @@ namespace net.minecraft.src
 
 			for (i1 = 0; i1 < this.blocksToReceive.Count; ++i1)
 			{
-				WorldBlockPositionType worldBlockPositionType3 = (WorldBlockPositionType)this.blocksToReceive.ToList()[i1];
+				WorldBlockPositionType worldBlockPositionType3 = (WorldBlockPositionType)this.blocksToReceive[i1];
 				if (--worldBlockPositionType3.acceptCountdown == 0)
 				{
 					base.setBlockAndMetadata(worldBlockPositionType3.posX, worldBlockPositionType3.posY, worldBlockPositionType3.posZ, worldBlockPositionType3.blockID, worldBlockPositionType3.metadata);
 					base.markBlockNeedsUpdate(worldBlockPositionType3.posX, worldBlockPositionType3.posY, worldBlockPositionType3.posZ);
-//JAVA TO C# CONVERTER TODO TASK: There is no .NET LinkedList equivalent to the Java 'remove' method:
-					this.blocksToReceive.remove(i1--);
-				}
+					this.blocksToReceive.RemoveAt(i1--);
+				} // PORTING TODO: This logic is confusing to me. Maybe something's different because blocksToReceieve used to be a linked list? IDK, check back on this later.
 			}
 
 			this.field_20915_C.unload100OldestChunks();
@@ -58,11 +61,10 @@ namespace net.minecraft.src
 		{
 			for (int i7 = 0; i7 < this.blocksToReceive.Count; ++i7)
 			{
-				WorldBlockPositionType worldBlockPositionType8 = (WorldBlockPositionType)this.blocksToReceive.ToList()[i7];
+				WorldBlockPositionType worldBlockPositionType8 = (WorldBlockPositionType)this.blocksToReceive[i7];
 				if (worldBlockPositionType8.posX >= i1 && worldBlockPositionType8.posY >= i2 && worldBlockPositionType8.posZ >= i3 && worldBlockPositionType8.posX <= i4 && worldBlockPositionType8.posY <= i5 && worldBlockPositionType8.posZ <= i6)
 				{
-//JAVA TO C# CONVERTER TODO TASK: There is no .NET LinkedList equivalent to the Java 'remove' method:
-					this.blocksToReceive.remove(i7--);
+					this.blocksToReceive.RemoveAt(i7--);
 				}
 			}
 
@@ -136,13 +138,10 @@ namespace net.minecraft.src
 			return z2;
 		}
 
-		public override Entity EntityDead
+		public override void setEntityDead(Entity entity1)
 		{
-			set
-			{
-				base.EntityDead = value;
-				this.entityList.remove(value);
-			}
+			base.setEntityDead(entity1);
+			this.entityList.Remove(entity1);
 		}
 
 		protected internal override void obtainEntitySkin(Entity entity1)
@@ -150,7 +149,7 @@ namespace net.minecraft.src
 			base.obtainEntitySkin(entity1);
 			if (this.entitySpawnQueue.Contains(entity1))
 			{
-				this.entitySpawnQueue.remove(entity1);
+				this.entitySpawnQueue.Remove(entity1);
 			}
 
 		}
@@ -166,7 +165,7 @@ namespace net.minecraft.src
 				}
 				else
 				{
-					this.entityList.remove(entity1);
+					this.entityList.Remove(entity1);
 				}
 			}
 
@@ -177,7 +176,7 @@ namespace net.minecraft.src
 			Entity entity3 = this.getEntityByID(i1);
 			if (entity3 != null)
 			{
-				this.EntityDead = entity3;
+				setEntityDead(entity3);
 			}
 
 			this.entityList.Add(entity2);
@@ -200,8 +199,8 @@ namespace net.minecraft.src
 			Entity entity2 = (Entity)this.entityHashSet.removeObject(i1);
 			if (entity2 != null)
 			{
-				this.entityList.remove(entity2);
-				this.EntityDead = entity2;
+				this.entityList.Remove(entity2);
+				setEntityDead(entity2);
 			}
 
 			return entity2;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -6,7 +7,7 @@ namespace net.minecraft.src
 	public class WorldGenBigTree : WorldGenerator
 	{
 		internal static readonly sbyte[] otherCoordPairs = new sbyte[]{(sbyte)2, (sbyte)0, (sbyte)0, (sbyte)1, (sbyte)2, (sbyte)1};
-		internal Random rand = new Random();
+		internal RandomExtended rand = new RandomExtended();
 		internal World worldObj;
 		internal int[] basePos = new int[]{0, 0, 0};
 		internal int heightLimit = 0;
@@ -38,9 +39,7 @@ namespace net.minecraft.src
 			{
 				i1 = 1;
 			}
-
-//JAVA TO C# CONVERTER NOTE: The following call to the 'RectangularArrays' helper class reproduces the rectangular array initialization that is automatic in Java:
-//ORIGINAL LINE: int[][] i2 = new int[i1 * this.heightLimit][4];
+            
 			int[][] i2 = RectangularArrays.RectangularIntArray(i1 * this.heightLimit, 4);
 			int i3 = this.basePos[1] + this.heightLimit - this.leafDistanceLimit;
 			int i4 = 1;
@@ -67,8 +66,8 @@ namespace net.minecraft.src
 					{
 						for (double d9 = 0.5D; i7 < i1; ++i7)
 						{
-							double d11 = this.scaleWidth * (double)f8 * ((double)this.rand.nextFloat() + 0.328D);
-							double d13 = (double)this.rand.nextFloat() * 2.0D * 3.14159D;
+							double d11 = this.scaleWidth * (double)f8 * ((double)this.rand.NextSingle() + 0.328D);
+							double d13 = (double)this.rand.NextSingle() * 2.0D * 3.14159D;
 							int i15 = MathHelper.floor_double(d11 * Math.Sin(d13) + (double)this.basePos[0] + d9);
 							int i16 = MathHelper.floor_double(d11 * Math.Cos(d13) + (double)this.basePos[2] + d9);
 							int[] i17 = new int[]{i15, i3, i16};
@@ -410,11 +409,12 @@ namespace net.minecraft.src
 			this.leafDensity = d5;
 		}
 
-		public override bool generate(World world1, Random random2, int i3, int i4, int i5)
+		public override bool generate(World world1, RandomExtended random2, int i3, int i4, int i5)
 		{
 			this.worldObj = world1;
-			long j6 = random2.nextLong();
-			this.rand.setSeed(j6);
+			long j6 = random2.NextInt64();
+			//this.rand.setSeed(j6); // PORTING TODO: RandomExtended.setSeed
+			rand = new RandomExtended(j6);
 			this.basePos[0] = i3;
 			this.basePos[1] = i4;
 			this.basePos[2] = i5;

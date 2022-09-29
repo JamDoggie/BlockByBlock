@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -70,7 +71,7 @@ namespace net.minecraft.src
 			return this.loadBlockGeneratorData(biomeGenBase1, i2, i3, i4, i5);
 		}
 
-		public override ChunkPosition findBiomePosition(int i1, int i2, int i3, System.Collections.IList list4, Random random5)
+		public override ChunkPosition findBiomePosition(int i1, int i2, int i3, System.Collections.IList list4, RandomExtended random5)
 		{
 			return list4.Contains(this.biomeGenerator) ? new ChunkPosition(i1 - i3 + random5.Next(i3 * 2 + 1), 0, i2 - i3 + random5.Next(i3 * 2 + 1)) : null;
 		}

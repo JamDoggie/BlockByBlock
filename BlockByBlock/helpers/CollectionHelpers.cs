@@ -22,5 +22,13 @@ namespace BlockByBlock.helpers
             collection.RemoveAt(index);
             return item;
         }
+
+        public static void RemoveAll(this IList collection, IList list)
+        {
+            foreach(object o in list)
+            {
+                collection.Remove(o);
+            }
+        }
     }
 }

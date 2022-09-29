@@ -1759,7 +1759,7 @@ namespace net.minecraft.client
 		{
 			int i2 = this.thePlayer.dimension;
 			this.thePlayer.dimension = i1;
-			this.theWorld.EntityDead = this.thePlayer;
+			theWorld.setEntityDead(thePlayer);
 			this.thePlayer.isDead = false;
 			double d3 = this.thePlayer.posX;
 			double d5 = this.thePlayer.posZ;
@@ -2115,7 +2115,7 @@ namespace net.minecraft.client
 			if (this.thePlayer != null)
 			{
 				i10 = this.thePlayer.entityId;
-				this.theWorld.EntityDead = this.thePlayer;
+				theWorld.setEntityDead(thePlayer);
 			}
 
 			EntityPlayerSP entityPlayerSP9 = this.thePlayer;

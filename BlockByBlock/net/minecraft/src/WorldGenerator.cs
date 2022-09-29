@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -17,7 +18,7 @@ namespace net.minecraft.src
 			this.doBlockNotify = z1;
 		}
 
-		public abstract bool generate(World world1, Random random2, int i3, int i4, int i5);
+		public abstract bool generate(World world1, RandomExtended random2, int i3, int i4, int i5);
 
 		public virtual void setScale(double d1, double d3, double d5)
 		{

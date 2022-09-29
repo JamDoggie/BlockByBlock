@@ -1,4 +1,5 @@
-﻿using BlockByBlock.java_extensions;
+﻿using BlockByBlock.helpers;
+using BlockByBlock.java_extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,8 +12,8 @@ namespace net.minecraft.src
 		public bool scheduledUpdatesAreImmediate;
 		public System.Collections.IList loadedEntityList;
 		private System.Collections.IList unloadedEntityList;
-		private SortedSet scheduledTickTreeSet;
-		private ISet<object> scheduledTickSet;
+		private IList scheduledTickTreeSet;
+		private IList scheduledTickSet;
 		public System.Collections.IList loadedTileEntityList;
 		private System.Collections.IList addedTileEntityList;
 		private System.Collections.IList entityRemoval;
@@ -78,91 +79,91 @@ namespace net.minecraft.src
 
 		public World(ISaveHandler iSaveHandler1, string string2, WorldProvider worldProvider3, WorldSettings worldSettings4)
 		{
-			this.scheduledUpdatesAreImmediate = false;
-			this.loadedEntityList = new ArrayList();
-			this.unloadedEntityList = new ArrayList();
-			this.scheduledTickTreeSet = new SortedSet();
-			this.scheduledTickSet = new HashSet<object>();
-			this.loadedTileEntityList = new ArrayList();
-			this.addedTileEntityList = new ArrayList();
-			this.entityRemoval = new ArrayList();
-			this.playerEntities = new ArrayList();
-			this.weatherEffects = new ArrayList();
-			this.cloudColour = 16777215L;
-			this.skylightSubtracted = 0;
-			this.updateLCG = (new Random()).Next();
-			this.DIST_HASH_MAGIC = 1013904223;
-			this.lastLightningBolt = 0;
-			this.lightningFlash = 0;
-			this.editingBlocks = false;
-			this.lockTimestamp = DateTimeHelper.CurrentUnixTimeMillis();
-			this.autosavePeriod = 40;
-			this.rand = new Random();
-			this.isNewWorld = false;
-			this.worldAccesses = new ArrayList();
-			this.villageCollectionObj = new VillageCollection(this);
-			this.villageSiegeObj = new VillageSiege(this);
-			this.collidingBoundingBoxes = new ArrayList();
-			this.spawnHostileMobs = true;
-			this.spawnPeacefulMobs = true;
-			this.activeChunkSet = new HashSet<object>();
-			this.ambientTickCountdown = this.rand.Next(12000);
-			this.lightUpdateBlockList = new int[32768];
-			this.entitiesWithinAABBExcludingEntity = new ArrayList();
-			this.isRemote = false;
-			this.saveHandler = iSaveHandler1;
-			this.worldInfo = new WorldInfo(worldSettings4, string2);
-			this.worldProvider = worldProvider3;
-			this.mapStorage = new MapStorage(iSaveHandler1);
+			scheduledUpdatesAreImmediate = false;
+			loadedEntityList = new ArrayList();
+			unloadedEntityList = new ArrayList();
+			scheduledTickTreeSet = new ArrayList();
+			scheduledTickSet = new ArrayList();
+			loadedTileEntityList = new ArrayList();
+			addedTileEntityList = new ArrayList();
+			entityRemoval = new ArrayList();
+			playerEntities = new ArrayList();
+			weatherEffects = new ArrayList();
+			cloudColour = 16777215L;
+			skylightSubtracted = 0;
+			updateLCG = (new Random()).Next();
+			DIST_HASH_MAGIC = 1013904223;
+			lastLightningBolt = 0;
+			lightningFlash = 0;
+			editingBlocks = false;
+			lockTimestamp = DateTimeHelper.CurrentUnixTimeMillis();
+			autosavePeriod = 40;
+			rand = new RandomExtended();
+			isNewWorld = false;
+			worldAccesses = new ArrayList();
+			villageCollectionObj = new VillageCollection(this);
+			villageSiegeObj = new VillageSiege(this);
+			collidingBoundingBoxes = new ArrayList();
+			spawnHostileMobs = true;
+			spawnPeacefulMobs = true;
+			activeChunkSet = new HashSet<object>();
+			ambientTickCountdown = this.rand.Next(12000);
+			lightUpdateBlockList = new int[32768];
+			entitiesWithinAABBExcludingEntity = new ArrayList();
+			isRemote = false;
+			saveHandler = iSaveHandler1;
+			worldInfo = new WorldInfo(worldSettings4, string2);
+			worldProvider = worldProvider3;
+			mapStorage = new MapStorage(iSaveHandler1);
 			worldProvider3.registerWorld(this);
-			this.chunkProvider = this.createChunkProvider();
-			this.calculateInitialSkylight();
-			this.calculateInitialWeather();
+			chunkProvider = this.createChunkProvider();
+			calculateInitialSkylight();
+			calculateInitialWeather();
 		}
 
 		public World(World world1, WorldProvider worldProvider2)
 		{
-			this.scheduledUpdatesAreImmediate = false;
-			this.loadedEntityList = new ArrayList();
-			this.unloadedEntityList = new ArrayList();
-			this.scheduledTickTreeSet = new SortedSet();
-			this.scheduledTickSet = new HashSet<object>();
-			this.loadedTileEntityList = new ArrayList();
-			this.addedTileEntityList = new ArrayList();
-			this.entityRemoval = new ArrayList();
-			this.playerEntities = new ArrayList();
-			this.weatherEffects = new ArrayList();
-			this.cloudColour = 16777215L;
-			this.skylightSubtracted = 0;
-			this.updateLCG = (new Random()).Next();
-			this.DIST_HASH_MAGIC = 1013904223;
-			this.lastLightningBolt = 0;
-			this.lightningFlash = 0;
-			this.editingBlocks = false;
-			this.lockTimestamp = DateTimeHelper.CurrentUnixTimeMillis();
-			this.autosavePeriod = 40;
-			this.rand = new Random();
-			this.isNewWorld = false;
-			this.worldAccesses = new ArrayList();
-			this.villageCollectionObj = new VillageCollection(this);
-			this.villageSiegeObj = new VillageSiege(this);
-			this.collidingBoundingBoxes = new ArrayList();
-			this.spawnHostileMobs = true;
-			this.spawnPeacefulMobs = true;
-			this.activeChunkSet = new HashSet<object>();
-			this.ambientTickCountdown = this.rand.Next(12000);
-			this.lightUpdateBlockList = new int[32768];
-			this.entitiesWithinAABBExcludingEntity = new ArrayList();
-			this.isRemote = false;
-			this.lockTimestamp = world1.lockTimestamp;
-			this.saveHandler = world1.saveHandler;
-			this.worldInfo = new WorldInfo(world1.worldInfo);
-			this.mapStorage = new MapStorage(this.saveHandler);
-			this.worldProvider = worldProvider2;
+			scheduledUpdatesAreImmediate = false;
+			loadedEntityList = new ArrayList();
+			unloadedEntityList = new ArrayList();
+			scheduledTickTreeSet = new ArrayList();
+			scheduledTickSet = new ArrayList();
+			loadedTileEntityList = new ArrayList();
+			addedTileEntityList = new ArrayList();
+			entityRemoval = new ArrayList();
+			playerEntities = new ArrayList();
+			weatherEffects = new ArrayList();
+			cloudColour = 16777215L;
+			skylightSubtracted = 0;
+			updateLCG = (new Random()).Next();
+			DIST_HASH_MAGIC = 1013904223;
+			lastLightningBolt = 0;
+			lightningFlash = 0;
+			editingBlocks = false;
+			lockTimestamp = DateTimeHelper.CurrentUnixTimeMillis();
+			autosavePeriod = 40;
+			rand = new RandomExtended();
+			isNewWorld = false;
+			worldAccesses = new ArrayList();
+			villageCollectionObj = new VillageCollection(this);
+			villageSiegeObj = new VillageSiege(this);
+			collidingBoundingBoxes = new ArrayList();
+			spawnHostileMobs = true;
+			spawnPeacefulMobs = true;
+			activeChunkSet = new HashSet<object>();
+			ambientTickCountdown = this.rand.Next(12000);
+			lightUpdateBlockList = new int[32768];
+			entitiesWithinAABBExcludingEntity = new ArrayList();
+			isRemote = false;
+			lockTimestamp = world1.lockTimestamp;
+			saveHandler = world1.saveHandler;
+			worldInfo = new WorldInfo(world1.worldInfo);
+			mapStorage = new MapStorage(this.saveHandler);
+			worldProvider = worldProvider2;
 			worldProvider2.registerWorld(this);
-			this.chunkProvider = this.createChunkProvider();
-			this.calculateInitialSkylight();
-			this.calculateInitialWeather();
+			chunkProvider = this.createChunkProvider();
+			calculateInitialSkylight();
+			calculateInitialWeather();
 		}
 
 		public World(ISaveHandler iSaveHandler1, string string2, WorldSettings worldSettings3) : this(iSaveHandler1, string2, (WorldSettings)worldSettings3, (WorldProvider)null)
@@ -171,42 +172,42 @@ namespace net.minecraft.src
 
 		public World(ISaveHandler iSaveHandler1, string string2, WorldSettings worldSettings3, WorldProvider worldProvider4)
 		{
-			this.scheduledUpdatesAreImmediate = false;
-			this.loadedEntityList = new ArrayList();
-			this.unloadedEntityList = new ArrayList();
-			this.scheduledTickTreeSet = new SortedSet();
-			this.scheduledTickSet = new HashSet<object>();
-			this.loadedTileEntityList = new ArrayList();
-			this.addedTileEntityList = new ArrayList();
-			this.entityRemoval = new ArrayList();
-			this.playerEntities = new ArrayList();
-			this.weatherEffects = new ArrayList();
-			this.cloudColour = 16777215L;
-			this.skylightSubtracted = 0;
-			this.updateLCG = (new Random()).Next();
-			this.DIST_HASH_MAGIC = 1013904223;
-			this.lastLightningBolt = 0;
-			this.lightningFlash = 0;
-			this.editingBlocks = false;
-			this.lockTimestamp = DateTimeHelper.CurrentUnixTimeMillis();
-			this.autosavePeriod = 40;
-			this.rand = new RandomExtended();
-			this.isNewWorld = false;
-			this.worldAccesses = new ArrayList();
-			this.villageCollectionObj = new VillageCollection(this);
-			this.villageSiegeObj = new VillageSiege(this);
-			this.collidingBoundingBoxes = new ArrayList();
-			this.spawnHostileMobs = true;
-			this.spawnPeacefulMobs = true;
-			this.activeChunkSet = new HashSet<object>();
-			this.ambientTickCountdown = this.rand.Next(12000);
-			this.lightUpdateBlockList = new int[32768];
-			this.entitiesWithinAABBExcludingEntity = new ArrayList();
-			this.isRemote = false;
-			this.saveHandler = iSaveHandler1;
-			this.mapStorage = new MapStorage(iSaveHandler1);
-			this.worldInfo = iSaveHandler1.loadWorldInfo();
-			this.isNewWorld = this.worldInfo == null;
+			scheduledUpdatesAreImmediate = false;
+			loadedEntityList = new ArrayList();
+			unloadedEntityList = new ArrayList();
+			scheduledTickTreeSet = new ArrayList();
+			scheduledTickSet = new ArrayList();
+			loadedTileEntityList = new ArrayList();
+			addedTileEntityList = new ArrayList();
+			entityRemoval = new ArrayList();
+			playerEntities = new ArrayList();
+			weatherEffects = new ArrayList();
+			cloudColour = 16777215L;
+			skylightSubtracted = 0;
+			updateLCG = (new Random()).Next();
+			DIST_HASH_MAGIC = 1013904223;
+			lastLightningBolt = 0;
+			lightningFlash = 0;
+			editingBlocks = false;
+			lockTimestamp = DateTimeHelper.CurrentUnixTimeMillis();
+			autosavePeriod = 40;
+			rand = new RandomExtended();
+			isNewWorld = false;
+			worldAccesses = new ArrayList();
+			villageCollectionObj = new VillageCollection(this);
+			villageSiegeObj = new VillageSiege(this);
+			collidingBoundingBoxes = new ArrayList();
+			spawnHostileMobs = true;
+			spawnPeacefulMobs = true;
+			activeChunkSet = new HashSet<object>();
+			ambientTickCountdown = this.rand.Next(12000);
+			lightUpdateBlockList = new int[32768];
+			entitiesWithinAABBExcludingEntity = new ArrayList();
+			isRemote = false;
+			saveHandler = iSaveHandler1;
+			mapStorage = new MapStorage(iSaveHandler1);
+			worldInfo = iSaveHandler1.loadWorldInfo();
+			isNewWorld = this.worldInfo == null;
 			if (worldProvider4 != null)
 			{
 				this.worldProvider = worldProvider4;
@@ -1289,29 +1290,25 @@ namespace net.minecraft.src
 			}
 
 		}
-
-		public virtual Entity EntityDead
+        
+		public virtual void setEntityDead(Entity entity1)
 		{
-			set
+			if (entity1.riddenByEntity != null)
 			{
-				if (value.riddenByEntity != null)
-				{
-					value.riddenByEntity.mountEntity((Entity)null);
-				}
-    
-				if (value.ridingEntity != null)
-				{
-					value.mountEntity((Entity)null);
-				}
-    
-				value.setDead();
-				if (value is EntityPlayer)
-				{
-					this.playerEntities.Remove((EntityPlayer)value);
-					this.updateAllPlayersSleepingFlag();
-				}
-    
+				entity1.riddenByEntity.mountEntity(null);
 			}
+
+			if (entity1.ridingEntity != null)
+			{
+				entity1.mountEntity(null);
+			}
+
+			entity1.setDead();
+			if (entity1 is EntityPlayer) {
+				playerEntities.Remove((EntityPlayer)entity1);
+				updateAllPlayersSleepingFlag();
+			}
+
 		}
 
 		public virtual void addWorldAccess(IWorldAccess iWorldAccess1)
@@ -1724,17 +1721,21 @@ namespace net.minecraft.src
 				{
 					tileEntity5.updateEntity();
 				}
+			}
 
-				if (tileEntity5.Invalid)
+			for (int i = loadedTileEntityList.Count - 1; i >= 0; i--)
+            {
+                TileEntity tileEntity = (TileEntity)loadedTileEntityList[i];
+
+                if (tileEntity.Invalid)
 				{
-//JAVA TO C# CONVERTER TODO TASK: .NET enumerators are read-only:
-					iterator10.remove();
-					if (this.chunkExists(tileEntity5.xCoord >> 4, tileEntity5.zCoord >> 4))
+					loadedTileEntityList.RemoveAt(i);
+					if (this.chunkExists(tileEntity.xCoord >> 4, tileEntity.zCoord >> 4))
 					{
-						Chunk chunk7 = this.getChunkFromChunkCoords(tileEntity5.xCoord >> 4, tileEntity5.zCoord >> 4);
+						Chunk chunk7 = this.getChunkFromChunkCoords(tileEntity.xCoord >> 4, tileEntity.zCoord >> 4);
 						if (chunk7 != null)
 						{
-							chunk7.removeChunkBlockTileEntity(tileEntity5.xCoord & 15, tileEntity5.yCoord, tileEntity5.zCoord & 15);
+							chunk7.removeChunkBlockTileEntity(tileEntity.xCoord & 15, tileEntity.yCoord, tileEntity.zCoord & 15);
 						}
 					}
 				}
@@ -2327,7 +2328,7 @@ namespace net.minecraft.src
 			{
 				ThreadedFileIOBase.threadedIOInstance.waitForFinish();
 			}
-			catch (InterruptedException interruptedException3)
+			catch (ThreadInterruptedException interruptedException3)
 			{
 				Console.WriteLine(interruptedException3.ToString());
 				Console.Write(interruptedException3.StackTrace);
@@ -2587,7 +2588,7 @@ namespace net.minecraft.src
 					EntityPlayer entityPlayer9 = this.getClosestPlayer((double)i5 + 0.5D, (double)i7 + 0.5D, (double)i6 + 0.5D, 8.0D);
 					if (entityPlayer9 != null && entityPlayer9.getDistanceSq((double)i5 + 0.5D, (double)i7 + 0.5D, (double)i6 + 0.5D) > 4.0D)
 					{
-						this.playSoundEffect((double)i5 + 0.5D, (double)i7 + 0.5D, (double)i6 + 0.5D, "ambient.cave.cave", 0.7F, 0.8F + this.rand.nextFloat() * 0.2F);
+						this.playSoundEffect((double)i5 + 0.5D, (double)i7 + 0.5D, (double)i6 + 0.5D, "ambient.cave.cave", 0.7F, 0.8F + this.rand.NextSingle() * 0.2F);
 						this.ambientTickCountdown = this.rand.Next(12000) + 6000;
 					}
 				}
@@ -3080,8 +3081,8 @@ namespace net.minecraft.src
 
 		public virtual bool tickUpdates(bool z1)
 		{
-			int i2 = this.scheduledTickTreeSet.Count;
-			if (i2 != this.scheduledTickSet.Count)
+			int i2 = scheduledTickTreeSet.Count;
+			if (i2 != scheduledTickSet.Count)
 			{
 				throw new System.InvalidOperationException("TickNextTick list out of synch");
 			}
@@ -3094,26 +3095,29 @@ namespace net.minecraft.src
 
 				for (int i3 = 0; i3 < i2; ++i3)
 				{
-					NextTickListEntry nextTickListEntry4 = (NextTickListEntry)this.scheduledTickTreeSet.Min;
-					if (!z1 && nextTickListEntry4.scheduledTime > this.worldInfo.WorldTime)
-					{
-						break;
-					}
-
-					this.scheduledTickTreeSet.remove(nextTickListEntry4);
-					this.scheduledTickSet.remove(nextTickListEntry4);
-					sbyte b5 = 8;
-					if (this.checkChunksExist(nextTickListEntry4.xCoord - b5, nextTickListEntry4.yCoord - b5, nextTickListEntry4.zCoord - b5, nextTickListEntry4.xCoord + b5, nextTickListEntry4.yCoord + b5, nextTickListEntry4.zCoord + b5))
-					{
-						int i6 = this.getBlockId(nextTickListEntry4.xCoord, nextTickListEntry4.yCoord, nextTickListEntry4.zCoord);
-						if (i6 == nextTickListEntry4.blockID && i6 > 0)
+                    if (scheduledTickTreeSet.Count > 0)
+                    {
+						NextTickListEntry nextTickListEntry4 = (NextTickListEntry)this.scheduledTickTreeSet[0];
+						if (!z1 && nextTickListEntry4.scheduledTime > this.worldInfo.WorldTime)
 						{
-							Block.blocksList[i6].updateTick(this, nextTickListEntry4.xCoord, nextTickListEntry4.yCoord, nextTickListEntry4.zCoord, this.rand);
+							break;
+						}
+
+						scheduledTickTreeSet.Remove(nextTickListEntry4);
+						scheduledTickSet.Remove(nextTickListEntry4);
+						sbyte b5 = 8;
+						if (this.checkChunksExist(nextTickListEntry4.xCoord - b5, nextTickListEntry4.yCoord - b5, nextTickListEntry4.zCoord - b5, nextTickListEntry4.xCoord + b5, nextTickListEntry4.yCoord + b5, nextTickListEntry4.zCoord + b5))
+						{
+							int i6 = this.getBlockId(nextTickListEntry4.xCoord, nextTickListEntry4.yCoord, nextTickListEntry4.zCoord);
+							if (i6 == nextTickListEntry4.blockID && i6 > 0)
+							{
+								Block.blocksList[i6].updateTick(this, nextTickListEntry4.xCoord, nextTickListEntry4.yCoord, nextTickListEntry4.zCoord, this.rand);
+							}
 						}
 					}
 				}
 
-				return this.scheduledTickTreeSet.Count != 0;
+				return scheduledTickTreeSet.Count != 0;
 			}
 		}
 
@@ -3125,18 +3129,17 @@ namespace net.minecraft.src
 			int i6 = i5 + 16;
 			int i7 = chunkCoordIntPair4.chunkZPos << 4;
 			int i8 = i7 + 16;
-			System.Collections.IEnumerator iterator9 = this.scheduledTickSet.GetEnumerator();
+            
+			for (int i = scheduledTickSet.Count - 1; i >= 0; i--)
+            {
+                NextTickListEntry nextTickListEntry = (NextTickListEntry)scheduledTickSet[i];
 
-			while (iterator9.MoveNext())
-			{
-				NextTickListEntry nextTickListEntry10 = (NextTickListEntry)iterator9.Current;
-				if (nextTickListEntry10.xCoord >= i5 && nextTickListEntry10.xCoord < i6 && nextTickListEntry10.zCoord >= i7 && nextTickListEntry10.zCoord < i8)
+				if (nextTickListEntry.xCoord >= i5 && nextTickListEntry.xCoord < i6 && nextTickListEntry.zCoord >= i7 && nextTickListEntry.zCoord < i8)
 				{
 					if (z2)
 					{
-						this.scheduledTickTreeSet.remove(nextTickListEntry10);
-//JAVA TO C# CONVERTER TODO TASK: .NET enumerators are read-only:
-						iterator9.remove();
+						this.scheduledTickTreeSet.Remove(nextTickListEntry);
+						scheduledTickSet.Remove(nextTickListEntry);
 					}
 
 					if (arrayList3 == null)
@@ -3144,7 +3147,7 @@ namespace net.minecraft.src
 						arrayList3 = new ArrayList();
 					}
 
-					arrayList3.Add(nextTickListEntry10);
+					arrayList3.Add(nextTickListEntry);
 				}
 			}
 
@@ -3154,7 +3157,7 @@ namespace net.minecraft.src
 		public virtual void randomDisplayUpdates(int i1, int i2, int i3)
 		{
 			sbyte b4 = 16;
-			Random random5 = new Random();
+			RandomExtended random5 = new RandomExtended();
 
 			for (int i6 = 0; i6 < 1000; ++i6)
 			{
@@ -3164,7 +3167,7 @@ namespace net.minecraft.src
 				int i10 = this.getBlockId(i7, i8, i9);
 				if (i10 == 0 && this.rand.Next(8) > i8 && this.worldProvider.WorldHasNoSky)
 				{
-					this.spawnParticle("depthsuspend", (double)((float)i7 + this.rand.nextFloat()), (double)((float)i8 + this.rand.nextFloat()), (double)((float)i9 + this.rand.nextFloat()), 0.0D, 0.0D, 0.0D);
+					this.spawnParticle("depthsuspend", (double)((float)i7 + this.rand.NextSingle()), (double)((float)i8 + this.rand.NextSingle()), (double)((float)i9 + this.rand.NextSingle()), 0.0D, 0.0D, 0.0D);
 				}
 				else if (i10 > 0)
 				{
@@ -3688,14 +3691,12 @@ namespace net.minecraft.src
 					EntityPlayer entityPlayer2;
 					do
 					{
-	//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-						if (!iterator1.hasNext())
+						if (!iterator1.MoveNext())
 						{
 							return true;
 						}
     
-	//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-						entityPlayer2 = (EntityPlayer)iterator1.next();
+						entityPlayer2 = (EntityPlayer)iterator1.Current;
 					} while (entityPlayer2.PlayerFullyAsleep);
     
 					return false;

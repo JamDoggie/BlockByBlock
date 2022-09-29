@@ -309,9 +309,7 @@ namespace net.minecraft.src
 			bool z1 = false;
 			bool z2 = worldObj.rand.Next(50) == 0;
 			System.Collections.IEnumerator iterator3 = villageDoorInfoList.GetEnumerator();
-
-			List<VillageDoorInfo> toRemove = new();
-
+            
 			while (true)
 			{
 				VillageDoorInfo villageDoorInfo4;
@@ -340,13 +338,8 @@ namespace net.minecraft.src
 				z1 = true;
 				villageDoorInfo4.isDetachedFromVillageFlag = true;
 
-				toRemove.Add(iterator3.Current as VillageDoorInfo);
+				villageDoorInfoList.Remove(iterator3.Current); // PORTING TODO: This was fucked because I was coding while tired. Luckily I caught it. Double check this again later.
 			}
-
-            foreach (VillageDoorInfo door in toRemove) // PORTING TODO: make this more elegant later, I'm too tired rn to trust myself with properly porting this absolute unit of a method.
-            {
-                villageDoorInfoList.Remove(door);
-            }
         }
 
 		private bool isBlockDoor(int i1, int i2, int i3)
