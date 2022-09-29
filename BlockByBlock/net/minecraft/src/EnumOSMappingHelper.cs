@@ -8,7 +8,7 @@
 		{
 			enumOSMappingArray[(int)EnumOS2.linux] = 1;
 
-			enumOSMappingArray[(int)EnumOS2.solaris] = 2;
+			enumOSMappingArray[(int)EnumOS2.freebsd] = 2;
 
 			enumOSMappingArray[(int)EnumOS2.windows] = 3;
 

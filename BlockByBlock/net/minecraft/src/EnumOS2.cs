@@ -3,7 +3,7 @@
 	public enum EnumOS2
 	{
 		linux,
-		solaris,
+		freebsd,
 		windows,
 		macos,
 		unknown

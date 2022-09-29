@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BlockByBlock.helpers;
+using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace net.minecraft.client
@@ -224,9 +227,7 @@ namespace net.minecraft.client
 			this.serverName = string1;
 			this.serverPort = i2;
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void startGame() throws org.lwjgl.LWJGLException
+        
 		public virtual void startGame()
 		{
 			if (this.mcCanvas != null)
@@ -277,9 +278,9 @@ namespace net.minecraft.client
 
 				try
 				{
-					Thread.Sleep(1000L);
+					Thread.Sleep(1000);
 				}
-				catch (InterruptedException)
+				catch (ThreadInterruptedException)
 				{
 				}
 
@@ -288,7 +289,7 @@ namespace net.minecraft.client
 
 			OpenGlHelper.initializeTextures();
 			this.mcDataDir = MinecraftDir;
-			this.saveLoader = new AnvilSaveConverter(new File(this.mcDataDir, "saves"));
+			this.saveLoader = new AnvilSaveConverter(new DirectoryInfo(mcDataDir + "/saves"));
 			this.gameSettings = new GameSettings(this, this.mcDataDir);
 			this.texturePackList = new TexturePackList(this, this.mcDataDir);
 			this.renderEngine = new RenderEngine(this.texturePackList, this.gameSettings);
@@ -308,7 +309,7 @@ namespace net.minecraft.client
 			this.entityRenderer = new EntityRenderer(this);
 			RenderManager.instance.itemRenderer = new ItemRenderer(this);
 			this.statFileWriter = new StatFileWriter(this.session, this.mcDataDir);
-			AchievementList.openInventory.StatStringFormatter = new StatStringFormatKeyInv(this);
+			AchievementList.openInventory.setStatStringFormatter(new StatStringFormatKeyInv(this));
 			this.loadScreen();
 			Mouse.create();
 			this.mouseHelper = new MouseHelper(this.mcCanvas);
@@ -439,38 +440,43 @@ namespace net.minecraft.client
 			}
 		}
 
-		public static File getAppDir(string string0)
+		public static DirectoryInfo getAppDir(string string0)
 		{
-			string string1 = System.getProperty("user.home", ".");
-			File file2;
-			switch (EnumOSMappingHelper.enumOSMappingArray[Os.ordinal()])
+			string string1 = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+			DirectoryInfo file2;
+			switch (EnumOSMappingHelper.enumOSMappingArray[(int)Os])
 			{
 			case 1:
 			case 2:
-				file2 = new File(string1, '.' + string0 + '/');
+				file2 = new DirectoryInfo(string1 + '/' + '.' + string0 + '/');
 				break;
 			case 3:
-				string string3 = Environment.GetEnvironmentVariable("APPDATA");
-				if (!string.ReferenceEquals(string3, null))
+				string? string3 = Environment.GetEnvironmentVariable("APPDATA");
+				if (string3 != null)
 				{
-					file2 = new File(string3, "." + string0 + '/');
+					file2 = new DirectoryInfo(string3 + "/." + string0 + '/');
 				}
 				else
 				{
-					file2 = new File(string1, '.' + string0 + '/');
+					file2 = new DirectoryInfo(string1 + '/' + '.' + string0 + '/');
 				}
 				break;
 			case 4:
-				file2 = new File(string1, "Library/Application Support/" + string0);
+				file2 = new DirectoryInfo(string1 + "/Library/Application Support/" + string0);
 				break;
 			default:
-				file2 = new File(string1, string0 + '/');
+				file2 = new DirectoryInfo(string1 + '/' + string0 + '/');
 			break;
 			}
 
-			if (!file2.exists() && !file2.mkdirs())
+			if (!file2.Exists)
 			{
-				throw new Exception("The working directory could not be created: " + file2);
+				file2.Create();
+
+				if (!file2.Exists)
+					throw new Exception("The working directory could not be created: " + file2);
+				else
+					return file2;
 			}
 			else
 			{
@@ -482,10 +488,28 @@ namespace net.minecraft.client
 		{
 			get
 			{
-				string string0 = System.getProperty("os.name").ToLower();
-				return string0.Contains("win") ? EnumOS2.windows : (string0.Contains("mac") ? EnumOS2.macos : (string0.Contains("solaris") ? EnumOS2.solaris : (string0.Contains("sunos") ? EnumOS2.solaris : (string0.Contains("linux") ? EnumOS2.linux : (string0.Contains("unix") ? EnumOS2.linux : EnumOS2.unknown)))));
-			}
-		}
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return EnumOS2.windows;
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    return EnumOS2.macos;
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    return EnumOS2.linux;
+                }
+				else if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+                {
+					return EnumOS2.freebsd;
+                }
+                else
+                {
+                    return EnumOS2.unknown;
+                }
+            }
+        }
 
 		public virtual ISaveFormat SaveLoader
 		{
@@ -695,7 +719,7 @@ namespace net.minecraft.client
 					this.timer.updateTimer();
 				}
 
-				long j6 = System.nanoTime();
+				long j6 = JTime.NanoTime();
 				Profiler.startSection("tick");
 
 				for (int i3 = 0; i3 < this.timer.elapsedTicks; ++i3)
@@ -715,7 +739,7 @@ namespace net.minecraft.client
 				}
 
 				Profiler.endSection();
-				long j7 = System.nanoTime() - j6;
+				long j7 = JTime.NanoTime() - j6;
 				this.checkGLError("Pre render");
 				RenderBlocks.fancyGrass = this.gameSettings.fancyGraphics;
 				Profiler.startSection("sound");
@@ -775,12 +799,12 @@ namespace net.minecraft.client
 				else
 				{
 					Profiler.profilingEnabled = false;
-					this.prevFrameTime = System.nanoTime();
+					this.prevFrameTime = JTime.NanoTime();
 				}
 
 				this.guiAchievement.updateAchievementWindow();
 				Profiler.startSection("root");
-				Thread.yield();
+				Thread.Yield();
 				if (Keyboard.isKeyDown(Keyboard.KEY_F7))
 				{
 					Display.update();
@@ -909,10 +933,10 @@ namespace net.minecraft.client
 			long j5 = 16666666L;
 			if (this.prevFrameTime == -1L)
 			{
-				this.prevFrameTime = System.nanoTime();
+				this.prevFrameTime = JTime.NanoTime();
 			}
 
-			long j7 = System.nanoTime();
+			long j7 = JTime.NanoTime();
 			tickTimes[numRecordedFrameTimes & frameTimes.Length - 1] = j1;
 			frameTimes[numRecordedFrameTimes++ & frameTimes.Length - 1] = j7 - this.prevFrameTime;
 			this.prevFrameTime = j7;
@@ -1038,7 +1062,7 @@ namespace net.minecraft.client
 				d27 += profilerResult29.sectionPercentage;
 			}
 
-			DecimalFormat decimalFormat28 = new DecimalFormat("##0.00");
+			string decimalFormat28 = "##0.00";
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			string string30 = "";
 			if (!profilerResult4.name.Equals("unspecified"))
@@ -1057,7 +1081,7 @@ namespace net.minecraft.client
 
 			i21 = 0xFFFFFF;
 			this.fontRenderer.drawStringWithShadow(string30, i15 - s26, i16 - s26 / 2 - 16, i21);
-			this.fontRenderer.drawStringWithShadow(string30 = decimalFormat28.format(profilerResult4.globalPercentage) + "%", i15 + s26 - this.fontRenderer.getStringWidth(string30), i16 - s26 / 2 - 16, i21);
+			this.fontRenderer.drawStringWithShadow(string30 = profilerResult4.globalPercentage.ToString(decimalFormat28) + "%", i15 + s26 - this.fontRenderer.getStringWidth(string30), i16 - s26 / 2 - 16, i21);
 
 			for (int i32 = 0; i32 < list3.Count; ++i32)
 			{
@@ -1074,8 +1098,8 @@ namespace net.minecraft.client
 
 				string33 = string33 + profilerResult31.name;
 				this.fontRenderer.drawStringWithShadow(string33, i15 - s26, i16 + s26 / 2 + i32 * 8 + 20, profilerResult31.DisplayColor);
-				this.fontRenderer.drawStringWithShadow(string33 = decimalFormat28.format(profilerResult31.sectionPercentage) + "%", i15 + s26 - 50 - this.fontRenderer.getStringWidth(string33), i16 + s26 / 2 + i32 * 8 + 20, profilerResult31.DisplayColor);
-				this.fontRenderer.drawStringWithShadow(string33 = decimalFormat28.format(profilerResult31.globalPercentage) + "%", i15 + s26 - this.fontRenderer.getStringWidth(string33), i16 + s26 / 2 + i32 * 8 + 20, profilerResult31.DisplayColor);
+				this.fontRenderer.drawStringWithShadow(string33 = profilerResult31.sectionPercentage.ToString(decimalFormat28) + "%", i15 + s26 - 50 - this.fontRenderer.getStringWidth(string33), i16 + s26 / 2 + i32 * 8 + 20, profilerResult31.DisplayColor);
+				this.fontRenderer.drawStringWithShadow(string33 = profilerResult31.globalPercentage.ToString(decimalFormat28) + "%", i15 + s26 - this.fontRenderer.getStringWidth(string33), i16 + s26 / 2 + i32 * 8 + 20, profilerResult31.DisplayColor);
 			}
 
 		}
@@ -2199,9 +2223,7 @@ namespace net.minecraft.client
 				return this.thePlayer is EntityClientPlayerMP ? ((EntityClientPlayerMP)this.thePlayer).sendQueue : null;
 			}
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public static void main(String[] string0) throws org.lwjgl.LWJGLException
+        
 		public static void Main(string[] string0)
 		{
 			string string1 = null;
@@ -2322,14 +2344,18 @@ namespace net.minecraft.client
 
 		public static void func_52004_D()
 		{
+			GCMemoryInfo gcMemoryInfo = GC.GetGCMemoryInfo();
+			long installedMemory = gcMemoryInfo.TotalAvailableMemoryBytes;
+			double physicalMemory = installedMemory / 1048576.0D;
+
 			PlayerUsageSnooper playerUsageSnooper0 = new PlayerUsageSnooper("client");
 			playerUsageSnooper0.func_52022_a("version", func_52003_C());
-			playerUsageSnooper0.func_52022_a("os_name", System.getProperty("os.name"));
-			playerUsageSnooper0.func_52022_a("os_version", System.getProperty("os.version"));
-			playerUsageSnooper0.func_52022_a("os_architecture", System.getProperty("os.arch"));
-			playerUsageSnooper0.func_52022_a("memory_total", Runtime.getRuntime().totalMemory());
-			playerUsageSnooper0.func_52022_a("memory_max", Runtime.getRuntime().maxMemory());
-			playerUsageSnooper0.func_52022_a("java_version", System.getProperty("java.version"));
+			playerUsageSnooper0.func_52022_a("os_name", Environment.OSVersion);
+			playerUsageSnooper0.func_52022_a("os_version", Environment.OSVersion.Version);
+            playerUsageSnooper0.func_52022_a("os_architecture", Environment.Is64BitOperatingSystem ? "x86_64" : "x86");
+            playerUsageSnooper0.func_52022_a("memory_total", physicalMemory + "MB");
+            playerUsageSnooper0.func_52022_a("memory_max", (Process.GetCurrentProcess().WorkingSet64 / 1000000) + "MB");
+            playerUsageSnooper0.func_52022_a("java_version", Environment.Version); // hehehe
 			playerUsageSnooper0.func_52022_a("opengl_version", GL11.glGetString(GL11.GL_VERSION));
 			playerUsageSnooper0.func_52022_a("opengl_vendor", GL11.glGetString(GL11.GL_VENDOR));
 			playerUsageSnooper0.func_52021_a();
