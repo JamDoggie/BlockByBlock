@@ -10,10 +10,10 @@ namespace net.minecraft.src
 		public string sessionId;
 		public string mpPassParameter;
 
-		public Session(string string1, string string2)
+		public Session(string username, string sessionId)
 		{
-			this.username = string1;
-			this.sessionId = string2;
+			this.username = username;
+			this.sessionId = sessionId;
 		}
 
 		static Session()

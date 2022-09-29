@@ -6,7 +6,9 @@ namespace net.minecraft.src
 
 	using Minecraft = net.minecraft.client.Minecraft;
 
-	public sealed class GameWindowListener : WindowAdapter
+	// PORTING TODO: This class is not necessary. Should be able to remove.
+
+	public sealed class GameWindowListener
 	{
 		internal readonly Minecraft mc;
 		internal readonly Thread mcThread;
@@ -19,19 +21,7 @@ namespace net.minecraft.src
 
 		public void windowClosing(WindowEvent windowEvent1)
 		{
-			this.mc.shutdown();
-
-			try
-			{
-				mcThread.Join();
-			}
-			catch (ThreadInterruptedException e)
-			{
-				Console.WriteLine(e.ToString());
-				Console.Write(e.StackTrace);
-			}
-
-			Environment.Exit(0);
+			
 		}
 	}
 

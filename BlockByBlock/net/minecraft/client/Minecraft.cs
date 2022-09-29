@@ -1,4 +1,8 @@
 ﻿using BlockByBlock.helpers;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -104,21 +108,13 @@ namespace net.minecraft.client
 	using WorldSettings = net.minecraft.src.WorldSettings;
 	using WorldType = net.minecraft.src.WorldType;
 
-	using LWJGLException = org.lwjgl.LWJGLException;
-	using Sys = org.lwjgl.Sys;
-	using Controllers = org.lwjgl.input.Controllers;
-	using Keyboard = org.lwjgl.input.Keyboard;
-	using Mouse = org.lwjgl.input.Mouse;
-	using Display = org.lwjgl.opengl.Display;
-	using DisplayMode = org.lwjgl.opengl.DisplayMode;
-	using GL11 = org.lwjgl.opengl.GL11;
-	using PixelFormat = org.lwjgl.opengl.PixelFormat;
-	using GLU = org.lwjgl.util.glu.GLU;
+	using OpenTK.Graphics.OpenGL;
+    using OpenTK.Windowing.GraphicsLibraryFramework;
 
-	public abstract class Minecraft : ThreadStart
+    public abstract class Minecraft
 	{
 		private bool InstanceFieldsInitialized = false;
-
+		
 		private void InitializeInstanceFields()
 		{
 			guiAchievement = new GuiAchievement(this);
@@ -140,7 +136,6 @@ namespace net.minecraft.client
 		public EffectRenderer effectRenderer;
 		public Session session = null;
 		public string minecraftUri;
-		public Canvas mcCanvas;
 		public bool hideQuitButton = false;
 		public volatile bool isGamePaused = false;
 		public RenderEngine renderEngine;
@@ -189,7 +184,7 @@ namespace net.minecraft.client
 		internal long systemTime = DateTimeHelper.CurrentUnixTimeMillis();
 		private int joinPlayerCounter = 0;
 
-		public Minecraft(Component component1, Canvas canvas2, MinecraftApplet minecraftApplet3, int i4, int i5, bool z6)
+		public Minecraft(NativeWindow window, MinecraftApplet minecraftApplet3, int displayWidth, int displayHeight, bool fullscreen)
 		{
 			if (!InstanceFieldsInitialized)
 			{
@@ -197,16 +192,17 @@ namespace net.minecraft.client
 				InstanceFieldsInitialized = true;
 			}
 			StatList.func_27360_a();
-			this.tempDisplayHeight = i5;
-			this.fullscreen = z6;
+			this.tempDisplayHeight = displayHeight;
+			this.fullscreen = fullscreen;
 			this.mcApplet = minecraftApplet3;
 			Packet3Chat.maxMessageLength = 32767;
 			new ThreadClientSleep(this, "Timer hack thread");
-			this.mcCanvas = canvas2;
-			this.displayWidth = i4;
-			this.displayHeight = i5;
-			this.fullscreen = z6;
-			if (minecraftApplet3 == null || "true".Equals(minecraftApplet3.getParameter("stand-alone")))
+			this.displayWidth = displayWidth;
+			this.displayHeight = displayHeight;
+			this.fullscreen = fullscreen;
+
+			// PORTING TODO:
+			//if (minecraftApplet3 == null || "true".Equals(minecraftApplet3.getParameter("stand-alone")))
 			{
 				this.hideQuitButton = false;
 			}
@@ -230,62 +226,28 @@ namespace net.minecraft.client
         
 		public virtual void startGame()
 		{
-			if (this.mcCanvas != null)
+			if (this.mcApplet != null)
 			{
-				Graphics graphics1 = this.mcCanvas.getGraphics();
-				if (graphics1 != null)
-				{
-					graphics1.setColor(Color.BLACK);
-					graphics1.fillRect(0, 0, this.displayWidth, this.displayHeight);
-					graphics1.dispose();
-				}
+				GL.ClearColor(Color4.Black);
 
-				Display.setParent(this.mcCanvas);
-			}
-			else if (this.fullscreen)
-			{
-				Display.setFullscreen(true);
-				this.displayWidth = Display.getDisplayMode().getWidth();
-				this.displayHeight = Display.getDisplayMode().getHeight();
-				if (this.displayWidth <= 0)
+				if (this.fullscreen)
 				{
-					this.displayWidth = 1;
-				}
+					mcApplet.WindowState = WindowState.Fullscreen;
+					this.displayWidth = Monitors.GetMonitorFromWindow(mcApplet).HorizontalResolution;
+					this.displayHeight = Monitors.GetMonitorFromWindow(mcApplet).VerticalResolution;
+					if (this.displayWidth <= 0)
+					{
+						this.displayWidth = 1;
+					}
 
-				if (this.displayHeight <= 0)
-				{
-					this.displayHeight = 1;
+					if (this.displayHeight <= 0)
+					{
+						this.displayHeight = 1;
+					}
 				}
 			}
-			else
-			{
-				Display.setDisplayMode(new DisplayMode(this.displayWidth, this.displayHeight));
-			}
-
-			Display.setTitle("Minecraft Minecraft 1.2.5");
-			Console.WriteLine("LWJGL Version: " + Sys.getVersion());
-
-			try
-			{
-				PixelFormat pixelFormat7 = new PixelFormat();
-				pixelFormat7 = pixelFormat7.withDepthBits(24);
-				Display.create(pixelFormat7);
-			}
-			catch (LWJGLException lWJGLException6)
-			{
-				Console.WriteLine(lWJGLException6.ToString());
-				Console.Write(lWJGLException6.StackTrace);
-
-				try
-				{
-					Thread.Sleep(1000);
-				}
-				catch (ThreadInterruptedException)
-				{
-				}
-
-				Display.create();
-			}
+            
+			mcApplet.Title = "Minecraft 1.2.5";
 
 			OpenGlHelper.initializeTextures();
 			this.mcDataDir = MinecraftDir;
@@ -312,7 +274,7 @@ namespace net.minecraft.client
 			AchievementList.openInventory.setStatStringFormatter(new StatStringFormatKeyInv(this));
 			this.loadScreen();
 			Mouse.create();
-			this.mouseHelper = new MouseHelper(this.mcCanvas);
+			this.mouseHelper = new MouseHelper(mcApplet);
 
 			try
 			{
@@ -326,32 +288,33 @@ namespace net.minecraft.client
 
 			func_52004_D();
 			this.checkGLError("Pre startup");
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glShadeModel(GL11.GL_SMOOTH);
-			GL11.glClearDepth(1.0D);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glDepthFunc(GL11.GL_LEQUAL);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-			GL11.glCullFace(GL11.GL_BACK);
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			this.checkGLError("Startup");
-			this.glCapabilities = new OpenGlCapsChecker();
-			this.sndManager.loadSoundSettings(this.gameSettings);
-			this.renderEngine.registerTextureFX(this.textureLavaFX);
-			this.renderEngine.registerTextureFX(this.textureWaterFX);
-			this.renderEngine.registerTextureFX(new TexturePortalFX());
-			this.renderEngine.registerTextureFX(new TextureCompassFX(this));
-			this.renderEngine.registerTextureFX(new TextureWatchFX(this));
-			this.renderEngine.registerTextureFX(new TextureWaterFlowFX());
-			this.renderEngine.registerTextureFX(new TextureLavaFlowFX());
-			this.renderEngine.registerTextureFX(new TextureFlamesFX(0));
-			this.renderEngine.registerTextureFX(new TextureFlamesFX(1));
-			this.renderGlobal = new RenderGlobal(this, this.renderEngine);
-			GL11.glViewport(0, 0, this.displayWidth, this.displayHeight);
-			this.effectRenderer = new EffectRenderer(this.theWorld, this.renderEngine);
+			GL.Enable(EnableCap.Texture2D);
+			GL.ShadeModel(ShadingModel.Smooth);
+			GL.ClearDepth(1.0D);
+			GL.Enable(EnableCap.DepthTest);
+			GL.DepthFunc(DepthFunction.Lequal);
+			GL.Enable(EnableCap.AlphaTest);
+            GL.AlphaFunc(AlphaFunction.Greater, 0.1F);
+			GL.CullFace(CullFaceMode.Back);
+			GL.MatrixMode(MatrixMode.Projection);
+
+			GL.LoadIdentity();
+			GL.MatrixMode(MatrixMode.Modelview);
+			checkGLError("Startup");
+			glCapabilities = new OpenGlCapsChecker();
+			sndManager.loadSoundSettings(this.gameSettings);
+			renderEngine.registerTextureFX(this.textureLavaFX);
+			renderEngine.registerTextureFX(this.textureWaterFX);
+			renderEngine.registerTextureFX(new TexturePortalFX());
+			renderEngine.registerTextureFX(new TextureCompassFX(this));
+			renderEngine.registerTextureFX(new TextureWatchFX(this));
+			renderEngine.registerTextureFX(new TextureWaterFlowFX());
+			renderEngine.registerTextureFX(new TextureLavaFlowFX());
+			renderEngine.registerTextureFX(new TextureFlamesFX(0));
+			renderEngine.registerTextureFX(new TextureFlamesFX(1));
+			renderGlobal = new RenderGlobal(this, this.renderEngine);
+			GL.Viewport(0, 0, this.displayWidth, this.displayHeight);
+			effectRenderer = new EffectRenderer(this.theWorld, this.renderEngine);
 
 			try
 			{
@@ -375,26 +338,24 @@ namespace net.minecraft.client
 
 			this.loadingScreen = new LoadingScreenRenderer(this);
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: private void loadScreen() throws org.lwjgl.LWJGLException
+        
 		private void loadScreen()
 		{
 			ScaledResolution scaledResolution1 = new ScaledResolution(this.gameSettings, this.displayWidth, this.displayHeight);
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glOrtho(0.0D, scaledResolution1.scaledWidthD, scaledResolution1.scaledHeightD, 0.0D, 1000.0D, 3000.0D);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glLoadIdentity();
-			GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
-			GL11.glViewport(0, 0, this.displayWidth, this.displayHeight);
-			GL11.glClearColor(0.0F, 0.0F, 0.0F, 0.0F);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.LoadIdentity();
+			GL.Ortho(0.0D, scaledResolution1.scaledWidthD, scaledResolution1.scaledHeightD, 0.0D, 1000.0D, 3000.0D);
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.LoadIdentity();
+			GL.Translate(0.0F, 0.0F, -2000.0F);
+			GL.Viewport(0, 0, this.displayWidth, this.displayHeight);
+			GL.ClearColor(0.0F, 0.0F, 0.0F, 0.0F);
 			Tessellator tessellator2 = Tessellator.instance;
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_FOG);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.renderEngine.getTexture("/title/mojang.png"));
+			GL.Disable(EnableCap.Lighting);
+			GL.Enable(EnableCap.Texture2D);
+			GL.Disable(EnableCap.Fog);
+			GL.BindTexture(TextureTarget.Texture2D, renderEngine.getTexture("/title/mojang.png"));
 			tessellator2.startDrawingQuads();
 			tessellator2.ColorOpaque_I = 0xFFFFFF;
 			tessellator2.addVertexWithUV(0.0D, (double)this.displayHeight, 0.0D, 0.0D, 0.0D);
@@ -404,14 +365,14 @@ namespace net.minecraft.client
 			tessellator2.draw();
 			short s3 = 256;
 			short s4 = 256;
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			tessellator2.ColorOpaque_I = 0xFFFFFF;
 			this.scaledTessellator((scaledResolution1.ScaledWidth - s3) / 2, (scaledResolution1.ScaledHeight - s4) / 2, 0, 0, s3, s4);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_FOG);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-			Display.swapBuffers();
+			GL.Disable(EnableCap.Lighting);
+			GL.Disable(EnableCap.Fog);
+			GL.Enable(EnableCap.AlphaTest);
+            GL.AlphaFunc(AlphaFunction.Greater, 0.1F);
+            Display.swapBuffers();
 		}
 
 		public virtual void scaledTessellator(int i1, int i2, int i3, int i4, int i5, int i6)
@@ -569,13 +530,13 @@ namespace net.minecraft.client
 
 		private void checkGLError(string string1)
 		{
-			int i2 = GL11.glGetError();
+			int i2 = (int)GLFW.GetError(out string error);
+			
 			if (i2 != 0)
 			{
-				string string3 = GLU.gluErrorString(i2);
 				Console.WriteLine("########## GL ERROR ##########");
 				Console.WriteLine("@ " + string1);
-				Console.WriteLine(i2 + ": " + string3);
+				Console.WriteLine(i2 + ": " + error);
 			}
 
 		}
@@ -671,7 +632,7 @@ namespace net.minecraft.client
 					{
 						this.freeMemory();
 						this.displayGuiScreen(new GuiMemoryErrorScreen());
-						System.GC.Collect();
+						System.GC.Collect(); // PORTING TODO: Come back to this, I'm pretty sure there's a better way to do GC collections.
 					}
 				}
 			}
@@ -694,7 +655,7 @@ namespace net.minecraft.client
 
 		private void runGameLoop()
 		{
-			if (this.mcApplet != null && !this.mcApplet.isActive())
+			if (this.mcApplet != null && !mcApplet.Exists)
 			{
 				this.running = false;
 			}
@@ -703,7 +664,7 @@ namespace net.minecraft.client
 				AxisAlignedBB.clearBoundingBoxPool();
 				Vec3D.initialize();
 				Profiler.startSection("root");
-				if (this.mcCanvas == null && Display.isCloseRequested())
+				if (mcApplet.IsExiting)
 				{
 					this.shutdown();
 				}
@@ -753,11 +714,11 @@ namespace net.minecraft.client
 				Profiler.endSection();
 				Profiler.startSection("render");
 				Profiler.startSection("display");
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
-				if (!Keyboard.isKeyDown(Keyboard.KEY_F7))
-				{
-					Display.update();
-				}
+				GL.Enable(EnableCap.Texture2D);
+				//if (!Keyboard.isKeyDown(Keyboard.KEY_F7))
+				//{
+				//	Display.update();
+				//} // PORTING TODO: Not sure what this is for
 
 				if (this.thePlayer != null && this.thePlayer.EntityInsideOpaqueBlock)
 				{
@@ -778,9 +739,9 @@ namespace net.minecraft.client
 					Profiler.endSection();
 				}
 
-				GL11.glFlush();
+				GL.Flush();
 				Profiler.endSection();
-				if (!Display.isActive() && this.fullscreen)
+				if (!mcApplet.IsFocused && this.fullscreen)
 				{
 					this.toggleFullscreen();
 				}
@@ -805,16 +766,16 @@ namespace net.minecraft.client
 				this.guiAchievement.updateAchievementWindow();
 				Profiler.startSection("root");
 				Thread.Yield();
-				if (Keyboard.isKeyDown(Keyboard.KEY_F7))
+				/*if (Keyboard.isKeyDown(Keyboard.KEY_F7))
 				{
 					Display.update();
-				}
+				}*/ // PORTING TODO
 
 				this.screenshotListener();
-				if (this.mcCanvas != null && !this.fullscreen && (this.mcCanvas.getWidth() != this.displayWidth || this.mcCanvas.getHeight() != this.displayHeight))
+				if (mcApplet != null && !this.fullscreen && (mcApplet.Size.X != this.displayWidth || mcApplet.Size.Y != this.displayHeight))
 				{
-					this.displayWidth = this.mcCanvas.getWidth();
-					this.displayHeight = this.mcCanvas.getHeight();
+					this.displayWidth = mcApplet.Size.X;
+					this.displayHeight = mcApplet.Size.Y;
 					if (this.displayWidth <= 0)
 					{
 						this.displayWidth = 1;
@@ -877,7 +838,7 @@ namespace net.minecraft.client
 
 		private void screenshotListener()
 		{
-			if (Keyboard.isKeyDown(Keyboard.KEY_F2))
+			if (mcApplet.KeyboardState.IsKeyPressed(Keys.F2))
 			{
 				if (!this.isTakingScreenshot)
 				{
@@ -940,16 +901,16 @@ namespace net.minecraft.client
 			tickTimes[numRecordedFrameTimes & frameTimes.Length - 1] = j1;
 			frameTimes[numRecordedFrameTimes++ & frameTimes.Length - 1] = j7 - this.prevFrameTime;
 			this.prevFrameTime = j7;
-			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-			GL11.glLoadIdentity();
-			GL11.glOrtho(0.0D, (double)this.displayWidth, (double)this.displayHeight, 0.0D, 1000.0D, 3000.0D);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glLoadIdentity();
-			GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
-			GL11.glLineWidth(1.0F);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL.Clear(ClearBufferMask.DepthBufferBit);
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.Enable(EnableCap.ColorMaterial);
+			GL.LoadIdentity();
+			GL.Ortho(0.0D, displayWidth, displayHeight, 0.0D, 1000.0D, 3000.0D);
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.LoadIdentity();
+			GL.Translate(0.0F, 0.0F, -2000.0F);
+			GL.LineWidth(1.0F);
+			GL.Disable(EnableCap.Texture2D);
 			Tessellator tessellator9 = Tessellator.instance;
 			tessellator9.startDrawing(7);
 			int i10 = (int)(j5 / 200000L);
@@ -1013,7 +974,7 @@ namespace net.minecraft.client
 			short s26 = 160;
 			i15 = this.displayWidth - s26 - 10;
 			i16 = this.displayHeight - s26 * 2;
-			GL11.glEnable(GL11.GL_BLEND);
+			GL.Enable(EnableCap.Blend);
 			tessellator9.startDrawingQuads();
 			tessellator9.setColorRGBA_I(0, 200);
 			tessellator9.addVertex((double)((float)i15 - (float)s26 * 1.1F), (double)((float)i16 - (float)s26 * 0.6F - 16.0F), 0.0D);
@@ -1021,7 +982,7 @@ namespace net.minecraft.client
 			tessellator9.addVertex((double)((float)i15 + (float)s26 * 1.1F), (double)(i16 + s26 * 2), 0.0D);
 			tessellator9.addVertex((double)((float)i15 + (float)s26 * 1.1F), (double)((float)i16 - (float)s26 * 0.6F - 16.0F), 0.0D);
 			tessellator9.draw();
-			GL11.glDisable(GL11.GL_BLEND);
+			GL.Disable(EnableCap.Blend);
 			double d27 = 0.0D;
 
 			int i21;
@@ -1063,7 +1024,7 @@ namespace net.minecraft.client
 			}
 
 			string decimalFormat28 = "##0.00";
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL.Enable(EnableCap.Texture2D);
 			string string30 = "";
 			if (!profilerResult4.name.Equals("unspecified"))
 			{
@@ -1111,7 +1072,7 @@ namespace net.minecraft.client
 
 		public virtual void setIngameFocus()
 		{
-			if (Display.isActive())
+			if (mcApplet.IsFocused)
 			{
 				if (!this.inGameHasFocus)
 				{
@@ -1259,9 +1220,9 @@ namespace net.minecraft.client
 				this.fullscreen = !this.fullscreen;
 				if (this.fullscreen)
 				{
-					Display.setDisplayMode(Display.getDesktopDisplayMode());
-					this.displayWidth = Display.getDisplayMode().getWidth();
-					this.displayHeight = Display.getDisplayMode().getHeight();
+					mcApplet.WindowState = WindowState.Fullscreen;
+					this.displayWidth = Monitors.GetMonitorFromWindow(mcApplet).HorizontalResolution;
+					this.displayHeight = Monitors.GetMonitorFromWindow(mcApplet).VerticalResolution;
 					if (this.displayWidth <= 0)
 					{
 						this.displayWidth = 1;
@@ -1274,15 +1235,12 @@ namespace net.minecraft.client
 				}
 				else
 				{
-					if (this.mcCanvas != null)
+					if (mcApplet != null)
 					{
-						this.displayWidth = this.mcCanvas.getWidth();
-						this.displayHeight = this.mcCanvas.getHeight();
-					}
-					else
-					{
-						this.displayWidth = this.tempDisplayWidth;
-						this.displayHeight = this.tempDisplayHeight;
+						this.displayWidth = mcApplet.Size.X;
+						this.displayHeight = mcApplet.Size.Y;
+
+						mcApplet.WindowState = WindowState.Normal;
 					}
 
 					if (this.displayWidth <= 0)
@@ -1300,9 +1258,6 @@ namespace net.minecraft.client
 				{
 					this.resize(this.displayWidth, this.displayHeight);
 				}
-
-				Display.setFullscreen(this.fullscreen);
-				Display.update();
 			}
 			catch (Exception exception2)
 			{
@@ -1383,7 +1338,7 @@ namespace net.minecraft.client
 				this.playerController.updateController();
 			}
 
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.renderEngine.getTexture("/terrain.png"));
+			GL.BindTexture(TextureTarget.Texture2D, renderEngine.getTexture("/terrain.png"));
 			Profiler.endStartSection("textures");
 			if (!this.isGamePaused)
 			{
@@ -2168,33 +2123,30 @@ namespace net.minecraft.client
 			this.preloadWorld(StatCollector.translateToLocal("menu.respawning"));
 			if (this.currentScreen is GuiGameOver)
 			{
-				this.displayGuiScreen((GuiScreen)null);
+				this.displayGuiScreen(null);
 			}
 
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public static void startMainThread1(String string0, String string1) throws org.lwjgl.LWJGLException
+        
 		public static void startMainThread1(string string0, string string1)
 		{
-			startMainThread(string0, string1, (string)null);
+			startMainThread(string0, string1, null);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public static void startMainThread(String string0, String string1, String string2) throws org.lwjgl.LWJGLException
 		public static void startMainThread(string string0, string string1, string string2)
 		{
-			bool z3 = false;
-			Frame frame5 = new Frame("Minecraft");
-			Canvas canvas6 = new Canvas();
-			frame5.setLayout(new BorderLayout());
-			frame5.add(canvas6, "Center");
-			canvas6.setPreferredSize(new Dimension(854, 480));
-			frame5.pack();
-			frame5.setLocationRelativeTo((Component)null);
-			MinecraftImpl minecraftImpl7 = new MinecraftImpl(frame5, canvas6, (MinecraftApplet)null, 854, 480, z3, frame5);
-			Thread thread8 = new Thread(minecraftImpl7, "Minecraft main thread");
-			thread8.setPriority(10);
+			bool fullscreen = false;
+
+			NativeWindowSettings windowSettings = new()
+			{
+				Size = new Vector2i(854, 480)
+			};
+
+			MinecraftApplet applet = new(windowSettings);
+
+			MinecraftImpl minecraftImpl7 = new MinecraftImpl(applet, 854, 480, fullscreen);
+			Thread thread8 = new Thread(() => minecraftImpl7.run());
+			thread8.Priority = ThreadPriority.Highest;
 			minecraftImpl7.minecraftUri = "www.minecraft.net";
 			if (!string.ReferenceEquals(string0, null) && !string.ReferenceEquals(string1, null))
 			{
@@ -2210,9 +2162,7 @@ namespace net.minecraft.client
 				string[] string9 = string2.Split(":", true);
 				minecraftImpl7.setServer(string9[0], int.Parse(string9[1]));
 			}
-
-			frame5.setVisible(true);
-			frame5.addWindowListener(new GameWindowListener(minecraftImpl7, thread8));
+            
 			thread8.Start();
 		}
 
@@ -2356,8 +2306,8 @@ namespace net.minecraft.client
             playerUsageSnooper0.func_52022_a("memory_total", physicalMemory + "MB");
             playerUsageSnooper0.func_52022_a("memory_max", (Process.GetCurrentProcess().WorkingSet64 / 1000000) + "MB");
             playerUsageSnooper0.func_52022_a("java_version", Environment.Version); // hehehe
-			playerUsageSnooper0.func_52022_a("opengl_version", GL11.glGetString(GL11.GL_VERSION));
-			playerUsageSnooper0.func_52022_a("opengl_vendor", GL11.glGetString(GL11.GL_VENDOR));
+			playerUsageSnooper0.func_52022_a("opengl_version", GL.GetString(StringName.Version));
+			playerUsageSnooper0.func_52022_a("opengl_vendor", GL.GetString(StringName.Vendor));
 			playerUsageSnooper0.func_52021_a();
 		}
 	}

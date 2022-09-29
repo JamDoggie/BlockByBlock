@@ -1,4 +1,5 @@
-﻿using System;
+﻿using net.minecraft.client;
+using System;
 
 namespace net.minecraft.src
 {
@@ -11,17 +12,17 @@ namespace net.minecraft.src
     //				Java input code
 	public class MouseHelper
 	{
-		private Component windowComponent;
+		private MinecraftApplet windowComponent;
 		private Cursor cursor;
 		public int deltaX;
 		public int deltaY;
 		private int field_1115_e = 10;
-
-		public MouseHelper(Component component1)
+        
+		public MouseHelper(MinecraftApplet component1)
 		{
 			this.windowComponent = component1;
 			IntBuffer intBuffer2 = GLAllocation.createDirectIntBuffer(1);
-			intBuffer2.put(0);
+			intBuffer2.putInt(0);
 			intBuffer2.flip();
 			IntBuffer intBuffer3 = GLAllocation.createDirectIntBuffer(1024);
 
