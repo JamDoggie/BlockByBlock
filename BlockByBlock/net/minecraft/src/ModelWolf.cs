@@ -1,8 +1,7 @@
-﻿namespace net.minecraft.src
-{
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
 
-	// PORTING TODO: OpenGL code
+namespace net.minecraft.src
+{
 
 	public class ModelWolf : ModelBase
 	{
@@ -55,13 +54,13 @@
 			if (this.isChild)
 			{
 				float f8 = 2.0F;
-				GL11.glPushMatrix();
-				GL11.glTranslatef(0.0F, 5.0F * f7, 2.0F * f7);
+				GL.PushMatrix();
+				GL.Translate(0.0F, 5.0F * f7, 2.0F * f7);
 				this.wolfHeadMain.renderWithRotation(f7);
-				GL11.glPopMatrix();
-				GL11.glPushMatrix();
-				GL11.glScalef(1.0F / f8, 1.0F / f8, 1.0F / f8);
-				GL11.glTranslatef(0.0F, 24.0F * f7, 0.0F);
+				GL.PopMatrix();
+				GL.PushMatrix();
+				GL.Scale(1.0F / f8, 1.0F / f8, 1.0F / f8);
+				GL.Translate(0.0F, 24.0F * f7, 0.0F);
 				this.wolfBody.render(f7);
 				this.wolfLeg1.render(f7);
 				this.wolfLeg2.render(f7);
@@ -69,7 +68,7 @@
 				this.wolfLeg4.render(f7);
 				this.wolfTail.renderWithRotation(f7);
 				this.wolfMane.render(f7);
-				GL11.glPopMatrix();
+				GL.PopMatrix();
 			}
 			else
 			{
@@ -138,7 +137,7 @@
 			if (entityWolf5.WolfShaking)
 			{
 				float f6 = entityWolf5.getBrightness(f4) * entityWolf5.getShadingWhileShaking(f4);
-				GL11.glColor3f(f6, f6, f6);
+				GL.Color3(f6, f6, f6);
 			}
 
 		}

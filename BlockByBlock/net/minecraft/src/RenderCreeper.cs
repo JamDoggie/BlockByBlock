@@ -1,6 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderCreeper : RenderLiving
 	{
@@ -28,7 +29,7 @@
 			f4 *= f4;
 			float f6 = (1.0F + f4 * 0.4F) * f5;
 			float f7 = (1.0F + f4 * 0.1F) / f5;
-			GL11.glScalef(f6, f7, f6);
+			GL.Scale(f6, f7, f6);
 		}
 
 		protected internal virtual int updateCreeperColorMultiplier(EntityCreeper entityCreeper1, float f2, float f3)
@@ -66,28 +67,28 @@
 				{
 					float f4 = (float)entityCreeper1.ticksExisted + f3;
 					this.loadTexture("/armor/power.png");
-					GL11.glMatrixMode(GL11.GL_TEXTURE);
-					GL11.glLoadIdentity();
+					GL.MatrixMode(MatrixMode.Texture);
+					GL.LoadIdentity();
 					float f5 = f4 * 0.01F;
 					float f6 = f4 * 0.01F;
-					GL11.glTranslatef(f5, f6, 0.0F);
+					GL.Translate(f5, f6, 0.0F);
 					this.RenderPassModel = this.field_27008_a;
-					GL11.glMatrixMode(GL11.GL_MODELVIEW);
-					GL11.glEnable(GL11.GL_BLEND);
+					GL.MatrixMode(MatrixMode.Modelview);
+					GL.Enable(EnableCap.Blend);
 					float f7 = 0.5F;
-					GL11.glColor4f(f7, f7, f7, 1.0F);
-					GL11.glDisable(GL11.GL_LIGHTING);
-					GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+					GL.Color4(f7, f7, f7, 1.0F);
+					GL.Disable(EnableCap.Lighting);
+					GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
 					return 1;
 				}
 
 				if (i2 == 2)
 				{
-					GL11.glMatrixMode(GL11.GL_TEXTURE);
-					GL11.glLoadIdentity();
-					GL11.glMatrixMode(GL11.GL_MODELVIEW);
-					GL11.glEnable(GL11.GL_LIGHTING);
-					GL11.glDisable(GL11.GL_BLEND);
+					GL.MatrixMode(MatrixMode.Texture);
+					GL.LoadIdentity();
+					GL.MatrixMode(MatrixMode.Modelview);
+					GL.Enable(EnableCap.Lighting);
+					GL.Disable(EnableCap.Blend);
 				}
 			}
 

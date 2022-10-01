@@ -1,11 +1,9 @@
-﻿using System;
+﻿using OpenTK.Graphics.OpenGL;
+using System;
 
 namespace net.minecraft.src
 {
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
 
 	public class RenderBlocks
 	{
@@ -4835,7 +4833,7 @@ namespace net.minecraft.src
 				f7 = (float)(i6 >> 16 & 255) / 255.0F;
 				f8 = (float)(i6 >> 8 & 255) / 255.0F;
 				f9 = (float)(i6 & 255) / 255.0F;
-				GL11.glColor4f(f7 * f3, f8 * f3, f9 * f3, 1.0F);
+				GL.Color4(f7 * f3, f8 * f3, f9 * f3, 1.0F);
 			}
 
 			i6 = block1.RenderType;
@@ -4867,7 +4865,7 @@ namespace net.minecraft.src
 				else if (i6 == 13)
 				{
 					block1.setBlockBoundsForItemRender();
-					GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+					GL.Translate(-0.5F, -0.5F, -0.5F);
 					f7 = 0.0625F;
 					tessellator4.startDrawingQuads();
 					tessellator4.setNormal(0.0F, -1.0F, 0.0F);
@@ -4901,12 +4899,12 @@ namespace net.minecraft.src
 					this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
 					tessellator4.addTranslation(f7, 0.0F, 0.0F);
 					tessellator4.draw();
-					GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+					GL.Translate(0.5F, 0.5F, 0.5F);
 				}
 				else if (i6 == 22)
 				{
 					ChestItemRenderHelper.instance.func_35609_a(block1, i2, f3);
-					GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+					GL.Enable(EnableCap.RescaleNormal);
 				}
 				else if (i6 == 6)
 				{
@@ -4936,7 +4934,7 @@ namespace net.minecraft.src
 							block1.setBlockBounds(0.0F, 0.0F, 0.5F, 1.0F, 0.5F, 1.0F);
 						}
 
-						GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+						GL.Translate(-0.5F, -0.5F, -0.5F);
 						tessellator4.startDrawingQuads();
 						tessellator4.setNormal(0.0F, -1.0F, 0.0F);
 						this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(0));
@@ -4961,13 +4959,13 @@ namespace net.minecraft.src
 						tessellator4.setNormal(1.0F, 0.0F, 0.0F);
 						this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
 						tessellator4.draw();
-						GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+						GL.Translate(0.5F, 0.5F, 0.5F);
 					}
 				}
 				else if (i6 == 27)
 				{
 					i14 = 0;
-					GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+					GL.Translate(-0.5F, -0.5F, -0.5F);
 					tessellator4.startDrawingQuads();
 
 					for (int i15 = 0; i15 < 8; ++i15)
@@ -5038,7 +5036,7 @@ namespace net.minecraft.src
 					}
 
 					tessellator4.draw();
-					GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+					GL.Translate(0.5F, 0.5F, 0.5F);
 					block1.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 				}
 				else if (i6 == 11)
@@ -5067,7 +5065,7 @@ namespace net.minecraft.src
 							block1.setBlockBounds(0.5F - f8, 0.5F - f8 * 3.0F, -f8 * 2.0F, 0.5F + f8, 0.5F - f8, 1.0F + f8 * 2.0F);
 						}
 
-						GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+						GL.Translate(-0.5F, -0.5F, -0.5F);
 						tessellator4.startDrawingQuads();
 						tessellator4.setNormal(0.0F, -1.0F, 0.0F);
 						this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(0));
@@ -5092,7 +5090,7 @@ namespace net.minecraft.src
 						tessellator4.setNormal(1.0F, 0.0F, 0.0F);
 						this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
 						tessellator4.draw();
-						GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+						GL.Translate(0.5F, 0.5F, 0.5F);
 					}
 
 					block1.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -5118,7 +5116,7 @@ namespace net.minecraft.src
 							block1.setBlockBounds(0.5F - f8, 0.5F, 0.0F, 0.5F + f8, 1.0F - f8, 1.0F);
 						}
 
-						GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+						GL.Translate(-0.5F, -0.5F, -0.5F);
 						tessellator4.startDrawingQuads();
 						tessellator4.setNormal(0.0F, -1.0F, 0.0F);
 						this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(0));
@@ -5143,7 +5141,7 @@ namespace net.minecraft.src
 						tessellator4.setNormal(1.0F, 0.0F, 0.0F);
 						this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
 						tessellator4.draw();
-						GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+						GL.Translate(0.5F, 0.5F, 0.5F);
 					}
 
 					block1.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -5157,7 +5155,7 @@ namespace net.minecraft.src
 				}
 
 				block1.setBlockBoundsForItemRender();
-				GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+				GL.Translate(-0.5F, -0.5F, -0.5F);
 				tessellator4.startDrawingQuads();
 				tessellator4.setNormal(0.0F, -1.0F, 0.0F);
 				this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSideAndMetadata(0, i2));
@@ -5168,7 +5166,7 @@ namespace net.minecraft.src
 					f8 = (float)(i14 >> 16 & 255) / 255.0F;
 					f9 = (float)(i14 >> 8 & 255) / 255.0F;
 					float f10 = (float)(i14 & 255) / 255.0F;
-					GL11.glColor4f(f8 * f3, f9 * f3, f10 * f3, 1.0F);
+					GL.Color4(f8 * f3, f9 * f3, f10 * f3, 1.0F);
 				}
 
 				tessellator4.startDrawingQuads();
@@ -5177,7 +5175,7 @@ namespace net.minecraft.src
 				tessellator4.draw();
 				if (z5 && this.useInventoryTint)
 				{
-					GL11.glColor4f(f3, f3, f3, 1.0F);
+					GL.Color4(f3, f3, f3, 1.0F);
 				}
 
 				tessellator4.startDrawingQuads();
@@ -5196,7 +5194,7 @@ namespace net.minecraft.src
 				tessellator4.setNormal(1.0F, 0.0F, 0.0F);
 				this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSideAndMetadata(5, i2));
 				tessellator4.draw();
-				GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+				GL.Translate(0.5F, 0.5F, 0.5F);
 			}
 
 		}

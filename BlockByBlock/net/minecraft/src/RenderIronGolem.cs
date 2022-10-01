@@ -1,10 +1,8 @@
-﻿using System;
+﻿using OpenTK.Graphics.OpenGL;
+using System;
 
 namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
-
 	public class RenderIronGolem : RenderLiving
 	{
 		private bool InstanceFieldsInitialized = false;
@@ -38,7 +36,7 @@ namespace net.minecraft.src
 				float f5 = 13.0F;
 				float f6 = entityIronGolem1.field_703_S - entityIronGolem1.field_704_R * (1.0F - f4) + 6.0F;
 				float f7 = (Math.Abs(f6 % f5 - f5 * 0.5F) - f5 * 0.25F) / (f5 * 0.25F);
-				GL11.glRotatef(6.5F * f7, 0.0F, 0.0F, 1.0F);
+				GL.Rotate(6.5F * f7, 0.0F, 0.0F, 1.0F);
 			}
 		}
 
@@ -47,23 +45,23 @@ namespace net.minecraft.src
 			base.renderEquippedItems(entityIronGolem1, f2);
 			if (entityIronGolem1.func_48117_D_() != 0)
 			{
-				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-				GL11.glPushMatrix();
-				GL11.glRotatef(5.0F + 180.0F * this.field_48422_c.field_48233_c.rotateAngleX / (float)Math.PI, 1.0F, 0.0F, 0.0F);
-				GL11.glTranslatef(-0.6875F, 1.25F, -0.9375F);
-				GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
+				GL.Enable(EnableCap.RescaleNormal);
+				GL.PushMatrix();
+				GL.Rotate(5.0F + 180.0F * this.field_48422_c.field_48233_c.rotateAngleX / (float)Math.PI, 1.0F, 0.0F, 0.0F);
+				GL.Translate(-0.6875F, 1.25F, -0.9375F);
+				GL.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
 				float f3 = 0.8F;
-				GL11.glScalef(f3, -f3, f3);
+				GL.Scale(f3, -f3, f3);
 				int i4 = entityIronGolem1.getBrightnessForRender(f2);
 				int i5 = i4 % 65536;
 				int i6 = i4 / 65536;
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i5 / 1.0F, (float)i6 / 1.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				this.loadTexture("/terrain.png");
 				this.renderBlocks.renderBlockAsItem(Block.plantRed, 0, 1.0F);
-				GL11.glPopMatrix();
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+				GL.PopMatrix();
+				GL.Disable(EnableCap.RescaleNormal);
 			}
 		}
 

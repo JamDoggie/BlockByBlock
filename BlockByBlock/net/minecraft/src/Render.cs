@@ -1,9 +1,7 @@
-﻿namespace net.minecraft.src
-{
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
 
-	// PORTING TODO: OpenGL code. Pretty much all of the classes that start with "Render"
-	// have OpenGL code in them (shocking, I know), so I'm not copying this comment to every one of them.
+namespace net.minecraft.src
+{
 
 	public abstract class Render
 	{
@@ -38,7 +36,7 @@
 
 		private void renderEntityOnFire(Entity entity1, double d2, double d4, double d6, float f8)
 		{
-			GL11.glDisable(GL11.GL_LIGHTING);
+			GL.Disable(EnableCap.Lighting);
 			int i9 = Block.fire.blockIndexInTexture;
 			int i10 = (i9 & 15) << 4;
 			int i11 = i9 & 240;
@@ -46,19 +44,19 @@
 			float f13 = ((float)i10 + 15.99F) / 256.0F;
 			float f14 = (float)i11 / 256.0F;
 			float f15 = ((float)i11 + 15.99F) / 256.0F;
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float)d2, (float)d4, (float)d6);
+			GL.PushMatrix();
+			GL.Translate((float)d2, (float)d4, (float)d6);
 			float f16 = entity1.width * 1.4F;
-			GL11.glScalef(f16, f16, f16);
+			GL.Scale(f16, f16, f16);
 			this.loadTexture("/terrain.png");
 			Tessellator tessellator17 = Tessellator.instance;
 			float f18 = 0.5F;
 			float f19 = 0.0F;
 			float f20 = entity1.height / f16;
 			float f21 = (float)(entity1.posY - entity1.boundingBox.minY);
-			GL11.glRotatef(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-			GL11.glTranslatef(0.0F, 0.0F, -0.3F + (float)((int)f20) * 0.02F);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+			GL.Translate(0.0F, 0.0F, -0.3F + (float)((int)f20) * 0.02F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			float f22 = 0.0F;
 			int i23 = 0;
 			tessellator17.startDrawingQuads();
@@ -99,18 +97,18 @@
 			}
 
 			tessellator17.draw();
-			GL11.glPopMatrix();
-			GL11.glEnable(GL11.GL_LIGHTING);
+			GL.PopMatrix();
+			GL.Enable(EnableCap.Lighting);
 		}
 
 		private void renderShadow(Entity entity1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 			RenderEngine renderEngine10 = this.renderManager.renderEngine;
 			renderEngine10.bindTexture(renderEngine10.getTexture("%clamp%/misc/shadow.png"));
 			World world11 = this.WorldFromRenderManager;
-			GL11.glDepthMask(false);
+			GL.DepthMask(false);
 			float f12 = this.shadowSize;
 			if (entity1 is EntityLiving)
 			{
@@ -157,9 +155,9 @@
 			}
 
 			tessellator31.draw();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glDepthMask(true);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Disable(EnableCap.Blend);
+			GL.DepthMask(true);
 		}
 
 		private World WorldFromRenderManager
@@ -203,9 +201,9 @@
 
 		public static void renderOffsetAABB(AxisAlignedBB axisAlignedBB0, double d1, double d3, double d5)
 		{
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL.Disable(EnableCap.Texture2D);
 			Tessellator tessellator7 = Tessellator.instance;
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			tessellator7.startDrawingQuads();
 			tessellator7.setTranslation(d1, d3, d5);
 			tessellator7.setNormal(0.0F, 0.0F, -1.0F);
@@ -240,7 +238,7 @@
 			tessellator7.addVertex(axisAlignedBB0.maxX, axisAlignedBB0.minY, axisAlignedBB0.maxZ);
 			tessellator7.setTranslation(0.0D, 0.0D, 0.0D);
 			tessellator7.draw();
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL.Enable(EnableCap.Texture2D);
 		}
 
 		public static void renderAABB(AxisAlignedBB axisAlignedBB0)

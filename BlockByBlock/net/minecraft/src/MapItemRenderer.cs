@@ -1,9 +1,9 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
+namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 
 	public class MapItemRenderer
 	{
@@ -14,9 +14,9 @@
 
 		public MapItemRenderer(FontRenderer fontRenderer1, GameSettings gameSettings2, RenderEngine renderEngine3)
 		{
-			this.gameSettings = gameSettings2;
-			this.fontRenderer = fontRenderer1;
-			this.bufferedImage = renderEngine3.allocateAndSetupTexture(new BufferedImage(128, 128, 2));
+			gameSettings = gameSettings2;
+			fontRenderer = fontRenderer1;
+			bufferedImage = renderEngine3.allocateAndSetupTexture(new Image<Rgba32>(128, 128));
 
 			for (int i4 = 0; i4 < 16384; ++i4)
 			{
@@ -71,29 +71,29 @@
 			sbyte b16 = 0;
 			Tessellator tessellator17 = Tessellator.instance;
 			float f18 = 0.0F;
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.bufferedImage);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL.BindTexture(TextureTarget.Texture2D, this.bufferedImage);
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactor.One, BlendingFactor.OneMinusSrcAlpha);
+			GL.Disable(EnableCap.AlphaTest);
 			tessellator17.startDrawingQuads();
 			tessellator17.addVertexWithUV((double)((float)(b15 + 0) + f18), (double)((float)(b16 + 128) - f18), -0.009999999776482582D, 0.0D, 1.0D);
 			tessellator17.addVertexWithUV((double)((float)(b15 + 128) - f18), (double)((float)(b16 + 128) - f18), -0.009999999776482582D, 1.0D, 1.0D);
 			tessellator17.addVertexWithUV((double)((float)(b15 + 128) - f18), (double)((float)(b16 + 0) + f18), -0.009999999776482582D, 1.0D, 0.0D);
 			tessellator17.addVertexWithUV((double)((float)(b15 + 0) + f18), (double)((float)(b16 + 0) + f18), -0.009999999776482582D, 0.0D, 0.0D);
 			tessellator17.draw();
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			GL11.glDisable(GL11.GL_BLEND);
+			GL.Enable(EnableCap.AlphaTest);
+			GL.Disable(EnableCap.Blend);
 			renderEngine2.bindTexture(renderEngine2.getTexture("/misc/mapicons.png"));
 			System.Collections.IEnumerator iterator19 = mapData3.playersVisibleOnMap.GetEnumerator();
 
 			while (iterator19.MoveNext())
 			{
 				MapCoord mapCoord20 = (MapCoord)iterator19.Current;
-				GL11.glPushMatrix();
-				GL11.glTranslatef((float)b15 + (float)mapCoord20.centerX / 2.0F + 64.0F, (float)b16 + (float)mapCoord20.centerZ / 2.0F + 64.0F, -0.02F);
-				GL11.glRotatef((float)(mapCoord20.iconRotation * 360) / 16.0F, 0.0F, 0.0F, 1.0F);
-				GL11.glScalef(4.0F, 4.0F, 3.0F);
-				GL11.glTranslatef(-0.125F, 0.125F, 0.0F);
+				GL.PushMatrix();
+				GL.Translate((float)b15 + (float)mapCoord20.centerX / 2.0F + 64.0F, (float)b16 + (float)mapCoord20.centerZ / 2.0F + 64.0F, -0.02F);
+				GL.Rotate((float)(mapCoord20.iconRotation * 360) / 16.0F, 0.0F, 0.0F, 1.0F);
+				GL.Scale(4.0F, 4.0F, 3.0F);
+				GL.Translate(-0.125F, 0.125F, 0.0F);
 				float f21 = (float)(mapCoord20.field_28217_a % 4 + 0) / 4.0F;
 				float f22 = (float)(mapCoord20.field_28217_a / 4 + 0) / 4.0F;
 				float f23 = (float)(mapCoord20.field_28217_a % 4 + 1) / 4.0F;
@@ -104,14 +104,14 @@
 				tessellator17.addVertexWithUV(1.0D, -1.0D, 0.0D, (double)f23, (double)f24);
 				tessellator17.addVertexWithUV(-1.0D, -1.0D, 0.0D, (double)f21, (double)f24);
 				tessellator17.draw();
-				GL11.glPopMatrix();
+				GL.PopMatrix();
 			}
 
-			GL11.glPushMatrix();
-			GL11.glTranslatef(0.0F, 0.0F, -0.04F);
-			GL11.glScalef(1.0F, 1.0F, 1.0F);
-			this.fontRenderer.drawString(mapData3.mapName, b15, b16, unchecked((int)0xFF000000));
-			GL11.glPopMatrix();
+			GL.PushMatrix();
+			GL.Translate(0.0F, 0.0F, -0.04F);
+			GL.Scale(1.0F, 1.0F, 1.0F);
+			fontRenderer.drawString(mapData3.mapName, b15, b16, unchecked((int)0xFF000000));
+			GL.PopMatrix();
 		}
 	}
 

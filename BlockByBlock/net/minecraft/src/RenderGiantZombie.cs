@@ -1,6 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderGiantZombie : RenderLiving
 	{
@@ -13,7 +14,7 @@
 
 		protected internal virtual void preRenderScale(EntityGiantZombie entityGiantZombie1, float f2)
 		{
-			GL11.glScalef(this.scale, this.scale, this.scale);
+			GL.Scale(this.scale, this.scale, this.scale);
 		}
 
 		protected internal override void preRenderCallback(EntityLiving entityLiving1, float f2)

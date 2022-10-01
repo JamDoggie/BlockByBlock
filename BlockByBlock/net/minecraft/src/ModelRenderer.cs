@@ -1,11 +1,8 @@
 ﻿using System.Collections;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 
 	public class ModelRenderer
 	{
@@ -114,7 +111,7 @@ namespace net.minecraft.src
 					{
 						if (this.rotationPointX == 0.0F && this.rotationPointY == 0.0F && this.rotationPointZ == 0.0F)
 						{
-							GL11.glCallList(this.displayList);
+							GL.CallList(this.displayList);
 							if (this.childModels != null)
 							{
 								for (i2 = 0; i2 < this.childModels.Count; ++i2)
@@ -125,8 +122,8 @@ namespace net.minecraft.src
 						}
 						else
 						{
-							GL11.glTranslatef(this.rotationPointX * f1, this.rotationPointY * f1, this.rotationPointZ * f1);
-							GL11.glCallList(this.displayList);
+							GL.Translate(this.rotationPointX * f1, this.rotationPointY * f1, this.rotationPointZ * f1);
+							GL.CallList(this.displayList);
 							if (this.childModels != null)
 							{
 								for (i2 = 0; i2 < this.childModels.Count; ++i2)
@@ -135,29 +132,29 @@ namespace net.minecraft.src
 								}
 							}
 
-							GL11.glTranslatef(-this.rotationPointX * f1, -this.rotationPointY * f1, -this.rotationPointZ * f1);
+							GL.Translate(-this.rotationPointX * f1, -this.rotationPointY * f1, -this.rotationPointZ * f1);
 						}
 					}
 					else
 					{
-						GL11.glPushMatrix();
-						GL11.glTranslatef(this.rotationPointX * f1, this.rotationPointY * f1, this.rotationPointZ * f1);
+						GL.PushMatrix();
+						GL.Translate(this.rotationPointX * f1, this.rotationPointY * f1, this.rotationPointZ * f1);
 						if (this.rotateAngleZ != 0.0F)
 						{
-							GL11.glRotatef(this.rotateAngleZ * 57.295776F, 0.0F, 0.0F, 1.0F);
+							GL.Rotate(this.rotateAngleZ * 57.295776F, 0.0F, 0.0F, 1.0F);
 						}
 
 						if (this.rotateAngleY != 0.0F)
 						{
-							GL11.glRotatef(this.rotateAngleY * 57.295776F, 0.0F, 1.0F, 0.0F);
+							GL.Rotate(this.rotateAngleY * 57.295776F, 0.0F, 1.0F, 0.0F);
 						}
 
 						if (this.rotateAngleX != 0.0F)
 						{
-							GL11.glRotatef(this.rotateAngleX * 57.295776F, 1.0F, 0.0F, 0.0F);
+							GL.Rotate(this.rotateAngleX * 57.295776F, 1.0F, 0.0F, 0.0F);
 						}
 
-						GL11.glCallList(this.displayList);
+						GL.CallList(this.displayList);
 						if (this.childModels != null)
 						{
 							for (i2 = 0; i2 < this.childModels.Count; ++i2)
@@ -166,7 +163,7 @@ namespace net.minecraft.src
 							}
 						}
 
-						GL11.glPopMatrix();
+						GL.PopMatrix();
 					}
 
 				}
@@ -184,25 +181,25 @@ namespace net.minecraft.src
 						this.compileDisplayList(f1);
 					}
 
-					GL11.glPushMatrix();
-					GL11.glTranslatef(this.rotationPointX * f1, this.rotationPointY * f1, this.rotationPointZ * f1);
+					GL.PushMatrix();
+					GL.Translate(this.rotationPointX * f1, this.rotationPointY * f1, this.rotationPointZ * f1);
 					if (this.rotateAngleY != 0.0F)
 					{
-						GL11.glRotatef(this.rotateAngleY * 57.295776F, 0.0F, 1.0F, 0.0F);
+						GL.Rotate(this.rotateAngleY * 57.295776F, 0.0F, 1.0F, 0.0F);
 					}
 
 					if (this.rotateAngleX != 0.0F)
 					{
-						GL11.glRotatef(this.rotateAngleX * 57.295776F, 1.0F, 0.0F, 0.0F);
+						GL.Rotate(this.rotateAngleX * 57.295776F, 1.0F, 0.0F, 0.0F);
 					}
 
 					if (this.rotateAngleZ != 0.0F)
 					{
-						GL11.glRotatef(this.rotateAngleZ * 57.295776F, 0.0F, 0.0F, 1.0F);
+						GL.Rotate(this.rotateAngleZ * 57.295776F, 0.0F, 0.0F, 1.0F);
 					}
 
-					GL11.glCallList(this.displayList);
-					GL11.glPopMatrix();
+					GL.CallList(this.displayList);
+					GL.PopMatrix();
 				}
 			}
 		}
@@ -222,25 +219,25 @@ namespace net.minecraft.src
 					{
 						if (this.rotationPointX != 0.0F || this.rotationPointY != 0.0F || this.rotationPointZ != 0.0F)
 						{
-							GL11.glTranslatef(this.rotationPointX * f1, this.rotationPointY * f1, this.rotationPointZ * f1);
+							GL.Translate(this.rotationPointX * f1, this.rotationPointY * f1, this.rotationPointZ * f1);
 						}
 					}
 					else
 					{
-						GL11.glTranslatef(this.rotationPointX * f1, this.rotationPointY * f1, this.rotationPointZ * f1);
+						GL.Translate(this.rotationPointX * f1, this.rotationPointY * f1, this.rotationPointZ * f1);
 						if (this.rotateAngleZ != 0.0F)
 						{
-							GL11.glRotatef(this.rotateAngleZ * 57.295776F, 0.0F, 0.0F, 1.0F);
+							GL.Rotate(this.rotateAngleZ * 57.295776F, 0.0F, 0.0F, 1.0F);
 						}
 
 						if (this.rotateAngleY != 0.0F)
 						{
-							GL11.glRotatef(this.rotateAngleY * 57.295776F, 0.0F, 1.0F, 0.0F);
+							GL.Rotate(this.rotateAngleY * 57.295776F, 0.0F, 1.0F, 0.0F);
 						}
 
 						if (this.rotateAngleX != 0.0F)
 						{
-							GL11.glRotatef(this.rotateAngleX * 57.295776F, 1.0F, 0.0F, 0.0F);
+							GL.Rotate(this.rotateAngleX * 57.295776F, 1.0F, 0.0F, 0.0F);
 						}
 					}
 
@@ -251,7 +248,7 @@ namespace net.minecraft.src
 		private void compileDisplayList(float f1)
 		{
 			this.displayList = GLAllocation.generateDisplayLists(1);
-			GL11.glNewList(this.displayList, GL11.GL_COMPILE);
+			GL.NewList(this.displayList, ListMode.Compile);
 			Tessellator tessellator2 = Tessellator.instance;
 
 			for (int i3 = 0; i3 < this.cubeList.Count; ++i3)
@@ -259,7 +256,7 @@ namespace net.minecraft.src
 				((ModelBox)this.cubeList[i3]).render(tessellator2, f1);
 			}
 
-			GL11.glEndList();
+			GL.EndList();
 			this.compiled = true;
 		}
 

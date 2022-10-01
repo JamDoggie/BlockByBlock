@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections;
 using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
 
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	using ARBOcclusionQuery = org.lwjgl.opengl.ARBOcclusionQuery;
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL15 = org.lwjgl.opengl.GL15;
 
 	public class RenderGlobal : IWorldAccess
 	{
@@ -25,7 +22,7 @@ namespace net.minecraft.src
 		private int glRenderListBase;
 		private Minecraft mc;
 		private RenderBlocks globalRenderBlocks;
-		private IntBuffer glOcclusionQueryBase;
+		private int[] glOcclusionQueryBase;
 		private bool occlusionEnabled = false;
 		private int cloudOffsetX = 0;
 		private int starGLCallList;
@@ -43,7 +40,7 @@ namespace net.minecraft.src
 		private int countEntitiesRendered;
 		private int countEntitiesHidden;
 		internal int[] dummyBuf50k = new int[50000];
-		internal IntBuffer occlusionResult = GLAllocation.createDirectIntBuffer(64);
+		internal int[] occlusionResult = new int[64];
 		private int renderersLoaded;
 		private int renderersBeingClipped;
 		private int renderersBeingOccluded;
@@ -75,23 +72,19 @@ namespace net.minecraft.src
 			this.occlusionEnabled = OpenGlCapsChecker.checkARBOcclusion();
 			if (this.occlusionEnabled)
 			{
-				this.occlusionResult.clear();
-				this.glOcclusionQueryBase = GLAllocation.createDirectIntBuffer(b3 * b3 * b4);
-				this.glOcclusionQueryBase.clear();
-				this.glOcclusionQueryBase.position(0);
-				this.glOcclusionQueryBase.limit(b3 * b3 * b4);
-				ARBOcclusionQuery.glGenQueriesARB(this.glOcclusionQueryBase);
+				glOcclusionQueryBase = new int[b3 * b3 * b4];
+				GL.Arb.GenQueries(glOcclusionQueryBase.Length, glOcclusionQueryBase); // PORTING TODO: Wasn't 100% sure about the first argument here. Investigate if this doesn't work.
 			}
 
 			this.starGLCallList = GLAllocation.generateDisplayLists(3);
-			GL11.glPushMatrix();
-			GL11.glNewList(this.starGLCallList, GL11.GL_COMPILE);
+			GL.PushMatrix();
+			GL.NewList(starGLCallList, ListMode.Compile);
 			this.renderStars();
-			GL11.glEndList();
-			GL11.glPopMatrix();
+			GL.EndList();
+			GL.PopMatrix();
 			Tessellator tessellator5 = Tessellator.instance;
 			this.glSkyList = this.starGLCallList + 1;
-			GL11.glNewList(this.glSkyList, GL11.GL_COMPILE);
+			GL.NewList(this.glSkyList, ListMode.Compile);
 			sbyte b7 = 64;
 			int i8 = 256 / b7 + 2;
 			float f6 = 16.0F;
@@ -111,9 +104,9 @@ namespace net.minecraft.src
 				}
 			}
 
-			GL11.glEndList();
+			GL.EndList();
 			this.glSkyList2 = this.starGLCallList + 2;
-			GL11.glNewList(this.glSkyList2, GL11.GL_COMPILE);
+			GL.NewList(this.glSkyList2, ListMode.Compile);
 			f6 = -16.0F;
 			tessellator5.startDrawingQuads();
 
@@ -129,7 +122,7 @@ namespace net.minecraft.src
 			}
 
 			tessellator5.draw();
-			GL11.glEndList();
+			GL.EndList();
 		}
 
 		private void renderStars()
@@ -257,7 +250,7 @@ namespace net.minecraft.src
 							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4] = new WorldRenderer(this.worldObj, this.tileEntities, i4 * 16, i5 * 16, i6 * 16, this.glRenderListBase + i2);
 							if (this.occlusionEnabled)
 							{
-								this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].glOcclusionQuery = this.glOcclusionQueryBase.get(i3);
+								this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].glOcclusionQuery = this.glOcclusionQueryBase[i3];
 							}
 
 							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].isWaitingOnOcclusionQuery = false;
@@ -519,16 +512,16 @@ namespace net.minecraft.src
 						i19 = this.sortedWorldRenderers.Length;
 					}
 
-					GL11.glDisable(GL11.GL_TEXTURE_2D);
-					GL11.glDisable(GL11.GL_LIGHTING);
-					GL11.glDisable(GL11.GL_ALPHA_TEST);
-					GL11.glDisable(GL11.GL_FOG);
-					GL11.glColorMask(false, false, false, false);
-					GL11.glDepthMask(false);
+					GL.Disable(EnableCap.Texture2D);
+					GL.Disable(EnableCap.Lighting);
+					GL.Disable(EnableCap.AlphaTest);
+					GL.Disable(EnableCap.Fog);
+					GL.ColorMask(false, false, false, false);
+					GL.DepthMask(false);
 					Profiler.startSection("check");
 					this.checkOcclusionQueryResult(i35, i19);
 					Profiler.endSection();
-					GL11.glPushMatrix();
+					GL.PushMatrix();
 					float f36 = 0.0F;
 					float f21 = 0.0F;
 					float f22 = 0.0F;
@@ -561,16 +554,16 @@ namespace net.minecraft.src
 									float f32 = f29 - f22;
 									if (f30 != 0.0F || f31 != 0.0F || f32 != 0.0F)
 									{
-										GL11.glTranslatef(f30, f31, f32);
+										GL.Translate(f30, f31, f32);
 										f36 += f30;
 										f21 += f31;
 										f22 += f32;
 									}
 
 									Profiler.startSection("bb");
-									ARBOcclusionQuery.glBeginQueryARB(GL15.GL_SAMPLES_PASSED, this.sortedWorldRenderers[i23].glOcclusionQuery);
-									this.sortedWorldRenderers[i23].callOcclusionQueryList();
-									ARBOcclusionQuery.glEndQueryARB(GL15.GL_SAMPLES_PASSED);
+                                    GL.Arb.BeginQuery(ArbOcclusionQuery.SamplesPassedArb, this.sortedWorldRenderers[i23].glOcclusionQuery);
+                                    this.sortedWorldRenderers[i23].callOcclusionQueryList();
+									GL.Arb.EndQuery(QueryTarget.SamplesPassed);
 									Profiler.endSection();
 									this.sortedWorldRenderers[i23].isWaitingOnOcclusionQuery = true;
 								}
@@ -578,27 +571,27 @@ namespace net.minecraft.src
 						}
 					}
 
-					GL11.glPopMatrix();
+					GL.PopMatrix();
 					if (this.mc.gameSettings.anaglyph)
 					{
 						if (EntityRenderer.anaglyphField == 0)
 						{
-							GL11.glColorMask(false, true, true, true);
+							GL.ColorMask(false, true, true, true);
 						}
 						else
 						{
-							GL11.glColorMask(true, false, false, true);
+							GL.ColorMask(true, false, false, true);
 						}
 					}
 					else
 					{
-						GL11.glColorMask(true, true, true, true);
+						GL.ColorMask(true, true, true, true);
 					}
 
-					GL11.glDepthMask(true);
-					GL11.glEnable(GL11.GL_TEXTURE_2D);
-					GL11.glEnable(GL11.GL_ALPHA_TEST);
-					GL11.glEnable(GL11.GL_FOG);
+					GL.DepthMask(true);
+					GL.Enable(EnableCap.Texture2D);
+					GL.Enable(EnableCap.AlphaTest);
+					GL.Enable(EnableCap.Fog);
 					Profiler.endStartSection("render");
 					i34 += this.renderSortedRenderers(i35, i19, i2, d3);
 				} while (i19 < this.sortedWorldRenderers.Length);
@@ -619,14 +612,12 @@ namespace net.minecraft.src
 			{
 				if (this.sortedWorldRenderers[i3].isWaitingOnOcclusionQuery)
 				{
-					this.occlusionResult.clear();
-					ARBOcclusionQuery.glGetQueryObjectuARB(this.sortedWorldRenderers[i3].glOcclusionQuery, GL15.GL_QUERY_RESULT_AVAILABLE, this.occlusionResult);
-					if (this.occlusionResult.get(0) != 0)
+					GL.Arb.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, QueryObjectParameterName.QueryResultAvailable, this.occlusionResult);
+					if (this.occlusionResult[0] != 0)
 					{
 						this.sortedWorldRenderers[i3].isWaitingOnOcclusionQuery = false;
-						this.occlusionResult.clear();
-						ARBOcclusionQuery.glGetQueryObjectuARB(this.sortedWorldRenderers[i3].glOcclusionQuery, GL15.GL_QUERY_RESULT, this.occlusionResult);
-						this.sortedWorldRenderers[i3].isVisible = this.occlusionResult.get(0) != 0;
+						GL.Arb.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, QueryObjectParameterName.QueryResult, this.occlusionResult);
+						this.sortedWorldRenderers[i3].isVisible = this.occlusionResult[0] != 0;
 					}
 				}
 			}
@@ -731,41 +722,41 @@ namespace net.minecraft.src
 		{
 			if (this.mc.theWorld.worldProvider.worldType == 1)
 			{
-				GL11.glDisable(GL11.GL_FOG);
-				GL11.glDisable(GL11.GL_ALPHA_TEST);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL.Disable(EnableCap.Fog);
+				GL.Disable(EnableCap.AlphaTest);
+				GL.Enable(EnableCap.Blend);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 				RenderHelper.disableStandardItemLighting();
-				GL11.glDepthMask(false);
+				GL.DepthMask(false);
 				this.renderEngine.bindTexture(this.renderEngine.getTexture("/misc/tunnel.png"));
 				Tessellator tessellator19 = Tessellator.instance;
 
 				for (int i20 = 0; i20 < 6; ++i20)
 				{
-					GL11.glPushMatrix();
+					GL.PushMatrix();
 					if (i20 == 1)
 					{
-						GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
+						GL.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
 					}
 
 					if (i20 == 2)
 					{
-						GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
+						GL.Rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 					}
 
 					if (i20 == 3)
 					{
-						GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
+						GL.Rotate(180.0F, 1.0F, 0.0F, 0.0F);
 					}
 
 					if (i20 == 4)
 					{
-						GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
+						GL.Rotate(90.0F, 0.0F, 0.0F, 1.0F);
 					}
 
 					if (i20 == 5)
 					{
-						GL11.glRotatef(-90.0F, 0.0F, 0.0F, 1.0F);
+						GL.Rotate(-90.0F, 0.0F, 0.0F, 1.0F);
 					}
 
 					tessellator19.startDrawingQuads();
@@ -775,16 +766,16 @@ namespace net.minecraft.src
 					tessellator19.addVertexWithUV(100.0D, -100.0D, 100.0D, 16.0D, 16.0D);
 					tessellator19.addVertexWithUV(100.0D, -100.0D, -100.0D, 16.0D, 0.0D);
 					tessellator19.draw();
-					GL11.glPopMatrix();
+					GL.PopMatrix();
 				}
 
-				GL11.glDepthMask(true);
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
-				GL11.glEnable(GL11.GL_ALPHA_TEST);
+				GL.DepthMask(true);
+				GL.Enable(EnableCap.Texture2D);
+				GL.Enable(EnableCap.AlphaTest);
 			}
 			else if (this.mc.theWorld.worldProvider.func_48217_e())
 			{
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				GL.Disable(EnableCap.Texture2D);
 				Vec3D vec3D2 = this.worldObj.getSkyColor(this.mc.renderViewEntity, f1);
 				float f3 = (float)vec3D2.xCoord;
 				float f4 = (float)vec3D2.yCoord;
@@ -801,16 +792,16 @@ namespace net.minecraft.src
 					f5 = f8;
 				}
 
-				GL11.glColor3f(f3, f4, f5);
+				GL.Color3(f3, f4, f5);
 				Tessellator tessellator21 = Tessellator.instance;
-				GL11.glDepthMask(false);
-				GL11.glEnable(GL11.GL_FOG);
-				GL11.glColor3f(f3, f4, f5);
-				GL11.glCallList(this.glSkyList);
-				GL11.glDisable(GL11.GL_FOG);
-				GL11.glDisable(GL11.GL_ALPHA_TEST);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL.DepthMask(false);
+				GL.Enable(EnableCap.Fog);
+				GL.Color3(f3, f4, f5);
+				GL.CallList(this.glSkyList);
+				GL.Disable(EnableCap.Fog);
+				GL.Disable(EnableCap.AlphaTest);
+				GL.Enable(EnableCap.Blend);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 				RenderHelper.disableStandardItemLighting();
 				float[] f22 = this.worldObj.worldProvider.calcSunriseSunsetColors(this.worldObj.getCelestialAngle(f1), f1);
 				float f9;
@@ -821,12 +812,12 @@ namespace net.minecraft.src
 				int i25;
 				if (f22 != null)
 				{
-					GL11.glDisable(GL11.GL_TEXTURE_2D);
-					GL11.glShadeModel(GL11.GL_SMOOTH);
-					GL11.glPushMatrix();
-					GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(MathHelper.sin(this.worldObj.getCelestialAngleRadians(f1)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
-					GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
+					GL.Disable(EnableCap.Texture2D);
+					GL.ShadeModel(ShadingModel.Smooth);
+					GL.PushMatrix();
+					GL.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(MathHelper.sin(this.worldObj.getCelestialAngleRadians(f1)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
+					GL.Rotate(90.0F, 0.0F, 0.0F, 1.0F);
 					f8 = f22[0];
 					f9 = f22[1];
 					f10 = f22[2];
@@ -856,23 +847,23 @@ namespace net.minecraft.src
 					}
 
 					tessellator21.draw();
-					GL11.glPopMatrix();
-					GL11.glShadeModel(GL11.GL_FLAT);
+					GL.PopMatrix();
+					GL.ShadeModel(ShadingModel.Flat);
 				}
 
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-				GL11.glPushMatrix();
+				GL.Enable(EnableCap.Texture2D);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.One);
+				GL.PushMatrix();
 				f7 = 1.0F - this.worldObj.getRainStrength(f1);
 				f8 = 0.0F;
 				f9 = 0.0F;
 				f10 = 0.0F;
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, f7);
-				GL11.glTranslatef(f8, f9, f10);
-				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-				GL11.glRotatef(this.worldObj.getCelestialAngle(f1) * 360.0F, 1.0F, 0.0F, 0.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, f7);
+				GL.Translate(f8, f9, f10);
+				GL.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(this.worldObj.getCelestialAngle(f1) * 360.0F, 1.0F, 0.0F, 0.0F);
 				f11 = 30.0F;
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.renderEngine.getTexture("/terrain/sun.png"));
+				GL.BindTexture(TextureTarget.Texture2D, this.renderEngine.getTexture("/terrain/sun.png"));
 				tessellator21.startDrawingQuads();
 				tessellator21.addVertexWithUV((double)(-f11), 100.0D, (double)(-f11), 0.0D, 0.0D);
 				tessellator21.addVertexWithUV((double)f11, 100.0D, (double)(-f11), 1.0D, 0.0D);
@@ -880,7 +871,7 @@ namespace net.minecraft.src
 				tessellator21.addVertexWithUV((double)(-f11), 100.0D, (double)f11, 0.0D, 1.0D);
 				tessellator21.draw();
 				f11 = 20.0F;
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.renderEngine.getTexture("/terrain/moon_phases.png"));
+				GL.BindTexture(TextureTarget.Texture2D, this.renderEngine.getTexture("/terrain/moon_phases.png"));
 				i25 = this.worldObj.getMoonPhase(f1);
 				int i26 = i25 % 4;
 				int i27 = i25 / 4 % 2;
@@ -894,28 +885,28 @@ namespace net.minecraft.src
 				tessellator21.addVertexWithUV((double)f11, -100.0D, (double)(-f11), (double)f15, (double)f16);
 				tessellator21.addVertexWithUV((double)(-f11), -100.0D, (double)(-f11), (double)f17, (double)f16);
 				tessellator21.draw();
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				GL.Disable(EnableCap.Texture2D);
 				f12 = this.worldObj.getStarBrightness(f1) * f7;
 				if (f12 > 0.0F)
 				{
-					GL11.glColor4f(f12, f12, f12, f12);
-					GL11.glCallList(this.starGLCallList);
+					GL.Color4(f12, f12, f12, f12);
+					GL.CallList(this.starGLCallList);
 				}
 
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glEnable(GL11.GL_ALPHA_TEST);
-				GL11.glEnable(GL11.GL_FOG);
-				GL11.glPopMatrix();
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				GL11.glColor3f(0.0F, 0.0F, 0.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Disable(EnableCap.Blend);
+				GL.Enable(EnableCap.AlphaTest);
+				GL.Enable(EnableCap.Fog);
+				GL.PopMatrix();
+				GL.Disable(EnableCap.Texture2D);
+				GL.Color3(0.0F, 0.0F, 0.0F);
 				double d23 = this.mc.thePlayer.getPosition(f1).yCoord - this.worldObj.SeaLevel;
 				if (d23 < 0.0D)
 				{
-					GL11.glPushMatrix();
-					GL11.glTranslatef(0.0F, 12.0F, 0.0F);
-					GL11.glCallList(this.glSkyList2);
-					GL11.glPopMatrix();
+					GL.PushMatrix();
+					GL.Translate(0.0F, 12.0F, 0.0F);
+					GL.CallList(this.glSkyList2);
+					GL.PopMatrix();
 					f9 = 1.0F;
 					f10 = -((float)(d23 + 65.0D));
 					f11 = -f9;
@@ -946,19 +937,19 @@ namespace net.minecraft.src
 
 				if (this.worldObj.worldProvider.SkyColored)
 				{
-					GL11.glColor3f(f3 * 0.2F + 0.04F, f4 * 0.2F + 0.04F, f5 * 0.6F + 0.1F);
+					GL.Color3(f3 * 0.2F + 0.04F, f4 * 0.2F + 0.04F, f5 * 0.6F + 0.1F);
 				}
 				else
 				{
-					GL11.glColor3f(f3, f4, f5);
+					GL.Color3(f3, f4, f5);
 				}
 
-				GL11.glPushMatrix();
-				GL11.glTranslatef(0.0F, -((float)(d23 - 16.0D)), 0.0F);
-				GL11.glCallList(this.glSkyList2);
-				GL11.glPopMatrix();
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
-				GL11.glDepthMask(true);
+				GL.PushMatrix();
+				GL.Translate(0.0F, -((float)(d23 - 16.0D)), 0.0F);
+				GL.CallList(this.glSkyList2);
+				GL.PopMatrix();
+				GL.Enable(EnableCap.Texture2D);
+				GL.DepthMask(true);
 			}
 		}
 
@@ -972,14 +963,14 @@ namespace net.minecraft.src
 				}
 				else
 				{
-					GL11.glDisable(GL11.GL_CULL_FACE);
+					GL.Disable(EnableCap.CullFace);
 					float f2 = (float)(this.mc.renderViewEntity.lastTickPosY + (this.mc.renderViewEntity.posY - this.mc.renderViewEntity.lastTickPosY) * (double)f1);
 					sbyte b3 = 32;
 					int i4 = 256 / b3;
 					Tessellator tessellator5 = Tessellator.instance;
-					GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.renderEngine.getTexture("/environment/clouds.png"));
-					GL11.glEnable(GL11.GL_BLEND);
-					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					GL.BindTexture(TextureTarget.Texture2D, this.renderEngine.getTexture("/environment/clouds.png"));
+					GL.Enable(EnableCap.Blend);
+					GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 					Vec3D vec3D6 = this.worldObj.drawClouds(f1);
 					float f7 = (float)vec3D6.xCoord;
 					float f8 = (float)vec3D6.yCoord;
@@ -1021,9 +1012,9 @@ namespace net.minecraft.src
 					}
 
 					tessellator5.draw();
-					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-					GL11.glDisable(GL11.GL_BLEND);
-					GL11.glEnable(GL11.GL_CULL_FACE);
+					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+					GL.Disable(EnableCap.Blend);
+					GL.Enable(EnableCap.CullFace);
 				}
 			}
 		}
@@ -1035,7 +1026,7 @@ namespace net.minecraft.src
 
 		public virtual void renderCloudsFancy(float f1)
 		{
-			GL11.glDisable(GL11.GL_CULL_FACE);
+			GL.Disable(EnableCap.CullFace);
 			float f2 = (float)(this.mc.renderViewEntity.lastTickPosY + (this.mc.renderViewEntity.posY - this.mc.renderViewEntity.lastTickPosY) * (double)f1);
 			Tessellator tessellator3 = Tessellator.instance;
 			float f4 = 12.0F;
@@ -1048,9 +1039,9 @@ namespace net.minecraft.src
 			int i14 = MathHelper.floor_double(d10 / 2048.0D);
 			d8 -= (double)(i13 * 2048);
 			d10 -= (double)(i14 * 2048);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.renderEngine.getTexture("/environment/clouds.png"));
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL.BindTexture(TextureTarget.Texture2D, this.renderEngine.getTexture("/environment/clouds.png"));
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 			Vec3D vec3D15 = this.worldObj.drawClouds(f1);
 			float f16 = (float)vec3D15.xCoord;
 			float f17 = (float)vec3D15.yCoord;
@@ -1078,28 +1069,28 @@ namespace net.minecraft.src
 			sbyte b24 = 8;
 			sbyte b25 = 4;
 			float f26 = 9.765625E-4F;
-			GL11.glScalef(f4, 1.0F, f4);
+			GL.Scale(f4, 1.0F, f4);
 
 			for (int i27 = 0; i27 < 2; ++i27)
 			{
 				if (i27 == 0)
 				{
-					GL11.glColorMask(false, false, false, false);
+					GL.ColorMask(false, false, false, false);
 				}
 				else if (this.mc.gameSettings.anaglyph)
 				{
 					if (EntityRenderer.anaglyphField == 0)
 					{
-						GL11.glColorMask(false, true, true, true);
+						GL.ColorMask(false, true, true, true);
 					}
 					else
 					{
-						GL11.glColorMask(true, false, false, true);
+						GL.ColorMask(true, false, false, true);
 					}
 				}
 				else
 				{
-					GL11.glColorMask(true, true, true, true);
+					GL.ColorMask(true, true, true, true);
 				}
 
 				for (int i28 = -b25 + 1; i28 <= b25; ++i28)
@@ -1191,9 +1182,9 @@ namespace net.minecraft.src
 				}
 			}
 
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Disable(EnableCap.Blend);
+			GL.Enable(EnableCap.CullFace);
 		}
 
 		public virtual bool updateRenderers(EntityLiving entityLiving1, bool z2)
@@ -1381,25 +1372,25 @@ namespace net.minecraft.src
 		public virtual void drawBlockBreaking(EntityPlayer entityPlayer1, MovingObjectPosition movingObjectPosition2, int i3, ItemStack itemStack4, float f5)
 		{
 			Tessellator tessellator6 = Tessellator.instance;
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, (MathHelper.sin((float)DateTimeHelper.CurrentUnixTimeMillis() / 100.0F) * 0.2F + 0.4F) * 0.5F);
+			GL.Enable(EnableCap.Blend);
+			GL.Enable(EnableCap.AlphaTest);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.One);
+			GL.Color4(1.0F, 1.0F, 1.0F, (MathHelper.sin((float)DateTimeHelper.CurrentUnixTimeMillis() / 100.0F) * 0.2F + 0.4F) * 0.5F);
 			int i8;
 			if (i3 == 0)
 			{
 				if (this.damagePartialTime > 0.0F)
 				{
-					GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_SRC_COLOR);
+					GL.BlendFunc(BlendingFactor.DstColor, BlendingFactor.SrcColor);
 					int i7 = this.renderEngine.getTexture("/terrain.png");
-					GL11.glBindTexture(GL11.GL_TEXTURE_2D, i7);
-					GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.5F);
-					GL11.glPushMatrix();
+					GL.BindTexture(TextureTarget.Texture2D, i7);
+					GL.Color4(1.0F, 1.0F, 1.0F, 0.5F);
+					GL.PushMatrix();
 					i8 = this.worldObj.getBlockId(movingObjectPosition2.blockX, movingObjectPosition2.blockY, movingObjectPosition2.blockZ);
 					Block block9 = i8 > 0 ? Block.blocksList[i8] : null;
-					GL11.glDisable(GL11.GL_ALPHA_TEST);
-					GL11.glPolygonOffset(-3.0F, -3.0F);
-					GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
+					GL.Disable(EnableCap.AlphaTest);
+					GL.PolygonOffset(-3.0F, -3.0F);
+					GL.Enable(EnableCap.PolygonOffsetFill);
 					double d10 = entityPlayer1.lastTickPosX + (entityPlayer1.posX - entityPlayer1.lastTickPosX) * (double)f5;
 					double d12 = entityPlayer1.lastTickPosY + (entityPlayer1.posY - entityPlayer1.lastTickPosY) * (double)f5;
 					double d14 = entityPlayer1.lastTickPosZ + (entityPlayer1.posZ - entityPlayer1.lastTickPosZ) * (double)f5;
@@ -1408,28 +1399,28 @@ namespace net.minecraft.src
 						block9 = Block.stone;
 					}
 
-					GL11.glEnable(GL11.GL_ALPHA_TEST);
+					GL.Enable(EnableCap.AlphaTest);
 					tessellator6.startDrawingQuads();
 					tessellator6.setTranslation(-d10, -d12, -d14);
 					tessellator6.disableColor();
 					this.globalRenderBlocks.renderBlockUsingTexture(block9, movingObjectPosition2.blockX, movingObjectPosition2.blockY, movingObjectPosition2.blockZ, 240 + (int)(this.damagePartialTime * 10.0F));
 					tessellator6.draw();
 					tessellator6.setTranslation(0.0D, 0.0D, 0.0D);
-					GL11.glDisable(GL11.GL_ALPHA_TEST);
-					GL11.glPolygonOffset(0.0F, 0.0F);
-					GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
-					GL11.glEnable(GL11.GL_ALPHA_TEST);
-					GL11.glDepthMask(true);
-					GL11.glPopMatrix();
+					GL.Disable(EnableCap.AlphaTest);
+					GL.PolygonOffset(0.0F, 0.0F);
+					GL.Disable(EnableCap.PolygonOffsetFill);
+					GL.Enable(EnableCap.AlphaTest);
+					GL.DepthMask(true);
+					GL.PopMatrix();
 				}
 			}
 			else if (itemStack4 != null)
 			{
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 				float f16 = MathHelper.sin((float)DateTimeHelper.CurrentUnixTimeMillis() / 100.0F) * 0.2F + 0.8F;
-				GL11.glColor4f(f16, f16, f16, MathHelper.sin((float)DateTimeHelper.CurrentUnixTimeMillis() / 200.0F) * 0.2F + 0.5F);
+				GL.Color4(f16, f16, f16, MathHelper.sin((float)DateTimeHelper.CurrentUnixTimeMillis() / 200.0F) * 0.2F + 0.5F);
 				i8 = this.renderEngine.getTexture("/terrain.png");
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, i8);
+				GL.BindTexture(TextureTarget.Texture2D, i8);
 				int i17 = movingObjectPosition2.blockX;
 				int i18 = movingObjectPosition2.blockY;
 				int i11 = movingObjectPosition2.blockZ;
@@ -1464,20 +1455,20 @@ namespace net.minecraft.src
 				}
 			}
 
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL.Disable(EnableCap.Blend);
+			GL.Disable(EnableCap.AlphaTest);
 		}
 
 		public virtual void drawSelectionBox(EntityPlayer entityPlayer1, MovingObjectPosition movingObjectPosition2, int i3, ItemStack itemStack4, float f5)
 		{
 			if (i3 == 0 && movingObjectPosition2.typeOfHit == EnumMovingObjectType.TILE)
 			{
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.4F);
-				GL11.glLineWidth(2.0F);
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				GL11.glDepthMask(false);
+				GL.Enable(EnableCap.Blend);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+				GL.Color4(0.0F, 0.0F, 0.0F, 0.4F);
+				GL.LineWidth(2.0F);
+				GL.Disable(EnableCap.Texture2D);
+				GL.DepthMask(false);
 				float f6 = 0.002F;
 				int i7 = this.worldObj.getBlockId(movingObjectPosition2.blockX, movingObjectPosition2.blockY, movingObjectPosition2.blockZ);
 				if (i7 > 0)
@@ -1489,9 +1480,9 @@ namespace net.minecraft.src
 					this.drawOutlinedBoundingBox(Block.blocksList[i7].getSelectedBoundingBoxFromPool(this.worldObj, movingObjectPosition2.blockX, movingObjectPosition2.blockY, movingObjectPosition2.blockZ).expand((double)f6, (double)f6, (double)f6).getOffsetBoundingBox(-d8, -d10, -d12));
 				}
 
-				GL11.glDepthMask(true);
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
-				GL11.glDisable(GL11.GL_BLEND);
+				GL.DepthMask(true);
+				GL.Enable(EnableCap.Texture2D);
+				GL.Disable(EnableCap.Blend);
 			}
 
 		}

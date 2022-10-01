@@ -1,10 +1,8 @@
-﻿using System;
+﻿using OpenTK.Graphics.OpenGL;
+using System;
 
 namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 
 	public class ModelDragon : ModelBase
 	{
@@ -108,14 +106,14 @@ namespace net.minecraft.src
 
 		public override void render(Entity entity1, float f2, float f3, float f4, float f5, float f6, float f7)
 		{
-			GL11.glPushMatrix();
+			GL.PushMatrix();
 			EntityDragon entityDragon8 = (EntityDragon)entity1;
 			float f9 = entityDragon8.field_40173_aw + (entityDragon8.field_40172_ax - entityDragon8.field_40173_aw) * this.field_40317_s;
 			this.jaw.rotateAngleX = (float)(Math.Sin((double)(f9 * (float)Math.PI * 2.0F)) + 1.0D) * 0.2F;
 			float f10 = (float)(Math.Sin((double)(f9 * (float)Math.PI * 2.0F - 1.0F)) + 1.0D);
 			f10 = (f10 * f10 * 1.0F + f10 * 2.0F) * 0.05F;
-			GL11.glTranslatef(0.0F, f10 - 2.0F, -3.0F);
-			GL11.glRotatef(f10 * 2.0F, 1.0F, 0.0F, 0.0F);
+			GL.Translate(0.0F, f10 - 2.0F, -3.0F);
+			GL.Rotate(f10 * 2.0F, 1.0F, 0.0F, 0.0F);
 			float f11 = -30.0F;
 			float f13 = 0.0F;
 			float f14 = 1.5F;
@@ -151,16 +149,16 @@ namespace net.minecraft.src
 			this.head.rotateAngleY = this.updateRotations(d22[0] - d15[0]) * (float)Math.PI / 180.0F * 1.0F;
 			this.head.rotateAngleZ = -this.updateRotations(d22[0] - (double)f17) * (float)Math.PI / 180.0F * 1.0F;
 			this.head.render(f7);
-			GL11.glPushMatrix();
-			GL11.glTranslatef(0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(-f16 * f14 * 1.0F, 0.0F, 0.0F, 1.0F);
-			GL11.glTranslatef(0.0F, -1.0F, 0.0F);
+			GL.PushMatrix();
+			GL.Translate(0.0F, 1.0F, 0.0F);
+			GL.Rotate(-f16 * f14 * 1.0F, 0.0F, 0.0F, 1.0F);
+			GL.Translate(0.0F, -1.0F, 0.0F);
 			this.body.rotateAngleZ = 0.0F;
 			this.body.render(f7);
 
 			for (int i23 = 0; i23 < 2; ++i23)
 			{
-				GL11.glEnable(GL11.GL_CULL_FACE);
+				GL.Enable(EnableCap.CullFace);
 				f21 = f9 * (float)Math.PI * 2.0F;
 				this.wing.rotateAngleX = 0.125F - (float)Math.Cos((double)f21) * 0.2F;
 				this.wing.rotateAngleY = 0.25F;
@@ -175,16 +173,16 @@ namespace net.minecraft.src
 				this.wing.render(f7);
 				this.frontLeg.render(f7);
 				this.rearLeg.render(f7);
-				GL11.glScalef(-1.0F, 1.0F, 1.0F);
+				GL.Scale(-1.0F, 1.0F, 1.0F);
 				if (i23 == 0)
 				{
-					GL11.glCullFace(GL11.GL_FRONT);
+					GL.CullFace(CullFaceMode.Front);
 				}
 			}
 
-			GL11.glPopMatrix();
-			GL11.glCullFace(GL11.GL_BACK);
-			GL11.glDisable(GL11.GL_CULL_FACE);
+			GL.PopMatrix();
+			GL.CullFace(CullFaceMode.Back);
+			GL.Disable(EnableCap.CullFace);
 			float f24 = -((float)Math.Sin((double)(f9 * (float)Math.PI * 2.0F))) * 0.0F;
 			f18 = f9 * (float)Math.PI * 2.0F;
 			f11 = 10.0F;
@@ -208,7 +206,7 @@ namespace net.minecraft.src
 				this.neck.render(f7);
 			}
 
-			GL11.glPopMatrix();
+			GL.PopMatrix();
 		}
 
 		public override void setRotationAngles(float f1, float f2, float f3, float f4, float f5, float f6)

@@ -1,8 +1,7 @@
-﻿namespace net.minecraft.src
-{
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
 
-	// PORTING TODO: OpenGL code
+namespace net.minecraft.src
+{
 
 	public class ModelEnderCrystal : ModelBase
 	{
@@ -33,24 +32,24 @@
 
 		public override void render(Entity entity1, float f2, float f3, float f4, float f5, float f6, float f7)
 		{
-			GL11.glPushMatrix();
-			GL11.glScalef(2.0F, 2.0F, 2.0F);
-			GL11.glTranslatef(0.0F, -0.5F, 0.0F);
+			GL.PushMatrix();
+			GL.Scale(2.0F, 2.0F, 2.0F);
+			GL.Translate(0.0F, -0.5F, 0.0F);
 			this.field_41059_i.render(f7);
-			GL11.glRotatef(f3, 0.0F, 1.0F, 0.0F);
-			GL11.glTranslatef(0.0F, 0.8F + f4, 0.0F);
-			GL11.glRotatef(60.0F, 0.7071F, 0.0F, 0.7071F);
+			GL.Rotate(f3, 0.0F, 1.0F, 0.0F);
+			GL.Translate(0.0F, 0.8F + f4, 0.0F);
+			GL.Rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
 			this.field_41058_h.render(f7);
 			float f8 = 0.875F;
-			GL11.glScalef(f8, f8, f8);
-			GL11.glRotatef(60.0F, 0.7071F, 0.0F, 0.7071F);
-			GL11.glRotatef(f3, 0.0F, 1.0F, 0.0F);
+			GL.Scale(f8, f8, f8);
+			GL.Rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
+			GL.Rotate(f3, 0.0F, 1.0F, 0.0F);
 			this.field_41058_h.render(f7);
-			GL11.glScalef(f8, f8, f8);
-			GL11.glRotatef(60.0F, 0.7071F, 0.0F, 0.7071F);
-			GL11.glRotatef(f3, 0.0F, 1.0F, 0.0F);
+			GL.Scale(f8, f8, f8);
+			GL.Rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
+			GL.Rotate(f3, 0.0F, 1.0F, 0.0F);
 			this.field_41057_g.render(f7);
-			GL11.glPopMatrix();
+			GL.PopMatrix();
 		}
 
 		public override void setRotationAngles(float f1, float f2, float f3, float f4, float f5, float f6)

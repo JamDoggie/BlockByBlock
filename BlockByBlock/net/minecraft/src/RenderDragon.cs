@@ -1,10 +1,9 @@
 ﻿using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
 using System;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderDragon : RenderLiving
 	{
@@ -33,9 +32,9 @@ namespace net.minecraft.src
 		{
 			float f5 = (float)entityDragon1.func_40160_a(7, f4)[0];
 			float f6 = (float)(entityDragon1.func_40160_a(5, f4)[1] - entityDragon1.func_40160_a(10, f4)[1]);
-			GL11.glRotatef(-f5, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(f6 * 10.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glTranslatef(0.0F, 0.0F, 1.0F);
+			GL.Rotate(-f5, 0.0F, 1.0F, 0.0F);
+			GL.Rotate(f6 * 10.0F, 1.0F, 0.0F, 0.0F);
+			GL.Translate(0.0F, 0.0F, 1.0F);
 			if (entityDragon1.deathTime > 0)
 			{
 				float f7 = ((float)entityDragon1.deathTime + f4 - 1.0F) / 20.0F * 1.6F;
@@ -45,7 +44,7 @@ namespace net.minecraft.src
 					f7 = 1.0F;
 				}
 
-				GL11.glRotatef(f7 * this.getDeathMaxRotation(entityDragon1), 0.0F, 0.0F, 1.0F);
+				GL.Rotate(f7 * this.getDeathMaxRotation(entityDragon1), 0.0F, 0.0F, 1.0F);
 			}
 
 		}
@@ -55,28 +54,28 @@ namespace net.minecraft.src
 			if (entityDragon1.field_40178_aA > 0)
 			{
 				float f8 = (float)entityDragon1.field_40178_aA / 200.0F;
-				GL11.glDepthFunc(GL11.GL_LEQUAL);
-				GL11.glEnable(GL11.GL_ALPHA_TEST);
-				GL11.glAlphaFunc(GL11.GL_GREATER, f8);
+				GL.DepthFunc(DepthFunction.Lequal);
+				GL.Enable(EnableCap.AlphaTest);
+				GL.AlphaFunc(AlphaFunction.Greater, f8);
 				this.loadDownloadableImageTexture(entityDragon1.skinUrl, "/mob/enderdragon/shuffle.png");
 				this.mainModel.render(entityDragon1, f2, f3, f4, f5, f6, f7);
-				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-				GL11.glDepthFunc(GL11.GL_EQUAL);
+				GL.AlphaFunc(AlphaFunction.Greater, 0.1F);
+				GL.DepthFunc(DepthFunction.Equal);
 			}
 
 			this.loadDownloadableImageTexture(entityDragon1.skinUrl, entityDragon1.Texture);
 			this.mainModel.render(entityDragon1, f2, f3, f4, f5, f6, f7);
 			if (entityDragon1.hurtTime > 0)
 			{
-				GL11.glDepthFunc(GL11.GL_EQUAL);
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				GL11.glColor4f(1.0F, 0.0F, 0.0F, 0.5F);
+				GL.DepthFunc(DepthFunction.Equal);
+				GL.Disable(EnableCap.Texture2D);
+				GL.Enable(EnableCap.Blend);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+				GL.Color4(1.0F, 0.0F, 0.0F, 0.5F);
 				this.mainModel.render(entityDragon1, f2, f3, f4, f5, f6, f7);
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glDepthFunc(GL11.GL_LEQUAL);
+				GL.Enable(EnableCap.Texture2D);
+				GL.Disable(EnableCap.Blend);
+				GL.DepthFunc(DepthFunction.Lequal);
 			}
 
 		}
@@ -101,15 +100,15 @@ namespace net.minecraft.src
 				float f14 = (float)(entityDragon1.healingEnderCrystal.posZ - entityDragon1.posZ - (entityDragon1.prevPosZ - entityDragon1.posZ) * (double)(1.0F - f9));
 				float f15 = MathHelper.sqrt_float(f12 * f12 + f14 * f14);
 				float f16 = MathHelper.sqrt_float(f12 * f12 + f13 * f13 + f14 * f14);
-				GL11.glPushMatrix();
-				GL11.glTranslatef((float)d2, (float)d4 + 2.0F, (float)d6);
-				GL11.glRotatef((float)(-Math.Atan2((double)f14, (double)f12)) * 180.0F / (float)Math.PI - 90.0F, 0.0F, 1.0F, 0.0F);
-				GL11.glRotatef((float)(-Math.Atan2((double)f15, (double)f13)) * 180.0F / (float)Math.PI - 90.0F, 1.0F, 0.0F, 0.0F);
+				GL.PushMatrix();
+				GL.Translate((float)d2, (float)d4 + 2.0F, (float)d6);
+				GL.Rotate((float)(-Math.Atan2((double)f14, (double)f12)) * 180.0F / (float)Math.PI - 90.0F, 0.0F, 1.0F, 0.0F);
+				GL.Rotate((float)(-Math.Atan2((double)f15, (double)f13)) * 180.0F / (float)Math.PI - 90.0F, 1.0F, 0.0F, 0.0F);
 				Tessellator tessellator17 = Tessellator.instance;
 				RenderHelper.disableStandardItemLighting();
-				GL11.glDisable(GL11.GL_CULL_FACE);
+				GL.Disable(EnableCap.CullFace);
 				this.loadTexture("/mob/enderdragon/beam.png");
-				GL11.glShadeModel(GL11.GL_SMOOTH);
+				GL.ShadeModel(ShadingModel.Smooth);
 				float f18 = 0.0F - ((float)entityDragon1.ticksExisted + f9) * 0.01F;
 				float f19 = MathHelper.sqrt_float(f12 * f12 + f13 * f13 + f14 * f14) / 32.0F - ((float)entityDragon1.ticksExisted + f9) * 0.01F;
 				tessellator17.startDrawing(5);
@@ -127,10 +126,10 @@ namespace net.minecraft.src
 				}
 
 				tessellator17.draw();
-				GL11.glEnable(GL11.GL_CULL_FACE);
-				GL11.glShadeModel(GL11.GL_FLAT);
+				GL.Enable(EnableCap.CullFace);
+				GL.ShadeModel(ShadingModel.Flat); ;
 				RenderHelper.enableStandardItemLighting();
-				GL11.glPopMatrix();
+				GL.PopMatrix();
 			}
 
 		}
@@ -150,24 +149,24 @@ namespace net.minecraft.src
 				}
 
 				RandomExtended random6 = new RandomExtended(432L);
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				GL11.glShadeModel(GL11.GL_SMOOTH);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-				GL11.glDisable(GL11.GL_ALPHA_TEST);
-				GL11.glEnable(GL11.GL_CULL_FACE);
-				GL11.glDepthMask(false);
-				GL11.glPushMatrix();
-				GL11.glTranslatef(0.0F, -1.0F, -2.0F);
+				GL.Disable(EnableCap.Texture2D);
+				GL.ShadeModel(ShadingModel.Smooth);
+				GL.Enable(EnableCap.Blend);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.One);
+				GL.Disable(EnableCap.AlphaTest);
+				GL.Enable(EnableCap.CullFace);
+				GL.DepthMask(false);
+				GL.PushMatrix();
+				GL.Translate(0.0F, -1.0F, -2.0F);
 
 				for (int i7 = 0; (float)i7 < (f4 + f4 * f4) / 2.0F * 60.0F; ++i7)
 				{
-					GL11.glRotatef(random6.NextSingle() * 360.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(random6.NextSingle() * 360.0F, 0.0F, 1.0F, 0.0F);
-					GL11.glRotatef(random6.NextSingle() * 360.0F, 0.0F, 0.0F, 1.0F);
-					GL11.glRotatef(random6.NextSingle() * 360.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(random6.NextSingle() * 360.0F, 0.0F, 1.0F, 0.0F);
-					GL11.glRotatef(random6.NextSingle() * 360.0F + f4 * 90.0F, 0.0F, 0.0F, 1.0F);
+					GL.Rotate(random6.NextSingle() * 360.0F, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(random6.NextSingle() * 360.0F, 0.0F, 1.0F, 0.0F);
+					GL.Rotate(random6.NextSingle() * 360.0F, 0.0F, 0.0F, 1.0F);
+					GL.Rotate(random6.NextSingle() * 360.0F, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(random6.NextSingle() * 360.0F, 0.0F, 1.0F, 0.0F);
+					GL.Rotate(random6.NextSingle() * 360.0F + f4 * 90.0F, 0.0F, 0.0F, 1.0F);
 					tessellator3.startDrawing(6);
 					float f8 = random6.NextSingle() * 20.0F + 5.0F + f5 * 10.0F;
 					float f9 = random6.NextSingle() * 2.0F + 1.0F + f5 * 2.0F;
@@ -181,14 +180,14 @@ namespace net.minecraft.src
 					tessellator3.draw();
 				}
 
-				GL11.glPopMatrix();
-				GL11.glDepthMask(true);
-				GL11.glDisable(GL11.GL_CULL_FACE);
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glShadeModel(GL11.GL_FLAT);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
-				GL11.glEnable(GL11.GL_ALPHA_TEST);
+				GL.PopMatrix();
+				GL.DepthMask(true);
+				GL.Disable(EnableCap.CullFace);
+				GL.Disable(EnableCap.Blend);
+				GL.ShadeModel(ShadingModel.Flat);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Enable(EnableCap.Texture2D);
+				GL.Enable(EnableCap.AlphaTest);
 				RenderHelper.enableStandardItemLighting();
 			}
 
@@ -198,7 +197,7 @@ namespace net.minecraft.src
 		{
 			if (i2 == 1)
 			{
-				GL11.glDepthFunc(GL11.GL_LEQUAL);
+				GL.DepthFunc(DepthFunction.Lequal);
 			}
 
 			if (i2 != 0)
@@ -209,18 +208,18 @@ namespace net.minecraft.src
 			{
 				this.loadTexture("/mob/enderdragon/ender_eyes.png");
 				float f4 = 1.0F;
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glDisable(GL11.GL_ALPHA_TEST);
-				GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
-				GL11.glDisable(GL11.GL_LIGHTING);
-				GL11.glDepthFunc(GL11.GL_EQUAL);
+				GL.Enable(EnableCap.Blend);
+                GL.Disable(EnableCap.AlphaTest);
+				GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
+				GL.Disable(EnableCap.Lighting);
+				GL.DepthFunc(DepthFunction.Equal);
 				int i5 = 61680;
 				int i6 = i5 % 65536;
 				int i7 = i5 / 65536;
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i6 / 1.0F, (float)i7 / 1.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glEnable(GL11.GL_LIGHTING);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, f4);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Enable(EnableCap.Lighting);
+				GL.Color4(1.0F, 1.0F, 1.0F, f4);
 				return 1;
 			}
 		}

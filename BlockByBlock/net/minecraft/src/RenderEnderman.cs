@@ -1,11 +1,9 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
 
 	public class RenderEnderman : RenderLiving
 	{
@@ -48,24 +46,24 @@ namespace net.minecraft.src
 			base.renderEquippedItems(entityEnderman1, f2);
 			if (entityEnderman1.Carried > 0)
 			{
-				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-				GL11.glPushMatrix();
+				GL.Enable(EnableCap.RescaleNormal);
+				GL.PushMatrix();
 				float f3 = 0.5F;
-				GL11.glTranslatef(0.0F, 0.6875F, -0.75F);
+				GL.Translate(0.0F, 0.6875F, -0.75F);
 				f3 *= 1.0F;
-				GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-				GL11.glScalef(f3, -f3, f3);
+				GL.Rotate(20.0F, 1.0F, 0.0F, 0.0F);
+				GL.Rotate(45.0F, 0.0F, 1.0F, 0.0F);
+				GL.Scale(f3, -f3, f3);
 				int i4 = entityEnderman1.getBrightnessForRender(f2);
 				int i5 = i4 % 65536;
 				int i6 = i4 / 65536;
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i5 / 1.0F, (float)i6 / 1.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				this.loadTexture("/terrain.png");
 				this.renderBlocks.renderBlockAsItem(Block.blocksList[entityEnderman1.Carried], entityEnderman1.CarryingData, 1.0F);
-				GL11.glPopMatrix();
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+				GL.PopMatrix();
+				GL.Disable(EnableCap.RescaleNormal);
 			}
 
 		}
@@ -80,17 +78,17 @@ namespace net.minecraft.src
 			{
 				this.loadTexture("/mob/enderman_eyes.png");
 				float f4 = 1.0F;
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glDisable(GL11.GL_ALPHA_TEST);
-				GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
-				GL11.glDisable(GL11.GL_LIGHTING);
+				GL.Enable(EnableCap.Blend);
+				GL.Disable(EnableCap.AlphaTest);
+				GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
+				GL.Disable(EnableCap.Lighting);
 				int i5 = 61680;
 				int i6 = i5 % 65536;
 				int i7 = i5 / 65536;
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i6 / 1.0F, (float)i7 / 1.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glEnable(GL11.GL_LIGHTING);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, f4);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Enable(EnableCap.Lighting);
+				GL.Color4(1.0F, 1.0F, 1.0F, f4);
 				return 1;
 			}
 		}

@@ -1,7 +1,7 @@
-﻿namespace net.minecraft.src
-{
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
 
+namespace net.minecraft.src
+{
 	public class RenderFallingSand : Render
 	{
 		private new RenderBlocks renderBlocks = new RenderBlocks();
@@ -13,12 +13,12 @@
 
 		public virtual void doRenderFallingSand(EntityFallingSand entityFallingSand1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float)d2, (float)d4, (float)d6);
+			GL.PushMatrix();
+			GL.Translate((float)d2, (float)d4, (float)d6);
 			this.loadTexture("/terrain.png");
 			Block block10 = Block.blocksList[entityFallingSand1.blockID];
 			World world11 = entityFallingSand1.World;
-			GL11.glDisable(GL11.GL_LIGHTING);
+			GL.Disable(EnableCap.Lighting);
 			if (block10 == Block.dragonEgg)
 			{
 				this.renderBlocks.blockAccess = world11;
@@ -34,8 +34,8 @@
 				this.renderBlocks.renderBlockFallingSand(block10, world11, MathHelper.floor_double(entityFallingSand1.posX), MathHelper.floor_double(entityFallingSand1.posY), MathHelper.floor_double(entityFallingSand1.posZ));
 			}
 
-			GL11.glEnable(GL11.GL_LIGHTING);
-			GL11.glPopMatrix();
+			GL.Enable(EnableCap.Lighting);
+			GL.PopMatrix();
 		}
 
 		public override void doRender(Entity entity1, double d2, double d4, double d6, float f8, float f9)

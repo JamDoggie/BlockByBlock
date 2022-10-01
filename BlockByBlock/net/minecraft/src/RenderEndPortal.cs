@@ -1,27 +1,25 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
 	public class RenderEndPortal : TileEntitySpecialRenderer
 	{
-		internal FloatBuffer field_40448_a = GLAllocation.createDirectFloatBuffer(16);
+		internal float[] floatBuf = new float[16];
 
 		public virtual void func_40446_a(TileEntityEndPortal tileEntityEndPortal1, double d2, double d4, double d6, float f8)
 		{
 			float f9 = (float)tileEntityRenderer.playerX;
 			float f10 = (float)tileEntityRenderer.playerY;
 			float f11 = (float)tileEntityRenderer.playerZ;
-			GL11.glDisable(GL11.GL_LIGHTING);
+			GL.Disable(EnableCap.Lighting);
 			RandomExtended random12 = new RandomExtended(31100L);
 			float f13 = 0.75F;
 
 			for (int i14 = 0; i14 < 16; ++i14)
 			{
-				GL11.glPushMatrix();
+				GL.PushMatrix();
 				float f15 = (float)(16 - i14);
 				float f16 = 0.0625F;
 				float f17 = 1.0F / (f15 + 1.0F);
@@ -31,15 +29,15 @@ namespace net.minecraft.src
 					f17 = 0.1F;
 					f15 = 65.0F;
 					f16 = 0.125F;
-					GL11.glEnable(GL11.GL_BLEND);
-					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					GL.Enable(EnableCap.Blend);
+					GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 				}
 
 				if (i14 == 1)
 				{
 					bindTextureByName("/misc/particlefield.png");
-					GL11.glEnable(GL11.GL_BLEND);
-					GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+					GL.Enable(EnableCap.Blend);
+					GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
 					f16 = 0.5F;
 				}
 
@@ -48,31 +46,32 @@ namespace net.minecraft.src
 				float f20 = f18 + f15 + ActiveRenderInfo.objectY;
 				float f21 = f19 / f20;
 				f21 += (float)(d4 + (double)f13);
-				GL11.glTranslatef(f9, f21, f11);
-				GL11.glTexGeni(GL11.GL_S, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
-				GL11.glTexGeni(GL11.GL_T, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
-				GL11.glTexGeni(GL11.GL_R, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
-				GL11.glTexGeni(GL11.GL_Q, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_EYE_LINEAR);
-				GL11.glTexGen(GL11.GL_S, GL11.GL_OBJECT_PLANE, func_40447_a(1.0F, 0.0F, 0.0F, 0.0F));
-				GL11.glTexGen(GL11.GL_T, GL11.GL_OBJECT_PLANE, func_40447_a(0.0F, 0.0F, 1.0F, 0.0F));
-				GL11.glTexGen(GL11.GL_R, GL11.GL_OBJECT_PLANE, func_40447_a(0.0F, 0.0F, 0.0F, 1.0F));
-				GL11.glTexGen(GL11.GL_Q, GL11.GL_EYE_PLANE, func_40447_a(0.0F, 1.0F, 0.0F, 0.0F));
-				GL11.glEnable(GL11.GL_TEXTURE_GEN_S);
-				GL11.glEnable(GL11.GL_TEXTURE_GEN_T);
-				GL11.glEnable(GL11.GL_TEXTURE_GEN_R);
-				GL11.glEnable(GL11.GL_TEXTURE_GEN_Q);
-				GL11.glPopMatrix();
-				GL11.glMatrixMode(GL11.GL_TEXTURE);
-				GL11.glPushMatrix();
-				GL11.glLoadIdentity();
-				GL11.glTranslatef(0.0F, (float)(DateTimeHelper.CurrentUnixTimeMillis() % 700000L) / 700000.0F, 0.0F);
-				GL11.glScalef(f16, f16, f16);
-				GL11.glTranslatef(0.5F, 0.5F, 0.0F);
-				GL11.glRotatef((float)(i14 * i14 * 4321 + i14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
-				GL11.glTranslatef(-0.5F, -0.5F, 0.0F);
-				GL11.glTranslatef(-f9, -f11, -f10);
+				GL.Translate(f9, f21, f11);
+                GL.TexGen(TextureCoordName.S, TextureGenParameter.TextureGenMode, (int)All.ObjectLinear);
+				GL.TexGen(TextureCoordName.T, TextureGenParameter.TextureGenMode, (int)All.ObjectLinear);
+				GL.TexGen(TextureCoordName.R, TextureGenParameter.TextureGenMode, (int)All.ObjectLinear);
+				GL.TexGen(TextureCoordName.Q, TextureGenParameter.TextureGenMode, (int)All.EyeLinear);
+				GL.TexGen(TextureCoordName.S, TextureGenParameter.ObjectPlane, func_40447_a(1.0F, 0.0F, 0.0F, 0.0F));
+				GL.TexGen(TextureCoordName.T, TextureGenParameter.ObjectPlane, func_40447_a(0.0F, 0.0F, 1.0F, 0.0F));
+				GL.TexGen(TextureCoordName.R, TextureGenParameter.ObjectPlane, func_40447_a(0.0F, 0.0F, 0.0F, 1.0F));
+				GL.TexGen(TextureCoordName.Q, TextureGenParameter.EyePlane, func_40447_a(0.0F, 1.0F, 0.0F, 0.0F));
+
+				GL.Enable(EnableCap.TextureGenS);
+				GL.Enable(EnableCap.TextureGenT);
+				GL.Enable(EnableCap.TextureGenR);
+				GL.Enable(EnableCap.TextureGenQ);
+				GL.PopMatrix();
+				GL.MatrixMode(MatrixMode.Texture);
+				GL.PushMatrix();
+				GL.LoadIdentity();
+				GL.Translate(0.0F, (float)(DateTimeHelper.CurrentUnixTimeMillis() % 700000L) / 700000.0F, 0.0F);
+				GL.Scale(f16, f16, f16);
+				GL.Translate(0.5F, 0.5F, 0.0F);
+				GL.Rotate((float)(i14 * i14 * 4321 + i14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
+				GL.Translate(-0.5F, -0.5F, 0.0F);
+				GL.Translate(-f9, -f11, -f10);
 				f19 = f18 + ActiveRenderInfo.objectY;
-				GL11.glTranslatef(ActiveRenderInfo.objectX * f15 / f19, ActiveRenderInfo.objectZ * f15 / f19, -f10);
+				GL.Translate(ActiveRenderInfo.objectX * f15 / f19, ActiveRenderInfo.objectZ * f15 / f19, -f10);
 				Tessellator tessellator24 = Tessellator.instance;
 				tessellator24.startDrawingQuads();
 				f21 = random12.NextSingle() * 0.5F + 0.1F;
@@ -91,24 +90,26 @@ namespace net.minecraft.src
 				tessellator24.addVertex(d2 + 1.0D, d4 + (double)f13, d6 + 1.0D);
 				tessellator24.addVertex(d2 + 1.0D, d4 + (double)f13, d6);
 				tessellator24.draw();
-				GL11.glPopMatrix();
-				GL11.glMatrixMode(GL11.GL_MODELVIEW);
+				GL.PopMatrix();
+				GL.MatrixMode(MatrixMode.Modelview);
 			}
 
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glDisable(GL11.GL_TEXTURE_GEN_S);
-			GL11.glDisable(GL11.GL_TEXTURE_GEN_T);
-			GL11.glDisable(GL11.GL_TEXTURE_GEN_R);
-			GL11.glDisable(GL11.GL_TEXTURE_GEN_Q);
-			GL11.glEnable(GL11.GL_LIGHTING);
+			GL.Disable(EnableCap.Blend);
+			GL.Disable(EnableCap.TextureGenS);
+			GL.Disable(EnableCap.TextureGenT);
+			GL.Disable(EnableCap.TextureGenR);
+			GL.Disable(EnableCap.TextureGenQ);
+			GL.Enable(EnableCap.Lighting);
 		}
 
-		private FloatBuffer func_40447_a(float f1, float f2, float f3, float f4)
+		private float[] func_40447_a(float f1, float f2, float f3, float f4)
 		{
-			field_40448_a.clear();
-			field_40448_a.putFloat(f1).putFloat(f2).putFloat(f3).putFloat(f4);
-			field_40448_a.flip();
-			return field_40448_a;
+			floatBuf[0] = f1;
+			floatBuf[1] = f2;
+			floatBuf[2] = f3;
+			floatBuf[3] = f4;
+
+			return floatBuf;
 		}
 
 		public override void renderTileEntityAt(TileEntity tileEntity1, double d2, double d4, double d6, float f8)

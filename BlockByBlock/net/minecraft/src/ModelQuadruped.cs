@@ -1,6 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class ModelQuadruped : ModelBase
 	{
@@ -52,19 +53,19 @@
 			if (this.isChild)
 			{
 				float f8 = 2.0F;
-				GL11.glPushMatrix();
-				GL11.glTranslatef(0.0F, this.field_40331_g * f7, this.field_40332_n * f7);
+				GL.PushMatrix();
+				GL.Translate(0.0F, this.field_40331_g * f7, this.field_40332_n * f7);
 				this.head.render(f7);
-				GL11.glPopMatrix();
-				GL11.glPushMatrix();
-				GL11.glScalef(1.0F / f8, 1.0F / f8, 1.0F / f8);
-				GL11.glTranslatef(0.0F, 24.0F * f7, 0.0F);
+				GL.PopMatrix();
+				GL.PushMatrix();
+				GL.Scale(1.0F / f8, 1.0F / f8, 1.0F / f8);
+				GL.Translate(0.0F, 24.0F * f7, 0.0F);
 				this.body.render(f7);
 				this.leg1.render(f7);
 				this.leg2.render(f7);
 				this.leg3.render(f7);
 				this.leg4.render(f7);
-				GL11.glPopMatrix();
+				GL.PopMatrix();
 			}
 			else
 			{

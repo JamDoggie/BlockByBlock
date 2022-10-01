@@ -1,16 +1,16 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
 
 	public class RenderFish : Render
 	{
 		public virtual void doRenderFishHook(EntityFishHook entityFishHook1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float)d2, (float)d4, (float)d6);
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glScalef(0.5F, 0.5F, 0.5F);
+			GL.PushMatrix();
+			GL.Translate((float)d2, (float)d4, (float)d6);
+			GL.Enable(EnableCap.RescaleNormal);
+			GL.Scale(0.5F, 0.5F, 0.5F);
 			sbyte b10 = 1;
 			sbyte b11 = 2;
 			this.loadTexture("/particles.png");
@@ -22,8 +22,8 @@
 			float f17 = 1.0F;
 			float f18 = 0.5F;
 			float f19 = 0.5F;
-			GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+			GL.Rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+			GL.Rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 			tessellator12.startDrawingQuads();
 			tessellator12.setNormal(0.0F, 1.0F, 0.0F);
 			tessellator12.addVertexWithUV((double)(0.0F - f18), (double)(0.0F - f19), 0.0D, (double)f13, (double)f16);
@@ -31,8 +31,8 @@
 			tessellator12.addVertexWithUV((double)(f17 - f18), (double)(1.0F - f19), 0.0D, (double)f14, (double)f15);
 			tessellator12.addVertexWithUV((double)(0.0F - f18), (double)(1.0F - f19), 0.0D, (double)f13, (double)f15);
 			tessellator12.draw();
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
+			GL.Disable(EnableCap.RescaleNormal);
+			GL.PopMatrix();
 			if (entityFishHook1.angler != null)
 			{
 				float f20 = (entityFishHook1.angler.prevRotationYaw + (entityFishHook1.angler.rotationYaw - entityFishHook1.angler.prevRotationYaw) * f9) * (float)Math.PI / 180.0F;
@@ -64,8 +64,8 @@
 				double d40 = (double)((float)(d28 - d34));
 				double d42 = (double)((float)(d30 - d36));
 				double d44 = (double)((float)(d32 - d38));
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				GL11.glDisable(GL11.GL_LIGHTING);
+				GL.Disable(EnableCap.Texture2D);
+				GL.Disable(EnableCap.Lighting);
 				tessellator12.startDrawing(3);
 				tessellator12.ColorOpaque_I = 0;
 				sbyte b46 = 16;
@@ -77,8 +77,8 @@
 				}
 
 				tessellator12.draw();
-				GL11.glEnable(GL11.GL_LIGHTING);
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
+				GL.Enable(EnableCap.Lighting);
+				GL.Enable(EnableCap.Texture2D);
 			}
 
 		}

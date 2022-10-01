@@ -1,7 +1,7 @@
-﻿namespace net.minecraft.src
-{
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
 
+namespace net.minecraft.src
+{
 	public class RenderGhast : RenderLiving
 	{
 		public RenderGhast() : base(new ModelGhast(), 0.5F)
@@ -19,8 +19,8 @@
 			f4 = 1.0F / (f4 * f4 * f4 * f4 * f4 * 2.0F + 1.0F);
 			float f5 = (8.0F + f4) / 2.0F;
 			float f6 = (8.0F + 1.0F / f4) / 2.0F;
-			GL11.glScalef(f6, f5, f6);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Scale(f6, f5, f6);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 		}
 
 		protected internal override void preRenderCallback(EntityLiving entityLiving1, float f2)

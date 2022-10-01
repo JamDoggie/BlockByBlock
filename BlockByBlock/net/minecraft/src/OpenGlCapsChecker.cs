@@ -1,8 +1,7 @@
-﻿namespace net.minecraft.src
-{
-	using GLContext = org.lwjgl.opengl.GLContext;
+﻿using net.minecraft.client;
 
-	// PORTING TODO: OpenGL code
+namespace net.minecraft.src
+{
 
 	public class OpenGlCapsChecker
 	{
@@ -10,7 +9,7 @@
 
 		public static bool checkARBOcclusion()
 		{
-			return tryCheckOcclusionCapable && GLContext.getCapabilities().GL_ARB_occlusion_query;
+			return tryCheckOcclusionCapable && MinecraftApplet.OpenGLExtensions.Contains("GL_ARB_occlusion_query");
 		}
 	}
 

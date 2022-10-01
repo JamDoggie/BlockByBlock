@@ -1,6 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class ModelOcelot : ModelBase
 	{
@@ -56,14 +57,14 @@
 			if (this.isChild)
 			{
 				float f8 = 2.0F;
-				GL11.glPushMatrix();
-				GL11.glScalef(1.5F / f8, 1.5F / f8, 1.5F / f8);
-				GL11.glTranslatef(0.0F, 10.0F * f7, 4.0F * f7);
+				GL.PushMatrix();
+				GL.Scale(1.5F / f8, 1.5F / f8, 1.5F / f8);
+				GL.Translate(0.0F, 10.0F * f7, 4.0F * f7);
 				this.field_48220_g.render(f7);
-				GL11.glPopMatrix();
-				GL11.glPushMatrix();
-				GL11.glScalef(1.0F / f8, 1.0F / f8, 1.0F / f8);
-				GL11.glTranslatef(0.0F, 24.0F * f7, 0.0F);
+				GL.PopMatrix();
+				GL.PushMatrix();
+				GL.Scale(1.0F / f8, 1.0F / f8, 1.0F / f8);
+				GL.Translate(0.0F, 24.0F * f7, 0.0F);
 				this.field_48226_n.render(f7);
 				this.field_48225_a.render(f7);
 				this.field_48223_b.render(f7);
@@ -71,7 +72,7 @@
 				this.field_48221_d.render(f7);
 				this.field_48222_e.render(f7);
 				this.field_48219_f.render(f7);
-				GL11.glPopMatrix();
+				GL.PopMatrix();
 			}
 			else
 			{

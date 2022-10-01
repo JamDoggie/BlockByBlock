@@ -1,13 +1,9 @@
-﻿using System;
+﻿using OpenTK.Graphics.OpenGL;
+using System;
 
 namespace net.minecraft.src
 {
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	using Display = org.lwjgl.opengl.Display;
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 
 	public class LoadingScreenRenderer : IProgressUpdate
 	{
@@ -47,13 +43,13 @@ namespace net.minecraft.src
 			{
 				this.currentlyDisplayedText = string1;
 				ScaledResolution scaledResolution2 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-				GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-				GL11.glMatrixMode(GL11.GL_PROJECTION);
-				GL11.glLoadIdentity();
-				GL11.glOrtho(0.0D, scaledResolution2.scaledWidthD, scaledResolution2.scaledHeightD, 0.0D, 100.0D, 300.0D);
-				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				GL11.glLoadIdentity();
-				GL11.glTranslatef(0.0F, 0.0F, -200.0F);
+				GL.Clear(ClearBufferMask.DepthBufferBit);
+				GL.MatrixMode(MatrixMode.Projection);
+				GL.LoadIdentity();
+				GL.Ortho(0.0D, scaledResolution2.scaledWidthD, scaledResolution2.scaledHeightD, 0.0D, 100.0D, 300.0D);
+				GL.MatrixMode(MatrixMode.Modelview);
+				GL.LoadIdentity();
+				GL.Translate(0.0F, 0.0F, -200.0F);
 			}
 		}
 
@@ -95,17 +91,17 @@ namespace net.minecraft.src
 						ScaledResolution scaledResolution4 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
 						int i5 = scaledResolution4.ScaledWidth;
 						int i6 = scaledResolution4.ScaledHeight;
-						GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-						GL11.glMatrixMode(GL11.GL_PROJECTION);
-						GL11.glLoadIdentity();
-						GL11.glOrtho(0.0D, scaledResolution4.scaledWidthD, scaledResolution4.scaledHeightD, 0.0D, 100.0D, 300.0D);
-						GL11.glMatrixMode(GL11.GL_MODELVIEW);
-						GL11.glLoadIdentity();
-						GL11.glTranslatef(0.0F, 0.0F, -200.0F);
-						GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+						GL.Clear(ClearBufferMask.DepthBufferBit);
+						GL.MatrixMode(MatrixMode.Projection);
+						GL.LoadIdentity();
+						GL.Ortho(0.0D, scaledResolution4.scaledWidthD, scaledResolution4.scaledHeightD, 0.0D, 100.0D, 300.0D);
+						GL.MatrixMode(MatrixMode.Modelview);
+						GL.LoadIdentity();
+						GL.Translate(0.0F, 0.0F, -200.0F);
+						GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 						Tessellator tessellator7 = Tessellator.instance;
 						int i8 = this.mc.renderEngine.getTexture("/gui/background.png");
-						GL11.glBindTexture(GL11.GL_TEXTURE_2D, i8);
+						GL.BindTexture(TextureTarget.Texture2D, i8);
 						float f9 = 32.0F;
 						tessellator7.startDrawingQuads();
 						tessellator7.ColorOpaque_I = 4210752;
@@ -120,7 +116,7 @@ namespace net.minecraft.src
 							sbyte b11 = 2;
 							int i12 = i5 / 2 - b10 / 2;
 							int i13 = i6 / 2 + 16;
-							GL11.glDisable(GL11.GL_TEXTURE_2D);
+							GL.Disable(EnableCap.Texture2D);
 							tessellator7.startDrawingQuads();
 							tessellator7.ColorOpaque_I = 8421504;
 							tessellator7.addVertex((double)i12, (double)i13, 0.0D);
@@ -133,12 +129,12 @@ namespace net.minecraft.src
 							tessellator7.addVertex((double)(i12 + value), (double)(i13 + b11), 0.0D);
 							tessellator7.addVertex((double)(i12 + value), (double)i13, 0.0D);
 							tessellator7.draw();
-							GL11.glEnable(GL11.GL_TEXTURE_2D);
+							GL.Enable(EnableCap.Texture2D);
 						}
-    
+						// PORTING TODO: There was a display.update here. Investigate.
+
 						this.mc.fontRenderer.drawStringWithShadow(this.currentlyDisplayedText, (i5 - this.mc.fontRenderer.getStringWidth(this.currentlyDisplayedText)) / 2, i6 / 2 - 4 - 16, 0xFFFFFF);
 						this.mc.fontRenderer.drawStringWithShadow(this.field_1004_a, (i5 - this.mc.fontRenderer.getStringWidth(this.field_1004_a)) / 2, i6 / 2 - 4 + 8, 0xFFFFFF);
-						Display.update();
     
 						try
 						{

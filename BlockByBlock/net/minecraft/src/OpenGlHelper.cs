@@ -1,11 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using ARBMultitexture = org.lwjgl.opengl.ARBMultitexture;
-	using GL13 = org.lwjgl.opengl.GL13;
-	using GLContext = org.lwjgl.opengl.GLContext;
-
-	// PORTING TODO: OpenGL code
-
 	public class OpenGlHelper
 	{
 		public static int defaultTexUnit;
@@ -14,8 +11,9 @@
 
 		public static void initializeTextures()
 		{
-			useMultitextureARB = GLContext.getCapabilities().GL_ARB_multitexture && !GLContext.getCapabilities().OpenGL13;
-			if (useMultitextureARB)
+            //useMultitextureARB = MinecraftApplet.OpenGLExtensions.Contains("GL_ARB_multitexture") && !OpenGl13; // PORTING TODO: perform this check correctly, maybe. Or maybe not. It's not 2004.
+            useMultitextureARB = false;
+            if (useMultitextureARB)
 			{
 				defaultTexUnit = 33984;
 				lightmapTexUnit = 33985;
@@ -34,11 +32,11 @@
 			{
 				if (useMultitextureARB)
 				{
-					ARBMultitexture.glActiveTextureARB(value);
+					//ARBMultitexture.glActiveTextureARB(value);
 				}
 				else
 				{
-					GL13.glActiveTexture(value);
+					GL.ActiveTexture((TextureUnit)value);
 				}
     
 			}
@@ -50,11 +48,11 @@
 			{
 				if (useMultitextureARB)
 				{
-					ARBMultitexture.glClientActiveTextureARB(value);
+					//ARBMultitexture.glClientActiveTextureARB(value);
 				}
 				else
 				{
-					GL13.glClientActiveTexture(value);
+					GL.ClientActiveTexture((TextureUnit)value);
 				}
     
 			}
@@ -64,11 +62,11 @@
 		{
 			if (useMultitextureARB)
 			{
-				ARBMultitexture.glMultiTexCoord2fARB(i0, f1, f2);
+				//ARBMultitexture.glMultiTexCoord2fARB(i0, f1, f2);
 			}
 			else
 			{
-				GL13.glMultiTexCoord2f(i0, f1, f2);
+				GL.MultiTexCoord2((TextureUnit)i0, f1, f2);
 			}
 
 		}

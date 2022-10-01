@@ -1,12 +1,9 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 
 	public class ModelGhast : ModelBase
 	{
@@ -47,8 +44,8 @@ namespace net.minecraft.src
 		public override void render(Entity entity1, float f2, float f3, float f4, float f5, float f6, float f7)
 		{
 			this.setRotationAngles(f2, f3, f4, f5, f6, f7);
-			GL11.glPushMatrix();
-			GL11.glTranslatef(0.0F, 0.6F, 0.0F);
+			GL.PushMatrix();
+			GL.Translate(0.0F, 0.6F, 0.0F);
 			this.body.render(f7);
 			ModelRenderer[] modelRenderer8 = this.tentacles;
 			int i9 = modelRenderer8.Length;
@@ -59,7 +56,7 @@ namespace net.minecraft.src
 				modelRenderer11.render(f7);
 			}
 
-			GL11.glPopMatrix();
+			GL.PopMatrix();
 		}
 	}
 

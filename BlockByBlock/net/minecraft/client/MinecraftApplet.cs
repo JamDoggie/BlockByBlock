@@ -26,10 +26,20 @@ namespace net.minecraft.client
 
 		public static MinecraftApplet mcWindow; // I will be lazy and set static references and YOU CAN'T STOP ME!!!! >:((((
 
+		public static HashSet<string> OpenGLExtensions { get; set; } = new();
+
 		public MinecraftApplet(NativeWindowSettings settings) : base(settings)
 		{
 			windowSettings = settings;
 			mcWindow = this;
+
+			// Load extensions
+			int count = GL.GetInteger(GetPName.NumExtensions);
+			for (var i = 0; i < count; i++)
+			{
+				var extension = GL.GetString(StringNameIndexed.Extensions, i);
+				OpenGLExtensions.Add(extension);
+			}
 		}
 
 		public virtual void init()
