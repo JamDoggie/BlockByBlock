@@ -1,10 +1,7 @@
 ﻿namespace net.minecraft.src
 {
-	using Minecraft = net.minecraft.client.Minecraft;
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-    // PORTING TODO: OpenGL code
+    using OpenTK.Graphics.OpenGL;
+    using Minecraft = net.minecraft.client.Minecraft;
 
     public class TileEntityRendererPiston : TileEntitySpecialRenderer
 	{
@@ -18,16 +15,16 @@
 				Tessellator tessellator10 = Tessellator.instance;
 				this.bindTextureByName("/terrain.png");
 				RenderHelper.disableStandardItemLighting();
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glDisable(GL11.GL_CULL_FACE);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+				GL.Enable(EnableCap.Blend);
+				GL.Disable(EnableCap.CullFace);
 				if (Minecraft.AmbientOcclusionEnabled)
 				{
-					GL11.glShadeModel(GL11.GL_SMOOTH);
+					GL.ShadeModel(ShadingModel.Smooth);
 				}
 				else
 				{
-					GL11.glShadeModel(GL11.GL_FLAT);
+					GL.ShadeModel(ShadingModel.Flat);
 				}
 
 				tessellator10.startDrawingQuads();

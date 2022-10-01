@@ -6,10 +6,6 @@ using System.Net.Sockets;
 namespace net.minecraft.src
 {
 
-	using Keyboard = org.lwjgl.input.Keyboard;
-
-	// PORTING TODO: OpenGL code; input
-
 	public class GuiMultiplayer : GuiScreen
 	{
 		private static int threadsPending = 0;
@@ -40,7 +36,7 @@ namespace net.minecraft.src
 		public override void initGui()
 		{
 			this.loadServerList();
-			Keyboard.enableRepeatEvents(true);
+			mc.mcApplet.EnableKeyRepeatingEvents(true);
 			this.controlList.Clear();
 			this.serverSlotContainer = new GuiSlotServer(this);
 			this.initGuiControls();
@@ -108,7 +104,7 @@ namespace net.minecraft.src
 
 		public override void onGuiClosed()
 		{
-			Keyboard.enableRepeatEvents(false);
+			mc.mcApplet.EnableKeyRepeatingEvents(false);
 		}
 
 		protected internal override void actionPerformed(GuiButton guiButton1)

@@ -106,10 +106,10 @@ namespace net.minecraft.src
 					i13 = i24;
 				}
 
-				this.imageData[i9 * 4 + 0] = (sbyte)i11;
-				this.imageData[i9 * 4 + 1] = (sbyte)i12;
-				this.imageData[i9 * 4 + 2] = (sbyte)i13;
-				this.imageData[i9 * 4 + 3] = (sbyte)i10;
+				this.imageData[i9 * 4 + 0] = (byte)(i11 & 255);
+				this.imageData[i9 * 4 + 1] = (byte)(i12 & 255);
+				this.imageData[i9 * 4 + 2] = (byte)(i13 & 255);
+				this.imageData[i9 * 4 + 3] = (byte)(i10 & 255);
 			}
 
 		}

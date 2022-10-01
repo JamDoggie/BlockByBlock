@@ -2,19 +2,14 @@
 using System.Threading;
 using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace net.minecraft.src
 {
 
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	using Mouse = org.lwjgl.input.Mouse;
-	using Display = org.lwjgl.opengl.Display;
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GLContext = org.lwjgl.opengl.GLContext;
-	using GLU = org.lwjgl.util.glu.GLU;
-
-	// PORTING TODO: OpenGL code
 
 	public class EntityRenderer
 	{
@@ -68,7 +63,7 @@ namespace net.minecraft.src
 		internal float[] rainYCoords;
 		internal volatile int field_1394_b = 0;
 		internal volatile int field_1393_c = 0;
-		internal FloatBuffer fogColorBuffer = GLAllocation.createDirectFloatBuffer(16);
+		internal float[] fogColorBuffer = new float[4];
 		internal float fogColorRed;
 		internal float fogColorGreen;
 		internal float fogColorBlue;
@@ -80,7 +75,7 @@ namespace net.minecraft.src
 		{
 			this.mc = minecraft1;
 			this.itemRenderer = new ItemRenderer(minecraft1);
-			this.lightmapTexture = minecraft1.renderEngine.allocateAndSetupTexture(new BufferedImage(16, 16, 1));
+			this.lightmapTexture = minecraft1.renderEngine.allocateAndSetupTexture(new Image<Rgba32>(16, 16));
 			this.lightmapColors = new int[256];
 		}
 
@@ -243,7 +238,7 @@ namespace net.minecraft.src
 			if (entityLiving2.Health <= 0)
 			{
 				f4 = (float)entityLiving2.deathTime + f1;
-				GL11.glRotatef(40.0F - 8000.0F / (f4 + 200.0F), 0.0F, 0.0F, 1.0F);
+				GL.Rotate(40.0F - 8000.0F / (f4 + 200.0F), 0.0F, 0.0F, 1.0F);
 			}
 
 			if (f3 >= 0.0F)
@@ -251,9 +246,9 @@ namespace net.minecraft.src
 				f3 /= (float)entityLiving2.maxHurtTime;
 				f3 = MathHelper.sin(f3 * f3 * f3 * f3 * (float)Math.PI);
 				f4 = entityLiving2.attackedAtYaw;
-				GL11.glRotatef(-f4, 0.0F, 1.0F, 0.0F);
-				GL11.glRotatef(-f3 * 14.0F, 0.0F, 0.0F, 1.0F);
-				GL11.glRotatef(f4, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(-f4, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(-f3 * 14.0F, 0.0F, 0.0F, 1.0F);
+				GL.Rotate(f4, 0.0F, 1.0F, 0.0F);
 			}
 		}
 
@@ -266,10 +261,10 @@ namespace net.minecraft.src
 				float f4 = -(entityPlayer2.distanceWalkedModified + f3 * f1);
 				float f5 = entityPlayer2.prevCameraYaw + (entityPlayer2.cameraYaw - entityPlayer2.prevCameraYaw) * f1;
 				float f6 = entityPlayer2.prevCameraPitch + (entityPlayer2.cameraPitch - entityPlayer2.prevCameraPitch) * f1;
-				GL11.glTranslatef(MathHelper.sin(f4 * (float)Math.PI) * f5 * 0.5F, -Math.Abs(MathHelper.cos(f4 * (float)Math.PI) * f5), 0.0F);
-				GL11.glRotatef(MathHelper.sin(f4 * (float)Math.PI) * f5 * 3.0F, 0.0F, 0.0F, 1.0F);
-				GL11.glRotatef(Math.Abs(MathHelper.cos(f4 * (float)Math.PI - 0.2F) * f5) * 5.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(f6, 1.0F, 0.0F, 0.0F);
+				GL.Translate(MathHelper.sin(f4 * (float)Math.PI) * f5 * 0.5F, -Math.Abs(MathHelper.cos(f4 * (float)Math.PI) * f5), 0.0F);
+				GL.Rotate(MathHelper.sin(f4 * (float)Math.PI) * f5 * 3.0F, 0.0F, 0.0F, 1.0F);
+				GL.Rotate(Math.Abs(MathHelper.cos(f4 * (float)Math.PI - 0.2F) * f5) * 5.0F, 1.0F, 0.0F, 0.0F);
+				GL.Rotate(f6, 1.0F, 0.0F, 0.0F);
 			}
 		}
 
@@ -280,11 +275,11 @@ namespace net.minecraft.src
 			double d4 = entityLiving2.prevPosX + (entityLiving2.posX - entityLiving2.prevPosX) * (double)f1;
 			double d6 = entityLiving2.prevPosY + (entityLiving2.posY - entityLiving2.prevPosY) * (double)f1 - (double)f3;
 			double d8 = entityLiving2.prevPosZ + (entityLiving2.posZ - entityLiving2.prevPosZ) * (double)f1;
-			GL11.glRotatef(this.prevCamRoll + (this.camRoll - this.prevCamRoll) * f1, 0.0F, 0.0F, 1.0F);
+			GL.Rotate(this.prevCamRoll + (this.camRoll - this.prevCamRoll) * f1, 0.0F, 0.0F, 1.0F);
 			if (entityLiving2.PlayerSleeping)
 			{
 				f3 = (float)((double)f3 + 1.0D);
-				GL11.glTranslatef(0.0F, 0.3F, 0.0F);
+				GL.Translate(0.0F, 0.3F, 0.0F);
 				if (!this.mc.gameSettings.debugCamEnable)
 				{
 					int i10 = this.mc.theWorld.getBlockId(MathHelper.floor_double(entityLiving2.posX), MathHelper.floor_double(entityLiving2.posY), MathHelper.floor_double(entityLiving2.posZ));
@@ -292,11 +287,11 @@ namespace net.minecraft.src
 					{
 						int i11 = this.mc.theWorld.getBlockMetadata(MathHelper.floor_double(entityLiving2.posX), MathHelper.floor_double(entityLiving2.posY), MathHelper.floor_double(entityLiving2.posZ));
 						int i12 = i11 & 3;
-						GL11.glRotatef((float)(i12 * 90), 0.0F, 1.0F, 0.0F);
+						GL.Rotate((float)(i12 * 90), 0.0F, 1.0F, 0.0F);
 					}
 
-					GL11.glRotatef(entityLiving2.prevRotationYaw + (entityLiving2.rotationYaw - entityLiving2.prevRotationYaw) * f1 + 180.0F, 0.0F, -1.0F, 0.0F);
-					GL11.glRotatef(entityLiving2.prevRotationPitch + (entityLiving2.rotationPitch - entityLiving2.prevRotationPitch) * f1, -1.0F, 0.0F, 0.0F);
+					GL.Rotate(entityLiving2.prevRotationYaw + (entityLiving2.rotationYaw - entityLiving2.prevRotationYaw) * f1 + 180.0F, 0.0F, -1.0F, 0.0F);
+					GL.Rotate(entityLiving2.prevRotationPitch + (entityLiving2.rotationPitch - entityLiving2.prevRotationPitch) * f1, -1.0F, 0.0F, 0.0F);
 				}
 			}
 			else if (this.mc.gameSettings.thirdPersonView > 0)
@@ -308,9 +303,9 @@ namespace net.minecraft.src
 				{
 					f28 = this.prevDebugCamYaw + (this.debugCamYaw - this.prevDebugCamYaw) * f1;
 					f13 = this.prevDebugCamPitch + (this.debugCamPitch - this.prevDebugCamPitch) * f1;
-					GL11.glTranslatef(0.0F, 0.0F, (float)(-d27));
-					GL11.glRotatef(f13, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(f28, 0.0F, 1.0F, 0.0F);
+					GL.Translate(0.0F, 0.0F, (float)(-d27));
+					GL.Rotate(f13, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(f28, 0.0F, 1.0F, 0.0F);
 				}
 				else
 				{
@@ -346,28 +341,28 @@ namespace net.minecraft.src
 
 					if (this.mc.gameSettings.thirdPersonView == 2)
 					{
-						GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+						GL.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
 					}
 
-					GL11.glRotatef(entityLiving2.rotationPitch - f13, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(entityLiving2.rotationYaw - f28, 0.0F, 1.0F, 0.0F);
-					GL11.glTranslatef(0.0F, 0.0F, (float)(-d27));
-					GL11.glRotatef(f28 - entityLiving2.rotationYaw, 0.0F, 1.0F, 0.0F);
-					GL11.glRotatef(f13 - entityLiving2.rotationPitch, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(entityLiving2.rotationPitch - f13, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(entityLiving2.rotationYaw - f28, 0.0F, 1.0F, 0.0F);
+					GL.Translate(0.0F, 0.0F, (float)(-d27));
+					GL.Rotate(f28 - entityLiving2.rotationYaw, 0.0F, 1.0F, 0.0F);
+					GL.Rotate(f13 - entityLiving2.rotationPitch, 1.0F, 0.0F, 0.0F);
 				}
 			}
 			else
 			{
-				GL11.glTranslatef(0.0F, 0.0F, -0.1F);
+				GL.Translate(0.0F, 0.0F, -0.1F);
 			}
 
 			if (!this.mc.gameSettings.debugCamEnable)
 			{
-				GL11.glRotatef(entityLiving2.prevRotationPitch + (entityLiving2.rotationPitch - entityLiving2.prevRotationPitch) * f1, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(entityLiving2.prevRotationYaw + (entityLiving2.rotationYaw - entityLiving2.prevRotationYaw) * f1 + 180.0F, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(entityLiving2.prevRotationPitch + (entityLiving2.rotationPitch - entityLiving2.prevRotationPitch) * f1, 1.0F, 0.0F, 0.0F);
+				GL.Rotate(entityLiving2.prevRotationYaw + (entityLiving2.rotationYaw - entityLiving2.prevRotationYaw) * f1 + 180.0F, 0.0F, 1.0F, 0.0F);
 			}
 
-			GL11.glTranslatef(0.0F, f3, 0.0F);
+			GL.Translate(0.0F, f3, 0.0F);
 			d4 = entityLiving2.prevPosX + (entityLiving2.posX - entityLiving2.prevPosX) * (double)f1;
 			d6 = entityLiving2.prevPosY + (entityLiving2.posY - entityLiving2.prevPosY) * (double)f1 - (double)f3;
 			d8 = entityLiving2.prevPosZ + (entityLiving2.posZ - entityLiving2.prevPosZ) * (double)f1;
@@ -377,33 +372,33 @@ namespace net.minecraft.src
 		private void setupCameraTransform(float f1, int i2)
 		{
 			this.farPlaneDistance = (float)(256 >> this.mc.gameSettings.renderDistance);
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.LoadIdentity();
 			float f3 = 0.07F;
 			if (this.mc.gameSettings.anaglyph)
 			{
-				GL11.glTranslatef((float)(-(i2 * 2 - 1)) * f3, 0.0F, 0.0F);
+				GL.Translate((float)(-(i2 * 2 - 1)) * f3, 0.0F, 0.0F);
 			}
 
 			if (this.cameraZoom != 1.0D)
 			{
-				GL11.glTranslatef((float)this.cameraYaw, (float)(-this.cameraPitch), 0.0F);
-				GL11.glScaled(this.cameraZoom, this.cameraZoom, 1.0D);
+				GL.Translate((float)this.cameraYaw, (float)(-this.cameraPitch), 0.0F);
+				GL.Scale(this.cameraZoom, this.cameraZoom, 1.0D);
 			}
-
-			GLU.gluPerspective(this.getFOVModifier(f1, true), (float)this.mc.displayWidth / (float)this.mc.displayHeight, 0.05F, this.farPlaneDistance * 2.0F);
+            
+			Glu.Perspective(getFOVModifier(f1, true), (float)mc.displayWidth / (float)mc.displayHeight, 0.05F, farPlaneDistance * 2.0F);
 			float f4;
 			if (this.mc.playerController.func_35643_e())
 			{
 				f4 = 0.6666667F;
-				GL11.glScalef(1.0F, f4, 1.0F);
+				GL.Scale(1.0F, f4, 1.0F);
 			}
 
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glLoadIdentity();
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.LoadIdentity();
 			if (this.mc.gameSettings.anaglyph)
 			{
-				GL11.glTranslatef((float)(i2 * 2 - 1) * 0.1F, 0.0F, 0.0F);
+				GL.Translate((float)(i2 * 2 - 1) * 0.1F, 0.0F, 0.0F);
 			}
 
 			this.hurtCameraEffect(f1);
@@ -423,9 +418,9 @@ namespace net.minecraft.src
 
 				float f6 = 5.0F / (f4 * f4 + 5.0F) - f4 * 0.04F;
 				f6 *= f6;
-				GL11.glRotatef(((float)this.rendererUpdateCount + f1) * (float)b5, 0.0F, 1.0F, 1.0F);
-				GL11.glScalef(1.0F / f6, 1.0F, 1.0F);
-				GL11.glRotatef(-((float)this.rendererUpdateCount + f1) * (float)b5, 0.0F, 1.0F, 1.0F);
+				GL.Rotate(((float)this.rendererUpdateCount + f1) * (float)b5, 0.0F, 1.0F, 1.0F);
+				GL.Scale(1.0F / f6, 1.0F, 1.0F);
+				GL.Rotate(-((float)this.rendererUpdateCount + f1) * (float)b5, 0.0F, 1.0F, 1.0F);
 			}
 
 			this.orientCamera(f1);
@@ -434,27 +429,27 @@ namespace net.minecraft.src
 				int i7 = this.debugViewDirection - 1;
 				if (i7 == 1)
 				{
-					GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+					GL.Rotate(90.0F, 0.0F, 1.0F, 0.0F);
 				}
 
 				if (i7 == 2)
 				{
-					GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+					GL.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
 				}
 
 				if (i7 == 3)
 				{
-					GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+					GL.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
 				}
 
 				if (i7 == 4)
 				{
-					GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
 				}
 
 				if (i7 == 5)
 				{
-					GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 				}
 			}
 
@@ -464,35 +459,35 @@ namespace net.minecraft.src
 		{
 			if (this.debugViewDirection <= 0)
 			{
-				GL11.glMatrixMode(GL11.GL_PROJECTION);
-				GL11.glLoadIdentity();
+				GL.MatrixMode(MatrixMode.Projection);
+				GL.LoadIdentity();
 				float f3 = 0.07F;
 				if (this.mc.gameSettings.anaglyph)
 				{
-					GL11.glTranslatef((float)(-(i2 * 2 - 1)) * f3, 0.0F, 0.0F);
+					GL.Translate((float)(-(i2 * 2 - 1)) * f3, 0.0F, 0.0F);
 				}
 
 				if (this.cameraZoom != 1.0D)
 				{
-					GL11.glTranslatef((float)this.cameraYaw, (float)(-this.cameraPitch), 0.0F);
-					GL11.glScaled(this.cameraZoom, this.cameraZoom, 1.0D);
+					GL.Translate((float)this.cameraYaw, (float)(-this.cameraPitch), 0.0F);
+					GL.Scale(this.cameraZoom, this.cameraZoom, 1.0D);
 				}
 
-				GLU.gluPerspective(this.getFOVModifier(f1, false), (float)this.mc.displayWidth / (float)this.mc.displayHeight, 0.05F, this.farPlaneDistance * 2.0F);
+				Glu.Perspective(this.getFOVModifier(f1, false), (float)this.mc.displayWidth / (float)this.mc.displayHeight, 0.05F, this.farPlaneDistance * 2.0F);
 				if (this.mc.playerController.func_35643_e())
 				{
 					float f4 = 0.6666667F;
-					GL11.glScalef(1.0F, f4, 1.0F);
+					GL.Scale(1.0F, f4, 1.0F);
 				}
 
-				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				GL11.glLoadIdentity();
+				GL.MatrixMode(MatrixMode.Modelview);
+				GL.LoadIdentity();
 				if (this.mc.gameSettings.anaglyph)
 				{
-					GL11.glTranslatef((float)(i2 * 2 - 1) * 0.1F, 0.0F, 0.0F);
+					GL.Translate((float)(i2 * 2 - 1) * 0.1F, 0.0F, 0.0F);
 				}
 
-				GL11.glPushMatrix();
+				GL.PushMatrix();
 				this.hurtCameraEffect(f1);
 				if (this.mc.gameSettings.viewBobbing)
 				{
@@ -506,7 +501,7 @@ namespace net.minecraft.src
 					this.disableLightmap((double)f1);
 				}
 
-				GL11.glPopMatrix();
+				GL.PopMatrix();
 				if (this.mc.gameSettings.thirdPersonView == 0 && !this.mc.renderViewEntity.PlayerSleeping)
 				{
 					this.itemRenderer.renderOverlays(f1);
@@ -524,28 +519,29 @@ namespace net.minecraft.src
 		public virtual void disableLightmap(double d1)
 		{
 			OpenGlHelper.ActiveTexture = OpenGlHelper.lightmapTexUnit;
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL.Disable(EnableCap.Texture2D);
 			OpenGlHelper.ActiveTexture = OpenGlHelper.defaultTexUnit;
 		}
-
+        
 		public virtual void enableLightmap(double d1)
 		{
 			OpenGlHelper.ActiveTexture = OpenGlHelper.lightmapTexUnit;
-			GL11.glMatrixMode(GL11.GL_TEXTURE);
-			GL11.glLoadIdentity();
+			GL.MatrixMode(MatrixMode.Texture);
+			GL.LoadIdentity();
 			float f3 = 0.00390625F;
-			GL11.glScalef(f3, f3, f3);
-			GL11.glTranslatef(8.0F, 8.0F, 8.0F);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL.Scale(f3, f3, f3);
+			GL.Translate(8.0F, 8.0F, 8.0F);
+			GL.MatrixMode(MatrixMode.Modelview);
 			this.mc.renderEngine.bindTexture(this.lightmapTexture);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+            
+            GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, RenderEngine.TextureFilterLinear);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, RenderEngine.TextureFilterLinear);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, RenderEngine.TextureFilterLinear);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, RenderEngine.TextureFilterLinear);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, RenderEngine.TextureWrapClamp);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, RenderEngine.TextureWrapClamp);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Enable(EnableCap.Texture2D);
 			OpenGlHelper.ActiveTexture = OpenGlHelper.defaultTexUnit;
 		}
 
@@ -670,7 +666,7 @@ namespace net.minecraft.src
 			}
 
 			Profiler.endSection();
-			if (!Display.isActive())
+			if (!mc.mcApplet.IsFocused)
 			{
 				if (DateTimeHelper.CurrentUnixTimeMillis() - this.prevFrameTime > 500L)
 				{
@@ -719,8 +715,8 @@ namespace net.minecraft.src
 				ScaledResolution scaledResolution13 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
 				int i14 = scaledResolution13.ScaledWidth;
 				int i15 = scaledResolution13.ScaledHeight;
-				int i16 = Mouse.getX() * i14 / this.mc.displayWidth;
-				int i17 = i15 - Mouse.getY() * i15 / this.mc.displayHeight - 1;
+				int i16 = (int)mc.MouseX * i14 / this.mc.displayWidth;
+				int i17 = i15 - (int)mc.MouseY * i15 / this.mc.displayHeight - 1;
 				short s18 = 200;
 				if (this.mc.gameSettings.limitFramerate == 1)
 				{
@@ -766,11 +762,11 @@ namespace net.minecraft.src
 				}
 				else
 				{
-					GL11.glViewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
-					GL11.glMatrixMode(GL11.GL_PROJECTION);
-					GL11.glLoadIdentity();
-					GL11.glMatrixMode(GL11.GL_MODELVIEW);
-					GL11.glLoadIdentity();
+                    GL.Viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
+					GL.MatrixMode(MatrixMode.Projection);
+					GL.LoadIdentity();
+					GL.MatrixMode(MatrixMode.Modelview);
+					GL.LoadIdentity();
 					this.setupOverlayRendering();
 					sleepMs = (this.renderEndNanoTime + (long)(1000000000 / s18) - JTime.NanoTime()) / 1000000L;
 					if (sleepMs < 0L)
@@ -788,7 +784,7 @@ namespace net.minecraft.src
 
 				if (this.mc.currentScreen != null)
 				{
-					GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+					GL.Clear(ClearBufferMask.DepthBufferBit);
 					this.mc.currentScreen.drawScreen(i16, i17, f1);
 					if (this.mc.currentScreen != null && this.mc.currentScreen.guiParticles != null)
 					{
@@ -807,8 +803,8 @@ namespace net.minecraft.src
 				this.updateLightmap();
 			}
 
-			GL11.glEnable(GL11.GL_CULL_FACE);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL.Enable(EnableCap.CullFace);
+			GL.Enable(EnableCap.DepthTest);
 			if (this.mc.renderViewEntity == null)
 			{
 				this.mc.renderViewEntity = this.mc.thePlayer;
@@ -840,19 +836,19 @@ namespace net.minecraft.src
 					anaglyphField = i18;
 					if (anaglyphField == 0)
 					{
-						GL11.glColorMask(false, true, true, false);
+						GL.ColorMask(false, true, true, false);
 					}
 					else
 					{
-						GL11.glColorMask(true, false, false, false);
+						GL.ColorMask(true, false, false, false);
 					}
 				}
 
 				Profiler.endStartSection("clear");
-				GL11.glViewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
+				GL.Viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
 				this.updateFogColor(f1);
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-				GL11.glEnable(GL11.GL_CULL_FACE);
+				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+				GL.Enable(EnableCap.CullFace);
 				Profiler.endStartSection("camera");
 				this.setupCameraTransform(f1, i18);
 				ActiveRenderInfo.updateRenderInfo(this.mc.thePlayer, this.mc.gameSettings.thirdPersonView == 2);
@@ -865,11 +861,11 @@ namespace net.minecraft.src
 					renderGlobal5.renderSky(f1);
 				}
 
-				GL11.glEnable(GL11.GL_FOG);
-				this.setupFog(1, f1);
-				if (this.mc.gameSettings.ambientOcclusion)
+				GL.Enable(EnableCap.Fog);
+				setupFog(1, f1);
+				if (mc.gameSettings.ambientOcclusion)
 				{
-					GL11.glShadeModel(GL11.GL_SMOOTH);
+					GL.ShadeModel(ShadingModel.Smooth);
 				}
 
 				Profiler.endStartSection("culling");
@@ -891,12 +887,12 @@ namespace net.minecraft.src
 				}
 
 				this.setupFog(0, f1);
-				GL11.glEnable(GL11.GL_FOG);
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/terrain.png"));
+				GL.Enable(EnableCap.Fog);
+				GL.BindTexture(TextureTarget.Texture2D, mc.renderEngine.getTexture("/terrain.png"));
 				RenderHelper.disableStandardItemLighting();
 				Profiler.endStartSection("terrain");
 				renderGlobal5.sortAndRender(entityLiving4, 0, (double)f1);
-				GL11.glShadeModel(GL11.GL_FLAT);
+				GL.ShadeModel(ShadingModel.Flat);
 				EntityPlayer entityPlayer21;
 				if (this.debugViewDirection == 0)
 				{
@@ -914,46 +910,46 @@ namespace net.minecraft.src
 					if (this.mc.objectMouseOver != null && entityLiving4.isInsideOfMaterial(Material.water) && entityLiving4 is EntityPlayer && !this.mc.gameSettings.hideGUI)
 					{
 						entityPlayer21 = (EntityPlayer)entityLiving4;
-						GL11.glDisable(GL11.GL_ALPHA_TEST);
+						GL.Disable(EnableCap.AlphaTest);
 						Profiler.endStartSection("outline");
 						renderGlobal5.drawBlockBreaking(entityPlayer21, this.mc.objectMouseOver, 0, entityPlayer21.inventory.CurrentItem, f1);
 						renderGlobal5.drawSelectionBox(entityPlayer21, this.mc.objectMouseOver, 0, entityPlayer21.inventory.CurrentItem, f1);
-						GL11.glEnable(GL11.GL_ALPHA_TEST);
+						GL.Enable(EnableCap.AlphaTest);
 					}
 				}
 
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glEnable(GL11.GL_CULL_FACE);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				GL11.glDepthMask(true);
+				GL.Disable(EnableCap.Blend);
+				GL.Enable(EnableCap.CullFace);
+                GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+                GL.DepthMask(true);
 				this.setupFog(0, f1);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glDisable(GL11.GL_CULL_FACE);
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/terrain.png"));
+				GL.Enable(EnableCap.Blend);
+				GL.Disable(EnableCap.CullFace);
+				GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/terrain.png"));
 				if (this.mc.gameSettings.fancyGraphics)
 				{
 					Profiler.endStartSection("water");
 					if (this.mc.gameSettings.ambientOcclusion)
 					{
-						GL11.glShadeModel(GL11.GL_SMOOTH);
+						GL.ShadeModel(ShadingModel.Smooth);
 					}
 
-					GL11.glColorMask(false, false, false, false);
+					GL.ColorMask(false, false, false, false);
 					i16 = renderGlobal5.sortAndRender(entityLiving4, 1, (double)f1);
 					if (this.mc.gameSettings.anaglyph)
 					{
 						if (anaglyphField == 0)
 						{
-							GL11.glColorMask(false, true, true, true);
+							GL.ColorMask(false, true, true, true);
 						}
 						else
 						{
-							GL11.glColorMask(true, false, false, true);
+							GL.ColorMask(true, false, false, true);
 						}
 					}
 					else
 					{
-						GL11.glColorMask(true, true, true, true);
+						GL.ColorMask(true, true, true, true);
 					}
 
 					if (i16 > 0)
@@ -961,7 +957,7 @@ namespace net.minecraft.src
 						renderGlobal5.renderAllRenderLists(1, (double)f1);
 					}
 
-					GL11.glShadeModel(GL11.GL_FLAT);
+					GL.ShadeModel(ShadingModel.Flat);
 				}
 				else
 				{
@@ -969,22 +965,22 @@ namespace net.minecraft.src
 					renderGlobal5.sortAndRender(entityLiving4, 1, (double)f1);
 				}
 
-				GL11.glDepthMask(true);
-				GL11.glEnable(GL11.GL_CULL_FACE);
-				GL11.glDisable(GL11.GL_BLEND);
+				GL.DepthMask(true);
+				GL.Enable(EnableCap.CullFace);
+				GL.Disable(EnableCap.Blend);
 				if (this.cameraZoom == 1.0D && entityLiving4 is EntityPlayer && !this.mc.gameSettings.hideGUI && this.mc.objectMouseOver != null && !entityLiving4.isInsideOfMaterial(Material.water))
 				{
 					entityPlayer21 = (EntityPlayer)entityLiving4;
-					GL11.glDisable(GL11.GL_ALPHA_TEST);
+					GL.Disable(EnableCap.AlphaTest);
 					Profiler.endStartSection("outline");
 					renderGlobal5.drawBlockBreaking(entityPlayer21, this.mc.objectMouseOver, 0, entityPlayer21.inventory.CurrentItem, f1);
 					renderGlobal5.drawSelectionBox(entityPlayer21, this.mc.objectMouseOver, 0, entityPlayer21.inventory.CurrentItem, f1);
-					GL11.glEnable(GL11.GL_ALPHA_TEST);
+					GL.Enable(EnableCap.AlphaTest);
 				}
 
 				Profiler.endStartSection("weather");
 				this.renderRainSnow(f1);
-				GL11.glDisable(GL11.GL_FOG);
+				GL.Disable(EnableCap.Fog);
 				if (this.pointedEntity != null)
 				{
 					;
@@ -993,19 +989,19 @@ namespace net.minecraft.src
 				if (this.mc.gameSettings.shouldRenderClouds())
 				{
 					Profiler.endStartSection("clouds");
-					GL11.glPushMatrix();
+					GL.PushMatrix();
 					this.setupFog(0, f1);
-					GL11.glEnable(GL11.GL_FOG);
+					GL.Enable(EnableCap.Fog);
 					renderGlobal5.renderClouds(f1);
-					GL11.glDisable(GL11.GL_FOG);
+					GL.Disable(EnableCap.Fog);
 					this.setupFog(1, f1);
-					GL11.glPopMatrix();
+					GL.PopMatrix();
 				}
 
 				Profiler.endStartSection("hand");
 				if (this.cameraZoom == 1.0D)
 				{
-					GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+					GL.Clear(ClearBufferMask.DepthBufferBit);
 					this.renderHand(f1, i18);
 				}
 
@@ -1016,7 +1012,7 @@ namespace net.minecraft.src
 				}
 			}
 
-			GL11.glColorMask(true, true, true, false);
+			GL.ColorMask(true, true, true, false);
 			Profiler.endSection();
 		}
 
@@ -1131,12 +1127,12 @@ namespace net.minecraft.src
 				int i44 = MathHelper.floor_double(entityLiving41.posY);
 				int i45 = MathHelper.floor_double(entityLiving41.posZ);
 				Tessellator tessellator8 = Tessellator.instance;
-				GL11.glDisable(GL11.GL_CULL_FACE);
-				GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				GL11.glAlphaFunc(GL11.GL_GREATER, 0.01F);
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/environment/snow.png"));
+				GL.Disable(EnableCap.CullFace);
+				GL.Normal3(0.0F, 1.0F, 0.0F);
+				GL.Enable(EnableCap.Blend);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+				GL.AlphaFunc(AlphaFunction.Greater, 0.01F);
+				GL.BindTexture(TextureTarget.Texture2D, mc.renderEngine.getTexture("/environment/snow.png"));
 				double d9 = entityLiving41.lastTickPosX + (entityLiving41.posX - entityLiving41.lastTickPosX) * (double)f1;
 				double d11 = entityLiving41.lastTickPosY + (entityLiving41.posY - entityLiving41.lastTickPosY) * (double)f1;
 				double d13 = entityLiving41.lastTickPosZ + (entityLiving41.posZ - entityLiving41.lastTickPosZ) * (double)f1;
@@ -1155,7 +1151,7 @@ namespace net.minecraft.src
 					b16 = 10;
 				}
 
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				z17 = false;
 
 				for (int i20 = i45 - b16; i20 <= i45 + b16; ++i20)
@@ -1205,7 +1201,7 @@ namespace net.minecraft.src
 										}
 
 										b18 = 0;
-										GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/environment/rain.png"));
+										GL.BindTexture(TextureTarget.Texture2D, mc.renderEngine.getTexture("/environment/rain.png"));
 										tessellator8.startDrawingQuads();
 									}
 
@@ -1233,7 +1229,7 @@ namespace net.minecraft.src
 										}
 
 										b18 = 1;
-										GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/environment/snow.png"));
+										GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/environment/snow.png"));
 										tessellator8.startDrawingQuads();
 									}
 
@@ -1263,23 +1259,23 @@ namespace net.minecraft.src
 					tessellator8.draw();
 				}
 
-				GL11.glEnable(GL11.GL_CULL_FACE);
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-				this.disableLightmap((double)f1);
+				GL.Enable(EnableCap.CullFace);
+				GL.Disable(EnableCap.Blend);
+				GL.AlphaFunc(AlphaFunction.Greater, 0.1F);
+				disableLightmap((double)f1);
 			}
 		}
 
 		public virtual void setupOverlayRendering()
 		{
 			ScaledResolution scaledResolution1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glOrtho(0.0D, scaledResolution1.scaledWidthD, scaledResolution1.scaledHeightD, 0.0D, 1000.0D, 3000.0D);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glLoadIdentity();
-			GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
+			GL.Clear(ClearBufferMask.DepthBufferBit);
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.LoadIdentity();
+			GL.Ortho(0.0D, scaledResolution1.scaledWidthD, scaledResolution1.scaledHeightD, 0.0D, 1000.0D, 3000.0D);
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.LoadIdentity();
+			GL.Translate(0.0F, 0.0F, -2000.0F);
 		}
 
 		private void updateFogColor(float f1)
@@ -1404,7 +1400,7 @@ namespace net.minecraft.src
 				this.fogColorBlue = f18;
 			}
 
-			GL11.glClearColor(this.fogColorRed, this.fogColorGreen, this.fogColorBlue, 0.0F);
+			GL.ClearColor(this.fogColorRed, this.fogColorGreen, this.fogColorBlue, 0.0F);
 		}
 
 		private void setupFog(int i1, float f2)
@@ -1418,22 +1414,23 @@ namespace net.minecraft.src
 
 			if (i1 == 999)
 			{
-				GL11.glFog(GL11.GL_FOG_COLOR, this.setFogColorBuffer(0.0F, 0.0F, 0.0F, 1.0F));
-				GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
-				GL11.glFogf(GL11.GL_FOG_START, 0.0F);
-				GL11.glFogf(GL11.GL_FOG_END, 8.0F);
-				if (GLContext.getCapabilities().GL_NV_fog_distance)
+				GL.Fog(FogParameter.FogColor, setFogColorBuffer(0.0F, 0.0F, 0.0F, 1.0F));
+                GL.Fog(FogParameter.FogMode, (int)FogMode.Linear);
+                GL.Fog(FogParameter.FogStart, 0.0F);
+				GL.Fog(FogParameter.FogEnd, 8.0F);
+                
+				//if (GLContext.getCapabilities().GL_NV_fog_distance) // Lol it's 2022, I'm not implementing this.
 				{
-					GL11.glFogi(34138, 34139);
+					GL.Fog((FogParameter)((int)All.FogDistanceModeNv), 34139);
 				}
 
-				GL11.glFogf(GL11.GL_FOG_START, 0.0F);
+				GL.Fog(FogParameter.FogStart, 0.0F);
 			}
 			else
 			{
-				GL11.glFog(GL11.GL_FOG_COLOR, this.setFogColorBuffer(this.fogColorRed, this.fogColorGreen, this.fogColorBlue, 1.0F));
-				GL11.glNormal3f(0.0F, -1.0F, 0.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Fog(FogParameter.FogColor, this.setFogColorBuffer(this.fogColorRed, this.fogColorGreen, this.fogColorBlue, 1.0F));
+				GL.Normal3(0.0F, -1.0F, 0.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				int i5 = ActiveRenderInfo.getBlockIdAtEntityViewpoint(this.mc.theWorld, entityLiving3, f2);
 				float f6;
 				if (entityLiving3.isPotionActive(Potion.blindness))
@@ -1445,21 +1442,21 @@ namespace net.minecraft.src
 						f6 = 5.0F + (this.farPlaneDistance - 5.0F) * (1.0F - (float)i7 / 20.0F);
 					}
 
-					GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
-					if (i1 < 0)
+                    GL.Fog(FogParameter.FogMode, (int)FogMode.Linear);
+                    if (i1 < 0)
 					{
-						GL11.glFogf(GL11.GL_FOG_START, 0.0F);
-						GL11.glFogf(GL11.GL_FOG_END, f6 * 0.8F);
+						GL.Fog(FogParameter.FogStart, 0.0F);
+						GL.Fog(FogParameter.FogEnd, f6 * 0.8F);
 					}
 					else
 					{
-						GL11.glFogf(GL11.GL_FOG_START, f6 * 0.25F);
-						GL11.glFogf(GL11.GL_FOG_END, f6);
+						GL.Fog(FogParameter.FogStart, f6 * 0.25F);
+						GL.Fog(FogParameter.FogEnd, f6);
 					}
 
-					if (GLContext.getCapabilities().GL_NV_fog_distance)
+					//if (GLContext.getCapabilities().GL_NV_fog_distance)
 					{
-						GL11.glFogi(34138, 34139);
+						GL.Fog((FogParameter)(int)(All.FogDistanceModeNv), 34139);
 					}
 				}
 				else
@@ -1471,8 +1468,8 @@ namespace net.minecraft.src
 					float f12;
 					if (this.cloudFog)
 					{
-						GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_EXP);
-						GL11.glFogf(GL11.GL_FOG_DENSITY, 0.1F);
+						GL.Fog(FogParameter.FogMode, (int)FogMode.Exp);
+						GL.Fog(FogParameter.FogDensity, 0.1F);
 						f6 = 1.0F;
 						f12 = 1.0F;
 						f8 = 1.0F;
@@ -1485,14 +1482,14 @@ namespace net.minecraft.src
 					}
 					else if (i5 > 0 && Block.blocksList[i5].blockMaterial == Material.water)
 					{
-						GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_EXP);
+						GL.Fog(FogParameter.FogMode, (int)FogMode.Exp);
 						if (!entityLiving3.isPotionActive(Potion.waterBreathing))
 						{
-							GL11.glFogf(GL11.GL_FOG_DENSITY, 0.1F);
+							GL.Fog(FogParameter.FogDensity, 0.1F);
 						}
 						else
 						{
-							GL11.glFogf(GL11.GL_FOG_DENSITY, 0.05F);
+							GL.Fog(FogParameter.FogDensity, 0.05F);
 						}
 
 						f6 = 0.4F;
@@ -1507,8 +1504,8 @@ namespace net.minecraft.src
 					}
 					else if (i5 > 0 && Block.blocksList[i5].blockMaterial == Material.lava)
 					{
-						GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_EXP);
-						GL11.glFogf(GL11.GL_FOG_DENSITY, 2.0F);
+						GL.Fog(FogParameter.FogMode, (int)FogMode.Exp);
+						GL.Fog(FogParameter.FogDensity, 2.0F);
 						f6 = 0.4F;
 						f12 = 0.3F;
 						f8 = 0.3F;
@@ -1546,42 +1543,43 @@ namespace net.minecraft.src
 							}
 						}
 
-						GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
+						GL.Fog(FogParameter.FogMode, (int)FogMode.Linear);
 						if (i1 < 0)
 						{
-							GL11.glFogf(GL11.GL_FOG_START, 0.0F);
-							GL11.glFogf(GL11.GL_FOG_END, f6 * 0.8F);
+							GL.Fog(FogParameter.FogStart, 0.0F);
+							GL.Fog(FogParameter.FogEnd, f6 * 0.8F);
 						}
 						else
 						{
-							GL11.glFogf(GL11.GL_FOG_START, f6 * 0.25F);
-							GL11.glFogf(GL11.GL_FOG_END, f6);
+							GL.Fog(FogParameter.FogStart, f6 * 0.25F);
+							GL.Fog(FogParameter.FogEnd, f6);
 						}
-
-						if (GLContext.getCapabilities().GL_NV_fog_distance)
+                        
+						//if (GLContext.getCapabilities().GL_NV_fog_distance)
 						{
-							GL11.glFogi(34138, 34139);
+							GL.Fog((FogParameter)((int)All.FogDistanceModeNv), 34139);
 						}
 
 						if (this.mc.theWorld.worldProvider.func_48218_b((int)entityLiving3.posX, (int)entityLiving3.posZ))
 						{
-							GL11.glFogf(GL11.GL_FOG_START, f6 * 0.05F);
-							GL11.glFogf(GL11.GL_FOG_END, Math.Min(f6, 192.0F) * 0.5F);
+							GL.Fog(FogParameter.FogStart, f6 * 0.05F);
+							GL.Fog(FogParameter.FogEnd, Math.Min(f6, 192.0F) * 0.5F);
 						}
 					}
 				}
 
-				GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-				GL11.glColorMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT);
+				GL.Enable(EnableCap.ColorMaterial);
+				GL.ColorMaterial(MaterialFace.Front, ColorMaterialParameter.Ambient);
 			}
 		}
 
-		private FloatBuffer setFogColorBuffer(float f1, float f2, float f3, float f4)
+		private float[] setFogColorBuffer(float f1, float f2, float f3, float f4)
 		{
-			this.fogColorBuffer.clear();
-			this.fogColorBuffer.putFloat(f1).putFloat(f2).putFloat(f3).putFloat(f4);
-			this.fogColorBuffer.flip();
-			return this.fogColorBuffer;
+			fogColorBuffer[0] = f1;
+			fogColorBuffer[1] = f2;
+			fogColorBuffer[2] = f3;
+			fogColorBuffer[3] = f4;
+			return fogColorBuffer;
 		}
 	}
 

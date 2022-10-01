@@ -16,6 +16,14 @@ namespace BlockByBlock.helpers
             }
         }
 
+        public static void AddRange(this IList collection, ICollection<object> items)
+        {
+            foreach (var item in items)
+            {
+                collection.Add(item);
+            }
+        }
+
         public static void AddRange(this IList collection, HashSet<object> items)
         {
             foreach (var item in items)

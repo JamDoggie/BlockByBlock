@@ -1,8 +1,5 @@
 ﻿namespace net.minecraft.src
 {
-	using Keyboard = org.lwjgl.input.Keyboard;
-
-	// PORTING TODO: OpenGL code; input
 
 	public class GuiScreenAddServer : GuiScreen
 	{
@@ -26,7 +23,7 @@
 		public override void initGui()
 		{
 			StringTranslate stringTranslate1 = StringTranslate.Instance;
-			Keyboard.enableRepeatEvents(true);
+			mc.mcApplet.EnableKeyRepeatingEvents(true);
 			this.controlList.Clear();
 			this.controlList.Add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 96 + 12, stringTranslate1.translateKey("addServer.add")));
 			this.controlList.Add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + 12, stringTranslate1.translateKey("gui.cancel")));
@@ -41,7 +38,7 @@
 
 		public override void onGuiClosed()
 		{
-			Keyboard.enableRepeatEvents(false);
+			mc.mcApplet.EnableKeyRepeatingEvents(true);
 		}
 
 		protected internal override void actionPerformed(GuiButton guiButton1)

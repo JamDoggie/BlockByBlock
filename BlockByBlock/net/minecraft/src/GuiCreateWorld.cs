@@ -4,10 +4,6 @@ using System.Text.RegularExpressions;
 namespace net.minecraft.src
 {
 
-	using Keyboard = org.lwjgl.input.Keyboard;
-
-	// PORTING TODO: OpenGL code; input
-
 	public class GuiCreateWorld : GuiScreen
 	{
 		private GuiScreen parentGuiScreen;
@@ -45,16 +41,16 @@ namespace net.minecraft.src
 		public override void initGui()
 		{
 			StringTranslate stringTranslate1 = StringTranslate.Instance;
-			Keyboard.enableRepeatEvents(true);
+			mc.mcApplet.EnableKeyRepeatingEvents(true);
 			this.controlList.Clear();
 			this.controlList.Add(new GuiButton(0, this.width / 2 - 155, this.height - 28, 150, 20, stringTranslate1.translateKey("selectWorld.create")));
 			this.controlList.Add(new GuiButton(1, this.width / 2 + 5, this.height - 28, 150, 20, stringTranslate1.translateKey("gui.cancel")));
 			this.controlList.Add(this.gameModeButton = new GuiButton(2, this.width / 2 - 75, 100, 150, 20, stringTranslate1.translateKey("selectWorld.gameMode")));
 			this.controlList.Add(this.moreWorldOptions = new GuiButton(3, this.width / 2 - 75, 172, 150, 20, stringTranslate1.translateKey("selectWorld.moreWorldOptions")));
 			this.controlList.Add(this.generateStructuresButton = new GuiButton(4, this.width / 2 - 155, 100, 150, 20, stringTranslate1.translateKey("selectWorld.mapFeatures")));
-			this.generateStructuresButton.drawButton_Conflict = false;
+			this.generateStructuresButton.shouldDrawButton = false;
 			this.controlList.Add(this.worldTypeButton = new GuiButton(5, this.width / 2 + 5, 100, 150, 20, stringTranslate1.translateKey("selectWorld.mapType")));
-			this.worldTypeButton.drawButton_Conflict = false;
+			this.worldTypeButton.shouldDrawButton = false;
 			this.textboxWorldName = new GuiTextField(this.fontRenderer, this.width / 2 - 100, 60, 200, 20);
 			this.textboxWorldName.func_50033_b(true);
 			this.textboxWorldName.Text = this.localizedNewWorldText;
@@ -117,7 +113,7 @@ namespace net.minecraft.src
 
 		public override void onGuiClosed()
 		{
-			Keyboard.enableRepeatEvents(false);
+			mc.mcApplet.EnableKeyRepeatingEvents(false);
 		}
 
 		protected internal override void actionPerformed(GuiButton guiButton1)
@@ -172,9 +168,9 @@ namespace net.minecraft.src
 				else if (guiButton1.id == 3)
 				{
 					this.moreOptions = !this.moreOptions;
-					this.gameModeButton.drawButton_Conflict = !this.moreOptions;
-					this.generateStructuresButton.drawButton_Conflict = this.moreOptions;
-					this.worldTypeButton.drawButton_Conflict = this.moreOptions;
+					this.gameModeButton.shouldDrawButton = !this.moreOptions;
+					this.generateStructuresButton.shouldDrawButton = this.moreOptions;
+					this.worldTypeButton.shouldDrawButton = this.moreOptions;
 					StringTranslate stringTranslate8;
 					if (this.moreOptions)
 					{

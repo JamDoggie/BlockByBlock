@@ -1,16 +1,13 @@
 ﻿namespace net.minecraft.src
 {
-
-	using Minecraft = net.minecraft.client.Minecraft;
-
-	using Mouse = org.lwjgl.input.Mouse;
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code; input
+    using net.minecraft.client;
+    using OpenTK.Graphics.OpenGL;
+    using OpenTK.Windowing.GraphicsLibraryFramework;
+    using Minecraft = net.minecraft.client.Minecraft;
 
 	public abstract class GuiSlot
 	{
-		private readonly Minecraft mc;
+		protected readonly Minecraft mc;
 		private readonly int width;
 		private readonly int height;
 		protected internal readonly int top;
@@ -157,7 +154,7 @@
 			int i11;
 			int i13;
 			int i20;
-			if (Mouse.isButtonDown(0))
+			if (mc.mcApplet.MouseState.IsButtonDown(MouseButton.Left))
 			{
 				if (this.initialClickY == -1.0F)
 				{
@@ -232,13 +229,15 @@
 			{
 				while (true)
 				{
-					if (!Mouse.next())
+					if (!mc.mcApplet.NextMouseEvent())
 					{
 						this.initialClickY = -1.0F;
 						break;
 					}
 
-					int i7 = Mouse.getEventDWheel();
+					MouseEvent e = mc.mcApplet.CurrentMouseEvent()!.Value;
+
+					int i7 = e.scrollDelta;
 					if (i7 != 0)
 					{
 						if (i7 > 0)
@@ -256,11 +255,11 @@
 			}
 
 			this.bindAmountScrolled();
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_FOG);
+			GL.Disable(EnableCap.Lighting);
+			GL.Disable(EnableCap.Fog);
 			Tessellator tessellator18 = Tessellator.instance;
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/background.png"));
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.BindTexture(TextureTarget.Texture2D, mc.renderEngine.getTexture("/gui/background.png"));
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			float f17 = 32.0F;
 			tessellator18.startDrawingQuads();
 			tessellator18.ColorOpaque_I = 2105376;
@@ -287,8 +286,8 @@
 					{
 						i14 = this.width / 2 - 110;
 						int i15 = this.width / 2 + 110;
-						GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-						GL11.glDisable(GL11.GL_TEXTURE_2D);
+						GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+						GL.Disable(EnableCap.Texture2D);
 						tessellator18.startDrawingQuads();
 						tessellator18.ColorOpaque_I = 8421504;
 						tessellator18.addVertexWithUV((double)i14, (double)(i20 + i13 + 2), 0.0D, 0.0D, 1.0D);
@@ -301,22 +300,22 @@
 						tessellator18.addVertexWithUV((double)(i15 - 1), (double)(i20 - 1), 0.0D, 1.0D, 0.0D);
 						tessellator18.addVertexWithUV((double)(i14 + 1), (double)(i20 - 1), 0.0D, 0.0D, 0.0D);
 						tessellator18.draw();
-						GL11.glEnable(GL11.GL_TEXTURE_2D);
+						GL.Enable(EnableCap.Texture2D);
 					}
 
 					this.drawSlot(i11, i9, i20, i13, tessellator18);
 				}
 			}
-
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
+            
+			GL.Disable(EnableCap.DepthTest);
 			sbyte b19 = 4;
 			this.overlayBackground(0, this.top, 255, 255);
 			this.overlayBackground(this.bottom, this.height, 255, 255);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
-			GL11.glShadeModel(GL11.GL_SMOOTH);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			GL.Disable(EnableCap.AlphaTest);
+			GL.ShadeModel(ShadingModel.Smooth);
+			GL.Disable(EnableCap.Texture2D);
 			tessellator18.startDrawingQuads();
 			tessellator18.setColorRGBA_I(0, 0);
 			tessellator18.addVertexWithUV((double)this.left, (double)(this.top + b19), 0.0D, 0.0D, 1.0D);
@@ -377,17 +376,17 @@
 			}
 
 			this.func_27257_b(i1, i2);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glShadeModel(GL11.GL_FLAT);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			GL11.glDisable(GL11.GL_BLEND);
+			GL.Enable(EnableCap.Texture2D);
+			GL.ShadeModel(ShadingModel.Flat);
+			GL.Enable(EnableCap.AlphaTest);
+			GL.Disable(EnableCap.Blend);
 		}
 
 		private void overlayBackground(int i1, int i2, int i3, int i4)
 		{
 			Tessellator tessellator5 = Tessellator.instance;
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/background.png"));
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/gui/background.png"));
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			float f6 = 32.0F;
 			tessellator5.startDrawingQuads();
 			tessellator5.setColorRGBA_I(4210752, i4);

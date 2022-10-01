@@ -18,11 +18,5 @@ namespace net.minecraft.src
 			this.mc = minecraft1;
 			this.mcThread = thread2;
 		}
-
-		public void windowClosing(WindowEvent windowEvent1)
-		{
-			
-		}
 	}
-
 }

@@ -1,8 +1,7 @@
-﻿namespace net.minecraft.src
-{
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
 
-	// PORTING TODO: OpenGL code
+namespace net.minecraft.src
+{
 
 	internal class GuiSlotServer : GuiSlot
 	{
@@ -73,7 +72,7 @@
 			this.parentGui.drawString(this.parentGui.fontRenderer, serverNBTStorage6.motd, i2 + 2, i3 + 12, 8421504);
 			this.parentGui.drawString(this.parentGui.fontRenderer, serverNBTStorage6.playerCount, i2 + 215 - this.parentGui.fontRenderer.getStringWidth(serverNBTStorage6.playerCount), i3 + 12, 8421504);
 			this.parentGui.drawString(this.parentGui.fontRenderer, serverNBTStorage6.host, i2 + 2, i3 + 12 + 11, 3158064);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.parentGui.mc.renderEngine.bindTexture(this.parentGui.mc.renderEngine.getTexture("/gui/icons.png"));
 			string string9 = "";
 			sbyte b7;

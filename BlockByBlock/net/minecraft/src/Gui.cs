@@ -1,8 +1,7 @@
-﻿namespace net.minecraft.src
-{
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
 
-	// PORTING TODO: OpenGL code.
+namespace net.minecraft.src
+{
 	public class Gui
 	{
 		protected internal float zLevel = 0.0F;
@@ -53,18 +52,18 @@
 			float f7 = (float)(i4 >> 8 & 255) / 255.0F;
 			float f8 = (float)(i4 & 255) / 255.0F;
 			Tessellator tessellator9 = Tessellator.instance;
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glColor4f(f6, f7, f8, f10);
+			GL.Enable(EnableCap.Blend);
+			GL.Disable(EnableCap.Texture2D);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			GL.Color4(f6, f7, f8, f10);
 			tessellator9.startDrawingQuads();
 			tessellator9.addVertex((double)i0, (double)i3, 0.0D);
 			tessellator9.addVertex((double)i2, (double)i3, 0.0D);
 			tessellator9.addVertex((double)i2, (double)i1, 0.0D);
 			tessellator9.addVertex((double)i0, (double)i1, 0.0D);
 			tessellator9.draw();
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_BLEND);
+			GL.Enable(EnableCap.Texture2D);
+			GL.Disable(EnableCap.Blend);
 		}
 
 		protected internal virtual void drawGradientRect(int i1, int i2, int i3, int i4, int i5, int i6)
@@ -77,11 +76,11 @@
 			float f12 = (float)(i6 >> 16 & 255) / 255.0F;
 			float f13 = (float)(i6 >> 8 & 255) / 255.0F;
 			float f14 = (float)(i6 & 255) / 255.0F;
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glShadeModel(GL11.GL_SMOOTH);
+			GL.Disable(EnableCap.Texture2D);
+			GL.Enable(EnableCap.Blend);
+			GL.Disable(EnableCap.AlphaTest);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			GL.ShadeModel(ShadingModel.Smooth);
 			Tessellator tessellator15 = Tessellator.instance;
 			tessellator15.startDrawingQuads();
 			tessellator15.setColorRGBA_F(f8, f9, f10, f7);
@@ -91,10 +90,10 @@
 			tessellator15.addVertex((double)i1, (double)i4, (double)this.zLevel);
 			tessellator15.addVertex((double)i3, (double)i4, (double)this.zLevel);
 			tessellator15.draw();
-			GL11.glShadeModel(GL11.GL_FLAT);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL.ShadeModel(ShadingModel.Flat);
+			GL.Disable(EnableCap.Blend);
+			GL.Enable(EnableCap.AlphaTest);
+			GL.Enable(EnableCap.Texture2D);
 		}
 
 		public virtual void drawCenteredString(FontRenderer fontRenderer1, string string2, int i3, int i4, int i5)

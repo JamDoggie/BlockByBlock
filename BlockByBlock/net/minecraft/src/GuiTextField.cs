@@ -1,11 +1,8 @@
-﻿using System;
+﻿using OpenTK.Graphics.OpenGL;
+using System;
 
 namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
-
 	public class GuiTextField : Gui
 	{
 		private readonly FontRenderer fontRenderer;
@@ -254,7 +251,7 @@ namespace net.minecraft.src
 					switch (i2)
 					{
 					case 14:
-						if (GuiScreen.func_50051_l())
+						if (GuiScreen.isControlDown())
 						{
 							this.func_50021_a(-1);
 						}
@@ -265,7 +262,7 @@ namespace net.minecraft.src
 
 						return true;
 					case 199:
-						if (GuiScreen.func_50049_m())
+						if (GuiScreen.isShiftDown())
 						{
 							this.func_50032_g(0);
 						}
@@ -276,9 +273,9 @@ namespace net.minecraft.src
 
 						return true;
 					case 203:
-						if (GuiScreen.func_50049_m())
+						if (GuiScreen.isShiftDown())
 						{
-							if (GuiScreen.func_50051_l())
+							if (GuiScreen.isControlDown())
 							{
 								this.func_50032_g(this.func_50024_a(-1, this.func_50036_k()));
 							}
@@ -287,7 +284,7 @@ namespace net.minecraft.src
 								this.func_50032_g(this.func_50036_k() - 1);
 							}
 						}
-						else if (GuiScreen.func_50051_l())
+						else if (GuiScreen.isControlDown())
 						{
 							this.func_50030_e(this.func_50028_c(-1));
 						}
@@ -298,9 +295,9 @@ namespace net.minecraft.src
 
 						return true;
 					case 205:
-						if (GuiScreen.func_50049_m())
+						if (GuiScreen.isShiftDown())
 						{
-							if (GuiScreen.func_50051_l())
+							if (GuiScreen.isControlDown())
 							{
 								this.func_50032_g(this.func_50024_a(1, this.func_50036_k()));
 							}
@@ -309,7 +306,7 @@ namespace net.minecraft.src
 								this.func_50032_g(this.func_50036_k() + 1);
 							}
 						}
-						else if (GuiScreen.func_50051_l())
+						else if (GuiScreen.isControlDown())
 						{
 							this.func_50030_e(this.func_50028_c(1));
 						}
@@ -320,7 +317,7 @@ namespace net.minecraft.src
 
 						return true;
 					case 207:
-						if (GuiScreen.func_50049_m())
+						if (GuiScreen.isShiftDown())
 						{
 							this.func_50032_g(this.text.Length);
 						}
@@ -331,7 +328,7 @@ namespace net.minecraft.src
 
 						return true;
 					case 211:
-						if (GuiScreen.func_50051_l())
+						if (GuiScreen.isControlDown())
 						{
 							this.func_50021_a(1);
 						}
@@ -466,18 +463,18 @@ namespace net.minecraft.src
 			}
 
 			Tessellator tessellator6 = Tessellator.instance;
-			GL11.glColor4f(0.0F, 0.0F, 255.0F, 255.0F);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_COLOR_LOGIC_OP);
-			GL11.glLogicOp(GL11.GL_OR_REVERSE);
+			GL.Color4(0.0F, 0.0F, 255.0F, 255.0F);
+			GL.Disable(EnableCap.Texture2D);
+			GL.Enable(EnableCap.ColorLogicOp);
+			GL.LogicOp(LogicOp.OrReverse);
 			tessellator6.startDrawingQuads();
 			tessellator6.addVertex((double)i1, (double)i4, 0.0D);
 			tessellator6.addVertex((double)i3, (double)i4, 0.0D);
 			tessellator6.addVertex((double)i3, (double)i2, 0.0D);
 			tessellator6.addVertex((double)i1, (double)i2, 0.0D);
 			tessellator6.draw();
-			GL11.glDisable(GL11.GL_COLOR_LOGIC_OP);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL.Disable(EnableCap.ColorLogicOp);
+			GL.Enable(EnableCap.Texture2D);
 		}
 
 		public virtual int MaxStringLength

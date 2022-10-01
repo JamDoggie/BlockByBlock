@@ -1,4 +1,4 @@
-﻿namespace net.minecraft.isom
+﻿/*namespace net.minecraft.isom
 {
 
 	using CanvasIsomPreview = net.minecraft.src.CanvasIsomPreview;
@@ -24,4 +24,4 @@
 		}
 	}
 
-}
+}*/

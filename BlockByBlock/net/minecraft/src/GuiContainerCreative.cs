@@ -1,9 +1,8 @@
-﻿namespace net.minecraft.src
-{
-	using Mouse = org.lwjgl.input.Mouse;
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
-	// PORTING TODO: OpenGL code
+namespace net.minecraft.src
+{
 
 	public class GuiContainerCreative : GuiContainer
 	{
@@ -136,7 +135,7 @@
 		public override void handleMouseInput()
 		{
 			base.handleMouseInput();
-			int i1 = Mouse.getEventDWheel();
+			int i1 = mc.MouseScrollDelta;
 			if (i1 != 0)
 			{
 				int i2 = ((ContainerCreative)this.inventorySlots).itemList.Count / 8 - 8 + 1;
@@ -168,7 +167,7 @@
 
 		public override void drawScreen(int i1, int i2, float f3)
 		{
-			bool z4 = Mouse.isButtonDown(0);
+			bool z4 = mc.mcApplet.MouseState.IsButtonDown(MouseButton.Left);
 			int i5 = this.guiLeft;
 			int i6 = this.guiTop;
 			int i7 = i5 + 155;
@@ -203,13 +202,13 @@
 			}
 
 			base.drawScreen(i1, i2, f3);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glDisable(GL11.GL_LIGHTING);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Disable(EnableCap.Lighting);
 		}
 
 		protected internal override void drawGuiContainerBackgroundLayer(float f1, int i2, int i3)
 		{
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			int i4 = this.mc.renderEngine.getTexture("/gui/allitems.png");
 			this.mc.renderEngine.bindTexture(i4);
 			int i5 = this.guiLeft;

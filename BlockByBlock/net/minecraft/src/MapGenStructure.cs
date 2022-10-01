@@ -29,7 +29,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual bool generateStructuresInChunk(World world1, Random random2, int i3, int i4)
+		public virtual bool generateStructuresInChunk(World world1, RandomExtended random2, int i3, int i4)
 		{
 			int i5 = (i3 << 4) + 8;
 			int i6 = (i4 << 4) + 8;

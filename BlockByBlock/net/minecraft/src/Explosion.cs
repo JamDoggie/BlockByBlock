@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
@@ -143,9 +144,9 @@ namespace net.minecraft.src
 				i8 = this.worldObj.getBlockId(i5, i6, i7);
 				if (z1)
 				{
-					double d9 = (double)((float)i5 + this.worldObj.rand.nextFloat());
-					double d11 = (double)((float)i6 + this.worldObj.rand.nextFloat());
-					double d13 = (double)((float)i7 + this.worldObj.rand.nextFloat());
+					double d9 = (double)((float)i5 + this.worldObj.rand.NextSingle());
+					double d11 = (double)((float)i6 + this.worldObj.rand.NextSingle());
+					double d13 = (double)((float)i7 + this.worldObj.rand.NextSingle());
 					double d15 = d9 - this.explosionX;
 					double d17 = d11 - this.explosionY;
 					double d19 = d13 - this.explosionZ;
@@ -154,7 +155,7 @@ namespace net.minecraft.src
 					d17 /= d21;
 					d19 /= d21;
 					double d23 = 0.5D / (d21 / (double)this.explosionSize + 0.1D);
-					d23 *= (double)(this.worldObj.rand.nextFloat() * this.worldObj.rand.nextFloat() + 0.3F);
+					d23 *= (double)(this.worldObj.rand.NextSingle() * this.worldObj.rand.NextSingle() + 0.3F);
 					d15 *= d23;
 					d17 *= d23;
 					d19 *= d23;

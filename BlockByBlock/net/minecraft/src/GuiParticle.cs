@@ -1,13 +1,10 @@
 ﻿using System.Collections;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
 
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 
 	public class GuiParticle : Gui
 	{
@@ -47,7 +44,7 @@ namespace net.minecraft.src
 				float f7 = (float)(particle3.prevTintRed + (particle3.tintRed - particle3.prevTintRed) * (double)f1);
 				float f8 = (float)(particle3.prevTintGreen + (particle3.tintGreen - particle3.prevTintGreen) * (double)f1);
 				float f9 = (float)(particle3.prevTintBlue + (particle3.tintBlue - particle3.prevTintBlue) * (double)f1);
-				GL11.glColor4f(f7, f8, f9, f6);
+				GL.Color4(f7, f8, f9, f6);
 				this.drawTexturedModalRect(i4, i5, 40, 0, 8, 8);
 			}
 

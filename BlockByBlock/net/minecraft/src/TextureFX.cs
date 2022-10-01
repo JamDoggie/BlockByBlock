@@ -1,12 +1,11 @@
-﻿namespace net.minecraft.src
-{
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
 
-	// PORTING TODO: OpenGL code
+namespace net.minecraft.src
+{
 
 	public class TextureFX
 	{
-		public sbyte[] imageData = new sbyte[1024];
+		public byte[] imageData = new byte[1024];
 		public int iconIndex;
 		public bool anaglyphEnabled = false;
 		public int textureId = 0;
@@ -26,11 +25,11 @@
 		{
 			if (this.tileImage == 0)
 			{
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, renderEngine1.getTexture("/terrain.png"));
+				GL.BindTexture(TextureTarget.Texture2D, renderEngine1.getTexture("/terrain.png"));
 			}
 			else if (this.tileImage == 1)
 			{
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, renderEngine1.getTexture("/gui/items.png"));
+				GL.BindTexture(TextureTarget.Texture2D, renderEngine1.getTexture("/gui/items.png"));
 			}
 
 		}

@@ -1,11 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
-
-    // PORTING TODO: OpenGL code
 
     public class ItemRenderer
 	{

@@ -1,9 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
-
 	public class EntityLargeExplodeFX : EntityFX
 	{
 		private int field_35130_a = 0;
@@ -33,8 +31,8 @@
 				float f14 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)f2 - interpPosX);
 				float f15 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)f2 - interpPosY);
 				float f16 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)f2 - interpPosZ);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glDisable(GL11.GL_LIGHTING);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Disable(EnableCap.Lighting);
 				RenderHelper.disableStandardItemLighting();
 				tessellator1.startDrawingQuads();
 				tessellator1.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, 1.0F);
@@ -45,8 +43,8 @@
 				tessellator1.addVertexWithUV((double)(f14 + f3 * f13 + f6 * f13), (double)(f15 + f4 * f13), (double)(f16 + f5 * f13 + f7 * f13), (double)f9, (double)f11);
 				tessellator1.addVertexWithUV((double)(f14 + f3 * f13 - f6 * f13), (double)(f15 - f4 * f13), (double)(f16 + f5 * f13 - f7 * f13), (double)f9, (double)f12);
 				tessellator1.draw();
-				GL11.glPolygonOffset(0.0F, 0.0F);
-				GL11.glEnable(GL11.GL_LIGHTING);
+				GL.PolygonOffset(0.0F, 0.0F);
+				GL.Enable(EnableCap.Lighting);
 			}
 		}
 

@@ -6,7 +6,7 @@ namespace net.minecraft.src
 
 	public class WorldGenReed : WorldGenerator
 	{
-		public override bool generate(World world1, Random random2, int i3, int i4, int i5)
+		public override bool generate(World world1, RandomExtended random2, int i3, int i4, int i5)
 		{
 			for (int i6 = 0; i6 < 20; ++i6)
 			{

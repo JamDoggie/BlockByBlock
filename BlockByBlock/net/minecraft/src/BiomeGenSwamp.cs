@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -17,7 +18,7 @@ namespace net.minecraft.src
 			this.waterColorMultiplier = 14745518;
 		}
 
-		public override WorldGenerator getRandomWorldGenForTrees(Random random1)
+		public override WorldGenerator getRandomWorldGenForTrees(RandomExtended random1)
 		{
 			return this.worldGenSwamp;
 		}

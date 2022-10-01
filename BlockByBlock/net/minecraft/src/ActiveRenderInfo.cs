@@ -1,17 +1,18 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.helpers;
+using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-    using GL11 = org.lwjgl.opengl.GL11;
-	using GLU = org.lwjgl.util.glu.GLU;
 
 	public class ActiveRenderInfo
 	{
 		public static float objectX = 0.0F;
 		public static float objectY = 0.0F;
 		public static float objectZ = 0.0F;
-		private static IntBuffer viewport = GLAllocation.createDirectIntBuffer(16);
-		private static FloatBuffer modelview = GLAllocation.createDirectFloatBuffer(16);
-		private static FloatBuffer projection = GLAllocation.createDirectFloatBuffer(16);
-		private static FloatBuffer objectCoords = GLAllocation.createDirectFloatBuffer(3);
+		private static int[] viewport = new int[16];
+		private static float[] modelview = new float[16];
+		private static float[] projection = new float[16];
+		private static float[] objectCoords = new float[3];
 		public static float rotationX;
 		public static float rotationXZ;
 		public static float rotationZ;
@@ -20,15 +21,15 @@
 
 		public static void updateRenderInfo(EntityPlayer entityPlayer0, bool z1)
 		{
-			GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, modelview);
-			GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projection);
-			GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
-			float f2 = (float)((viewport.get(0) + viewport.get(2)) / 2);
-			float f3 = (float)((viewport.get(1) + viewport.get(3)) / 2);
-			GLU.gluUnProject(f2, f3, 0.0F, modelview, projection, viewport, objectCoords);
-			objectX = objectCoords.get(0);
-			objectY = objectCoords.get(1);
-			objectZ = objectCoords.get(2);
+			GL.GetFloat(GetPName.ModelviewMatrix, modelview);
+			GL.GetFloat(GetPName.ProjectionMatrix, projection);
+			GL.GetInteger(GetPName.Viewport, viewport);
+			float f2 = (float)((viewport[0] + viewport[2]) / 2);
+			float f3 = (float)((viewport[1] + viewport[3]) / 2);
+			Glu.UnProject(f2, f3, 0.0F, modelview, projection, viewport, objectCoords);
+			objectX = objectCoords[0];
+			objectY = objectCoords[1];
+			objectZ = objectCoords[2];
 			int i4 = z1 ? 1 : 0;
 			float f5 = entityPlayer0.rotationPitch;
 			float f6 = entityPlayer0.rotationYaw;

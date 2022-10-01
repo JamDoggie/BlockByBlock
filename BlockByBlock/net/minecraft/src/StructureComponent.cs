@@ -566,7 +566,7 @@ namespace net.minecraft.src
 
 		}
 
-		private static void fillTreasureChestWithLoot(Random random0, StructurePieceTreasure[] structurePieceTreasure1, TileEntityChest tileEntityChest2, int i3)
+		private static void fillTreasureChestWithLoot(RandomExtended random0, StructurePieceTreasure[] structurePieceTreasure1, TileEntityChest tileEntityChest2, int i3)
 		{
 			for (int i4 = 0; i4 < i3; ++i4)
 			{

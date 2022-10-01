@@ -1,13 +1,9 @@
 ﻿using System;
+using BlockByBlock.helpers;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GLU = org.lwjgl.util.glu.GLU;
-	using GL12 = org.lwjgl.opengl.GL12;
-
-	// PORTING TODO: OpenGL code
 
 	public class GuiEnchantment : GuiContainer
 	{
@@ -77,34 +73,34 @@ namespace net.minecraft.src
 		protected internal override void drawGuiContainerBackgroundLayer(float f1, int i2, int i3)
 		{
 			int i4 = this.mc.renderEngine.getTexture("/gui/enchant.png");
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i4);
 			int i5 = (this.width - this.xSize) / 2;
 			int i6 = (this.height - this.ySize) / 2;
 			this.drawTexturedModalRect(i5, i6, 0, 0, this.xSize, this.ySize);
-			GL11.glPushMatrix();
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glPushMatrix();
-			GL11.glLoadIdentity();
+			GL.PushMatrix();
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.PushMatrix();
+			GL.LoadIdentity();
 			ScaledResolution scaledResolution7 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-			GL11.glViewport((scaledResolution7.ScaledWidth - 320) / 2 * scaledResolution7.scaleFactor, (scaledResolution7.ScaledHeight - 240) / 2 * scaledResolution7.scaleFactor, 320 * scaledResolution7.scaleFactor, 240 * scaledResolution7.scaleFactor);
-			GL11.glTranslatef(-0.34F, 0.23F, 0.0F);
-			GLU.gluPerspective(90.0F, 1.3333334F, 9.0F, 80.0F);
+			GL.Viewport((scaledResolution7.ScaledWidth - 320) / 2 * scaledResolution7.scaleFactor, (scaledResolution7.ScaledHeight - 240) / 2 * scaledResolution7.scaleFactor, 320 * scaledResolution7.scaleFactor, 240 * scaledResolution7.scaleFactor);
+			GL.Translate(-0.34F, 0.23F, 0.0F);
+			Glu.Perspective(90.0F, 1.3333334F, 9.0F, 80.0F);
 			float f8 = 1.0F;
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glLoadIdentity();
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.LoadIdentity();
 			RenderHelper.enableStandardItemLighting();
-			GL11.glTranslatef(0.0F, 3.3F, -16.0F);
-			GL11.glScalef(f8, f8, f8);
+			GL.Translate(0.0F, 3.3F, -16.0F);
+			GL.Scale(f8, f8, f8);
 			float f9 = 5.0F;
-			GL11.glScalef(f9, f9, f9);
-			GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
+			GL.Scale(f9, f9, f9);
+			GL.Rotate(180.0F, 0.0F, 0.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(this.mc.renderEngine.getTexture("/item/book.png"));
-			GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
+			GL.Rotate(20.0F, 1.0F, 0.0F, 0.0F);
 			float f10 = this.field_40221_n + (this.field_40224_m - this.field_40221_n) * f1;
-			GL11.glTranslatef((1.0F - f10) * 0.2F, (1.0F - f10) * 0.1F, (1.0F - f10) * 0.25F);
-			GL11.glRotatef(-(1.0F - f10) * 90.0F - 90.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
+			GL.Translate((1.0F - f10) * 0.2F, (1.0F - f10) * 0.1F, (1.0F - f10) * 0.25F);
+			GL.Rotate(-(1.0F - f10) * 90.0F - 90.0F, 0.0F, 1.0F, 0.0F);
+			GL.Rotate(180.0F, 1.0F, 0.0F, 0.0F);
 			float f11 = this.field_40225_j + (this.field_40229_i - this.field_40225_j) * f1 + 0.25F;
 			float f12 = this.field_40225_j + (this.field_40229_i - this.field_40225_j) * f1 + 0.75F;
 			f11 = (f11 - (float)MathHelper.func_40346_b((double)f11)) * 1.6F - 0.3F;
@@ -129,17 +125,17 @@ namespace net.minecraft.src
 				f12 = 1.0F;
 			}
 
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL.Enable(EnableCap.RescaleNormal);
 			bookModel.render((Entity)null, 0.0F, f11, f12, f10, 0.0F, 0.0625F);
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+			GL.Disable(EnableCap.RescaleNormal);
 			RenderHelper.disableStandardItemLighting();
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glViewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
-			GL11.glPopMatrix();
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glPopMatrix();
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.Viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
+			GL.PopMatrix();
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.PopMatrix();
 			RenderHelper.disableStandardItemLighting();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i4);
 			EnchantmentNameParts.instance.RandSeed = this.containerEnchantment.nameSeed;
 
@@ -149,7 +145,7 @@ namespace net.minecraft.src
 				this.zLevel = 0.0F;
 				this.mc.renderEngine.bindTexture(i4);
 				int i15 = this.containerEnchantment.enchantLevels[i13];
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				if (i15 == 0)
 				{
 					this.drawTexturedModalRect(i5 + 60, i6 + 14 + 19 * i13, 0, 185, 108, 19);

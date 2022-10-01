@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections;
 using TextCopy;
+using OpenTK.Graphics.OpenGL;
+using net.minecraft.client;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace net.minecraft.src
 {
 
 	using Minecraft = net.minecraft.client.Minecraft;
 
-	using Keyboard = org.lwjgl.input.Keyboard;
-	using Mouse = org.lwjgl.input.Mouse;
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code; input
 	public class GuiScreen : Gui
 	{
 		protected internal Minecraft mc;
@@ -105,12 +103,12 @@ namespace net.minecraft.src
 
 		public virtual void handleInput()
 		{
-			while (Mouse.next())
+			while (mc.mcApplet.NextMouseEvent())
 			{
 				this.handleMouseInput();
 			}
 
-			while (Keyboard.next())
+			while (mc.mcApplet.NextKeyEvent())
 			{
 				this.handleKeyboardInput();
 			}
@@ -121,32 +119,42 @@ namespace net.minecraft.src
 		{
 			int i1;
 			int i2;
-			if (Mouse.getEventButtonState())
+
+			if (mc.mcApplet.CurrentMouseEvent() == null)
+				return;
+
+			MouseEvent e = mc.mcApplet.CurrentMouseEvent()!.Value;
+
+			if (e.IsPressed)
 			{
-				i1 = Mouse.getEventX() * this.width / this.mc.displayWidth;
-				i2 = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-				this.mouseClicked(i1, i2, Mouse.getEventButton());
+				i1 = e.posX * this.width / this.mc.displayWidth;
+				i2 = this.height - e.posY * this.height / this.mc.displayHeight - 1;
+				this.mouseClicked(i1, i2, (int)e.button!.Value);
 			}
 			else
 			{
-				i1 = Mouse.getEventX() * this.width / this.mc.displayWidth;
-				i2 = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-				this.mouseMovedOrUp(i1, i2, Mouse.getEventButton());
-			}
+				i1 = e.posX * this.width / this.mc.displayWidth;
+				i2 = this.height - e.posY * this.height / this.mc.displayHeight - 1;
+                this.mouseMovedOrUp(i1, i2, e.button == null ? -1 : (int)e.button!.Value);
+            }
 
 		}
 
 		public virtual void handleKeyboardInput()
 		{
-			if (Keyboard.getEventKeyState())
+			if (mc.mcApplet.CurrentKeyEvent() == null)
+				return;
+
+			KeyEvent e = mc.mcApplet.CurrentKeyEvent()!.Value;
+
+			if (e.isPressed)
 			{
-				if (Keyboard.getEventKey() == Keyboard.KEY_F11)
+				if (e.e.Key == Keys.F11)
 				{
 					this.mc.toggleFullscreen();
 					return;
 				}
-
-				this.keyTyped(Keyboard.getEventCharacter(), Keyboard.getEventKey());
+				keyTyped((char)e.e.Key, (int)e.e.Key);
 			}
 
 		}
@@ -179,11 +187,11 @@ namespace net.minecraft.src
 
 		public virtual void drawBackground(int i1)
 		{
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_FOG);
+			GL.Disable(EnableCap.Lighting);
+			GL.Disable(EnableCap.Fog);
 			Tessellator tessellator2 = Tessellator.instance;
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/background.png"));
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.BindTexture(TextureTarget.Texture2D, mc.renderEngine.getTexture("/gui/background.png"));
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			float f3 = 32.0F;
 			tessellator2.startDrawingQuads();
 			tessellator2.ColorOpaque_I = 4210752;
@@ -203,14 +211,14 @@ namespace net.minecraft.src
 		{
 		}
 
-		public static bool func_50051_l()
+		public static bool isControlDown()
 		{
-			return Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
+			return MinecraftApplet.mcWindow.KeyboardState.IsKeyDown(Keys.LeftShift) || MinecraftApplet.mcWindow.KeyboardState.IsKeyDown(Keys.RightShift);
 		}
 
-		public static bool func_50049_m()
+		public static bool isShiftDown()
 		{
-			return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+			return MinecraftApplet.mcWindow.KeyboardState.IsKeyDown(Keys.LeftControl) || MinecraftApplet.mcWindow.KeyboardState.IsKeyDown(Keys.RightControl);
 		}
 	}
 

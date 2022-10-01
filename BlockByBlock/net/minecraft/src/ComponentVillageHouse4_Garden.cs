@@ -13,7 +13,7 @@ namespace net.minecraft.src
 		{
 			this.coordBaseMode = i4;
 			this.boundingBox = structureBoundingBox3;
-			this.isRoofAccessible = random2.nextBoolean();
+			this.isRoofAccessible = random2.NextBool();
 		}
 
 		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, RandomExtended random3)

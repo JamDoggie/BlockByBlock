@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -12,7 +13,7 @@ namespace net.minecraft.src
 			this.biomeDecorator.grassPerChunk = 2;
 		}
 
-		public override WorldGenerator getRandomWorldGenForTrees(Random random1)
+		public override WorldGenerator getRandomWorldGenForTrees(RandomExtended random1)
 		{
 			return (WorldGenerator)(random1.Next(5) == 0 ? this.worldGenForest : (random1.Next(10) == 0 ? this.worldGenBigTree : this.worldGenTrees));
 		}

@@ -8,18 +8,18 @@ namespace net.minecraft.src
 	{
 		private readonly int field_35052_a;
 
-		public ComponentStrongholdCorridor(int i1, Random random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
+		public ComponentStrongholdCorridor(int i1, RandomExtended random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
 		{
 			this.coordBaseMode = i4;
 			this.boundingBox = structureBoundingBox3;
 			this.field_35052_a = i4 != 2 && i4 != 0 ? structureBoundingBox3.XSize : structureBoundingBox3.ZSize;
 		}
 
-		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, Random random3)
+		public override void buildComponent(StructureComponent structureComponent1, System.Collections.IList list2, RandomExtended random3)
 		{
 		}
 
-		public static StructureBoundingBox func_35051_a(System.Collections.IList list0, Random random1, int i2, int i3, int i4, int i5)
+		public static StructureBoundingBox func_35051_a(System.Collections.IList list0, RandomExtended random1, int i2, int i3, int i4, int i5)
 		{
 			StructureBoundingBox structureBoundingBox7 = StructureBoundingBox.getComponentToAddBoundingBox(i2, i3, i4, -1, -1, 0, 5, 5, 4, i5);
 			StructureComponent structureComponent8 = StructureComponent.findIntersecting(list0, structureBoundingBox7);
@@ -45,7 +45,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public override bool addComponentParts(World world1, Random random2, StructureBoundingBox structureBoundingBox3)
+		public override bool addComponentParts(World world1, RandomExtended random2, StructureBoundingBox structureBoundingBox3)
 		{
 			if (this.isLiquidInStructureBoundingBox(world1, structureBoundingBox3))
 			{

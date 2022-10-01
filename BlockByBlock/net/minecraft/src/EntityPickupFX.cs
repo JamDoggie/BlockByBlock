@@ -1,9 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
-
 	public class EntityPickupFX : EntityFX
 	{
 		private Entity entityToPickUp;
@@ -40,7 +38,7 @@
 			int i31 = i30 % 65536;
 			int i32 = i30 / 65536;
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i31 / 1.0F, (float)i32 / 1.0F);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			d21 -= interpPosX;
 			d23 -= interpPosY;
 			d25 -= interpPosZ;

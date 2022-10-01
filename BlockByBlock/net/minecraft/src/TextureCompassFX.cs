@@ -52,10 +52,10 @@ namespace net.minecraft.src
 					i5 = i8;
 				}
 
-				this.imageData[i1 * 4 + 0] = (sbyte)i3;
-				this.imageData[i1 * 4 + 1] = (sbyte)i4;
-				this.imageData[i1 * 4 + 2] = (sbyte)i5;
-				this.imageData[i1 * 4 + 3] = (sbyte)i2;
+				this.imageData[i1 * 4 + 0] = (byte)i3;
+				this.imageData[i1 * 4 + 1] = (byte)i4;
+				this.imageData[i1 * 4 + 2] = (byte)i5;
+				this.imageData[i1 * 4 + 3] = (byte)i2;
 			}
 
 			double d20 = 0.0D;
@@ -67,7 +67,7 @@ namespace net.minecraft.src
 				d20 = (double)(this.mc.thePlayer.rotationYaw - 90.0F) * Math.PI / 180.0D - Math.Atan2(d25, d23);
 				if (!this.mc.theWorld.worldProvider.func_48217_e())
 				{
-					d20 = MathHelper.NextDouble * (double)(float)Math.PI * 2.0D;
+					d20 = portinghelpers.MathHelper.NextDouble * (double)(float)Math.PI * 2.0D;
 				}
 			}
 
@@ -127,10 +127,10 @@ namespace net.minecraft.src
 					i15 = i19;
 				}
 
-				this.imageData[i12 * 4 + 0] = (sbyte)i13;
-				this.imageData[i12 * 4 + 1] = (sbyte)i14;
-				this.imageData[i12 * 4 + 2] = (sbyte)i15;
-				this.imageData[i12 * 4 + 3] = (sbyte)s16;
+				this.imageData[i12 * 4 + 0] = (byte)i13;
+				this.imageData[i12 * 4 + 1] = (byte)i14;
+				this.imageData[i12 * 4 + 2] = (byte)i15;
+				this.imageData[i12 * 4 + 3] = (byte)s16;
 			}
 
 			for (i9 = -8; i9 <= 16; ++i9)
@@ -152,10 +152,10 @@ namespace net.minecraft.src
 					i15 = i19;
 				}
 
-				this.imageData[i12 * 4 + 0] = (sbyte)i13;
-				this.imageData[i12 * 4 + 1] = (sbyte)i14;
-				this.imageData[i12 * 4 + 2] = (sbyte)i15;
-				this.imageData[i12 * 4 + 3] = (sbyte)s16;
+				this.imageData[i12 * 4 + 0] = (byte)i13;
+				this.imageData[i12 * 4 + 1] = (byte)i14;
+				this.imageData[i12 * 4 + 2] = (byte)i15;
+				this.imageData[i12 * 4 + 3] = (byte)s16;
 			}
 
 		}

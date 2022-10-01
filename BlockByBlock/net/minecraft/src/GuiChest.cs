@@ -1,9 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code.
-
 	public class GuiChest : GuiContainer
 	{
 		private IInventory upperChestInventory;
@@ -30,7 +28,7 @@
 		protected internal override void drawGuiContainerBackgroundLayer(float f1, int i2, int i3)
 		{
 			int i4 = this.mc.renderEngine.getTexture("/gui/container.png");
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i4);
 			int i5 = (this.width - this.xSize) / 2;
 			int i6 = (this.height - this.ySize) / 2;

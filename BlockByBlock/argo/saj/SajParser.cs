@@ -6,9 +6,7 @@ namespace argo.saj
 
 	public sealed class SajParser
 	{
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: public void parse(java.io.Reader reader1, JsonListener jsonListener2) throws InvalidSyntaxException, java.io.IOException
-		public void parse(Reader reader1, JsonListener jsonListener2)
+		public void parse(StringReader reader1, JsonListener jsonListener2)
 		{
 			PositionTrackingPushbackReader positionTrackingPushbackReader3 = new PositionTrackingPushbackReader(reader1);
 			char c4 = (char)positionTrackingPushbackReader3.read();
@@ -38,9 +36,7 @@ namespace argo.saj
 				jsonListener2.endDocument();
 			}
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: private void arrayString(PositionTrackingPushbackReader positionTrackingPushbackReader1, JsonListener jsonListener2) throws InvalidSyntaxException, java.io.IOException
+        
 		private void arrayString(PositionTrackingPushbackReader positionTrackingPushbackReader1, JsonListener jsonListener2)
 		{
 			char c3 = (char)this.readNextNonWhitespaceChar(positionTrackingPushbackReader1);

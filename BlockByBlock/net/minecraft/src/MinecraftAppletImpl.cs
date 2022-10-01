@@ -17,10 +17,7 @@
 
 		public override void displayUnexpectedThrowable(UnexpectedThrowable unexpectedThrowable1)
 		{
-			this.mainFrame.removeAll();
-			this.mainFrame.setLayout(new BorderLayout());
-			this.mainFrame.add(new PanelCrashReport(unexpectedThrowable1), "Center");
-			this.mainFrame.validate();
+			// PORTING TODO: show crash report panel here.
 		}
 	}
 

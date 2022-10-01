@@ -1,8 +1,6 @@
 ﻿namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
-
+	using OpenTK.Graphics.OpenGL;
 	// PORTING TODO: OpenGL code
 
 	public class TileEntityChestRenderer : TileEntitySpecialRenderer
@@ -44,12 +42,12 @@
 					this.bindTextureByName("/item/largechest.png");
 				}
 
-				GL11.glPushMatrix();
-				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glTranslatef((float)d2, (float)d4 + 1.0F, (float)d6 + 1.0F);
-				GL11.glScalef(1.0F, -1.0F, -1.0F);
-				GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+				GL.PushMatrix();
+				GL.Enable(EnableCap.RescaleNormal);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Translate((float)d2, (float)d4 + 1.0F, (float)d6 + 1.0F);
+				GL.Scale(1.0F, -1.0F, -1.0F);
+				GL.Translate(0.5F, 0.5F, 0.5F);
 				short s11 = 0;
 				if (i9 == 2)
 				{
@@ -73,16 +71,16 @@
 
 				if (i9 == 2 && tileEntityChest1.adjacentChestXPos != null)
 				{
-					GL11.glTranslatef(1.0F, 0.0F, 0.0F);
+					GL.Translate(1.0F, 0.0F, 0.0F);
 				}
 
 				if (i9 == 5 && tileEntityChest1.adjacentChestZPos != null)
 				{
-					GL11.glTranslatef(0.0F, 0.0F, -1.0F);
+					GL.Translate(0.0F, 0.0F, -1.0F);
 				}
 
-				GL11.glRotatef((float)s11, 0.0F, 1.0F, 0.0F);
-				GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+				GL.Rotate((float)s11, 0.0F, 1.0F, 0.0F);
+				GL.Translate(-0.5F, -0.5F, -0.5F);
 				float f12 = tileEntityChest1.prevLidAngle + (tileEntityChest1.lidAngle - tileEntityChest1.prevLidAngle) * f8;
 				float f13;
 				if (tileEntityChest1.adjacentChestZNeg != null)
@@ -107,9 +105,9 @@
 				f12 = 1.0F - f12 * f12 * f12;
 				modelChest14.chestLid.rotateAngleX = -(f12 * (float)Math.PI / 2.0F);
 				modelChest14.renderAll();
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-				GL11.glPopMatrix();
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Disable(EnableCap.RescaleNormal);
+				GL.PopMatrix();
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			}
 		}
 

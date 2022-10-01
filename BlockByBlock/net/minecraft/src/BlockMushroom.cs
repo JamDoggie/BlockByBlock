@@ -90,7 +90,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual bool fertilizeMushroom(World world1, int i2, int i3, int i4, Random random5)
+		public virtual bool fertilizeMushroom(World world1, int i2, int i3, int i4, RandomExtended random5)
 		{
 			int i6 = world1.getBlockMetadata(i2, i3, i4);
 			world1.setBlock(i2, i3, i4, 0);

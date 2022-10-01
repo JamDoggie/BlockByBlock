@@ -15,7 +15,7 @@ namespace net.minecraft.src
 
 		public virtual string getMD5String(string str)
 		{
-			using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) // PORTING TODO: Likely Java parity issue.
+			using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) // PORTING TODO: Possible Java parity issue.
 																									 // May need to use IKVM for full Java parity with world seeds.
 																									 // This doesn't *seem* to be used for world gen though, so idk.
 			{

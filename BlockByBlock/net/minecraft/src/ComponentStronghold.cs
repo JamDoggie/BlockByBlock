@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -9,7 +10,7 @@ namespace net.minecraft.src
 		{
 		}
 
-		protected internal virtual void placeDoor(World world1, Random random2, StructureBoundingBox structureBoundingBox3, EnumDoor enumDoor4, int i5, int i6, int i7)
+		protected internal virtual void placeDoor(World world1, RandomExtended random2, StructureBoundingBox structureBoundingBox3, EnumDoor enumDoor4, int i5, int i6, int i7)
 		{
 			switch (EnumDoorHelper.doorEnum[(int)enumDoor4])
 			{
@@ -74,7 +75,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		protected internal virtual StructureComponent getNextComponentNormal(ComponentStrongholdStairs2 componentStrongholdStairs21, System.Collections.IList list2, Random random3, int i4, int i5)
+		protected internal virtual StructureComponent getNextComponentNormal(ComponentStrongholdStairs2 componentStrongholdStairs21, System.Collections.IList list2, RandomExtended random3, int i4, int i5)
 		{
 			switch (this.coordBaseMode)
 			{
@@ -91,7 +92,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		protected internal virtual StructureComponent getNextComponentX(ComponentStrongholdStairs2 componentStrongholdStairs21, System.Collections.IList list2, Random random3, int i4, int i5)
+		protected internal virtual StructureComponent getNextComponentX(ComponentStrongholdStairs2 componentStrongholdStairs21, System.Collections.IList list2, RandomExtended random3, int i4, int i5)
 		{
 			switch (this.coordBaseMode)
 			{
@@ -108,7 +109,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		protected internal virtual StructureComponent getNextComponentZ(ComponentStrongholdStairs2 componentStrongholdStairs21, System.Collections.IList list2, Random random3, int i4, int i5)
+		protected internal virtual StructureComponent getNextComponentZ(ComponentStrongholdStairs2 componentStrongholdStairs21, System.Collections.IList list2, RandomExtended random3, int i4, int i5)
 		{
 			switch (this.coordBaseMode)
 			{

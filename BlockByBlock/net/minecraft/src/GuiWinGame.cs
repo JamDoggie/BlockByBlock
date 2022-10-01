@@ -1,16 +1,12 @@
 ﻿using BlockByBlock;
 using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections;
 using System.IO;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
-
 	public class GuiWinGame : GuiScreen
 	{
 		private int updateCounter = 0;
@@ -121,7 +117,7 @@ namespace net.minecraft.src
 		private void func_41040_b(int i1, int i2, float f3)
 		{
 			Tessellator tessellator4 = Tessellator.instance;
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("%blur%/gui/background.png"));
+			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("%blur%/gui/background.png"));
 			tessellator4.startDrawingQuads();
 			tessellator4.setColorRGBA_F(1.0F, 1.0F, 1.0F, 1.0F);
 			int i5 = this.width;
@@ -159,10 +155,10 @@ namespace net.minecraft.src
 			int i6 = this.width / 2 - s5 / 2;
 			int i7 = this.height + 50;
 			float f8 = -((float)this.updateCounter + f3) * this.field_41043_e;
-			GL11.glPushMatrix();
-			GL11.glTranslatef(0.0F, f8, 0.0F);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/title/mclogo.png"));
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.PushMatrix();
+			GL.Translate(0.0F, f8, 0.0F);
+			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/title/mclogo.png"));
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.drawTexturedModalRect(i6, i7, 0, 0, 155, 44);
 			this.drawTexturedModalRect(i6 + 155, i7, 0, 45, 155, 44);
 			tessellator4.ColorOpaque_I = 0xFFFFFF;
@@ -176,7 +172,7 @@ namespace net.minecraft.src
 					float f11 = (float)i9 + f8 - (float)(this.height / 2 - 6);
 					if (f11 < 0.0F)
 					{
-						GL11.glTranslatef(0.0F, -f11, 0.0F);
+						GL.Translate(0.0F, -f11, 0.0F);
 					}
 				}
 
@@ -201,20 +197,20 @@ namespace net.minecraft.src
 				i9 += 12;
 			}
 
-			GL11.glPopMatrix();
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("%blur%/misc/vignette.png"));
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_ZERO, GL11.GL_ONE_MINUS_SRC_COLOR);
-			tessellator4.startDrawingQuads();
+			GL.PopMatrix();
+			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("%blur%/misc/vignette.png"));
+			GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.Zero, BlendingFactor.OneMinusSrcColor);
+            tessellator4.startDrawingQuads();
 			tessellator4.setColorRGBA_F(1.0F, 1.0F, 1.0F, 1.0F);
-			i10 = this.width;
-			int i13 = this.height;
+			i10 = width;
+			int i13 = height;
 			tessellator4.addVertexWithUV(0.0D, (double)i13, (double)this.zLevel, 0.0D, 1.0D);
 			tessellator4.addVertexWithUV((double)i10, (double)i13, (double)this.zLevel, 1.0D, 1.0D);
 			tessellator4.addVertexWithUV((double)i10, 0.0D, (double)this.zLevel, 1.0D, 0.0D);
 			tessellator4.addVertexWithUV(0.0D, 0.0D, (double)this.zLevel, 0.0D, 0.0D);
 			tessellator4.draw();
-			GL11.glDisable(GL11.GL_BLEND);
+			GL.Disable(EnableCap.Blend);
 			base.drawScreen(i1, i2, f3);
 		}
 	}

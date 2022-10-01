@@ -1,10 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code.
 
 	public class GuiButton : Gui
 	{
@@ -15,8 +13,7 @@
 		public string displayString;
 		public int id;
 		public bool enabled;
-//JAVA TO C# CONVERTER NOTE: Field name conflicts with a method name of the current type:
-		public bool drawButton_Conflict;
+		public bool shouldDrawButton;
 
 		public GuiButton(int i1, int i2, int i3, string string4) : this(i1, i2, i3, 200, 20, string4)
 		{
@@ -27,7 +24,7 @@
 			this.field_52008_a = 200;
 			this.field_52007_b = 20;
 			this.enabled = true;
-			this.drawButton_Conflict = true;
+			this.shouldDrawButton = true;
 			this.id = i1;
 			this.xPosition = i2;
 			this.yPosition = i3;
@@ -53,11 +50,11 @@
 
 		public virtual void drawButton(Minecraft minecraft1, int i2, int i3)
 		{
-			if (this.drawButton_Conflict)
+			if (this.shouldDrawButton)
 			{
 				FontRenderer fontRenderer4 = minecraft1.fontRenderer;
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft1.renderEngine.getTexture("/gui/gui.png"));
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.BindTexture(TextureTarget.Texture2D, minecraft1.renderEngine.getTexture("/gui/gui.png"));
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				bool z5 = i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.field_52008_a && i3 < this.yPosition + this.field_52007_b;
 				int i6 = this.getHoverState(z5);
 				this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 46 + i6 * 20, this.field_52008_a / 2, this.field_52007_b);
@@ -87,7 +84,7 @@
 
 		public virtual bool mousePressed(Minecraft minecraft1, int i2, int i3)
 		{
-			return this.enabled && this.drawButton_Conflict && i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.field_52008_a && i3 < this.yPosition + this.field_52007_b;
+			return this.enabled && this.shouldDrawButton && i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.field_52008_a && i3 < this.yPosition + this.field_52007_b;
 		}
 	}
 

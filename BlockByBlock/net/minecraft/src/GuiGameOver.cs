@@ -1,9 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 
 	public class GuiGameOver : GuiScreen
 	{
@@ -74,12 +72,12 @@
 		public override void drawScreen(int i1, int i2, float f3)
 		{
 			this.drawGradientRect(0, 0, this.width, this.height, 1615855616, -1602211792);
-			GL11.glPushMatrix();
-			GL11.glScalef(2.0F, 2.0F, 2.0F);
+			GL.PushMatrix();
+			GL.Scale(2.0F, 2.0F, 2.0F);
 			bool z4 = this.mc.theWorld.WorldInfo.HardcoreModeEnabled;
 			string string5 = z4 ? StatCollector.translateToLocal("deathScreen.title.hardcore") : StatCollector.translateToLocal("deathScreen.title");
 			this.drawCenteredString(this.fontRenderer, string5, this.width / 2 / 2, 30, 0xFFFFFF);
-			GL11.glPopMatrix();
+			GL.PopMatrix();
 			if (z4)
 			{
 				this.drawCenteredString(this.fontRenderer, StatCollector.translateToLocal("deathScreen.hardcoreInfo"), this.width / 2, 144, 0xFFFFFF);

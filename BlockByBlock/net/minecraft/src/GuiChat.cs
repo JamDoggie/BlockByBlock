@@ -2,14 +2,10 @@
 using System;
 using System.Collections;
 using System.Text;
+using OpenTK.Input;
 
 namespace net.minecraft.src
 {
-
-	using Keyboard = org.lwjgl.input.Keyboard;
-	using Mouse = org.lwjgl.input.Mouse;
-
-	// PORTING TODO: OpenGL code.
 
 	public class GuiChat : GuiScreen
 	{
@@ -20,7 +16,7 @@ namespace net.minecraft.src
 		private string field_50059_f = "";
 		private int field_50067_h = 0;
 		private System.Collections.IList field_50068_i = new ArrayList();
-		private URI field_50065_j = null;
+		private Uri field_50065_j = null;
 		protected internal GuiTextField field_50064_a;
 		private string field_50066_k = "";
 
@@ -35,7 +31,7 @@ namespace net.minecraft.src
 
 		public override void initGui()
 		{
-			Keyboard.enableRepeatEvents(true);
+			mc.mcApplet.EnableKeyRepeatingEvents(true);
 			this.field_50063_c = this.mc.ingameGUI.func_50013_c().Count;
 			this.field_50064_a = new GuiTextField(this.fontRenderer, 4, this.height - 12, this.width - 4, 12);
 			this.field_50064_a.MaxStringLength = 100;
@@ -47,7 +43,7 @@ namespace net.minecraft.src
 
 		public override void onGuiClosed()
 		{
-			Keyboard.enableRepeatEvents(false);
+			mc.mcApplet.EnableKeyRepeatingEvents(false);
 			this.mc.ingameGUI.func_50014_d();
 		}
 
@@ -107,7 +103,7 @@ namespace net.minecraft.src
 		public override void handleMouseInput()
 		{
 			base.handleMouseInput();
-			int i1 = Mouse.getEventDWheel();
+			int i1 = mc.mcApplet.MouseState.ScrollDelta.Y > 0 ? 1 : mc.mcApplet.MouseState.ScrollDelta.Y < 0 ? -1 : 0;
 			if (i1 != 0)
 			{
 				if (i1 > 1)
@@ -120,7 +116,7 @@ namespace net.minecraft.src
 					i1 = -1;
 				}
 
-				if (!func_50049_m())
+				if (!isShiftDown())
 				{
 					i1 *= 7;
 				}
@@ -134,7 +130,7 @@ namespace net.minecraft.src
 		{
 			if (i3 == 0)
 			{
-				ChatClickData chatClickData4 = this.mc.ingameGUI.func_50012_a(Mouse.getX(), Mouse.getY());
+				ChatClickData chatClickData4 = this.mc.ingameGUI.func_50012_a((int)mc.MouseX, (int)mc.MouseY);
 				if (chatClickData4 != null)
 				{
 					Uri uRI5 = chatClickData4.getURIFromChatLine();

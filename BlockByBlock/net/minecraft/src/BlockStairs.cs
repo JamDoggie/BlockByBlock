@@ -193,7 +193,7 @@ namespace net.minecraft.src
 			this.modelBlock.onEntityWalking(world1, i2, i3, i4, entity5);
 		}
 
-		public override void updateTick(World world1, int i2, int i3, int i4, Random random5)
+		public override void updateTick(World world1, int i2, int i3, int i4, RandomExtended random5)
 		{
 			this.modelBlock.updateTick(world1, i2, i3, i4, random5);
 		}

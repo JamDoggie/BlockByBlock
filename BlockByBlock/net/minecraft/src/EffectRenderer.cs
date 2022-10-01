@@ -1,12 +1,9 @@
-﻿using System;
+﻿using OpenTK.Graphics.OpenGL;
+using System;
 using System.Collections;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 
 	public class EffectRenderer
 	{
@@ -90,9 +87,9 @@ namespace net.minecraft.src
 						i9 = this.renderer.getTexture("/gui/items.png");
 					}
 
-					GL11.glBindTexture(GL11.GL_TEXTURE_2D, i9);
+					GL.BindTexture(TextureTarget.Texture2D, i9);
 					Tessellator tessellator10 = Tessellator.instance;
-					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 					tessellator10.startDrawingQuads();
 
 					for (int i11 = 0; i11 < this.fxLayers[i8].Count; ++i11)

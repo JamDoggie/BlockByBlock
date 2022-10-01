@@ -17,7 +17,7 @@ namespace BlockByBlock.helpers
                 Console.WriteLine(stackFrame.GetMethod().Name);
             }*/ // This code may or may not be better. PORTING TODO: investigate this.
 
-            Console.WriteLine($"StackTrace: {Environent.StackTrace}")
+            Console.WriteLine($"StackTrace: {Environment.StackTrace}");
         }
     }
 }

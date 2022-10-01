@@ -103,7 +103,7 @@ namespace net.minecraft.src
 			return i5 == 5 && world1.isBlockIndirectlyProvidingPowerTo(i2, i3 - 1, i4, 0) ? true : (i5 == 3 && world1.isBlockIndirectlyProvidingPowerTo(i2, i3, i4 - 1, 2) ? true : (i5 == 4 && world1.isBlockIndirectlyProvidingPowerTo(i2, i3, i4 + 1, 3) ? true : (i5 == 1 && world1.isBlockIndirectlyProvidingPowerTo(i2 - 1, i3, i4, 4) ? true : i5 == 2 && world1.isBlockIndirectlyProvidingPowerTo(i2 + 1, i3, i4, 5))));
 		}
 
-		public override void updateTick(World world1, int i2, int i3, int i4, Random random5)
+		public override void updateTick(World world1, int i2, int i3, int i4, RandomExtended random5)
 		{
 			bool z6 = this.isIndirectlyPowered(world1, i2, i3, i4);
 
@@ -159,7 +159,7 @@ namespace net.minecraft.src
 			return true;
 		}
 
-		public override void randomDisplayTick(World world1, int i2, int i3, int i4, Random random5)
+		public override void randomDisplayTick(World world1, int i2, int i3, int i4, RandomExtended random5)
 		{
 			if (this.torchActive)
 			{

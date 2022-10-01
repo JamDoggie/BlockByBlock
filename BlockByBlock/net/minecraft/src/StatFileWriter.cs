@@ -1,14 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Text;
 
 namespace net.minecraft.src
 {
-	using JdomParser = argo.jdom.JdomParser;
-	using JsonNode = argo.jdom.JsonNode;
-	using JsonRootNode = argo.jdom.JsonRootNode;
-	using JsonStringNode = argo.jdom.JsonStringNode;
-	using InvalidSyntaxException = argo.saj.InvalidSyntaxException;
 
 
 	public class StatFileWriter
@@ -115,47 +111,46 @@ namespace net.minecraft.src
 			}
 		}
 
-		public static System.Collections.IDictionary func_27177_a(string string0)
+		public static System.Collections.IDictionary? getStatsFromJson(string string0)
 		{
 			Hashtable hashMap1 = new Hashtable();
-
+            
 			try
 			{
+				StatFileJson? statFile = JsonConvert.DeserializeObject<StatFileJson>(string0);
+
+				if (statFile == null)
+					return null;
+
 				string string2 = "local";
 				StringBuilder stringBuilder3 = new StringBuilder();
-				JsonRootNode jsonRootNode4 = (new JdomParser()).parse(string0);
-				System.Collections.IList list5 = jsonRootNode4.getArrayNode(new object[]{"stats-change"});
-				System.Collections.IEnumerator iterator6 = list5.GetEnumerator();
-
-				while (iterator6.MoveNext())
+				
+				foreach (KeyValuePair<string,int> pair in statFile.stats)
 				{
-					JsonNode jsonNode7 = (JsonNode)iterator6.Current;
-					System.Collections.IDictionary map8 = jsonNode7.Fields;
-					DictionaryEntry mapEntry = map8.GetEnumerator().Entry;
-					int i10 = int.Parse(((JsonStringNode)mapEntry.Key).Text);
-					int i11 = int.Parse(((JsonNode)mapEntry.Value).Text);
-					StatBase statBase12 = StatList.getOneShotStat(i10);
+					int k = int.Parse(pair.Key);
+					int v = pair.Value;
+					StatBase statBase12 = StatList.getOneShotStat(k);
 					if (statBase12 == null)
 					{
-						Console.WriteLine(i10 + " is not a valid stat");
+						Console.WriteLine(k + " is not a valid stat");
 					}
 					else
 					{
-						stringBuilder3.Append(StatList.getOneShotStat(i10).statGuid).Append(",");
-						stringBuilder3.Append(i11).Append(",");
-						hashMap1[statBase12] = i11;
+						stringBuilder3.Append(StatList.getOneShotStat(k).statGuid).Append(",");
+						stringBuilder3.Append(v).Append(',');
+						hashMap1[statBase12] = v;
 					}
 				}
 
 				MD5String mD5String14 = new MD5String(string2);
-				string string15 = mD5String14.getMD5String(stringBuilder3.ToString());
-				if (!string15.Equals(jsonRootNode4.getStringValue(new object[]{"checksum"})))
+				string jsonChecksum = mD5String14.getMD5String(stringBuilder3.ToString());
+				if (jsonChecksum != statFile.checksum)
 				{
-					Console.WriteLine("CHECKSUM MISMATCH");
+					Console.WriteLine("CHECKSUM MISMATCH"); // PORTING TODO: this probably will get triggered because I have a feeling getMD5String won't have java parity. Come back to this.
 					return null;
 				}
 			}
-			catch (InvalidSyntaxException invalidSyntaxException13)
+			catch (JsonSerializationException invalidSyntaxException13)
 			{
 				Console.WriteLine(invalidSyntaxException13.ToString());
 				Console.Write(invalidSyntaxException13.StackTrace);
@@ -164,7 +159,7 @@ namespace net.minecraft.src
 			return hashMap1;
 		}
 
-		public static string func_27185_a(string string0, string string1, System.Collections.IDictionary map2)
+		public static string getFileContentsToWrite(string string0, string string1, System.Collections.IDictionary stats)
 		{
 			StringBuilder stringBuilder3 = new StringBuilder();
 			StringBuilder stringBuilder4 = new StringBuilder();
@@ -179,7 +174,7 @@ namespace net.minecraft.src
 			}
 
 			stringBuilder3.Append("  \"stats-change\":[");
-			System.Collections.IEnumerator iterator6 = map2.Keys.GetEnumerator();
+			System.Collections.IEnumerator iterator6 = stats.Keys.GetEnumerator();
 
 			while (iterator6.MoveNext())
 			{
@@ -193,9 +188,9 @@ namespace net.minecraft.src
 					z5 = false;
 				}
 
-				stringBuilder3.Append("\r\n    {\"").Append(statBase7.statId).Append("\":").Append(map2[statBase7]);
+				stringBuilder3.Append("\r\n    {\"").Append(statBase7.statId).Append("\":").Append(stats[statBase7]);
 				stringBuilder4.Append(statBase7.statGuid).Append(",");
-				stringBuilder4.Append(map2[statBase7]).Append(",");
+				stringBuilder4.Append(stats[statBase7]).Append(",");
 			}
 
 			if (!z5)
@@ -246,4 +241,18 @@ namespace net.minecraft.src
 		}
 	}
 
+	public class StatFileJson
+    {
+		public StatFileUser user { get; set; }
+
+        public Dictionary<string, int> stats { get; set; }
+
+        public string checksum { get; set; }
+    }
+
+	public class StatFileUser
+    {
+        public string name { get; set; }
+		public string sessionid { get; set; }
+    }
 }

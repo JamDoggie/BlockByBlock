@@ -223,7 +223,7 @@
 					d2 += 0.5D;
 				}
 
-				this.worldObj.playSoundEffect(d2, (double)this.yCoord + 0.5D, d4, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+				this.worldObj.playSoundEffect(d2, (double)this.yCoord + 0.5D, d4, "random.chestopen", 0.5F, this.worldObj.rand.NextSingle() * 0.1F + 0.9F);
 			}
 
 			if (this.numUsingPlayers == 0 && this.lidAngle > 0.0F || this.numUsingPlayers > 0 && this.lidAngle < 1.0F)
@@ -258,7 +258,7 @@
 						d4 += 0.5D;
 					}
 
-					this.worldObj.playSoundEffect(d4, (double)this.yCoord + 0.5D, d6, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+					this.worldObj.playSoundEffect(d4, (double)this.yCoord + 0.5D, d6, "random.chestclosed", 0.5F, this.worldObj.rand.NextSingle() * 0.1F + 0.9F);
 				}
 
 				if (this.lidAngle < 0.0F)

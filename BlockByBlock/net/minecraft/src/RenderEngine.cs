@@ -1,11 +1,15 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Drawing.Processing;
+using System;
 using System.Collections;
 using System.IO;
+using System.Runtime.InteropServices;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderEngine
 	{
@@ -21,20 +25,29 @@ namespace net.minecraft.src
 		public bool clampTexture = false;
 		public bool blurTexture = false;
 		private TexturePackList texturePack;
-		private BufferedImage missingTextureImage = new BufferedImage(64, 64, 2);
-		private int field_48512_n = 16;
+        private Image<Rgba32> missingTextureImage = new(64, 64, Color.Black);
+        private int field_48512_n = 16;
 
 		public RenderEngine(TexturePackList texturePackList1, GameSettings gameSettings2)
 		{
 			this.texturePack = texturePackList1;
 			this.options = gameSettings2;
-			Graphics graphics3 = this.missingTextureImage.getGraphics();
-			graphics3.setColor(Color.WHITE);
-			graphics3.fillRect(0, 0, 64, 64);
-			graphics3.setColor(Color.BLACK);
-			graphics3.drawString("missingtex", 1, 10);
-			graphics3.dispose();
+
+			missingTextureImage.Mutate(x => x.Fill(Color.Black, new RectangleF(0, 0, 32, 32))
+											.Fill(Color.Black, new RectangleF(32, 32, 32, 32))
+											.Fill(Rgba32.ParseHex("#ff007f"), new RectangleF(32, 0, 32, 32))
+											.Fill(Rgba32.ParseHex("#ff007f"), new RectangleF(0, 32, 32, 32)));
 		}
+
+		private static int[] texFilterLinear = new int[] { (int)TextureMinFilter.Linear };
+		private static int[] texWrapClamp = new int[] { (int)TextureWrapMode.Clamp };
+		private static int[] texWrapRepeat = new int[] { (int)TextureWrapMode.Repeat };
+
+		public static int[] TextureFilterLinear => texFilterLinear;
+
+		public static int[] TextureWrapClamp => texWrapClamp;
+
+		public static int[] TextureWrapRepeat => texWrapRepeat;
 
 		public virtual int[] getTextureContents(string string1)
 		{
@@ -94,20 +107,24 @@ namespace net.minecraft.src
 			}
 		}
 
-		private int[] getImageContentsAndAllocate(BufferedImage bufferedImage1)
+		private int[] getImageContentsAndAllocate(Image<Rgba32> bufferedImage1)
 		{
-			int i2 = bufferedImage1.getWidth();
-			int i3 = bufferedImage1.getHeight();
-			int[] i4 = new int[i2 * i3];
-			bufferedImage1.getRGB(0, 0, i2, i3, i4, 0, i2);
-			return i4;
+			int i2 = bufferedImage1.Width;
+			int i3 = bufferedImage1.Height;
+			byte[] i4 = new byte[i2 * i3 * 4];
+			bufferedImage1.CopyPixelDataTo(i4);
+			int[] array = new int[i2 * i3];
+
+            System.Buffer.BlockCopy(i4, 0, array, 0, i4.Length);
+
+            return array;
 		}
 
-		private int[] getImageContents(BufferedImage bufferedImage1, int[] i2)
+		private int[] getImageContents(Image<Rgba32> bufferedImage1, int[] i2)
 		{
-			int i3 = bufferedImage1.getWidth();
-			int i4 = bufferedImage1.getHeight();
-			bufferedImage1.getRGB(0, 0, i3, i4, i2, 0, i3);
+			int i3 = bufferedImage1.Width;
+			int i4 = bufferedImage1.Height;
+			FillIntBufferWithImage(bufferedImage1, i2);
 			return i2;
 		}
 
@@ -179,67 +196,65 @@ namespace net.minecraft.src
 			}
 		}
 
-		private BufferedImage unwrapImageByColumns(BufferedImage bufferedImage1)
+		private Image<Rgba32> unwrapImageByColumns(Image<Rgba32> bufferedImage1)
 		{
-			int i2 = bufferedImage1.getWidth() / 16;
-			BufferedImage bufferedImage3 = new BufferedImage(16, bufferedImage1.getHeight() * i2, 2);
-			Graphics graphics4 = bufferedImage3.getGraphics();
-
+			int i2 = bufferedImage1.Width / 16;
+			Image<Rgba32> bufferedImage3 = new(16, bufferedImage1.Height * i2);
+			
 			for (int i5 = 0; i5 < i2; ++i5)
 			{
-				graphics4.drawImage(bufferedImage1, -i5 * 16, i5 * bufferedImage1.getHeight(), (ImageObserver)null);
+				bufferedImage3.Mutate(x => x.DrawImage(bufferedImage1, new Point(-i5 * 16, i5 * bufferedImage1.Height), 1.0f));
 			}
-
-			graphics4.dispose();
+            
 			return bufferedImage3;
 		}
 
-		public virtual int allocateAndSetupTexture(BufferedImage bufferedImage1)
+		public virtual int allocateAndSetupTexture(Image<Rgba32> bufferedImage1)
 		{
-			this.singleIntBuffer.clear();
-			GLAllocation.generateTextureNames(this.singleIntBuffer);
-			int i2 = this.singleIntBuffer.get(0);
-			this.setupTexture(bufferedImage1, i2);
-			this.textureNameToImageMap.addKey(i2, bufferedImage1);
+			singleIntBuffer.clear();
+			GLAllocation.generateTextureNames(singleIntBuffer);
+			int i2 = singleIntBuffer.get(0);
+			setupTexture(bufferedImage1, i2);
+			textureNameToImageMap.addKey(i2, bufferedImage1);
 			return i2;
 		}
 
-		public virtual void setupTexture(BufferedImage bufferedImage1, int i2)
+		public virtual void setupTexture(Image<Rgba32> bufferedImage1, int i2)
 		{
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, i2);
+			GL.BindTexture(TextureTarget.Texture2D, i2);
 			if (useMipmaps)
 			{
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_LINEAR);
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+                GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.NearestMipmapLinear });
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
 			}
 			else
 			{
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Nearest });
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
 			}
 
-			if (this.blurTexture)
+			if (blurTexture)
 			{
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Linear });
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Linear });
 			}
 
-			if (this.clampTexture)
+			if (clampTexture)
 			{
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Clamp });
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Clamp });
 			}
 			else
 			{
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Repeat });
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Repeat });
 			}
 
-			int i3 = bufferedImage1.getWidth();
-			int i4 = bufferedImage1.getHeight();
+			int i3 = bufferedImage1.Width;
+			int i4 = bufferedImage1.Height;
 			int[] i5 = new int[i3 * i4];
-			sbyte[] b6 = new sbyte[i3 * i4 * 4];
-			bufferedImage1.getRGB(0, 0, i3, i4, i5, 0, i3);
+			byte[] b6 = new byte[i3 * i4 * 4];
+			FillIntBufferWithImage(bufferedImage1, i5);
 
 			int i7;
 			int i8;
@@ -265,17 +280,17 @@ namespace net.minecraft.src
 					i11 = i14;
 				}
 
-				b6[i7 * 4 + 0] = (sbyte)i9;
-				b6[i7 * 4 + 1] = (sbyte)i10;
-				b6[i7 * 4 + 2] = (sbyte)i11;
-				b6[i7 * 4 + 3] = (sbyte)i8;
+				b6[i7 * 4 + 0] = (byte)(i9 & 255);
+				b6[i7 * 4 + 1] = (byte)(i10 & 255);
+				b6[i7 * 4 + 2] = (byte)(i11 & 255);
+				b6[i7 * 4 + 3] = (byte)(i8 & 255);
 			}
 
 			imageData.clear();
-			imageData.Put(b6);
+			imageData.Put(b6, 0, b6.Length);
 			imageData.position(0).limit(b6.Length);
-			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, i3, i4, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.imageData);
-			if (useMipmaps)
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, i3, i4, 0, PixelFormat.Rgba, PixelType.UnsignedByte, b6);
+            if (useMipmaps)
 			{
 				for (i7 = 1; i7 <= 4; ++i7)
 				{
@@ -296,44 +311,47 @@ namespace net.minecraft.src
 						}
 					}
 
-					GL11.glTexImage2D(GL11.GL_TEXTURE_2D, i7, GL11.GL_RGBA, i9, i10, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.imageData);
-				}
+					byte[] buff = new byte[imageData.getLimit()];
+					imageData.get(buff, 0, buff.Length);
+
+					GL.TexImage2D(TextureTarget.Texture2D, i7, PixelInternalFormat.Rgba, i9, i10, 0, PixelFormat.Rgba, PixelType.UnsignedByte, buff);
+                }
 			}
 
 		}
 
 		public virtual void createTextureFromBytes(int[] i1, int i2, int i3, int i4)
 		{
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, i4);
-			if (useMipmaps)
+            GL.BindTexture(TextureTarget.Texture2D, i4);
+            if (useMipmaps)
 			{
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_LINEAR);
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.NearestMipmapLinear });
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
 			}
 			else
 			{
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Nearest });
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
 			}
 
-			if (this.blurTexture)
+			if (blurTexture)
 			{
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Linear });
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Linear });
 			}
 
-			if (this.clampTexture)
+			if (clampTexture)
 			{
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Clamp });
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Clamp });
 			}
 			else
 			{
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Repeat });
+				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Repeat });
 			}
 
-			sbyte[] b5 = new sbyte[i2 * i3 * 4];
+			byte[] b5 = new byte[i2 * i3 * 4];
 
 			for (int i6 = 0; i6 < i1.Length; ++i6)
 			{
@@ -351,25 +369,28 @@ namespace net.minecraft.src
 					i10 = i13;
 				}
 
-				b5[i6 * 4 + 0] = (sbyte)i8;
-				b5[i6 * 4 + 1] = (sbyte)i9;
-				b5[i6 * 4 + 2] = (sbyte)i10;
-				b5[i6 * 4 + 3] = (sbyte)i7;
+				b5[i6 * 4 + 0] = (byte)(i8 & 255);
+				b5[i6 * 4 + 1] = (byte)(i9 & 255);
+				b5[i6 * 4 + 2] = (byte)(i10 & 255);
+				b5[i6 * 4 + 3] = (byte)(i7 & 255);
 			}
 
 			this.imageData.clear();
-			this.imageData.Put(b5);
+			this.imageData.Put(b5, 0, b5.Length);
 			this.imageData.position(0).limit(b5.Length);
-			GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, i2, i3, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.imageData);
-		}
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, i2, i3, PixelFormat.Rgba, PixelType.UnsignedByte, b5);
+        }
+
+		int[] singleIntCache = new int[1];
 
 		public virtual void deleteTexture(int i1)
 		{
-			this.textureNameToImageMap.removeObject(i1);
-			this.singleIntBuffer.clear();
-			this.singleIntBuffer.putInt(i1);
-			this.singleIntBuffer.flip();
-			GL11.glDeleteTextures(this.singleIntBuffer);
+			textureNameToImageMap.removeObject(i1);
+			singleIntBuffer.clear();
+			singleIntBuffer.putInt(i1); // PORTING TODO: this intbuffer is redundant because no methods take in ByteBuffers anyway since we're in C# land.
+			singleIntBuffer.flip();
+            singleIntCache[0] = i1;
+			GL.DeleteTextures(1, singleIntCache);
 		}
 
 		public virtual int getTextureForDownloadableImage(string string1, string string2)
@@ -441,9 +462,9 @@ namespace net.minecraft.src
 				TextureFX textureFX3 = (TextureFX)this.textureList[i2];
 				textureFX3.anaglyphEnabled = this.options.anaglyph;
 				textureFX3.onTick();
-				this.imageData.clear();
-				this.imageData.Put(textureFX3.imageData);
-				this.imageData.position(0).limit(textureFX3.imageData.Length);
+				imageData.clear();
+				imageData.Put(textureFX3.imageData, 0, textureFX3.imageData.Length);
+				imageData.position(0).limit(textureFX3.imageData.Length);
 				if (textureFX3.iconIndex != i1)
 				{
 					textureFX3.bindImage(this);
@@ -454,11 +475,10 @@ namespace net.minecraft.src
 				{
 					for (int i5 = 0; i5 < textureFX3.tileSize; ++i5)
 					{
-						GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, textureFX3.iconIndex % 16 * 16 + i4 * 16, textureFX3.iconIndex / 16 * 16 + i5 * 16, 16, 16, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.imageData);
+						GL.TexSubImage2D(TextureTarget.Texture2D, 0, textureFX3.iconIndex % 16 * 16 + i4 * 16, textureFX3.iconIndex / 16 * 16 + i5 * 16, 16, 16, PixelFormat.Rgba, PixelType.UnsignedByte, textureFX3.imageData);
 					}
 				}
 			}
-
 		}
 
 		private int alphaBlend(int i1, int i2)
@@ -502,11 +522,11 @@ namespace net.minecraft.src
 			TexturePackBase texturePackBase1 = this.texturePack.selectedTexturePack;
 			System.Collections.IEnumerator iterator2 = this.textureNameToImageMap.KeySet.GetEnumerator();
 
-			BufferedImage bufferedImage4;
+			Image<Rgba32> bufferedImage4;
 			while (iterator2.MoveNext())
 			{
 				int i3 = ((int?)iterator2.Current).Value;
-				bufferedImage4 = (BufferedImage)this.textureNameToImageMap.lookup(i3);
+				bufferedImage4 = (Image<Rgba32>)this.textureNameToImageMap.lookup(i3);
 				this.setupTexture(bufferedImage4, i3);
 			}
 
@@ -602,9 +622,9 @@ namespace net.minecraft.src
 
 		}
         
-		private BufferedImage readTextureImage(Stream inputStream1)
+		private Image<Rgba32> readTextureImage(Stream inputStream1)
 		{
-			BufferedImage bufferedImage2 = ImageIO.read(inputStream1);
+			Image<Rgba32> bufferedImage2 = Image.Load<Rgba32>(inputStream1);
 			inputStream1.Close();
 			return bufferedImage2;
 		}
@@ -613,9 +633,40 @@ namespace net.minecraft.src
 		{
 			if (i1 >= 0)
 			{
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, i1);
+				GL.BindTexture(TextureTarget.Texture2D, i1);
+			}
+		}
+
+		public static void FillIntBufferWithImage(Image<Rgba32> img, int[] buffer)
+        {
+			if (img == null || buffer == null)
+				return;
+
+			for (int x = 0; x < img.Width; x++)
+			{
+				for (int y = 0; y < img.Height; y++)
+				{
+					Rgba32 color = img[x, y];
+
+					buffer[x + y * img.Width] = new IntByteUnion() { byte0 = color.R, byte1 = color.G, byte2 = color.B, byte3 = color.A }.integer;
+				}
 			}
 		}
 	}
 
+	[StructLayout(LayoutKind.Explicit)]
+	struct IntByteUnion
+    {
+		[FieldOffset(0)]
+		public byte byte0;
+		[FieldOffset(1)]
+		public byte byte1;
+		[FieldOffset(2)]
+		public byte byte2;
+		[FieldOffset(3)]
+		public byte byte3;
+
+		[FieldOffset(0)]
+		public int integer;
+	}
 }

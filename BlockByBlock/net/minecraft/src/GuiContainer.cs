@@ -1,14 +1,9 @@
 ﻿using System;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace net.minecraft.src
 {
-
-	using Keyboard = org.lwjgl.input.Keyboard;
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
-
-	// PORTING TODO: OpenGL code
-
 	public abstract class GuiContainer : GuiScreen
 	{
 		protected internal static RenderItem itemRenderer = new RenderItem();
@@ -38,15 +33,15 @@ namespace net.minecraft.src
 			int i5 = this.guiTop;
 			this.drawGuiContainerBackgroundLayer(f3, i1, i2);
 			RenderHelper.enableGUIStandardItemLighting();
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float)i4, (float)i5, 0.0F);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL.PushMatrix();
+			GL.Translate((float)i4, (float)i5, 0.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Enable(EnableCap.RescaleNormal);
 			Slot slot6 = null;
 			short s7 = 240;
 			short s8 = 240;
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)s7 / 1.0F, (float)s8 / 1.0F);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 
 			int i10;
 			for (int i20 = 0; i20 < this.inventorySlots.inventorySlots.Count; ++i20)
@@ -56,13 +51,13 @@ namespace net.minecraft.src
 				if (this.isMouseOverSlot(slot22, i1, i2))
 				{
 					slot6 = slot22;
-					GL11.glDisable(GL11.GL_LIGHTING);
-					GL11.glDisable(GL11.GL_DEPTH_TEST);
+					GL.Disable(EnableCap.Lighting);
+					GL.Disable(EnableCap.DepthTest);
 					int i9 = slot22.xDisplayPosition;
 					i10 = slot22.yDisplayPosition;
 					this.drawGradientRect(i9, i10, i9 + 16, i10 + 16, -2130706433, -2130706433);
-					GL11.glEnable(GL11.GL_LIGHTING);
-					GL11.glEnable(GL11.GL_DEPTH_TEST);
+					GL.Enable(EnableCap.Lighting);
+					GL.Enable(EnableCap.DepthTest);
 				}
 			}
 
@@ -70,7 +65,7 @@ namespace net.minecraft.src
 			InventoryPlayer inventoryPlayer21 = this.mc.thePlayer.inventory;
 			if (inventoryPlayer21.ItemStack != null)
 			{
-				GL11.glTranslatef(0.0F, 0.0F, 32.0F);
+				GL.Translate(0.0F, 0.0F, 32.0F);
 				this.zLevel = 200.0F;
 				itemRenderer.zLevel = 200.0F;
 				itemRenderer.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, inventoryPlayer21.ItemStack, i1 - i4 - 8, i2 - i5 - 8);
@@ -79,10 +74,10 @@ namespace net.minecraft.src
 				itemRenderer.zLevel = 0.0F;
 			}
 
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+			GL.Disable(EnableCap.RescaleNormal);
 			RenderHelper.disableStandardItemLighting();
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL.Disable(EnableCap.Lighting);
+			GL.Disable(EnableCap.DepthTest);
 			if (inventoryPlayer21.ItemStack == null && slot6 != null && slot6.HasStack)
 			{
 				ItemStack itemStack23 = slot6.Stack;
@@ -151,10 +146,10 @@ namespace net.minecraft.src
 				}
 			}
 
-			GL11.glPopMatrix();
+			GL.PopMatrix();
 			base.drawScreen(i1, i2, f3);
-			GL11.glEnable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL.Enable(EnableCap.Lighting);
+			GL.Enable(EnableCap.DepthTest);
 		}
 
 		protected internal virtual void drawGuiContainerForegroundLayer()
@@ -176,10 +171,10 @@ namespace net.minecraft.src
 				int i8 = slot1.BackgroundIconIndex;
 				if (i8 >= 0)
 				{
-					GL11.glDisable(GL11.GL_LIGHTING);
+					GL.Disable(EnableCap.Lighting);
 					this.mc.renderEngine.bindTexture(this.mc.renderEngine.getTexture("/gui/items.png"));
 					this.drawTexturedModalRect(i2, i3, i8 % 16 * 16, i8 / 16 * 16, 16, 16);
-					GL11.glEnable(GL11.GL_LIGHTING);
+					GL.Enable(EnableCap.Lighting);
 					z5 = true;
 				}
 			}
@@ -230,7 +225,7 @@ namespace net.minecraft.src
 
 				if (i8 != -1)
 				{
-					bool z9 = i8 != -999 && (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT));
+					bool z9 = i8 != -999 && (mc.mcApplet.KeyboardState.IsKeyDown(Keys.LeftShift) || mc.mcApplet.KeyboardState.IsKeyDown(Keys.RightShift));
 					this.handleMouseClick(slot4, i8, i3, z9);
 				}
 			}

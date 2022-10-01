@@ -1,15 +1,12 @@
 ﻿using BlockByBlock.helpers;
 using System;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
 
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	using Sys = org.lwjgl.Sys;
-
-    // PORTING TODO: OpenGL code; 
-	//				 main class code.
+    
 
 	public class GuiTexturePacks : GuiScreen
 	{
@@ -56,7 +53,7 @@ namespace net.minecraft.src
 					if (z2)
 					{
 						Console.WriteLine("Opening via Sys class!");
-						Sys.openURL("file://" + this.fileLocation);
+						SystemHelpers.OpenUrl("file://" + this.fileLocation);
 					}
 				}
 				else if (guiButton1.id == 6)

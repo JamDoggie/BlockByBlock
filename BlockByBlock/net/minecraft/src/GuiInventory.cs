@@ -1,12 +1,8 @@
 ﻿using System;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
-
-	// PORTING TODO: OpenGL code
 
 	public class GuiInventory : GuiContainer
 	{
@@ -61,41 +57,41 @@ namespace net.minecraft.src
 		protected internal override void drawGuiContainerBackgroundLayer(float f1, int i2, int i3)
 		{
 			int i4 = this.mc.renderEngine.getTexture("/gui/inventory.png");
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i4);
 			int i5 = this.guiLeft;
 			int i6 = this.guiTop;
 			this.drawTexturedModalRect(i5, i6, 0, 0, this.xSize, this.ySize);
 			this.displayDebuffEffects();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float)(i5 + 51), (float)(i6 + 75), 50.0F);
+			GL.Enable(EnableCap.RescaleNormal);
+			GL.Enable(EnableCap.ColorMaterial);
+			GL.PushMatrix();
+			GL.Translate((float)(i5 + 51), (float)(i6 + 75), 50.0F);
 			float f7 = 30.0F;
-			GL11.glScalef(-f7, f7, f7);
-			GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
+			GL.Scale(-f7, f7, f7);
+			GL.Rotate(180.0F, 0.0F, 0.0F, 1.0F);
 			float f8 = this.mc.thePlayer.renderYawOffset;
 			float f9 = this.mc.thePlayer.rotationYaw;
 			float f10 = this.mc.thePlayer.rotationPitch;
 			float f11 = (float)(i5 + 51) - this.xSize_lo;
 			float f12 = (float)(i6 + 75 - 50) - this.ySize_lo;
-			GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
+			GL.Rotate(135.0F, 0.0F, 1.0F, 0.0F);
 			RenderHelper.enableStandardItemLighting();
-			GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(-((float)Math.Atan((double)(f12 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+			GL.Rotate(-135.0F, 0.0F, 1.0F, 0.0F);
+			GL.Rotate(-((float)Math.Atan((double)(f12 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
 			this.mc.thePlayer.renderYawOffset = (float)Math.Atan((double)(f11 / 40.0F)) * 20.0F;
 			this.mc.thePlayer.rotationYaw = (float)Math.Atan((double)(f11 / 40.0F)) * 40.0F;
 			this.mc.thePlayer.rotationPitch = -((float)Math.Atan((double)(f12 / 40.0F))) * 20.0F;
 			this.mc.thePlayer.rotationYawHead = this.mc.thePlayer.rotationYaw;
-			GL11.glTranslatef(0.0F, this.mc.thePlayer.yOffset, 0.0F);
+			GL.Translate(0.0F, this.mc.thePlayer.yOffset, 0.0F);
 			RenderManager.instance.playerViewY = 180.0F;
 			RenderManager.instance.renderEntityWithPosYaw(this.mc.thePlayer, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
 			this.mc.thePlayer.renderYawOffset = f8;
 			this.mc.thePlayer.rotationYaw = f9;
 			this.mc.thePlayer.rotationPitch = f10;
-			GL11.glPopMatrix();
+			GL.PopMatrix();
 			RenderHelper.disableStandardItemLighting();
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+			GL.Disable(EnableCap.RescaleNormal);
 		}
 
 		protected internal override void actionPerformed(GuiButton guiButton1)
@@ -130,7 +126,7 @@ namespace net.minecraft.src
 				{
 					PotionEffect potionEffect7 = (PotionEffect)iterator6.Current;
 					Potion potion8 = Potion.potionTypes[potionEffect7.PotionID];
-					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 					this.mc.renderEngine.bindTexture(i3);
 					this.drawTexturedModalRect(i1, i2, 0, this.ySize, 140, 32);
 					if (potion8.hasStatusIcon())

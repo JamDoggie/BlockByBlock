@@ -19,7 +19,7 @@ namespace net.minecraft.src
 			return i1 == Block.tilledField.blockID;
 		}
 
-		public override void updateTick(World world1, int i2, int i3, int i4, Random random5)
+		public override void updateTick(World world1, int i2, int i3, int i4, RandomExtended random5)
 		{
 			base.updateTick(world1, i2, i3, i4, random5);
 			if (world1.getBlockLightValue(i2, i3 + 1, i4) >= 9)

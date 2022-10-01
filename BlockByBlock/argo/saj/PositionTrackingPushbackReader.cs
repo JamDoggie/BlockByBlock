@@ -3,14 +3,14 @@
 
 	internal sealed class PositionTrackingPushbackReader : ThingWithPosition
 	{
-		private readonly PushbackReader pushbackReader;
+		private readonly StringReader pushbackReader;
 		private int characterCount = 0;
 		private int lineCount = 1;
 		private bool lastCharacterWasCarriageReturn = false;
 
-		public PositionTrackingPushbackReader(Reader reader1)
+		public PositionTrackingPushbackReader(StringReader reader1)
 		{
-			this.pushbackReader = new PushbackReader(reader1);
+			this.pushbackReader = reader1;
 		}
 
 //JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:

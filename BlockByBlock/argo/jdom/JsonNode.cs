@@ -7,7 +7,7 @@
 
 		public abstract string Text {get;}
 
-		public abstract System.Collections.IDictionary Fields {get;}
+		public abstract IDictionary<JsonStringNode,JsonNode> Fields {get;}
 
 		public abstract System.Collections.IList Elements {get;}
 

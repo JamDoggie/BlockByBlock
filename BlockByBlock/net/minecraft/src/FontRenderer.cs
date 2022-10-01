@@ -5,13 +5,12 @@ using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using OpenTK.Graphics.OpenGL;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 	public class FontRenderer
 	{
 		private static readonly Regex chatColorRegex = new Regex("(?i)\\u00A7[0-9A-FK-OR]", RegexOptions.Compiled);
@@ -43,25 +42,18 @@ namespace net.minecraft.src
 			this.renderEngine = renderEngine3;
 			this.unicodeFlag = z4;
 
-			BufferedImage bufferedImage5;
-			try
-			{
-				bufferedImage5 = ImageIO.read(GameEnv.GetResourceAsStream(string2));
-				Stream? inputStream6 = GameEnv.GetResourceAsStream("/font/glyph_sizes.bin");
+			Image<Rgba32> bufferedImage5;
+            
+			bufferedImage5 =  Image.Load<Rgba32>(GameEnv.GetResourceAsStream(string2));
+			Stream? inputStream6 = GameEnv.GetResourceAsStream("/font/glyph_sizes.bin");
                 
-				if (inputStream6 != null)
-					inputStream6.Read(this.glyphWidth, 0, this.glyphWidth.Length);
-			}
-			catch (IOException iOException18)
-			{
-				throw new Exception(iOException18);
-			}
+			if (inputStream6 != null)
+				inputStream6.Read(this.glyphWidth, 0, this.glyphWidth.Length);
 
-			int i19 = bufferedImage5.getWidth();
-			int i7 = bufferedImage5.getHeight();
+			int i19 = bufferedImage5.Width;
+			int i7 = bufferedImage5.Height;
 			int[] i8 = new int[i19 * i7];
-			bufferedImage5.getRGB(0, 0, i19, i7, i8, 0, i19);
-
+			RenderEngine.FillIntBufferWithImage(bufferedImage5, i8);
 			int i9;
 			int i10;
 			int i11;
@@ -150,21 +142,21 @@ namespace net.minecraft.src
 			float f5 = z2 ? 1.0F : 0.0F;
 			if (this.boundTextureName != this.fontTextureName)
 			{
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.fontTextureName);
+				GL.BindTexture(TextureTarget.Texture2D, this.fontTextureName);
 				this.boundTextureName = this.fontTextureName;
 			}
 
 			float f6 = (float)this.charWidth[i1] - 0.01F;
-			GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
-			GL11.glTexCoord2f(f3 / 128.0F, f4 / 128.0F);
-			GL11.glVertex3f(this.posX + f5, this.posY, 0.0F);
-			GL11.glTexCoord2f(f3 / 128.0F, (f4 + 7.99F) / 128.0F);
-			GL11.glVertex3f(this.posX - f5, this.posY + 7.99F, 0.0F);
-			GL11.glTexCoord2f((f3 + f6) / 128.0F, f4 / 128.0F);
-			GL11.glVertex3f(this.posX + f6 + f5, this.posY, 0.0F);
-			GL11.glTexCoord2f((f3 + f6) / 128.0F, (f4 + 7.99F) / 128.0F);
-			GL11.glVertex3f(this.posX + f6 - f5, this.posY + 7.99F, 0.0F);
-			GL11.glEnd();
+			GL.Begin(PrimitiveType.TriangleStrip);
+			GL.TexCoord2(f3 / 128.0F, f4 / 128.0F);
+			GL.Vertex3(this.posX + f5, this.posY, 0.0F);
+			GL.TexCoord2(f3 / 128.0F, (f4 + 7.99F) / 128.0F);
+			GL.Vertex3(this.posX - f5, this.posY + 7.99F, 0.0F);
+			GL.TexCoord2((f3 + f6) / 128.0F, f4 / 128.0F);
+			GL.Vertex3(this.posX + f6 + f5, this.posY, 0.0F);
+			GL.TexCoord2((f3 + f6) / 128.0F, (f4 + 7.99F) / 128.0F);
+			GL.Vertex3(this.posX + f6 - f5, this.posY + 7.99F, 0.0F);
+			GL.End();
 			return (float)this.charWidth[i1];
 		}
 
@@ -172,15 +164,8 @@ namespace net.minecraft.src
 		{
 			string string3 = string.Format("/font/glyph_{0:X2}.png", new object[]{i1});
 
-			BufferedImage bufferedImage2;
-			try
-			{
-				bufferedImage2 = ImageIO.read(GameEnv.GetResourceAsStream(string3));
-			}
-			catch (IOException iOException5)
-			{
-				throw new Exception(iOException5);
-			}
+			Image<Rgba32> bufferedImage2;
+			bufferedImage2 = Image.Load<Rgba32>(GameEnv.GetResourceAsStream(string3));
 
 			this.glyphTextureName[i1] = this.renderEngine.allocateAndSetupTexture(bufferedImage2);
 			this.boundTextureName = this.glyphTextureName[i1];
@@ -202,7 +187,7 @@ namespace net.minecraft.src
 
 				if (this.boundTextureName != this.glyphTextureName[i3])
 				{
-					GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.glyphTextureName[i3]);
+					GL.BindTexture(TextureTarget.Texture2D, this.glyphTextureName[i3]);
 					this.boundTextureName = this.glyphTextureName[i3];
 				}
 
@@ -214,16 +199,16 @@ namespace net.minecraft.src
 				float f9 = (float)((c1 & 255) / 16 * 16);
 				float f10 = f7 - f6 - 0.02F;
 				float f11 = z2 ? 1.0F : 0.0F;
-				GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
-				GL11.glTexCoord2f(f8 / 256.0F, f9 / 256.0F);
-				GL11.glVertex3f(this.posX + f11, this.posY, 0.0F);
-				GL11.glTexCoord2f(f8 / 256.0F, (f9 + 15.98F) / 256.0F);
-				GL11.glVertex3f(this.posX - f11, this.posY + 7.99F, 0.0F);
-				GL11.glTexCoord2f((f8 + f10) / 256.0F, f9 / 256.0F);
-				GL11.glVertex3f(this.posX + f10 / 2.0F + f11, this.posY, 0.0F);
-				GL11.glTexCoord2f((f8 + f10) / 256.0F, (f9 + 15.98F) / 256.0F);
-				GL11.glVertex3f(this.posX + f10 / 2.0F - f11, this.posY + 7.99F, 0.0F);
-				GL11.glEnd();
+				GL.Begin(PrimitiveType.TriangleStrip);
+				GL.TexCoord2(f8 / 256.0F, f9 / 256.0F);
+				GL.Vertex3(this.posX + f11, this.posY, 0.0F);
+				GL.TexCoord2(f8 / 256.0F, (f9 + 15.98F) / 256.0F);
+				GL.Vertex3(this.posX - f11, this.posY + 7.99F, 0.0F);
+				GL.TexCoord2((f8 + f10) / 256.0F, f9 / 256.0F);
+				GL.Vertex3(this.posX + f10 / 2.0F + f11, this.posY, 0.0F);
+				GL.TexCoord2((f8 + f10) / 256.0F, (f9 + 15.98F) / 256.0F);
+				GL.Vertex3(this.posX + f10 / 2.0F - f11, this.posY + 7.99F, 0.0F);
+				GL.End();
 				return (f7 - f6) / 2.0F + 1.0F;
 			}
 		}
@@ -356,7 +341,7 @@ namespace net.minecraft.src
 						}
 
 						i11 = this.colorCode[i10];
-						GL11.glColor3f((float)(i11 >> 16) / 255.0F, (float)(i11 >> 8 & 255) / 255.0F, (float)(i11 & 255) / 255.0F);
+						GL.Color3((float)(i11 >> 16) / 255.0F, (float)(i11 >> 8 & 255) / 255.0F, (float)(i11 & 255) / 255.0F);
 					}
 					else if (i10 == 16)
 					{
@@ -385,7 +370,7 @@ namespace net.minecraft.src
 						z7 = false;
 						z6 = false;
 						z5 = false;
-						GL11.glColor4f(this.field_50115_n, this.field_50116_o, this.field_50118_p, this.field_50117_q);
+						GL.Color4(this.field_50115_n, this.field_50116_o, this.field_50118_p, this.field_50117_q);
 					}
 
 					++i8;
@@ -416,20 +401,20 @@ namespace net.minecraft.src
 					if (z7)
 					{
 						tessellator12 = Tessellator.instance;
-						GL11.glDisable(GL11.GL_TEXTURE_2D);
+						GL.Disable(EnableCap.Texture2D);
 						tessellator12.startDrawingQuads();
 						tessellator12.addVertex((double)this.posX, (double)(this.posY + (float)(this.FONT_HEIGHT / 2)), 0.0D);
 						tessellator12.addVertex((double)(this.posX + f14), (double)(this.posY + (float)(this.FONT_HEIGHT / 2)), 0.0D);
 						tessellator12.addVertex((double)(this.posX + f14), (double)(this.posY + (float)(this.FONT_HEIGHT / 2) - 1.0F), 0.0D);
 						tessellator12.addVertex((double)this.posX, (double)(this.posY + (float)(this.FONT_HEIGHT / 2) - 1.0F), 0.0D);
 						tessellator12.draw();
-						GL11.glEnable(GL11.GL_TEXTURE_2D);
+						GL.Enable(EnableCap.Texture2D);
 					}
 
 					if (z6)
 					{
 						tessellator12 = Tessellator.instance;
-						GL11.glDisable(GL11.GL_TEXTURE_2D);
+						GL.Disable(EnableCap.Texture2D);
 						tessellator12.startDrawingQuads();
 						int i13 = z6 ? -1 : 0;
 						tessellator12.addVertex((double)(this.posX + (float)i13), (double)(this.posY + (float)this.FONT_HEIGHT), 0.0D);
@@ -437,7 +422,7 @@ namespace net.minecraft.src
 						tessellator12.addVertex((double)(this.posX + f14), (double)(this.posY + (float)this.FONT_HEIGHT - 1.0F), 0.0D);
 						tessellator12.addVertex((double)(this.posX + (float)i13), (double)(this.posY + (float)this.FONT_HEIGHT - 1.0F), 0.0D);
 						tessellator12.draw();
-						GL11.glEnable(GL11.GL_TEXTURE_2D);
+						GL.Enable(EnableCap.Texture2D);
 					}
 
 					this.posX += f14;
@@ -465,7 +450,7 @@ namespace net.minecraft.src
 				this.field_50116_o = (float)(i4 >> 8 & 255) / 255.0F;
 				this.field_50118_p = (float)(i4 & 255) / 255.0F;
 				this.field_50117_q = (float)(i4 >> 24 & 255) / 255.0F;
-				GL11.glColor4f(this.field_50115_n, this.field_50116_o, this.field_50118_p, this.field_50117_q);
+				GL.Color4(this.field_50115_n, this.field_50116_o, this.field_50118_p, this.field_50117_q);
 				this.posX = (float)i2;
 				this.posY = (float)i3;
 				this.renderStringAtPos(string1, z5);

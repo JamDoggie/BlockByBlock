@@ -116,7 +116,7 @@ namespace net.minecraft.src
 
 		}
 
-		public override int idDropped(int i1, Random random2, int i3)
+		public override int idDropped(int i1, RandomExtended random2, int i3)
 		{
 			return Block.dirt.idDropped(0, random2, i3);
 		}

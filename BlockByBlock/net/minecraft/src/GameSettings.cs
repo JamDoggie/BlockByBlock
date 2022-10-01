@@ -1,14 +1,11 @@
-﻿using System;
+﻿using OpenTK.Windowing.GraphicsLibraryFramework;
+using System;
 using System.IO;
 
 namespace net.minecraft.src
 {
 
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	using Keyboard = org.lwjgl.input.Keyboard;
-
-	// PORTING TODO: OpenGL code; inputs.
 
 	public class GameSettings
 	{
@@ -105,7 +102,7 @@ namespace net.minecraft.src
 
 		public static string getKeyDisplayString(int i0)
 		{
-			return i0 < 0 ? StatCollector.translateToLocalFormatted("key.mouseButton", new object[]{i0 + 101}) : Keyboard.getKeyName(i0);
+			return i0 < 0 ? StatCollector.translateToLocalFormatted("key.mouseButton", new object[]{i0 + 101}) : ((Keys)i0).ToString();
 		}
 
 		public virtual void setKeyBinding(int i1, int i2)

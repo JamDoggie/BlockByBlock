@@ -32,7 +32,7 @@ namespace net.minecraft.src
 			return arrayList2;
 		}
 
-		private static int getAvailablePieceWeight(ArrayList arrayList0)
+		private static int getAvailablePieceWeight(List<StructureVillagePieceWeight> arrayList0)
 		{
 			bool z1 = false;
 			int i2 = 0;

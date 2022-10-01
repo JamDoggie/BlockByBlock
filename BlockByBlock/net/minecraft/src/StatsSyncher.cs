@@ -80,7 +80,7 @@ namespace net.minecraft.src
 					stringBuilder4.Append(string3);
 				}
 
-				System.Collections.IDictionary map5 = StatFileWriter.func_27177_a(stringBuilder4.ToString());
+				System.Collections.IDictionary map5 = StatFileWriter.getStatsFromJson(stringBuilder4.ToString());
 				return map5;
 			}
 			catch (Exception exception15)
@@ -114,7 +114,7 @@ namespace net.minecraft.src
 
 			try
 			{
-				printWriter5.WriteLine(StatFileWriter.func_27185_a(theSession.username, "local", map1));
+				printWriter5.WriteLine(StatFileWriter.getFileContentsToWrite(theSession.username, "local", map1));
 			}
 			finally
 			{

@@ -50,7 +50,7 @@
 					}
 
 					this.field_1140_j[i1 + i2 * 16] -= 0.06F;
-					if (MathHelper.NextDouble < 0.005D)
+					if (portinghelpers.MathHelper.NextDouble < 0.005D)
 					{
 						this.field_1140_j[i1 + i2 * 16] = 1.5F;
 					}
@@ -87,10 +87,10 @@
 					i7 = i10;
 				}
 
-				this.imageData[i2 * 4 + 0] = (sbyte)i5;
-				this.imageData[i2 * 4 + 1] = (sbyte)i6;
-				this.imageData[i2 * 4 + 2] = (sbyte)i7;
-				this.imageData[i2 * 4 + 3] = -1;
+				this.imageData[i2 * 4 + 0] = (byte)(i5 & 255);
+				this.imageData[i2 * 4 + 1] = (byte)(i6 & 255);
+				this.imageData[i2 * 4 + 2] = (byte)(i7 & 255);
+				this.imageData[i2 * 4 + 3] = -1 & 255;
 			}
 
 		}

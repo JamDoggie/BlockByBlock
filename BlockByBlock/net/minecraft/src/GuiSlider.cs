@@ -1,10 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 
 	public class GuiSlider : GuiButton
 	{
@@ -25,7 +23,7 @@
 
 		protected internal override void mouseDragged(Minecraft minecraft1, int i2, int i3)
 		{
-			if (this.drawButton_Conflict)
+			if (this.shouldDrawButton)
 			{
 				if (this.dragging)
 				{
@@ -44,7 +42,7 @@
 					this.displayString = minecraft1.gameSettings.getKeyBinding(this.idFloat);
 				}
 
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				this.drawTexturedModalRect(this.xPosition + (int)(this.sliderValue * (float)(this.field_52008_a - 8)), this.yPosition, 0, 66, 4, 20);
 				this.drawTexturedModalRect(this.xPosition + (int)(this.sliderValue * (float)(this.field_52008_a - 8)) + 4, this.yPosition, 196, 66, 4, 20);
 			}

@@ -1,4 +1,5 @@
 ﻿using BlockByBlock.helpers;
+using BlockByBlock.java_extensions;
 using System;
 using System.Collections;
 using System.Drawing;
@@ -104,12 +105,12 @@ namespace net.minecraft.src
 			return this;
 		}
 
-		public virtual WorldGenerator getRandomWorldGenForTrees(Random random1)
+		public virtual WorldGenerator getRandomWorldGenForTrees(RandomExtended random1)
 		{
 			return (WorldGenerator)(random1.Next(10) == 0 ? this.worldGenBigTree : this.worldGenTrees);
 		}
 
-		public virtual WorldGenerator func_48410_b(Random random1)
+		public virtual WorldGenerator func_48410_b(RandomExtended random1)
 		{
 			return new WorldGenTallGrass(Block.tallGrass.blockID, 1);
 		}
@@ -220,7 +221,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual void decorate(World world1, Random random2, int i3, int i4)
+		public virtual void decorate(World world1, RandomExtended random2, int i3, int i4)
 		{
 			this.biomeDecorator.decorate(world1, random2, i3, i4);
 		}

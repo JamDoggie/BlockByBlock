@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿/*using System.IO;
 
 namespace net.minecraft.src
 {
@@ -17,4 +17,4 @@ namespace net.minecraft.src
 		}
 	}
 
-}
+}*/ // PORTING TODO: Pretty sure this is unnecessary. Remove later.

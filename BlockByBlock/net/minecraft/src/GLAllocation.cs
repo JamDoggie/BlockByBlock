@@ -3,9 +3,8 @@
 namespace net.minecraft.src
 {
 
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code.
+	using OpenTK.Graphics.OpenGL;
+    
 	public class GLAllocation
 	{
 		private static System.Collections.IList displayLists = new ArrayList();
@@ -15,20 +14,21 @@ namespace net.minecraft.src
 		{
 			lock (typeof(GLAllocation))
 			{
-				int i1 = GL11.glGenLists(i0);
+				int i1 = GL.GenLists(i0);
 				displayLists.Add(i1);
 				displayLists.Add(i0);
 				return i1;
 			}
 		}
-
-		public static void generateTextureNames(IntBuffer intBuffer0)
+        
+		public static unsafe void generateTextureNames(IntBuffer intBuffer0)
 		{
 			lock (typeof(GLAllocation))
 			{
-				GL11.glGenTextures(intBuffer0);
-        
-				for (int i1 = (int)intBuffer0.position(); i1 < intBuffer0.limit(); ++i1)
+				byte[] texBuffer = GetBytesFromBuffer(intBuffer0);
+				GL.GenTextures(texBuffer.Length / 4, GetIntBufferFromBytes(texBuffer)); // PORTING TODO: I think this code works, but if something fucks up check this.
+                
+				for (int i1 = (int)intBuffer0.position(); i1 < intBuffer0.getLimit(); ++i1)
 				{
 					textureNames.Add(intBuffer0.getInt(i1));
 				}
@@ -41,24 +41,26 @@ namespace net.minecraft.src
 			lock (typeof(GLAllocation))
 			{
 				int i1 = displayLists.IndexOf(i0);
-				GL11.glDeleteLists(((int?)displayLists[i1]).Value, ((int?)displayLists[i1 + 1]).Value);
+				GL.DeleteLists(((int?)displayLists[i1]).Value, ((int?)displayLists[i1 + 1]).Value);
 				displayLists.RemoveAt(i1);
 				displayLists.RemoveAt(i1);
 			}
 		}
 
-		public static void deleteTexturesAndDisplayLists()
+		public static unsafe void deleteTexturesAndDisplayLists()
 		{
 			lock (typeof(GLAllocation))
 			{
 				for (int i0 = 0; i0 < displayLists.Count; i0 += 2)
 				{
-					GL11.glDeleteLists(((int?)displayLists[i0]).Value, ((int?)displayLists[i0 + 1]).Value);
+					GL.DeleteLists(((int?)displayLists[i0]).Value, ((int?)displayLists[i0 + 1]).Value);
 				}
         
 				IntBuffer intBuffer2 = createDirectIntBuffer(textureNames.Count);
 				intBuffer2.flip();
-				GL11.glDeleteTextures(intBuffer2);
+                
+				byte[] texBuffer = GetBytesFromBuffer(intBuffer2);
+				GL.DeleteTextures(texBuffer.Length / 4, GetIntBufferFromBytes(texBuffer));
         
 				for (int i1 = 0; i1 < textureNames.Count; ++i1)
 				{
@@ -66,7 +68,8 @@ namespace net.minecraft.src
 				}
         
 				intBuffer2.flip();
-				GL11.glDeleteTextures(intBuffer2);
+				byte[] texBuffer2 = GetBytesFromBuffer(intBuffer2);
+				GL.DeleteTextures(texBuffer2.Length / 4, GetIntBufferFromBytes(texBuffer2));
 				displayLists.Clear();
 				textureNames.Clear();
 			}
@@ -90,6 +93,27 @@ namespace net.minecraft.src
 		{
 			return createDirectByteBuffer(i0 << 2).asFloatBuffer();
 		}
+
+		private static byte[] GetBytesFromBuffer(ByteBuffer buf)
+        {
+			byte[] buffer = new byte[buf.getLimit()];
+			buf.get(buffer, 0, buffer.Length);
+
+			return buffer;
+		}
+
+		/// <summary>
+		/// NOTE: this method uses pinning (fixed statements). Caution is advised as this can cause the GC to be noticeably less efficient unless you know what you're doing.
+		/// </summary>
+		/// <param name="bytes"></param>
+		/// <returns></returns>
+        public static unsafe int* GetIntBufferFromBytes(byte[] bytes)
+        {
+            fixed (byte* p = bytes)
+            {
+                return (int*)p;
+            }
+        }
 	}
 
 }

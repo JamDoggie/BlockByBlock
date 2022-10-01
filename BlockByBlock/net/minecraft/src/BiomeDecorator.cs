@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -6,7 +7,7 @@ namespace net.minecraft.src
 	public class BiomeDecorator
 	{
 		protected internal World currentWorld;
-		protected internal Random randomGenerator;
+		protected internal RandomExtended randomGenerator;
 		protected internal int chunk_X;
 		protected internal int chunk_Z;
 		protected internal BiomeGenBase biome;

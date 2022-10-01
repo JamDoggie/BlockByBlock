@@ -10,7 +10,7 @@ namespace net.minecraft.src
 		public StructureNetherBridgeStart(World world1, RandomExtended random2, int i3, int i4)
 		{
 			ComponentNetherBridgeStartPiece componentNetherBridgeStartPiece5 = new ComponentNetherBridgeStartPiece(random2, (i3 << 4) + 2, (i4 << 4) + 2);
-			this.components.AddLast(componentNetherBridgeStartPiece5);
+			this.components.Add(componentNetherBridgeStartPiece5);
 			componentNetherBridgeStartPiece5.buildComponent(componentNetherBridgeStartPiece5, this.components, random2);
 			List<StructureComponent> arrayList6 = componentNetherBridgeStartPiece5.field_40034_d;
 

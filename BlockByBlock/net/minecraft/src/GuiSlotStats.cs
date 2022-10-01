@@ -1,9 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Windowing.GraphicsLibraryFramework;
+
+namespace net.minecraft.src
 {
-
-	using Mouse = org.lwjgl.input.Mouse;
-
-	// PORTING TODO: OpenGL code; input
 
 	internal abstract class GuiSlotStats : GuiSlot
 	{
@@ -40,7 +38,7 @@
 
 		protected internal override void func_27260_a(int i1, int i2, Tessellator tessellator3)
 		{
-			if (!Mouse.isButtonDown(0))
+			if (!mc.mcApplet.MouseState.IsButtonDown(MouseButton.Left))
 			{
 				this.field_27268_b = -1;
 			}

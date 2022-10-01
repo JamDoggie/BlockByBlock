@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Threading;
 
 namespace net.minecraft.src
@@ -36,4 +36,4 @@ namespace net.minecraft.src
 			}
 		}
 	}
-}
+}*/ // PORTING TODO: Don't think this class is used. Make sure.

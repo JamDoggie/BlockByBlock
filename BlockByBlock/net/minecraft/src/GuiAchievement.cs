@@ -1,11 +1,8 @@
 ﻿namespace net.minecraft.src
 {
-	using Minecraft = net.minecraft.client.Minecraft;
-
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
-
-	// PORTING TODO: OpenGL code.
+    using OpenTK.Graphics.OpenGL;
+    using Minecraft = net.minecraft.client.Minecraft;
+    
 	public class GuiAchievement : Gui
 	{
 		private Minecraft theGame;
@@ -44,23 +41,23 @@
 
 		private void updateAchievementWindowScale()
 		{
-			GL11.glViewport(0, 0, this.theGame.displayWidth, this.theGame.displayHeight);
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glLoadIdentity();
+			GL.Viewport(0, 0, this.theGame.displayWidth, this.theGame.displayHeight);
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.LoadIdentity();
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.LoadIdentity();
 			this.achievementWindowWidth = this.theGame.displayWidth;
 			this.achievementWindowHeight = this.theGame.displayHeight;
 			ScaledResolution scaledResolution1 = new ScaledResolution(this.theGame.gameSettings, this.theGame.displayWidth, this.theGame.displayHeight);
 			this.achievementWindowWidth = scaledResolution1.ScaledWidth;
 			this.achievementWindowHeight = scaledResolution1.ScaledHeight;
-			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glOrtho(0.0D, (double)this.achievementWindowWidth, (double)this.achievementWindowHeight, 0.0D, 1000.0D, 3000.0D);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glLoadIdentity();
-			GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
+			GL.Clear(ClearBufferMask.DepthBufferBit);
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.LoadIdentity();
+			GL.Ortho(0.0D, (double)this.achievementWindowWidth, (double)this.achievementWindowHeight, 0.0D, 1000.0D, 3000.0D);
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.LoadIdentity();
+			GL.Translate(0.0F, 0.0F, -2000.0F);
 		}
 
 		public virtual void updateAchievementWindow()
@@ -71,8 +68,8 @@
 				if (this.haveAchiement || d1 >= 0.0D && d1 <= 1.0D)
 				{
 					this.updateAchievementWindowScale();
-					GL11.glDisable(GL11.GL_DEPTH_TEST);
-					GL11.glDepthMask(false);
+					GL.Disable(EnableCap.DepthTest);
+					GL.DepthMask(false);
 					double d3 = d1 * 2.0D;
 					if (d3 > 1.0D)
 					{
@@ -91,10 +88,10 @@
 					int i5 = this.achievementWindowWidth - 160;
 					int i6 = 0 - (int)(d3 * 36.0D);
 					int i7 = this.theGame.renderEngine.getTexture("/achievement/bg.png");
-					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-					GL11.glEnable(GL11.GL_TEXTURE_2D);
-					GL11.glBindTexture(GL11.GL_TEXTURE_2D, i7);
-					GL11.glDisable(GL11.GL_LIGHTING);
+					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+					GL.Enable(EnableCap.Texture2D);
+					GL.BindTexture(TextureTarget.Texture2D, i7);
+					GL.Disable(EnableCap.Lighting);
 					this.drawTexturedModalRect(i5, i6, 96, 202, 160, 32);
 					if (this.haveAchiement)
 					{
@@ -105,16 +102,16 @@
 						this.theGame.fontRenderer.drawString(this.achievementGetLocalText, i5 + 30, i6 + 7, -256);
 						this.theGame.fontRenderer.drawString(this.achievementStatName, i5 + 30, i6 + 18, -1);
 					}
-
+                    
 					RenderHelper.enableGUIStandardItemLighting();
-					GL11.glDisable(GL11.GL_LIGHTING);
-					GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-					GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-					GL11.glEnable(GL11.GL_LIGHTING);
+					GL.Disable(EnableCap.Lighting);
+					GL.Enable(EnableCap.RescaleNormal);
+					GL.Enable(EnableCap.ColorMaterial);
+					GL.Enable(EnableCap.Lighting);
 					this.itemRender.renderItemIntoGUI(this.theGame.fontRenderer, this.theGame.renderEngine, this.theAchievement.theItemStack, i5 + 8, i6 + 8);
-					GL11.glDisable(GL11.GL_LIGHTING);
-					GL11.glDepthMask(true);
-					GL11.glEnable(GL11.GL_DEPTH_TEST);
+					GL.Disable(EnableCap.Lighting);
+					GL.DepthMask(true);
+					GL.Enable(EnableCap.DepthTest);
 				}
 				else
 				{

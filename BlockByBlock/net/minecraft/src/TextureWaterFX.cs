@@ -88,10 +88,10 @@
 					i7 = i11;
 				}
 
-				this.imageData[i2 * 4 + 0] = (sbyte)i5;
-				this.imageData[i2 * 4 + 1] = (sbyte)i6;
-				this.imageData[i2 * 4 + 2] = (sbyte)i7;
-				this.imageData[i2 * 4 + 3] = (sbyte)i8;
+				this.imageData[i2 * 4 + 0] = (byte)(i5 & 255);
+				this.imageData[i2 * 4 + 1] = (byte)(i6 & 255);
+				this.imageData[i2 * 4 + 2] = (byte)(i7 & 255);
+				this.imageData[i2 * 4 + 3] = (byte)(i8 & 255);
 			}
 
 		}

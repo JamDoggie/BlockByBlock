@@ -39,7 +39,7 @@ namespace net.minecraft.src
 			return i2 == 1 ? 63 : (i2 == 2 ? 79 : (i2 == 3 ? 30 : base.getBlockTextureFromSideAndMetadata(i1, i2)));
 		}
 
-		public virtual void growTree(World world1, int i2, int i3, int i4, Random random5)
+		public virtual void growTree(World world1, int i2, int i3, int i4, RandomExtended random5)
 		{
 			int i6 = world1.getBlockMetadata(i2, i3, i4) & 3;
 			object object7 = null;

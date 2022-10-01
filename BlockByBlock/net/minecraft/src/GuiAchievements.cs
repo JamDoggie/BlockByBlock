@@ -1,14 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 
 namespace net.minecraft.src
 {
-
-	using Mouse = org.lwjgl.input.Mouse;
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
-
-    // PORTING TODO: OpenGL code.
 	public class GuiAchievements : GuiScreen
 	{
 		private static readonly int guiMapTop = AchievementList.minDisplayColumn * 24 - 112;
@@ -70,7 +66,7 @@ namespace net.minecraft.src
 
 		public override void drawScreen(int i1, int i2, float f3)
 		{
-			if (Mouse.isButtonDown(0))
+			if (mc.mcApplet.MouseState.IsButtonDown(MouseButton.Button1))
 			{
 				int i4 = (this.width - this.achievementsPaneWidth) / 2;
 				int i5 = (this.height - this.achievementsPaneHeight) / 2;
@@ -121,11 +117,11 @@ namespace net.minecraft.src
 
 			this.drawDefaultBackground();
 			this.genAchievementBackground(i1, i2, f3);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL.Disable(EnableCap.Lighting);
+			GL.Disable(EnableCap.DepthTest);
 			this.func_27110_k();
-			GL11.glEnable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL.Enable(EnableCap.Lighting);
+			GL.Enable(EnableCap.DepthTest);
 		}
 
 		public override void updateScreen()
@@ -185,13 +181,13 @@ namespace net.minecraft.src
 			int i10 = i8 + 16;
 			int i11 = i9 + 17;
 			this.zLevel = 0.0F;
-			GL11.glDepthFunc(GL11.GL_GEQUAL);
-			GL11.glPushMatrix();
-			GL11.glTranslatef(0.0F, 0.0F, -200.0F);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+			GL.DepthFunc(DepthFunction.Gequal);
+			GL.PushMatrix();
+			GL.Translate(0.0F, 0.0F, -200.0F);
+			GL.Enable(EnableCap.Texture2D);
+			GL.Disable(EnableCap.Lighting);
+			GL.Enable(EnableCap.RescaleNormal);
+			GL.Enable(EnableCap.ColorMaterial);
 			this.mc.renderEngine.bindTexture(i6);
 			int i12 = i4 + 288 >> 4;
 			int i13 = i5 + 288 >> 4;
@@ -206,7 +202,7 @@ namespace net.minecraft.src
 			for (i22 = 0; i22 * 16 - i15 < 155; ++i22)
 			{
 				float f23 = 0.6F - (float)(i13 + i22) / 25.0F * 0.3F;
-				GL11.glColor4f(f23, f23, f23, 1.0F);
+				GL.Color4(f23, f23, f23, 1.0F);
 
 				for (i24 = 0; i24 * 16 - i14 < 224; ++i24)
 				{
@@ -254,9 +250,9 @@ namespace net.minecraft.src
 				}
 			}
 
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glDepthFunc(GL11.GL_LEQUAL);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL.Enable(EnableCap.DepthTest);
+			GL.DepthFunc(DepthFunction.Lequal);
+			GL.Disable(EnableCap.Texture2D);
 
 			int i27;
 			int i30;
@@ -290,9 +286,9 @@ namespace net.minecraft.src
 			Achievement achievement32 = null;
 			RenderItem renderItem34 = new RenderItem();
 			RenderHelper.enableGUIStandardItemLighting();
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+			GL.Disable(EnableCap.Lighting);
+			GL.Enable(EnableCap.RescaleNormal);
+			GL.Enable(EnableCap.ColorMaterial);
 
 			int i39;
 			int i40;
@@ -307,17 +303,17 @@ namespace net.minecraft.src
 					if (this.statFileWriter.hasAchievementUnlocked(achievement35))
 					{
 						f38 = 1.0F;
-						GL11.glColor4f(f38, f38, f38, 1.0F);
+						GL.Color4(f38, f38, f38, 1.0F);
 					}
 					else if (this.statFileWriter.canUnlockAchievement(achievement35))
 					{
 						f38 = Math.Sin((double)(DateTimeHelper.CurrentUnixTimeMillis() % 600L) / 600.0D * Math.PI * 2.0D) < 0.6D ? 0.6F : 0.8F;
-						GL11.glColor4f(f38, f38, f38, 1.0F);
+						GL.Color4(f38, f38, f38, 1.0F);
 					}
 					else
 					{
 						f38 = 0.3F;
-						GL11.glColor4f(f38, f38, f38, 1.0F);
+						GL.Color4(f38, f38, f38, 1.0F);
 					}
 
 					this.mc.renderEngine.bindTexture(i7);
@@ -335,20 +331,20 @@ namespace net.minecraft.src
 					if (!this.statFileWriter.canUnlockAchievement(achievement35))
 					{
 						float f41 = 0.1F;
-						GL11.glColor4f(f41, f41, f41, 1.0F);
+						GL.Color4(f41, f41, f41, 1.0F);
 						renderItem34.field_27004_a = false;
 					}
 
-					GL11.glEnable(GL11.GL_LIGHTING);
-					GL11.glEnable(GL11.GL_CULL_FACE);
+					GL.Enable(EnableCap.Lighting);
+					GL.Enable(EnableCap.CullFace);
 					renderItem34.renderItemIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, achievement35.theItemStack, i39 + 3, i40 + 3);
-					GL11.glDisable(GL11.GL_LIGHTING);
+					GL.Disable(EnableCap.Lighting);
 					if (!this.statFileWriter.canUnlockAchievement(achievement35))
 					{
 						renderItem34.field_27004_a = true;
 					}
 
-					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 					if (i1 >= i10 && i2 >= i11 && i1 < i10 + 224 && i2 < i11 + 155 && i1 >= i39 && i1 <= i39 + 22 && i2 >= i40 && i2 <= i40 + 22)
 					{
 						achievement32 = achievement35;
@@ -356,16 +352,16 @@ namespace net.minecraft.src
 				}
 			}
 
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Disable(EnableCap.DepthTest);
+			GL.Enable(EnableCap.Blend);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i7);
 			this.drawTexturedModalRect(i8, i9, 0, 0, this.achievementsPaneWidth, this.achievementsPaneHeight);
-			GL11.glPopMatrix();
+			GL.PopMatrix();
 			this.zLevel = 0.0F;
-			GL11.glDepthFunc(GL11.GL_LEQUAL);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL.DepthFunc(DepthFunction.Lequal);
+			GL.Disable(EnableCap.DepthTest);
+			GL.Enable(EnableCap.Texture2D);
 			base.drawScreen(i1, i2, f3);
 			if (achievement32 != null)
 			{
@@ -401,8 +397,8 @@ namespace net.minecraft.src
 				this.fontRenderer.drawStringWithShadow(string36, i26, i27, this.statFileWriter.canUnlockAchievement(achievement32) ? (achievement32.Special ? -128 : -1) : (achievement32.Special ? -8355776 : -8355712));
 			}
 
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glEnable(GL11.GL_LIGHTING);
+			GL.Enable(EnableCap.DepthTest);
+			GL.Enable(EnableCap.Lighting);
 			RenderHelper.disableStandardItemLighting();
 		}
 

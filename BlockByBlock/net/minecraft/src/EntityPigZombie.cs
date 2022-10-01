@@ -15,7 +15,7 @@
 			this.isImmuneToFire = true;
 		}
 
-		protected internal override bool AIEnabled
+		public override bool AIEnabled
 		{
 			get
 			{

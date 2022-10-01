@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -16,7 +17,7 @@ namespace net.minecraft.src
 			this.biomeDecorator.cactiPerChunk = 10;
 		}
 
-		public override void decorate(World world1, Random random2, int i3, int i4)
+		public override void decorate(World world1, RandomExtended random2, int i3, int i4)
 		{
 			base.decorate(world1, random2, i3, i4);
 			if (random2.Next(1000) == 0)

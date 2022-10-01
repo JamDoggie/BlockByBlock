@@ -8,7 +8,7 @@
 	{
 		
 
-		public MinecraftImpl(MinecraftApplet minecraftApplet3, int i4, int i5, bool z6) : base(component1, canvas2, minecraftApplet3, i4, i5, z6)
+		public MinecraftImpl(MinecraftApplet minecraftApplet3, int i4, int i5, bool z6) : base(minecraftApplet3, minecraftApplet3, i4, i5, z6)
 		{
 			
 		}

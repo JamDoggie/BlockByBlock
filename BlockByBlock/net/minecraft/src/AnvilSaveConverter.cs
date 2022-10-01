@@ -18,11 +18,11 @@ namespace net.minecraft.src
 			}
 		}
 
-		public override System.Collections.IList SaveList
+		public override List<SaveFormatComparator> SaveList
 		{
 			get
 			{
-				ArrayList arrayList1 = new ArrayList();
+				List<SaveFormatComparator> arrayList1 = new();
 
 				DirectoryInfo[] file2 = savesDirectory.GetDirectories();
                 

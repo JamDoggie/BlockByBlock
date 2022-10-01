@@ -1791,7 +1791,7 @@ namespace net.minecraft.src
 				this.potionsNeedUpdate = false;
 			}
 
-			if (this.rand.nextBoolean())
+			if (this.rand.NextBool())
 			{
 				i9 = this.dataWatcher.getWatchableObjectInt(8);
 				if (i9 > 0)
@@ -1937,14 +1937,14 @@ namespace net.minecraft.src
 
 		public virtual void renderBrokenItemStack(ItemStack itemStack1)
 		{
-			this.worldObj.playSoundAtEntity(this, "random.break", 0.8F, 0.8F + this.worldObj.rand.nextFloat() * 0.4F);
+			this.worldObj.playSoundAtEntity(this, "random.break", 0.8F, 0.8F + this.worldObj.rand.NextSingle() * 0.4F);
 
 			for (int i2 = 0; i2 < 5; ++i2)
 			{
-				Vec3D vec3D3 = Vec3D.createVector(((double)this.rand.nextFloat() - 0.5D) * 0.1D, MathHelper.NextDouble * 0.1D + 0.1D, 0.0D);
+				Vec3D vec3D3 = Vec3D.createVector(((double)this.rand.NextSingle() - 0.5D) * 0.1D, portinghelpers.MathHelper.NextDouble * 0.1D + 0.1D, 0.0D);
 				vec3D3.rotateAroundX(-this.rotationPitch * (float)Math.PI / 180.0F);
 				vec3D3.rotateAroundY(-this.rotationYaw * (float)Math.PI / 180.0F);
-				Vec3D vec3D4 = Vec3D.createVector(((double)this.rand.nextFloat() - 0.5D) * 0.3D, (double)(-this.rand.nextFloat()) * 0.6D - 0.3D, 0.6D);
+				Vec3D vec3D4 = Vec3D.createVector(((double)this.rand.NextSingle() - 0.5D) * 0.3D, (double)(-this.rand.NextSingle()) * 0.6D - 0.3D, 0.6D);
 				vec3D4.rotateAroundX(-this.rotationPitch * (float)Math.PI / 180.0F);
 				vec3D4.rotateAroundY(-this.rotationYaw * (float)Math.PI / 180.0F);
 				vec3D4 = vec3D4.addVector(this.posX, this.posY + (double)this.EyeHeight, this.posZ);

@@ -1,9 +1,7 @@
-﻿namespace net.minecraft.src
-{
-	using Keyboard = org.lwjgl.input.Keyboard;
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
 
-	// PORTING TODO: OpenGL code; input
+namespace net.minecraft.src
+{
 
 	public class GuiEditSign : GuiScreen
 	{
@@ -21,14 +19,14 @@
 		public override void initGui()
 		{
 			this.controlList.Clear();
-			Keyboard.enableRepeatEvents(true);
+			mc.mcApplet.EnableKeyRepeatingEvents(true);
 			this.controlList.Add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120, "Done"));
 			this.entitySign.func_50006_a(false);
 		}
 
 		public override void onGuiClosed()
 		{
-			Keyboard.enableRepeatEvents(false);
+			mc.mcApplet.EnableKeyRepeatingEvents(false);
 			if (this.mc.theWorld.isRemote)
 			{
 				this.mc.SendQueue.addToSendQueue(new Packet130UpdateSign(this.entitySign.xCoord, this.entitySign.yCoord, this.entitySign.zCoord, this.entitySign.signText));
@@ -83,17 +81,17 @@
 		{
 			this.drawDefaultBackground();
 			this.drawCenteredString(this.fontRenderer, this.screenTitle, this.width / 2, 40, 0xFFFFFF);
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float)(this.width / 2), 0.0F, 50.0F);
+			GL.PushMatrix();
+			GL.Translate((float)(this.width / 2), 0.0F, 50.0F);
 			float f4 = 93.75F;
-			GL11.glScalef(-f4, -f4, -f4);
-			GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+			GL.Scale(-f4, -f4, -f4);
+			GL.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
 			Block block5 = this.entitySign.BlockType;
 			if (block5 == Block.signPost)
 			{
 				float f6 = (float)(this.entitySign.BlockMetadata * 360) / 16.0F;
-				GL11.glRotatef(f6, 0.0F, 1.0F, 0.0F);
-				GL11.glTranslatef(0.0F, -1.0625F, 0.0F);
+				GL.Rotate(f6, 0.0F, 1.0F, 0.0F);
+				GL.Translate(0.0F, -1.0625F, 0.0F);
 			}
 			else
 			{
@@ -114,8 +112,8 @@
 					f7 = -90.0F;
 				}
 
-				GL11.glRotatef(f7, 0.0F, 1.0F, 0.0F);
-				GL11.glTranslatef(0.0F, -1.0625F, 0.0F);
+				GL.Rotate(f7, 0.0F, 1.0F, 0.0F);
+				GL.Translate(0.0F, -1.0625F, 0.0F);
 			}
 
 			if (this.updateCounter / 6 % 2 == 0)
@@ -125,7 +123,7 @@
 
 			TileEntityRenderer.instance.renderTileEntityAt(this.entitySign, -0.5D, -0.75D, -0.5D, 0.0F);
 			this.entitySign.lineBeingEdited = -1;
-			GL11.glPopMatrix();
+			GL.PopMatrix();
 			base.drawScreen(i1, i2, f3);
 		}
 	}

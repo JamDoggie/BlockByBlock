@@ -1,11 +1,7 @@
 ﻿namespace net.minecraft.src
 {
-	using Minecraft = net.minecraft.client.Minecraft;
-
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
-
-	// PORTING TODO: OpenGL code
+    using OpenTK.Graphics.OpenGL;
+    using Minecraft = net.minecraft.client.Minecraft;
 	public class GuiStats : GuiScreen
 	{
 		private static RenderItem renderItem = new RenderItem();
@@ -95,11 +91,11 @@
 		private void drawItemSprite(int i1, int i2, int i3)
 		{
 			this.drawButtonBackground(i1 + 1, i2 + 1);
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL.Enable(EnableCap.RescaleNormal);
 			RenderHelper.enableGUIStandardItemLighting();
 			renderItem.drawItemIntoGui(this.fontRenderer, this.mc.renderEngine, i3, 0, Item.itemsList[i3].getIconFromDamage(0), i1 + 2, i2 + 2);
 			RenderHelper.disableStandardItemLighting();
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+			GL.Disable(EnableCap.RescaleNormal);
 		}
 
 		private void drawButtonBackground(int i1, int i2)
@@ -110,7 +106,7 @@
 		private void drawSprite(int i1, int i2, int i3, int i4)
 		{
 			int i5 = this.mc.renderEngine.getTexture("/gui/slot.png");
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i5);
 			Tessellator tessellator10 = Tessellator.instance;
 			tessellator10.startDrawingQuads();

@@ -1,9 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
-
 	public class EntityFootStepFX : EntityFX
 	{
 		private int field_27018_a = 0;
@@ -28,15 +26,15 @@
 			}
 
 			f9 *= 0.2F;
-			GL11.glDisable(GL11.GL_LIGHTING);
+			GL.Disable(EnableCap.Lighting);
 			float f10 = 0.125F;
 			float f11 = (float)(this.posX - interpPosX);
 			float f12 = (float)(this.posY - interpPosY);
 			float f13 = (float)(this.posZ - interpPosZ);
 			float f14 = this.worldObj.getLightBrightness(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 			this.currentFootSteps.bindTexture(this.currentFootSteps.getTexture("/misc/footprint.png"));
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 			tessellator1.startDrawingQuads();
 			tessellator1.setColorRGBA_F(f14, f14, f14, f9);
 			tessellator1.addVertexWithUV((double)(f11 - f10), (double)f12, (double)(f13 + f10), 0.0D, 1.0D);
@@ -44,8 +42,8 @@
 			tessellator1.addVertexWithUV((double)(f11 + f10), (double)f12, (double)(f13 - f10), 1.0D, 0.0D);
 			tessellator1.addVertexWithUV((double)(f11 - f10), (double)f12, (double)(f13 - f10), 0.0D, 0.0D);
 			tessellator1.draw();
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_LIGHTING);
+			GL.Disable(EnableCap.Blend);
+			GL.Enable(EnableCap.Lighting);
 		}
 
 		public override void onUpdate()

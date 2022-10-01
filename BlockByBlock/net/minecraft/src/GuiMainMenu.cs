@@ -1,14 +1,15 @@
 ﻿using BlockByBlock;
+using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections;
 using System.IO;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GLU = org.lwjgl.util.glu.GLU;
 
 	public class GuiMainMenu : GuiScreen
 	{
@@ -64,7 +65,7 @@ namespace net.minecraft.src
 
 		public override void initGui()
 		{
-			this.viewportTexture = this.mc.renderEngine.allocateAndSetupTexture(new BufferedImage(256, 256, 2));
+			this.viewportTexture = this.mc.renderEngine.allocateAndSetupTexture(new Image<Rgba32>(256, 256));
 			DateTime calendar1 = DateTime.Now;
 			if (calendar1.Month + 1 == 11 && calendar1.Day == 9)
 			{
@@ -143,61 +144,61 @@ namespace net.minecraft.src
 		private void drawPanorama(int i1, int i2, float f3)
 		{
 			Tessellator tessellator4 = Tessellator.instance;
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glPushMatrix();
-			GL11.glLoadIdentity();
-			GLU.gluPerspective(120.0F, 1.0F, 0.05F, 10.0F);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glPushMatrix();
-			GL11.glLoadIdentity();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
-			GL11.glDisable(GL11.GL_CULL_FACE);
-			GL11.glDepthMask(false);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.PushMatrix();
+			GL.LoadIdentity();
+			Glu.Perspective(120.0F, 1.0F, 0.05F, 10.0F);
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.PushMatrix();
+			GL.LoadIdentity();
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Rotate(180.0F, 1.0F, 0.0F, 0.0F);
+			GL.Enable(EnableCap.Blend);
+			GL.Disable(EnableCap.AlphaTest);
+			GL.Disable(EnableCap.CullFace);
+			GL.DepthMask(false);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 			sbyte b5 = 8;
 
 			for (int i6 = 0; i6 < b5 * b5; ++i6)
 			{
-				GL11.glPushMatrix();
+				GL.PushMatrix();
 				float f7 = ((float)(i6 % b5) / (float)b5 - 0.5F) / 64.0F;
 				float f8 = ((float)(i6 / b5) / (float)b5 - 0.5F) / 64.0F;
 				float f9 = 0.0F;
-				GL11.glTranslatef(f7, f8, f9);
-				GL11.glRotatef(MathHelper.sin(((float)this.panoramaTimer + f3) / 400.0F) * 25.0F + 20.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(-((float)this.panoramaTimer + f3) * 0.1F, 0.0F, 1.0F, 0.0F);
+				GL.Translate(f7, f8, f9);
+				GL.Rotate(MathHelper.sin(((float)this.panoramaTimer + f3) / 400.0F) * 25.0F + 20.0F, 1.0F, 0.0F, 0.0F);
+				GL.Rotate(-((float)this.panoramaTimer + f3) * 0.1F, 0.0F, 1.0F, 0.0F);
 
 				for (int i10 = 0; i10 < 6; ++i10)
 				{
-					GL11.glPushMatrix();
+					GL.PushMatrix();
 					if (i10 == 1)
 					{
-						GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+						GL.Rotate(90.0F, 0.0F, 1.0F, 0.0F);
 					}
 
 					if (i10 == 2)
 					{
-						GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+						GL.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
 					}
 
 					if (i10 == 3)
 					{
-						GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+						GL.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
 					}
 
 					if (i10 == 4)
 					{
-						GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
+						GL.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
 					}
 
 					if (i10 == 5)
 					{
-						GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
+						GL.Rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 					}
 
-					GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/title/bg/panorama" + i10 + ".png"));
+					GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/title/bg/panorama" + i10 + ".png"));
 					tessellator4.startDrawingQuads();
 					tessellator4.setColorRGBA_I(0xFFFFFF, 255 / (i6 + 1));
 					float f11 = 0.0F;
@@ -206,32 +207,32 @@ namespace net.minecraft.src
 					tessellator4.addVertexWithUV(1.0D, 1.0D, 1.0D, (double)(1.0F - f11), (double)(1.0F - f11));
 					tessellator4.addVertexWithUV(-1.0D, 1.0D, 1.0D, (double)(0.0F + f11), (double)(1.0F - f11));
 					tessellator4.draw();
-					GL11.glPopMatrix();
+					GL.PopMatrix();
 				}
 
-				GL11.glPopMatrix();
-				GL11.glColorMask(true, true, true, false);
+				GL.PopMatrix();
+				GL.ColorMask(true, true, true, false);
 			}
 
 			tessellator4.setTranslation(0.0D, 0.0D, 0.0D);
-			GL11.glColorMask(true, true, true, true);
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glPopMatrix();
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glPopMatrix();
-			GL11.glDepthMask(true);
-			GL11.glEnable(GL11.GL_CULL_FACE);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL.ColorMask(true, true, true, true);
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.PopMatrix();
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.PopMatrix();
+			GL.DepthMask(true);
+			GL.Enable(EnableCap.CullFace);
+			GL.Enable(EnableCap.AlphaTest);
+			GL.Enable(EnableCap.DepthTest);
 		}
 
 		private void rotateAndBlurSkybox(float f1)
 		{
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.viewportTexture);
-			GL11.glCopyTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, 0, 0, 256, 256);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glColorMask(true, true, true, false);
+			GL.BindTexture(TextureTarget.Texture2D, this.viewportTexture);
+			GL.CopyTexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, 0, 0, 256, 256);
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			GL.ColorMask(true, true, true, false);
 			Tessellator tessellator2 = Tessellator.instance;
 			tessellator2.startDrawingQuads();
 			sbyte b3 = 3;
@@ -249,15 +250,15 @@ namespace net.minecraft.src
 			}
 
 			tessellator2.draw();
-			GL11.glColorMask(true, true, true, true);
+			GL.ColorMask(true, true, true, true);
 		}
 
 		private void renderSkybox(int i1, int i2, float f3)
 		{
-			GL11.glViewport(0, 0, 256, 256);
+			GL.Viewport(0, 0, 256, 256);
 			this.drawPanorama(i1, i2, f3);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL.Disable(EnableCap.Texture2D);
+			GL.Enable(EnableCap.Texture2D);
 			this.rotateAndBlurSkybox(f3);
 			this.rotateAndBlurSkybox(f3);
 			this.rotateAndBlurSkybox(f3);
@@ -266,14 +267,14 @@ namespace net.minecraft.src
 			this.rotateAndBlurSkybox(f3);
 			this.rotateAndBlurSkybox(f3);
 			this.rotateAndBlurSkybox(f3);
-			GL11.glViewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
+			GL.Viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
 			Tessellator tessellator4 = Tessellator.instance;
 			tessellator4.startDrawingQuads();
 			float f5 = this.width > this.height ? 120.0F / (float)this.width : 120.0F / (float)this.height;
 			float f6 = (float)this.height * f5 / 256.0F;
 			float f7 = (float)this.width * f5 / 256.0F;
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+            GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, RenderEngine.TextureFilterLinear);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, RenderEngine.TextureFilterLinear);
 			tessellator4.setColorRGBA_F(1.0F, 1.0F, 1.0F, 1.0F);
 			int i8 = this.width;
 			int i9 = this.height;
@@ -293,8 +294,8 @@ namespace net.minecraft.src
 			sbyte b7 = 30;
 			this.drawGradientRect(0, 0, this.width, this.height, -2130706433, 0xFFFFFF);
 			this.drawGradientRect(0, 0, this.width, this.height, 0, int.MinValue);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/title/mclogo.png"));
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/title/mclogo.png"));
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			if ((double)this.updateCounter < 1.0E-4D)
 			{
 				this.drawTexturedModalRect(i6 + 0, b7 + 0, 0, 0, 99, 44);
@@ -310,14 +311,14 @@ namespace net.minecraft.src
 			}
 
 			tessellator4.ColorOpaque_I = 0xFFFFFF;
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float)(this.width / 2 + 90), 70.0F, 0.0F);
-			GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
+			GL.PushMatrix();
+			GL.Translate((float)(this.width / 2 + 90), 70.0F, 0.0F);
+			GL.Rotate(-20.0F, 0.0F, 0.0F, 1.0F);
 			float f8 = 1.8F - MathHelper.abs(MathHelper.sin((float)(DateTimeHelper.CurrentUnixTimeMillis() % 1000L) / 1000.0F * (float)Math.PI * 2.0F) * 0.1F);
 			f8 = f8 * 100.0F / (float)(this.fontRenderer.getStringWidth(this.splashText) + 32);
-			GL11.glScalef(f8, f8, f8);
+			GL.Scale(f8, f8, f8);
 			this.drawCenteredString(this.fontRenderer, this.splashText, 0, -8, 16776960);
-			GL11.glPopMatrix();
+			GL.PopMatrix();
 			this.drawString(this.fontRenderer, "Minecraft 1.2.5", 2, this.height - 10, 0xFFFFFF);
 			string string9 = "Copyright Mojang AB. Do not distribute!";
 			this.drawString(this.fontRenderer, string9, this.width - this.fontRenderer.getStringWidth(string9) - 2, this.height - 10, 0xFFFFFF);

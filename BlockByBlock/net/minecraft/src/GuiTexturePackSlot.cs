@@ -1,11 +1,8 @@
 ﻿using System;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 
 	internal class GuiTexturePackSlot : GuiSlot
 	{
@@ -65,7 +62,7 @@ namespace net.minecraft.src
 		{
 			TexturePackBase texturePackBase6 = (TexturePackBase)GuiTexturePacks.func_22121_h(this.parentTexturePackGui).texturePackList.availableTexturePacks()[i1];
 			texturePackBase6.bindThumbnailTexture(GuiTexturePacks.func_22123_i(this.parentTexturePackGui));
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			tessellator5.startDrawingQuads();
 			tessellator5.ColorOpaque_I = 0xFFFFFF;
 			tessellator5.addVertexWithUV((double)i2, (double)(i3 + i4), 0.0D, 0.0D, 1.0D);
