@@ -9,11 +9,6 @@ namespace net.minecraft.src
 
 	using Minecraft = net.minecraft.client.Minecraft;
 
-	using Document = org.w3c.dom.Document;
-	using Element = org.w3c.dom.Element;
-	using Node = org.w3c.dom.Node;
-	using NodeList = org.w3c.dom.NodeList;
-
 	public class ThreadDownloadResources
 	{
 		public DirectoryInfo resourcesFolder;

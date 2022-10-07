@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet43Experience : Packet
@@ -9,16 +11,16 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			experience = dataInputStream1.ReadSingle();
-			experienceLevel = dataInputStream1.ReadInt16();
-			experienceTotal = dataInputStream1.ReadInt16();
+			experience = dataInputStream1.ReadSingleBigEndian();
+			experienceLevel = dataInputStream1.ReadInt16BigEndian();
+			experienceTotal = dataInputStream1.ReadInt16BigEndian();
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(experience);
-			dataOutputStream1.Write((short)experienceLevel);
-			dataOutputStream1.Write((short)experienceTotal);
+			dataOutputStream1.WriteBigEndian(experience);
+			dataOutputStream1.WriteBigEndian((short)experienceLevel);
+			dataOutputStream1.WriteBigEndian((short)experienceTotal);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

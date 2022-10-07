@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet201PlayerInfo : Packet
@@ -11,14 +13,14 @@
 		{
 			playerName = readString(dataInputStream1, 16);
 			isConnected = dataInputStream1.ReadByte() != 0;
-			ping = dataInputStream1.ReadInt16();
+			ping = dataInputStream1.ReadInt16BigEndian();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
 			writeString(playerName, dataOutputStream1);
 			dataOutputStream1.Write(isConnected ? (byte)1 : (byte)0);
-			dataOutputStream1.Write((short)ping);
+			dataOutputStream1.WriteBigEndian((short)ping);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

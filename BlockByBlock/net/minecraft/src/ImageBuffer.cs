@@ -1,9 +1,13 @@
-﻿namespace net.minecraft.src
+﻿
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
+namespace net.minecraft.src
 {
 
 	public interface ImageBuffer
 	{
-		BufferedImage parseUserSkin(BufferedImage bufferedImage1); // PORTING TODO: Java image type
+		Image<Bgra32> parseUserSkin(Image<Bgra32> bufferedImage1);
 	}
 
 }

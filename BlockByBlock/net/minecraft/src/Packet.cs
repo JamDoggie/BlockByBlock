@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -112,19 +113,15 @@ namespace net.minecraft.src
 			field_48156_n += (long)packet3.PacketSize;
 			return packet3;
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static void writePacket(Packet packet0, java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
+        
 		public static void writePacket(Packet packet0, BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(packet0.PacketId);
+			dataOutputStream1.Write((byte)packet0.PacketId);
 			packet0.writePacketData(dataOutputStream1);
 			++field_48157_o;
 			field_48155_p += (long)packet0.PacketSize;
 		}
 
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static void writeString(String string0, java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
 		public static void writeString(string string0, BinaryWriter dataOutputStream1)
 		{
 			if (string0.Length > 32767)
@@ -133,16 +130,14 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				dataOutputStream1.Write((short)string0.Length);
-				dataOutputStream1.Write(string0.ToArray());
+				dataOutputStream1.WriteBigEndian((short)string0.Length);
+				dataOutputStream1.WriteBigEndian(string0.ToArray());
 			}
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static String readString(java.io.DataInputStream dataInputStream0, int i1) throws java.io.IOException
+        
 		public static string readString(BinaryReader dataInputStream0, int i1)
 		{
-			short s2 = dataInputStream0.ReadInt16();
+			short s2 = dataInputStream0.ReadInt16BigEndian();
 			if (s2 > i1)
 			{
 				throw new IOException("Received string length longer than maximum allowed (" + s2 + " > " + i1 + ")");
@@ -153,14 +148,11 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				StringBuilder stringBuilder3 = new StringBuilder();
+				char[] chars = dataInputStream0.ReadCharsBigEndian(s2);
+                byte[] bytes = new byte[chars.Length * sizeof(char)];
+				Buffer.BlockCopy(chars, 0, bytes, 0, bytes.Length);
 
-				for (int i4 = 0; i4 < s2; ++i4)
-				{
-					stringBuilder3.Append(dataInputStream0.ReadChar());
-				}
-
-				return stringBuilder3.ToString();
+				return Encoding.Unicode.GetString(bytes);
 			}
 		}
 
@@ -175,11 +167,11 @@ namespace net.minecraft.src
 		protected internal virtual ItemStack readItemStack(BinaryReader dataInputStream1)
 		{
 			ItemStack itemStack2 = null;
-			short s3 = dataInputStream1.ReadInt16();
+			short s3 = dataInputStream1.ReadInt16BigEndian();
 			if (s3 >= 0)
 			{
 				sbyte b4 = dataInputStream1.ReadSByte();
-				short s5 = dataInputStream1.ReadInt16();
+				short s5 = dataInputStream1.ReadInt16BigEndian();
 				itemStack2 = new ItemStack(s3, b4, s5);
 				if (Item.itemsList[s3].Damageable || Item.itemsList[s3].func_46056_k())
 				{
@@ -200,9 +192,9 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				dataOutputStream2.Write((short)itemStack1.itemID);
+				dataOutputStream2.WriteBigEndian((short)itemStack1.itemID);
 				dataOutputStream2.Write((sbyte)itemStack1.stackSize);
-				dataOutputStream2.Write((short)itemStack1.ItemDamage);
+				dataOutputStream2.WriteBigEndian((short)itemStack1.ItemDamage);
 				if (itemStack1.Item.Damageable || itemStack1.Item.func_46056_k())
 				{
 					this.writeNBTTagCompound(itemStack1.stackTagCompound, dataOutputStream2);
@@ -215,7 +207,7 @@ namespace net.minecraft.src
 		// ORIGINAL LINE: protected NBTTagCompound readNBTTagCompound(java.io.DataInputStream dataInputStream1) throws java.io.IOException
 		protected internal virtual NBTTagCompound readNBTTagCompound(BinaryReader dataInputStream1)
 		{
-			short s2 = dataInputStream1.ReadInt16();
+			short s2 = dataInputStream1.ReadInt16BigEndian();
 			if (s2 < 0)
 			{
 				return null;
@@ -234,12 +226,12 @@ namespace net.minecraft.src
 		{
 			if (nBTTagCompound1 == null)
 			{
-				dataOutputStream2.Write((short)-1);
+				dataOutputStream2.WriteBigEndian((short)-1);
 			}
 			else
 			{
 				byte[] b3 = CompressedStreamTools.compress(nBTTagCompound1);
-				dataOutputStream2.Write((short)b3.Length);
+				dataOutputStream2.WriteBigEndian((short)b3.Length);
 				dataOutputStream2.Write(b3);
 			}
 

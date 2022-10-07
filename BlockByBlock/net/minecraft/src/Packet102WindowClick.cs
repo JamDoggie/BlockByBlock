@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet102WindowClick : Packet
@@ -32,9 +34,9 @@
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
 			window_Id = dataInputStream1.ReadSByte();
-			inventorySlot = dataInputStream1.ReadInt16();
+			inventorySlot = dataInputStream1.ReadInt16BigEndian();
 			mouseClick = dataInputStream1.ReadSByte();
-			action = dataInputStream1.ReadInt16();
+			action = dataInputStream1.ReadInt16BigEndian();
 			holdingShift = dataInputStream1.ReadBoolean();
 			itemStack = this.readItemStack(dataInputStream1);
 		}
@@ -42,9 +44,9 @@
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
 			dataOutputStream1.Write((sbyte)window_Id);
-			dataOutputStream1.Write((short)inventorySlot);
+			dataOutputStream1.WriteBigEndian((short)inventorySlot);
 			dataOutputStream1.Write((sbyte)mouseClick);
-			dataOutputStream1.Write(action);
+			dataOutputStream1.WriteBigEndian(action);
 			dataOutputStream1.Write(holdingShift);
 			this.writeItemStack(this.itemStack, dataOutputStream1);
 		}

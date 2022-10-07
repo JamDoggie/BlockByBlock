@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet107CreativeSetSlot : Packet
@@ -23,13 +25,13 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			slot = dataInputStream1.ReadInt16();
+			slot = dataInputStream1.ReadInt16BigEndian();
 			itemStack = readItemStack(dataInputStream1);
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write((short)slot);
+			dataOutputStream1.WriteBigEndian((short)slot);
 			writeItemStack(itemStack, dataOutputStream1);
 		}
 

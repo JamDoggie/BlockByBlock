@@ -1,4 +1,5 @@
-﻿using BlockByBlock.java_extensions;
+﻿using BlockByBlock.helpers;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -52,11 +53,10 @@ namespace net.minecraft.src
 			}
 		}
 
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static NBTBase readNamedTag(java.io.DataInput dataInput0) throws java.io.IOException
 		public static NBTBase readNamedTag(BinaryReader dataInput0)
 		{
-			sbyte b1 = dataInput0.ReadSByte();
+
+            sbyte b1 = dataInput0.ReadSByte();
 			if (b1 == 0)
 			{
 				return new NBTTagEnd();
@@ -69,9 +69,7 @@ namespace net.minecraft.src
 				return nBTBase3;
 			}
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static void writeNamedTag(NBTBase nBTBase0, java.io.DataOutput dataOutput1) throws java.io.IOException
+        
 		public static void writeNamedTag(NBTBase nBTBase0, BinaryWriter dataOutput1)
 		{
 			dataOutput1.Write(nBTBase0.Id);
@@ -84,7 +82,7 @@ namespace net.minecraft.src
 
 		public static NBTBase newTag(sbyte b0, string string1)
 		{
-			switch (b0)
+            switch (b0)
 			{
 			case 0:
 				return new NBTTagEnd();

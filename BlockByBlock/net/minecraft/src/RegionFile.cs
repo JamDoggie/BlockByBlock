@@ -1,4 +1,5 @@
-﻿using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+﻿using BlockByBlock.java_extensions;
+using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using System;
 using System.Collections;
 using System.IO;
@@ -36,7 +37,7 @@ namespace net.minecraft.src
 					this.lastModified = file1.LastWriteTime.Ticks;
 				}
 
-                this.dataFile = new FileStream(file1.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                this.dataFile = new FileStream(file1.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
 				binaryWriter = new BinaryWriter(dataFile);
                 binaryReader = new BinaryReader(dataFile);
 
@@ -45,12 +46,12 @@ namespace net.minecraft.src
 				{
 					for (i2 = 0; i2 < 1024; ++i2)
 					{
-						binaryWriter.Write(0);
+						binaryWriter.WriteBigEndian(0);
 					}
 
 					for (i2 = 0; i2 < 1024; ++i2)
 					{
-						binaryWriter.Write(0);
+						binaryWriter.WriteBigEndian(0);
 					}
 
 					sizeDelta += 8192;
@@ -60,7 +61,7 @@ namespace net.minecraft.src
 				{
 					for (i2 = 0; i2 < (dataFile.Length & 4095L); ++i2)
 					{
-						binaryWriter.Write(0);
+						binaryWriter.WriteBigEndian(0);
 					}
 				}
 
@@ -80,7 +81,7 @@ namespace net.minecraft.src
 				int i4;
 				for (i3 = 0; i3 < 1024; ++i3)
 				{
-					i4 = binaryReader.ReadInt32();
+					i4 = binaryReader.ReadInt32BigEndian();
 					offsets[i3] = i4;
 					if (i4 != 0 && (i4 >> 8) + (i4 & 255) <= sectorFree.Count)
 					{
@@ -93,12 +94,13 @@ namespace net.minecraft.src
 
 				for (i3 = 0; i3 < 1024; ++i3)
 				{
-					i4 = binaryReader.ReadInt32();
+					i4 = binaryReader.ReadInt32BigEndian();
 					chunkTimestamps[i3] = i4;
 				}
 			}
 			catch (IOException iOException6)
 			{
+				close();
 				Console.WriteLine(iOException6.ToString());
 				Console.Write(iOException6.StackTrace);
 			}
@@ -160,7 +162,7 @@ namespace net.minecraft.src
 							else
 							{
 								binaryReader.BaseStream.Seek((long)(i4 * 4096), SeekOrigin.Begin);
-								int i6 = binaryReader.ReadInt32();
+								int i6 = binaryReader.ReadInt32BigEndian();
 								if (i6 > 4096 * i5)
 								{
 									this.debugln("READ", i1, i2, "invalid length: " + i6 + " > 4096 * " + i5);
@@ -322,7 +324,7 @@ namespace net.minecraft.src
 		{
 			debugln(" " + i1);
 			binaryWriter.Seek(i1 * 4096, SeekOrigin.Begin);
-			binaryWriter.Write(i3 + 1);
+			binaryWriter.WriteBigEndian(i3 + 1);
 			binaryWriter.Write((sbyte)2);
 			binaryWriter.Write(b2, 0, i3);
 		}
@@ -348,7 +350,7 @@ namespace net.minecraft.src
 		{
 			this.offsets[i1 + i2 * 32] = value;
 			binaryWriter.Seek(((i1 + i2 * 32) * 4), SeekOrigin.Begin);
-			binaryWriter.Write(value);
+			binaryWriter.WriteBigEndian(value);
 		}
         
 		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
@@ -357,7 +359,7 @@ namespace net.minecraft.src
 		{
 			this.chunkTimestamps[i1 + i2 * 32] = timeStamp;
 			binaryWriter.Seek((4096 + (i1 + i2 * 32) * 4), SeekOrigin.Begin);
-			binaryWriter.Write(timeStamp);
+			binaryWriter.WriteBigEndian(timeStamp);
 		}
 
 		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:

@@ -1,7 +1,7 @@
-﻿namespace net.minecraft.src
-{
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
 
+namespace net.minecraft.src
+{
 	public class RenderSheep : RenderLiving
 	{
 		public RenderSheep(ModelBase modelBase1, ModelBase modelBase2, float f3) : base(modelBase1, f3)
@@ -16,7 +16,7 @@
 				this.loadTexture("/mob/sheep_fur.png");
 				float f4 = 1.0F;
 				int i5 = entitySheep1.FleeceColor;
-				GL11.glColor3f(f4 * EntitySheep.fleeceColorTable[i5][0], f4 * EntitySheep.fleeceColorTable[i5][1], f4 * EntitySheep.fleeceColorTable[i5][2]);
+				GL.Color3(f4 * EntitySheep.fleeceColorTable[i5][0], f4 * EntitySheep.fleeceColorTable[i5][1], f4 * EntitySheep.fleeceColorTable[i5][2]);
 				return 1;
 			}
 			else

@@ -21,16 +21,17 @@ namespace net.minecraft.src
 			}
 		}
         
-		public static unsafe void generateTextureNames(IntBuffer intBuffer0)
+		public static unsafe void generateTextureNames(ByteBuffer intBuffer0)
 		{
 			lock (typeof(GLAllocation))
 			{
-				byte[] texBuffer = GetBytesFromBuffer(intBuffer0);
+				byte[] texBuffer = intBuffer0.GetUnderlyingBuffer();
 				GL.GenTextures(texBuffer.Length / 4, GetIntBufferFromBytes(texBuffer)); // PORTING TODO: I think this code works, but if something fucks up check this.
+																						// Update: something fucked up, and it was because of this.
                 
-				for (int i1 = (int)intBuffer0.position(); i1 < intBuffer0.getLimit(); ++i1)
+				for (int i = 0; i < texBuffer.Length; i += 4)
 				{
-					textureNames.Add(intBuffer0.getInt(i1));
+					textureNames.Add(intBuffer0.getInt(i));
 				}
         
 			}
@@ -55,8 +56,8 @@ namespace net.minecraft.src
 				{
 					GL.DeleteLists(((int?)displayLists[i0]).Value, ((int?)displayLists[i0 + 1]).Value);
 				}
-        
-				IntBuffer intBuffer2 = createDirectIntBuffer(textureNames.Count);
+
+				ByteBuffer intBuffer2 = createDirectIntBuffer(textureNames.Count);
 				intBuffer2.flip();
                 
 				byte[] texBuffer = GetBytesFromBuffer(intBuffer2);
@@ -84,20 +85,22 @@ namespace net.minecraft.src
 			}
 		}
 
-		public static IntBuffer createDirectIntBuffer(int i0)
+		public static ByteBuffer createDirectIntBuffer(int i0)
 		{
-			return createDirectByteBuffer(i0 << 2).asIntBuffer();
+			return createDirectByteBuffer(i0 << 2);
 		}
 
-		public static FloatBuffer createDirectFloatBuffer(int i0)
+		public static ByteBuffer createDirectFloatBuffer(int i0)
 		{
-			return createDirectByteBuffer(i0 << 2).asFloatBuffer();
+			return createDirectByteBuffer(i0 << 2);
 		}
 
 		private static byte[] GetBytesFromBuffer(ByteBuffer buf)
         {
+			long pos = buf.position();
 			byte[] buffer = new byte[buf.getLimit()];
 			buf.get(buffer, 0, buffer.Length);
+			buf.position(pos);
 
 			return buffer;
 		}

@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet0KeepAlive : Packet
@@ -21,12 +23,12 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.randomId = dataInputStream1.ReadInt32();
+			this.randomId = dataInputStream1.ReadInt32BigEndian();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(randomId);
+			dataOutputStream1.WriteBigEndian(randomId);
 		}
 
 		public override int PacketSize

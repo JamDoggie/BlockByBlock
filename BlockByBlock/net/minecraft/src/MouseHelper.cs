@@ -1,4 +1,5 @@
 ﻿using net.minecraft.client;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 
 namespace net.minecraft.src
@@ -29,8 +30,18 @@ namespace net.minecraft.src
 
 		public virtual void mouseXYChange()
 		{
-			deltaX = windowComponent.MouseState.Delta.X;
-			deltaY = windowComponent.MouseState.Delta.Y;
+            if (Minecraft.previousMouseX == null || Minecraft.previousMouseY == null)
+            {
+				deltaX = 0;
+				deltaY = 0;
+				return;
+            }
+            unsafe
+            {
+				GLFW.GetCursorPos(windowComponent.WindowPtr, out double mouseX, out double mouseY);
+				deltaX = (float)(mouseX - Minecraft.previousMouseX);
+				deltaY = (float)(Minecraft.previousMouseY - mouseY);
+			}
 		}
 	}
 

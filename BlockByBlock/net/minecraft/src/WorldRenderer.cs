@@ -1,13 +1,10 @@
 ﻿using BlockByBlock.helpers;
+using OpenTK.Graphics.OpenGL;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
 
 	public class WorldRenderer
 	{
@@ -70,16 +67,16 @@ namespace net.minecraft.src
 				this.posZMinus = i3 - this.posZClip;
 				float f4 = 6.0F;
 				this.rendererBoundingBox = AxisAlignedBB.getBoundingBox((double)((float)i1 - f4), (double)((float)i2 - f4), (double)((float)i3 - f4), (double)((float)(i1 + 16) + f4), (double)((float)(i2 + 16) + f4), (double)((float)(i3 + 16) + f4));
-				GL11.glNewList(this.glRenderList + 2, GL11.GL_COMPILE);
+				GL.NewList(this.glRenderList + 2, ListMode.Compile);
 				RenderItem.renderAABB(AxisAlignedBB.getBoundingBoxFromPool((double)((float)this.posXClip - f4), (double)((float)this.posYClip - f4), (double)((float)this.posZClip - f4), (double)((float)(this.posXClip + 16) + f4), (double)((float)(this.posYClip + 16) + f4), (double)((float)(this.posZClip + 16) + f4)));
-				GL11.glEndList();
+				GL.EndList();
 				this.markDirty();
 			}
 		}
 
 		private void setupGLTranslation()
 		{
-			GL11.glTranslatef((float)this.posXClip, (float)this.posYClip, (float)this.posZClip);
+			GL.Translate((float)this.posXClip, (float)this.posYClip, (float)this.posZClip);
 		}
 
 		public virtual void updateRenderer()
@@ -129,13 +126,13 @@ namespace net.minecraft.src
 										if (!z14)
 										{
 											z14 = true;
-											GL11.glNewList(this.glRenderList + i11, GL11.GL_COMPILE);
-											GL11.glPushMatrix();
+											GL.NewList(this.glRenderList + i11, ListMode.Compile);
+											GL.PushMatrix();
 											this.setupGLTranslation();
 											float f19 = 1.000001F;
-											GL11.glTranslatef(-8.0F, -8.0F, -8.0F);
-											GL11.glScalef(f19, f19, f19);
-											GL11.glTranslatef(8.0F, 8.0F, 8.0F);
+											GL.Translate(-8.0F, -8.0F, -8.0F);
+											GL.Scale(f19, f19, f19);
+											GL.Translate(8.0F, 8.0F, 8.0F);
 											tessellator.startDrawingQuads();
 											tessellator.setTranslation((double)(-this.posX), (double)(-this.posY), (double)(-this.posZ));
 										}
@@ -167,8 +164,8 @@ namespace net.minecraft.src
 						if (z14)
 						{
 							this.bytesDrawn += tessellator.draw();
-							GL11.glPopMatrix();
-							GL11.glEndList();
+							GL.PopMatrix();
+							GL.EndList();
 							tessellator.setTranslation(0.0D, 0.0D, 0.0D);
 						}
 						else
@@ -236,7 +233,7 @@ namespace net.minecraft.src
 
 		public virtual void callOcclusionQueryList()
 		{
-			GL11.glCallList(this.glRenderList + 2);
+			GL.CallList(this.glRenderList + 2);
 		}
 
 		public virtual bool skipAllRenderPasses()

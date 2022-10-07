@@ -13,7 +13,18 @@ namespace BlockByBlock
 
         public static Stream? GetResourceAsStream(string path)
         {
-            return CurrentAssembly.GetManifestResourceStream(path);
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            List<string> resourceNames = new List<string>(assembly.GetManifestResourceNames());
+
+            string newPath;
+
+            newPath = path.Replace(@"/", ".");
+            newPath = resourceNames.FirstOrDefault(r => r.Contains(newPath));
+
+            if (newPath == null)
+                throw new FileNotFoundException("Resource not found");
+
+            return assembly.GetManifestResourceStream(newPath);
         }
     }
 }

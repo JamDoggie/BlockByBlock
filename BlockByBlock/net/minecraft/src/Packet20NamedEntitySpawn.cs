@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet20NamedEntitySpawn : Packet
@@ -31,26 +33,26 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			entityId = dataInputStream1.ReadInt32();
+			entityId = dataInputStream1.ReadInt32BigEndian();
 			name = readString(dataInputStream1, 16);
-			xPosition = dataInputStream1.ReadInt32();
-			yPosition = dataInputStream1.ReadInt32();
-			zPosition = dataInputStream1.ReadInt32();
+			xPosition = dataInputStream1.ReadInt32BigEndian();
+			yPosition = dataInputStream1.ReadInt32BigEndian();
+			zPosition = dataInputStream1.ReadInt32BigEndian();
 			rotation = dataInputStream1.ReadSByte();
 			pitch = dataInputStream1.ReadSByte();
-			currentItem = dataInputStream1.ReadInt16();
+			currentItem = dataInputStream1.ReadInt16BigEndian();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(entityId);
+			dataOutputStream1.WriteBigEndian(entityId);
 			writeString(name, dataOutputStream1);
-			dataOutputStream1.Write(xPosition);
-			dataOutputStream1.Write(yPosition);
-			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.WriteBigEndian(xPosition);
+			dataOutputStream1.WriteBigEndian(yPosition);
+			dataOutputStream1.WriteBigEndian(zPosition);
 			dataOutputStream1.Write(rotation);
 			dataOutputStream1.Write(pitch);
-			dataOutputStream1.Write((short)currentItem);
+			dataOutputStream1.WriteBigEndian((short)currentItem);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

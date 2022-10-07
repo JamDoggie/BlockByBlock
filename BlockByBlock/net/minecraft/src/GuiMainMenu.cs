@@ -65,7 +65,7 @@ namespace net.minecraft.src
 
 		public override void initGui()
 		{
-			this.viewportTexture = this.mc.renderEngine.allocateAndSetupTexture(new Image<Rgba32>(256, 256));
+			this.viewportTexture = this.mc.renderEngine.allocateAndSetupTexture(new Image<Bgra32>(256, 256));
 			DateTime calendar1 = DateTime.Now;
 			if (calendar1.Month + 1 == 11 && calendar1.Day == 9)
 			{

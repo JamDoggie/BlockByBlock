@@ -1022,7 +1022,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual void func_48494_a(sbyte[] b1, int i2, int i3, bool z4)
+		public virtual void func_48494_a(byte[] b1, int i2, int i3, bool z4)
 		{
 			int i5 = 0;
 
@@ -1035,8 +1035,14 @@ namespace net.minecraft.src
 					{
 						this.storageArrays[i6] = new ExtendedBlockStorage(i6 << 4);
 					}
+					sbyte[] sBArray = this.storageArrays[i6].func_48692_g();
+					byte[] b7 = new byte[sBArray.Length];
 
-					sbyte[] b7 = this.storageArrays[i6].func_48692_g();
+                    for(int i = 0; i < sBArray.Length; i++)
+                    {
+                        b7[i] = JTypes.SByteToRawByteBits(sBArray[i]);
+					}
+
 					Array.Copy(b1, i5, b7, 0, b7.Length);
 					i5 += b7.Length;
 				}

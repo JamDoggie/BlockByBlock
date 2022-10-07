@@ -1,9 +1,10 @@
-﻿using System;
+﻿using BlockByBlock;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using System;
 
 namespace net.minecraft.src
 {
-
-	// PORTING TODO: Java image stuff
 
 	public class TerrainTextureManager
 	{
@@ -19,9 +20,9 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				BufferedImage bufferedImage1 = ImageIO.read(GameEnv.getResource("/terrain.png"));
+				Image<Bgra32> bufferedImage1 = Image.Load<Bgra32>(GameEnv.GetResourceAsStream("/terrain.png"));
 				int[] i2 = new int[65536];
-				bufferedImage1.getRGB(0, 0, 256, 256, i2, 0, 256);
+				RenderEngine.FillIntBufferWithImage(bufferedImage1, i2);
 
 				for (int i3 = 0; i3 < 256; ++i3)
 				{
@@ -227,10 +228,23 @@ namespace net.minecraft.src
 					this.postProcess();
 					if (isoImageBuffer1.image == null)
 					{
-						isoImageBuffer1.image = new BufferedImage(32, 544, 2);
+						isoImageBuffer1.image = new Image<Bgra32>(32, 544);
 					}
 
-					isoImageBuffer1.image.setRGB(0, 0, 32, 544, this.pixels, 0, 32);
+					int iter = 0;
+                    for(int x = 0; x < isoImageBuffer1.image.Width; x++)
+                    {
+						for (int y = 0; y < isoImageBuffer1.image.Height; y++)
+                        {
+							Bgra32 pixel = isoImageBuffer1.image[x, y];
+							IntByteUnion union = new IntByteUnion() { byte0 = pixel.R, byte1 = pixel.G, byte2 = pixel.B, byte3 = pixel.A };
+
+							pixels[iter] = union.integer;
+
+							iter++;
+                        }
+					}
+
 					isoImageBuffer1.rendered = true;
 				}
 			}

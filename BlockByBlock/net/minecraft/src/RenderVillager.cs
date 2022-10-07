@@ -1,6 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderVillager : RenderLiving
 	{
@@ -54,7 +55,7 @@
 				this.shadowSize = 0.5F;
 			}
 
-			GL11.glScalef(f3, f3, f3);
+			GL.Scale(f3, f3, f3);
 		}
 
 		protected internal override void passSpecialRender(EntityLiving entityLiving1, double d2, double d4, double d6)

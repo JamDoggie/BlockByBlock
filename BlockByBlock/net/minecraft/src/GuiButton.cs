@@ -84,7 +84,13 @@ namespace net.minecraft.src
 
 		public virtual bool mousePressed(Minecraft minecraft1, int i2, int i3)
 		{
-			return this.enabled && this.shouldDrawButton && i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.field_52008_a && i3 < this.yPosition + this.field_52007_b;
+			bool isEnabled = enabled;
+			bool shouldDraw = shouldDrawButton;
+			bool x1 = i2 >= this.xPosition;
+            bool x2 = i2 < this.xPosition + this.field_52008_a;
+            bool y1 = i3 >= this.yPosition;
+            bool y2 = i3 < this.yPosition + this.field_52007_b;
+            return this.enabled && this.shouldDrawButton && i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.field_52008_a && i3 < this.yPosition + this.field_52007_b;
 		}
 	}
 

@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet71Weather : Packet
@@ -28,20 +30,20 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			entityID = dataInputStream1.ReadInt32();
+			entityID = dataInputStream1.ReadInt32BigEndian();
 			isLightningBolt = dataInputStream1.ReadSByte();
-			posX = dataInputStream1.ReadInt32();
-			posY = dataInputStream1.ReadInt32();
-			posZ = dataInputStream1.ReadInt32();
+			posX = dataInputStream1.ReadInt32BigEndian();
+			posY = dataInputStream1.ReadInt32BigEndian();
+			posZ = dataInputStream1.ReadInt32BigEndian();
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(entityID);
+			dataOutputStream1.WriteBigEndian(entityID);
 			dataOutputStream1.Write((sbyte)isLightningBolt);
-			dataOutputStream1.Write(posX);
-			dataOutputStream1.Write(posY);
-			dataOutputStream1.Write(posZ);
+			dataOutputStream1.WriteBigEndian(posX);
+			dataOutputStream1.WriteBigEndian(posY);
+			dataOutputStream1.WriteBigEndian(posZ);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

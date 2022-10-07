@@ -1,8 +1,7 @@
 ﻿namespace net.minecraft.src
 {
-	using Minecraft = net.minecraft.client.Minecraft;
-
-	using GL11 = org.lwjgl.opengl.GL11;
+    using OpenTK.Graphics.OpenGL;
+    using Minecraft = net.minecraft.client.Minecraft;
 
 	public class RenderPlayer : RenderLiving
 	{
@@ -113,19 +112,19 @@
 					else
 					{
 						FontRenderer fontRenderer13 = this.FontRendererFromRenderManager;
-						GL11.glPushMatrix();
-						GL11.glTranslatef((float)d2 + 0.0F, (float)d4 + 2.3F, (float)d6);
-						GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-						GL11.glRotatef(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-						GL11.glRotatef(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-						GL11.glScalef(-f9, -f9, f9);
-						GL11.glDisable(GL11.GL_LIGHTING);
-						GL11.glTranslatef(0.0F, 0.25F / f9, 0.0F);
-						GL11.glDepthMask(false);
-						GL11.glEnable(GL11.GL_BLEND);
-						GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+						GL.PushMatrix();
+						GL.Translate((float)d2 + 0.0F, (float)d4 + 2.3F, (float)d6);
+						GL.Normal3(0.0F, 1.0F, 0.0F);
+						GL.Rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+						GL.Rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+						GL.Scale(-f9, -f9, f9);
+						GL.Disable(EnableCap.Lighting);
+						GL.Translate(0.0F, 0.25F / f9, 0.0F);
+						GL.DepthMask(false);
+						GL.Enable(EnableCap.Blend);
+						GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 						Tessellator tessellator14 = Tessellator.instance;
-						GL11.glDisable(GL11.GL_TEXTURE_2D);
+						GL.Disable(EnableCap.Texture2D);
 						tessellator14.startDrawingQuads();
 						int i15 = fontRenderer13.getStringWidth(string12) / 2;
 						tessellator14.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
@@ -134,13 +133,13 @@
 						tessellator14.addVertex((double)(i15 + 1), 8.0D, 0.0D);
 						tessellator14.addVertex((double)(i15 + 1), -1.0D, 0.0D);
 						tessellator14.draw();
-						GL11.glEnable(GL11.GL_TEXTURE_2D);
-						GL11.glDepthMask(true);
+						GL.Enable(EnableCap.Texture2D);
+						GL.DepthMask(true);
 						fontRenderer13.drawString(string12, -fontRenderer13.getStringWidth(string12) / 2, 0, 553648127);
-						GL11.glEnable(GL11.GL_LIGHTING);
-						GL11.glDisable(GL11.GL_BLEND);
-						GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-						GL11.glPopMatrix();
+						GL.Enable(EnableCap.Lighting);
+						GL.Disable(EnableCap.Blend);
+						GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+						GL.PopMatrix();
 					}
 				}
 			}
@@ -153,18 +152,18 @@
 			ItemStack itemStack3 = entityPlayer1.inventory.armorItemInSlot(3);
 			if (itemStack3 != null && itemStack3.Item.shiftedIndex < 256)
 			{
-				GL11.glPushMatrix();
+				GL.PushMatrix();
 				this.modelBipedMain.bipedHead.postRender(0.0625F);
 				if (RenderBlocks.renderItemIn3d(Block.blocksList[itemStack3.itemID].RenderType))
 				{
 					float f4 = 0.625F;
-					GL11.glTranslatef(0.0F, -0.25F, 0.0F);
-					GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
-					GL11.glScalef(f4, -f4, f4);
+					GL.Translate(0.0F, -0.25F, 0.0F);
+					GL.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
+					GL.Scale(f4, -f4, f4);
 				}
 
 				this.renderManager.itemRenderer.renderItem(entityPlayer1, itemStack3, 0);
-				GL11.glPopMatrix();
+				GL.PopMatrix();
 			}
 
 			float f6;
@@ -174,25 +173,25 @@
 				{
 					float f5 = entityPlayer1.prevRotationYaw + (entityPlayer1.rotationYaw - entityPlayer1.prevRotationYaw) * f2 - (entityPlayer1.prevRenderYawOffset + (entityPlayer1.renderYawOffset - entityPlayer1.prevRenderYawOffset) * f2);
 					f6 = entityPlayer1.prevRotationPitch + (entityPlayer1.rotationPitch - entityPlayer1.prevRotationPitch) * f2;
-					GL11.glPushMatrix();
-					GL11.glRotatef(f5, 0.0F, 1.0F, 0.0F);
-					GL11.glRotatef(f6, 1.0F, 0.0F, 0.0F);
-					GL11.glTranslatef(0.375F * (float)(i19 * 2 - 1), 0.0F, 0.0F);
-					GL11.glTranslatef(0.0F, -0.375F, 0.0F);
-					GL11.glRotatef(-f6, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(-f5, 0.0F, 1.0F, 0.0F);
+					GL.PushMatrix();
+					GL.Rotate(f5, 0.0F, 1.0F, 0.0F);
+					GL.Rotate(f6, 1.0F, 0.0F, 0.0F);
+					GL.Translate(0.375F * (float)(i19 * 2 - 1), 0.0F, 0.0F);
+					GL.Translate(0.0F, -0.375F, 0.0F);
+					GL.Rotate(-f6, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(-f5, 0.0F, 1.0F, 0.0F);
 					float f7 = 1.3333334F;
-					GL11.glScalef(f7, f7, f7);
+					GL.Scale(f7, f7, f7);
 					this.modelBipedMain.renderEars(0.0625F);
-					GL11.glPopMatrix();
+					GL.PopMatrix();
 				}
 			}
 
 			float f10;
 			if (this.loadDownloadableImageTexture(entityPlayer1.playerCloakUrl, (string)null))
 			{
-				GL11.glPushMatrix();
-				GL11.glTranslatef(0.0F, 0.0F, 0.125F);
+				GL.PushMatrix();
+				GL.Translate(0.0F, 0.0F, 0.125F);
 				double d20 = entityPlayer1.field_20066_r + (entityPlayer1.field_20063_u - entityPlayer1.field_20066_r) * (double)f2 - (entityPlayer1.prevPosX + (entityPlayer1.posX - entityPlayer1.prevPosX) * (double)f2);
 				double d23 = entityPlayer1.field_20065_s + (entityPlayer1.field_20062_v - entityPlayer1.field_20065_s) * (double)f2 - (entityPlayer1.prevPosY + (entityPlayer1.posY - entityPlayer1.prevPosY) * (double)f2);
 				double d8 = entityPlayer1.field_20064_t + (entityPlayer1.field_20061_w - entityPlayer1.field_20064_t) * (double)f2 - (entityPlayer1.prevPosZ + (entityPlayer1.posZ - entityPlayer1.prevPosZ) * (double)f2);
@@ -224,20 +223,20 @@
 					f15 += 25.0F;
 				}
 
-				GL11.glRotatef(6.0F + f16 / 2.0F + f15, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(f17 / 2.0F, 0.0F, 0.0F, 1.0F);
-				GL11.glRotatef(-f17 / 2.0F, 0.0F, 1.0F, 0.0F);
-				GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(6.0F + f16 / 2.0F + f15, 1.0F, 0.0F, 0.0F);
+				GL.Rotate(f17 / 2.0F, 0.0F, 0.0F, 1.0F);
+				GL.Rotate(-f17 / 2.0F, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
 				this.modelBipedMain.renderCloak(0.0625F);
-				GL11.glPopMatrix();
+				GL.PopMatrix();
 			}
 
 			ItemStack itemStack21 = entityPlayer1.inventory.CurrentItem;
 			if (itemStack21 != null)
 			{
-				GL11.glPushMatrix();
+				GL.PushMatrix();
 				this.modelBipedMain.bipedRightArm.postRender(0.0625F);
-				GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
+				GL.Translate(-0.0625F, 0.4375F, 0.0625F);
 				if (entityPlayer1.fishEntity != null)
 				{
 					itemStack21 = new ItemStack(Item.stick);
@@ -252,51 +251,51 @@
 				if (itemStack21.itemID < 256 && RenderBlocks.renderItemIn3d(Block.blocksList[itemStack21.itemID].RenderType))
 				{
 					f6 = 0.5F;
-					GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
+					GL.Translate(0.0F, 0.1875F, -0.3125F);
 					f6 *= 0.75F;
-					GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-					GL11.glScalef(f6, -f6, f6);
+					GL.Rotate(20.0F, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(45.0F, 0.0F, 1.0F, 0.0F);
+					GL.Scale(f6, -f6, f6);
 				}
 				else if (itemStack21.itemID == Item.bow.shiftedIndex)
 				{
 					f6 = 0.625F;
-					GL11.glTranslatef(0.0F, 0.125F, 0.3125F);
-					GL11.glRotatef(-20.0F, 0.0F, 1.0F, 0.0F);
-					GL11.glScalef(f6, -f6, f6);
-					GL11.glRotatef(-100.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+					GL.Translate(0.0F, 0.125F, 0.3125F);
+					GL.Rotate(-20.0F, 0.0F, 1.0F, 0.0F);
+					GL.Scale(f6, -f6, f6);
+					GL.Rotate(-100.0F, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(45.0F, 0.0F, 1.0F, 0.0F);
 				}
 				else if (Item.itemsList[itemStack21.itemID].Full3D)
 				{
 					f6 = 0.625F;
 					if (Item.itemsList[itemStack21.itemID].shouldRotateAroundWhenRendering())
 					{
-						GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-						GL11.glTranslatef(0.0F, -0.125F, 0.0F);
+						GL.Rotate(180.0F, 0.0F, 0.0F, 1.0F);
+						GL.Translate(0.0F, -0.125F, 0.0F);
 					}
 
 					if (entityPlayer1.ItemInUseCount > 0 && enumAction22 == EnumAction.block)
 					{
-						GL11.glTranslatef(0.05F, 0.0F, -0.1F);
-						GL11.glRotatef(-50.0F, 0.0F, 1.0F, 0.0F);
-						GL11.glRotatef(-10.0F, 1.0F, 0.0F, 0.0F);
-						GL11.glRotatef(-60.0F, 0.0F, 0.0F, 1.0F);
+						GL.Translate(0.05F, 0.0F, -0.1F);
+						GL.Rotate(-50.0F, 0.0F, 1.0F, 0.0F);
+						GL.Rotate(-10.0F, 1.0F, 0.0F, 0.0F);
+						GL.Rotate(-60.0F, 0.0F, 0.0F, 1.0F);
 					}
 
-					GL11.glTranslatef(0.0F, 0.1875F, 0.0F);
-					GL11.glScalef(f6, -f6, f6);
-					GL11.glRotatef(-100.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+					GL.Translate(0.0F, 0.1875F, 0.0F);
+					GL.Scale(f6, -f6, f6);
+					GL.Rotate(-100.0F, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(45.0F, 0.0F, 1.0F, 0.0F);
 				}
 				else
 				{
 					f6 = 0.375F;
-					GL11.glTranslatef(0.25F, 0.1875F, -0.1875F);
-					GL11.glScalef(f6, f6, f6);
-					GL11.glRotatef(60.0F, 0.0F, 0.0F, 1.0F);
-					GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(20.0F, 0.0F, 0.0F, 1.0F);
+					GL.Translate(0.25F, 0.1875F, -0.1875F);
+					GL.Scale(f6, f6, f6);
+					GL.Rotate(60.0F, 0.0F, 0.0F, 1.0F);
+					GL.Rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(20.0F, 0.0F, 0.0F, 1.0F);
 				}
 
 				if (itemStack21.Item.func_46058_c())
@@ -307,7 +306,7 @@
 						float f26 = (float)(i24 >> 16 & 255) / 255.0F;
 						float f9 = (float)(i24 >> 8 & 255) / 255.0F;
 						f10 = (float)(i24 & 255) / 255.0F;
-						GL11.glColor4f(f26, f9, f10, 1.0F);
+						GL.Color4(f26, f9, f10, 1.0F);
 						this.renderManager.itemRenderer.renderItem(entityPlayer1, itemStack21, i25);
 					}
 				}
@@ -315,8 +314,8 @@
 				{
 					this.renderManager.itemRenderer.renderItem(entityPlayer1, itemStack21, 0);
 				}
-
-				GL11.glPopMatrix();
+                
+				GL.PopMatrix();
 			}
 
 		}
@@ -324,7 +323,7 @@
 		protected internal virtual void renderPlayerScale(EntityPlayer entityPlayer1, float f2)
 		{
 			float f3 = 0.9375F;
-			GL11.glScalef(f3, f3, f3);
+			GL.Scale(f3, f3, f3);
 		}
 
 		public virtual void drawFirstPersonHand()
@@ -351,9 +350,9 @@
 		{
 			if (entityPlayer1.EntityAlive && entityPlayer1.PlayerSleeping)
 			{
-				GL11.glRotatef(entityPlayer1.BedOrientationInDegrees, 0.0F, 1.0F, 0.0F);
-				GL11.glRotatef(this.getDeathMaxRotation(entityPlayer1), 0.0F, 0.0F, 1.0F);
-				GL11.glRotatef(270.0F, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(entityPlayer1.BedOrientationInDegrees, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(this.getDeathMaxRotation(entityPlayer1), 0.0F, 0.0F, 1.0F);
+				GL.Rotate(270.0F, 0.0F, 1.0F, 0.0F);
 			}
 			else
 			{

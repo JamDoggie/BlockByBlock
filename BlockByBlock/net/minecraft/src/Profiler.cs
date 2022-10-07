@@ -1,6 +1,7 @@
 ﻿using BlockByBlock.helpers;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 
 namespace net.minecraft.src
 {
@@ -11,7 +12,7 @@ namespace net.minecraft.src
 		private static System.Collections.IList sectionList = new ArrayList();
 		private static List<long> timestampList = new();
 		private static string profilingSection = "";
-		private static System.Collections.IDictionary profilingMap = new Hashtable();
+		private static IDictionary<string,long?> profilingMap = new ConcurrentDictionary<string,long?>();
 
 		public static void clearProfiling()
 		{
@@ -41,7 +42,7 @@ namespace net.minecraft.src
 				long j2 = ((long?)timestampList.RemoveAndReturn(timestampList.Count - 1)).Value;
 				sectionList.RemoveAt(sectionList.Count - 1);
 				long j4 = j0 - j2;
-				if (profilingMap.Contains(profilingSection))
+				if (profilingMap.ContainsKey(profilingSection))
 				{
 					profilingMap[profilingSection] = ((long?)profilingMap[profilingSection]).Value + j4;
 				}
@@ -67,8 +68,8 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				long j2 = profilingMap.Contains("root") ? ((long?)profilingMap["root"]).Value : 0L;
-				long j4 = profilingMap.Contains(string0) ? ((long?)profilingMap[string0]).Value : -1L;
+				long j2 = profilingMap.ContainsKey("root") ? ((long?)profilingMap["root"]).Value : 0L;
+				long j4 = profilingMap.ContainsKey(string0) ? ((long?)profilingMap[string0]).Value : -1L;
 				ArrayList arrayList6 = new ArrayList();
 				if (string0.Length > 0)
 				{

@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet200Statistic : Packet
@@ -13,13 +15,13 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			statisticId = dataInputStream1.ReadInt32();
+			statisticId = dataInputStream1.ReadInt32BigEndian();
 			amount = dataInputStream1.ReadSByte();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(statisticId);
+			dataOutputStream1.WriteBigEndian(statisticId);
 			dataOutputStream1.Write((sbyte)amount);
 		}
 

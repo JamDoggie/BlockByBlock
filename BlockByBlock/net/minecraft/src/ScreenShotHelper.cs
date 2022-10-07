@@ -1,16 +1,16 @@
-﻿using System;
+﻿using OpenTK.Graphics.OpenGL;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using System;
 
 namespace net.minecraft.src
 {
-
-	using BufferUtils = org.lwjgl.BufferUtils;
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class ScreenShotHelper
 	{
 		private static string dateFormat = "yyyy-MM-dd_HH.mm.ss";
 		private static ByteBuffer buffer;
-		private static sbyte[] pixelData;
+		private static byte[] pixelData;
 		private static int[] imageData;
 
 		public static string saveScreenshot(DirectoryInfo mcDirectory, int i1, int i2)
@@ -26,19 +26,20 @@ namespace net.minecraft.src
 				screenshotsDirectory.Create();
 				if (buffer == null || buffer.capacity() < i2 * i3)
 				{
-					buffer = BufferUtils.createByteBuffer(i2 * i3 * 3);
+					buffer = ByteBuffer.allocate(i2 * i3 * 3);
 				}
 
 				if (imageData == null || imageData.Length < i2 * i3 * 3)
 				{
-					pixelData = new sbyte[i2 * i3 * 3];
+					pixelData = new byte[i2 * i3 * 3];
 					imageData = new int[i2 * i3];
 				}
 
-				GL11.glPixelStorei(GL11.GL_PACK_ALIGNMENT, 1);
-				GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+				GL.PixelStore(PixelStoreParameter.PackAlignment, 1);
+				GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
 				buffer.clear();
-				GL11.glReadPixels(0, 0, i2, i3, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, buffer);
+				byte[] bytes = new byte[buffer.getLimit()];
+				GL.ReadPixels(0, 0, i2, i3, PixelFormat.Rgb, PixelType.UnsignedByte, bytes);
 				buffer.clear();
 				string string5 = DateTime.Now.ToString(dateFormat);
 				FileInfo file6;
@@ -46,15 +47,15 @@ namespace net.minecraft.src
 				if (string.ReferenceEquals(string1, null))
 				{
 					for (i7 = 1; (file6 = new FileInfo(screenshotsDirectory.FullName + '/' + string5 + (i7 == 1 ? "" : "_" + i7) + ".png")).Exists; ++i7)
-					{ // ????
+					{
 					}
 				}
 				else
 				{
 					file6 = new FileInfo(screenshotsDirectory.FullName + '/' + string1);
 				}
-
-				buffer.get(pixelData);
+                
+				Array.Copy(bytes, pixelData, pixelData.Length);
 
 				for (i7 = 0; i7 < i2; ++i7)
 				{
@@ -69,10 +70,10 @@ namespace net.minecraft.src
 					}
 				}
 
-				BufferedImage bufferedImage15 = new BufferedImage(i2, i3, 1);
-				bufferedImage15.setRGB(0, 0, i2, i3, imageData, 0, i2);
-				ImageIO.write(bufferedImage15, "png", file6);
-				return "Saved screenshot as " + file6.Name;
+				Image<Bgra32> bufferedImage15 = new Image<Bgra32>(i2, i3);
+				RenderEngine.FillIntBufferWithImage(bufferedImage15, imageData);
+                bufferedImage15.SaveAsPng(file6.FullName);
+                return "Saved screenshot as " + file6.Name;
 			}
 			catch (Exception exception14)
 			{

@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet28EntityVelocity : Packet
@@ -57,18 +59,18 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			entityId = dataInputStream1.ReadInt32();
-			motionX = dataInputStream1.ReadInt16();
-			motionY = dataInputStream1.ReadInt16();
-			motionZ = dataInputStream1.ReadInt16();
+			entityId = dataInputStream1.ReadInt32BigEndian();
+			motionX = dataInputStream1.ReadInt16BigEndian();
+			motionY = dataInputStream1.ReadInt16BigEndian();
+			motionZ = dataInputStream1.ReadInt16BigEndian();
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(entityId);
-			dataOutputStream1.Write((short)motionX);
-			dataOutputStream1.Write((short)motionY);
-			dataOutputStream1.Write((short)motionZ);
+			dataOutputStream1.WriteBigEndian(entityId);
+			dataOutputStream1.WriteBigEndian((short)motionX);
+			dataOutputStream1.WriteBigEndian((short)motionY);
+			dataOutputStream1.WriteBigEndian((short)motionZ);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

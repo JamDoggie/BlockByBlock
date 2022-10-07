@@ -1,4 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+using System.Buffers.Binary;
+
+namespace net.minecraft.src
 {
 
 	public class NBTTagDouble : NBTBase
@@ -16,12 +19,12 @@
 
 		internal override void write(BinaryWriter dataOutput1)
 		{
-			dataOutput1.Write(data);
+			dataOutput1.WriteBigEndian(data);
 		}
         
 		internal override void load(BinaryReader dataInput1)
 		{
-			this.data = dataInput1.ReadDouble();
+			this.data = dataInput1.ReadDoubleBigEndian();
 		}
 
 		public override sbyte Id

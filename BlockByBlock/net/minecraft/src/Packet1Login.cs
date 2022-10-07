@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet1Login : Packet
@@ -24,7 +26,7 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			protocolVersion = dataInputStream1.ReadInt32();
+			protocolVersion = dataInputStream1.ReadInt32BigEndian();
 			username = readString(dataInputStream1, 16);
 			string string2 = readString(dataInputStream1, 16);
 			terrainType = WorldType.parseWorldType(string2);
@@ -33,8 +35,8 @@
 				terrainType = WorldType.DEFAULT;
 			}
 
-			serverMode = dataInputStream1.ReadInt32();
-			field_48170_e = dataInputStream1.ReadInt32();
+			serverMode = dataInputStream1.ReadInt32BigEndian();
+			field_48170_e = dataInputStream1.ReadInt32BigEndian();
 			difficultySetting = dataInputStream1.ReadSByte();
 			worldHeight = dataInputStream1.ReadByte();
 			maxPlayers = dataInputStream1.ReadByte();
@@ -42,7 +44,7 @@
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(protocolVersion);
+			dataOutputStream1.WriteBigEndian(protocolVersion);
 			writeString(username, dataOutputStream1);
 			if (terrainType == null)
 			{
@@ -53,8 +55,8 @@
 				writeString(terrainType.func_48628_a(), dataOutputStream1);
 			}
 
-			dataOutputStream1.Write(serverMode);
-			dataOutputStream1.Write(field_48170_e);
+			dataOutputStream1.WriteBigEndian(serverMode);
+			dataOutputStream1.WriteBigEndian(field_48170_e);
 			dataOutputStream1.Write(difficultySetting);
 			dataOutputStream1.Write(worldHeight);
 			dataOutputStream1.Write(maxPlayers);

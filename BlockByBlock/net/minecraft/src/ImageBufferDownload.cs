@@ -1,4 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+
+namespace net.minecraft.src
 {
 
 	public class ImageBufferDownload : ImageBuffer
@@ -7,7 +11,7 @@
 		private int imageWidth;
 		private int imageHeight;
 
-		public virtual BufferedImage parseUserSkin(BufferedImage bufferedImage1)
+		public virtual Image<Bgra32> parseUserSkin(Image<Bgra32> bufferedImage1)
 		{
 			if (bufferedImage1 == null)
 			{
@@ -17,11 +21,9 @@
 			{
 				this.imageWidth = 64;
 				this.imageHeight = 32;
-				BufferedImage bufferedImage2 = new BufferedImage(this.imageWidth, this.imageHeight, 2);
-				Graphics graphics3 = bufferedImage2.getGraphics();
-				graphics3.drawImage(bufferedImage1, 0, 0, (ImageObserver)null);
-				graphics3.dispose();
-				this.imageData = ((DataBufferInt)bufferedImage2.getRaster().getDataBuffer()).getData();
+				Image<Bgra32> bufferedImage2 = new Image<Bgra32>(this.imageWidth, this.imageHeight);
+				bufferedImage2.Mutate(x => x.DrawImage(bufferedImage1, 1.0f));
+				RenderEngine.FillIntBufferWithImage(bufferedImage2, imageData);
 				this.func_884_b(0, 0, 32, 16);
 				this.func_885_a(32, 0, 64, 32);
 				this.func_884_b(0, 16, 64, 32);

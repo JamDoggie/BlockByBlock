@@ -1,11 +1,9 @@
 ﻿using System;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
 
 	public class RenderLiving : Render
 	{
@@ -43,8 +41,8 @@ namespace net.minecraft.src
 
 		public virtual void doRenderLiving(EntityLiving entityLiving1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL11.glPushMatrix();
-			GL11.glDisable(GL11.GL_CULL_FACE);
+			GL.PushMatrix();
+			GL.Disable(EnableCap.CullFace);
 			this.mainModel.onGround = this.renderSwingProgress(entityLiving1, f9);
 			if (this.renderPassModel != null)
 			{
@@ -72,10 +70,10 @@ namespace net.minecraft.src
 				float f13 = this.handleRotationFloat(entityLiving1, f9);
 				this.rotateCorpse(entityLiving1, f13, f10, f9);
 				float f14 = 0.0625F;
-				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-				GL11.glScalef(-1.0F, -1.0F, 1.0F);
+				GL.Enable(EnableCap.RescaleNormal);
+				GL.Scale(-1.0F, -1.0F, 1.0F);
 				this.preRenderCallback(entityLiving1, f9);
-				GL11.glTranslatef(0.0F, -24.0F * f14 - 0.0078125F, 0.0F);
+				GL.Translate(0.0F, -24.0F * f14 - 0.0078125F, 0.0F);
 				float f15 = entityLiving1.field_705_Q + (entityLiving1.field_704_R - entityLiving1.field_705_Q) * f9;
 				float f16 = entityLiving1.field_703_S - entityLiving1.field_704_R * (1.0F - f9);
 				if (entityLiving1.Child)
@@ -88,7 +86,7 @@ namespace net.minecraft.src
 					f15 = 1.0F;
 				}
 
-				GL11.glEnable(GL11.GL_ALPHA_TEST);
+				GL.Enable(EnableCap.AlphaTest);
 				this.mainModel.setLivingAnimations(entityLiving1, f16, f15, f9);
 				this.renderModel(entityLiving1, f16, f15, f13, f11 - f10, f12, f14);
 
@@ -107,41 +105,41 @@ namespace net.minecraft.src
 						{
 							f19 = (float)entityLiving1.ticksExisted + f9;
 							this.loadTexture("%blur%/misc/glint.png");
-							GL11.glEnable(GL11.GL_BLEND);
+							GL.Enable(EnableCap.Blend);
 							f20 = 0.5F;
-							GL11.glColor4f(f20, f20, f20, 1.0F);
-							GL11.glDepthFunc(GL11.GL_EQUAL);
-							GL11.glDepthMask(false);
+							GL.Color4(f20, f20, f20, 1.0F);
+							GL.DepthFunc(DepthFunction.Equal);
+							GL.DepthMask(false);
 
 							for (int i21 = 0; i21 < 2; ++i21)
 							{
-								GL11.glDisable(GL11.GL_LIGHTING);
+								GL.Disable(EnableCap.Lighting);
 								f22 = 0.76F;
-								GL11.glColor4f(0.5F * f22, 0.25F * f22, 0.8F * f22, 1.0F);
-								GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
-								GL11.glMatrixMode(GL11.GL_TEXTURE);
-								GL11.glLoadIdentity();
+								GL.Color4(0.5F * f22, 0.25F * f22, 0.8F * f22, 1.0F);
+								GL.BlendFunc(BlendingFactor.SrcColor, BlendingFactor.One);
+								GL.MatrixMode(MatrixMode.Texture);
+								GL.LoadIdentity();
 								float f23 = f19 * (0.001F + (float)i21 * 0.003F) * 20.0F;
 								float f24 = 0.33333334F;
-								GL11.glScalef(f24, f24, f24);
-								GL11.glRotatef(30.0F - (float)i21 * 60.0F, 0.0F, 0.0F, 1.0F);
-								GL11.glTranslatef(0.0F, f23, 0.0F);
-								GL11.glMatrixMode(GL11.GL_MODELVIEW);
+								GL.Scale(f24, f24, f24);
+								GL.Rotate(30.0F - (float)i21 * 60.0F, 0.0F, 0.0F, 1.0F);
+								GL.Translate(0.0F, f23, 0.0F);
+								GL.MatrixMode(MatrixMode.Modelview);
 								this.renderPassModel.render(entityLiving1, f16, f15, f13, f11 - f10, f12, f14);
 							}
 
-							GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-							GL11.glMatrixMode(GL11.GL_TEXTURE);
-							GL11.glDepthMask(true);
-							GL11.glLoadIdentity();
-							GL11.glMatrixMode(GL11.GL_MODELVIEW);
-							GL11.glEnable(GL11.GL_LIGHTING);
-							GL11.glDisable(GL11.GL_BLEND);
-							GL11.glDepthFunc(GL11.GL_LEQUAL);
+							GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+							GL.MatrixMode(MatrixMode.Texture);
+							GL.DepthMask(true);
+							GL.LoadIdentity();
+							GL.MatrixMode(MatrixMode.Modelview);
+							GL.Enable(EnableCap.Lighting);
+							GL.Disable(EnableCap.Blend);
+							GL.DepthFunc(DepthFunction.Lequal);
 						}
 
-						GL11.glDisable(GL11.GL_BLEND);
-						GL11.glEnable(GL11.GL_ALPHA_TEST);
+						GL.Disable(EnableCap.Blend);
+						GL.Enable(EnableCap.AlphaTest);
 					}
 				}
 
@@ -149,25 +147,25 @@ namespace net.minecraft.src
 				float f26 = entityLiving1.getBrightness(f9);
 				i18 = this.getColorMultiplier(entityLiving1, f26, f9);
 				OpenGlHelper.ActiveTexture = OpenGlHelper.lightmapTexUnit;
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				GL.Disable(EnableCap.Texture2D);
 				OpenGlHelper.ActiveTexture = OpenGlHelper.defaultTexUnit;
 				if ((i18 >> 24 & 255) > 0 || entityLiving1.hurtTime > 0 || entityLiving1.deathTime > 0)
 				{
-					GL11.glDisable(GL11.GL_TEXTURE_2D);
-					GL11.glDisable(GL11.GL_ALPHA_TEST);
-					GL11.glEnable(GL11.GL_BLEND);
-					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-					GL11.glDepthFunc(GL11.GL_EQUAL);
+					GL.Disable(EnableCap.Texture2D);
+					GL.Disable(EnableCap.AlphaTest);
+					GL.Enable(EnableCap.Blend);
+					GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+					GL.DepthFunc(DepthFunction.Equal);
 					if (entityLiving1.hurtTime > 0 || entityLiving1.deathTime > 0)
 					{
-						GL11.glColor4f(f26, 0.0F, 0.0F, 0.4F);
+						GL.Color4(f26, 0.0F, 0.0F, 0.4F);
 						this.mainModel.render(entityLiving1, f16, f15, f13, f11 - f10, f12, f14);
 
 						for (int i27 = 0; i27 < 4; ++i27)
 						{
 							if (this.inheritRenderPass(entityLiving1, i27, f9) >= 0)
 							{
-								GL11.glColor4f(f26, 0.0F, 0.0F, 0.4F);
+								GL.Color4(f26, 0.0F, 0.0F, 0.4F);
 								this.renderPassModel.render(entityLiving1, f16, f15, f13, f11 - f10, f12, f14);
 							}
 						}
@@ -179,26 +177,26 @@ namespace net.minecraft.src
 						f20 = (float)(i18 >> 8 & 255) / 255.0F;
 						float f28 = (float)(i18 & 255) / 255.0F;
 						f22 = (float)(i18 >> 24 & 255) / 255.0F;
-						GL11.glColor4f(f19, f20, f28, f22);
+						GL.Color4(f19, f20, f28, f22);
 						this.mainModel.render(entityLiving1, f16, f15, f13, f11 - f10, f12, f14);
 
 						for (int i29 = 0; i29 < 4; ++i29)
 						{
 							if (this.inheritRenderPass(entityLiving1, i29, f9) >= 0)
 							{
-								GL11.glColor4f(f19, f20, f28, f22);
+								GL.Color4(f19, f20, f28, f22);
 								this.renderPassModel.render(entityLiving1, f16, f15, f13, f11 - f10, f12, f14);
 							}
 						}
 					}
 
-					GL11.glDepthFunc(GL11.GL_LEQUAL);
-					GL11.glDisable(GL11.GL_BLEND);
-					GL11.glEnable(GL11.GL_ALPHA_TEST);
-					GL11.glEnable(GL11.GL_TEXTURE_2D);
+					GL.DepthFunc(DepthFunction.Lequal);
+					GL.Disable(EnableCap.Blend);
+					GL.Enable(EnableCap.AlphaTest);
+					GL.Enable(EnableCap.Texture2D);
 				}
-
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+                
+				GL.Disable(EnableCap.RescaleNormal);
 			}
 			catch (Exception exception25)
 			{
@@ -207,10 +205,10 @@ namespace net.minecraft.src
 			}
 
 			OpenGlHelper.ActiveTexture = OpenGlHelper.lightmapTexUnit;
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL.Enable(EnableCap.Texture2D);
 			OpenGlHelper.ActiveTexture = OpenGlHelper.defaultTexUnit;
-			GL11.glEnable(GL11.GL_CULL_FACE);
-			GL11.glPopMatrix();
+			GL.Enable(EnableCap.CullFace);
+			GL.PopMatrix();
 			this.passSpecialRender(entityLiving1, d2, d4, d6);
 		}
 
@@ -222,12 +220,12 @@ namespace net.minecraft.src
 
 		protected internal virtual void renderLivingAt(EntityLiving entityLiving1, double d2, double d4, double d6)
 		{
-			GL11.glTranslatef((float)d2, (float)d4, (float)d6);
+			GL.Translate((float)d2, (float)d4, (float)d6);
 		}
 
 		protected internal virtual void rotateCorpse(EntityLiving entityLiving1, float f2, float f3, float f4)
 		{
-			GL11.glRotatef(180.0F - f3, 0.0F, 1.0F, 0.0F);
+			GL.Rotate(180.0F - f3, 0.0F, 1.0F, 0.0F);
 			if (entityLiving1.deathTime > 0)
 			{
 				float f5 = ((float)entityLiving1.deathTime + f4 - 1.0F) / 20.0F * 1.6F;
@@ -237,7 +235,7 @@ namespace net.minecraft.src
 					f5 = 1.0F;
 				}
 
-				GL11.glRotatef(f5 * this.getDeathMaxRotation(entityLiving1), 0.0F, 0.0F, 1.0F);
+				GL.Rotate(f5 * this.getDeathMaxRotation(entityLiving1), 0.0F, 0.0F, 1.0F);
 			}
 
 		}
@@ -297,17 +295,17 @@ namespace net.minecraft.src
 				FontRenderer fontRenderer11 = this.FontRendererFromRenderManager;
 				float f12 = 1.6F;
 				float f13 = 0.016666668F * f12;
-				GL11.glPushMatrix();
-				GL11.glTranslatef((float)d3 + 0.0F, (float)d5 + 2.3F, (float)d7);
-				GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-				GL11.glRotatef(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-				GL11.glRotatef(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-				GL11.glScalef(-f13, -f13, f13);
-				GL11.glDisable(GL11.GL_LIGHTING);
-				GL11.glDepthMask(false);
-				GL11.glDisable(GL11.GL_DEPTH_TEST);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL.PushMatrix();
+				GL.Translate((float)d3 + 0.0F, (float)d5 + 2.3F, (float)d7);
+				GL.Normal3(0.0F, 1.0F, 0.0F);
+				GL.Rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+				GL.Scale(-f13, -f13, f13);
+				GL.Disable(EnableCap.Lighting);
+				GL.DepthMask(false);
+				GL.Disable(EnableCap.DepthTest);
+				GL.Enable(EnableCap.Blend);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 				Tessellator tessellator14 = Tessellator.instance;
 				sbyte b15 = 0;
 				if (string2.Equals("deadmau5"))
@@ -315,7 +313,7 @@ namespace net.minecraft.src
 					b15 = -10;
 				}
 
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				GL.Disable(EnableCap.Texture2D);
 				tessellator14.startDrawingQuads();
 				int i16 = fontRenderer11.getStringWidth(string2) / 2;
 				tessellator14.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
@@ -324,15 +322,15 @@ namespace net.minecraft.src
 				tessellator14.addVertex((double)(i16 + 1), (double)(8 + b15), 0.0D);
 				tessellator14.addVertex((double)(i16 + 1), (double)(-1 + b15), 0.0D);
 				tessellator14.draw();
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
+				GL.Enable(EnableCap.Texture2D);
 				fontRenderer11.drawString(string2, -fontRenderer11.getStringWidth(string2) / 2, b15, 553648127);
-				GL11.glEnable(GL11.GL_DEPTH_TEST);
-				GL11.glDepthMask(true);
+				GL.Enable(EnableCap.DepthTest);
+				GL.DepthMask(true);
 				fontRenderer11.drawString(string2, -fontRenderer11.getStringWidth(string2) / 2, b15, -1);
-				GL11.glEnable(GL11.GL_LIGHTING);
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glPopMatrix();
+				GL.Enable(EnableCap.Lighting);
+				GL.Disable(EnableCap.Blend);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.PopMatrix();
 			}
 		}
 

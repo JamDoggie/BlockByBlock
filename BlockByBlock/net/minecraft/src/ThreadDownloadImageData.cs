@@ -1,9 +1,12 @@
-﻿namespace net.minecraft.src
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
+namespace net.minecraft.src
 {
 
 	public class ThreadDownloadImageData
 	{
-		public BufferedImage image;
+		public Image<Bgra32> image;
 		public int referenceCount = 1;
 		public int textureName = -1;
 		public bool textureSetupComplete = false;

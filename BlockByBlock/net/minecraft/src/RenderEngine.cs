@@ -17,7 +17,7 @@ namespace net.minecraft.src
 		private Hashtable textureMap = new Hashtable();
 		private Hashtable textureContentsMap = new Hashtable();
 		private IntHashMap textureNameToImageMap = new IntHashMap();
-		private IntBuffer singleIntBuffer = GLAllocation.createDirectIntBuffer(1);
+		private ByteBuffer singleIntBuffer = GLAllocation.createDirectIntBuffer(1);
 		private ByteBuffer imageData = GLAllocation.createDirectByteBuffer(16777216);
 		private System.Collections.IList textureList = new ArrayList();
 		private System.Collections.IDictionary urlToImageDataMap = new Hashtable();
@@ -25,7 +25,7 @@ namespace net.minecraft.src
 		public bool clampTexture = false;
 		public bool blurTexture = false;
 		private TexturePackList texturePack;
-        private Image<Rgba32> missingTextureImage = new(64, 64, Color.Black);
+        private Image<Bgra32> missingTextureImage = new(64, 64, Color.Black);
         private int field_48512_n = 16;
 
 		public RenderEngine(TexturePackList texturePackList1, GameSettings gameSettings2)
@@ -107,7 +107,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		private int[] getImageContentsAndAllocate(Image<Rgba32> bufferedImage1)
+		private int[] getImageContentsAndAllocate(Image<Bgra32> bufferedImage1)
 		{
 			int i2 = bufferedImage1.Width;
 			int i3 = bufferedImage1.Height;
@@ -120,7 +120,7 @@ namespace net.minecraft.src
             return array;
 		}
 
-		private int[] getImageContents(Image<Rgba32> bufferedImage1, int[] i2)
+		private int[] getImageContents(Image<Bgra32> bufferedImage1, int[] i2)
 		{
 			int i3 = bufferedImage1.Width;
 			int i4 = bufferedImage1.Height;
@@ -142,7 +142,7 @@ namespace net.minecraft.src
 				{
 					this.singleIntBuffer.clear();
 					GLAllocation.generateTextureNames(this.singleIntBuffer);
-					int i6 = this.singleIntBuffer.get(0);
+					int i6 = this.singleIntBuffer.getInt(0);
 					if (string1.StartsWith("##", StringComparison.Ordinal))
 					{
 						this.setupTexture(this.unwrapImageByColumns(this.readTextureImage(texturePackBase2.getResourceAsStream(string1.Substring(2)))), i6);
@@ -188,7 +188,7 @@ namespace net.minecraft.src
 					Console.WriteLine(exception5.ToString());
 					Console.Write(exception5.StackTrace);
 					GLAllocation.generateTextureNames(this.singleIntBuffer);
-					int i4 = this.singleIntBuffer.get(0);
+					int i4 = this.singleIntBuffer.getInt(0);
 					this.setupTexture(this.missingTextureImage, i4);
 					this.textureMap[string1] = i4;
 					return i4;
@@ -196,10 +196,10 @@ namespace net.minecraft.src
 			}
 		}
 
-		private Image<Rgba32> unwrapImageByColumns(Image<Rgba32> bufferedImage1)
+		private Image<Bgra32> unwrapImageByColumns(Image<Bgra32> bufferedImage1)
 		{
 			int i2 = bufferedImage1.Width / 16;
-			Image<Rgba32> bufferedImage3 = new(16, bufferedImage1.Height * i2);
+			Image<Bgra32> bufferedImage3 = new(16, bufferedImage1.Height * i2);
 			
 			for (int i5 = 0; i5 < i2; ++i5)
 			{
@@ -209,17 +209,17 @@ namespace net.minecraft.src
 			return bufferedImage3;
 		}
 
-		public virtual int allocateAndSetupTexture(Image<Rgba32> bufferedImage1)
+		public virtual int allocateAndSetupTexture(Image<Bgra32> bufferedImage1)
 		{
 			singleIntBuffer.clear();
 			GLAllocation.generateTextureNames(singleIntBuffer);
-			int i2 = singleIntBuffer.get(0);
+			int i2 = singleIntBuffer.getInt(0);
 			setupTexture(bufferedImage1, i2);
 			textureNameToImageMap.addKey(i2, bufferedImage1);
 			return i2;
 		}
 
-		public virtual void setupTexture(Image<Rgba32> bufferedImage1, int i2)
+		public virtual void setupTexture(Image<Bgra32> bufferedImage1, int i2)
 		{
 			GL.BindTexture(TextureTarget.Texture2D, i2);
 			if (useMipmaps)
@@ -313,7 +313,7 @@ namespace net.minecraft.src
 
 					byte[] buff = new byte[imageData.getLimit()];
 					imageData.get(buff, 0, buff.Length);
-
+					imageData.position(0);
 					GL.TexImage2D(TextureTarget.Texture2D, i7, PixelInternalFormat.Rgba, i9, i10, 0, PixelFormat.Rgba, PixelType.UnsignedByte, buff);
                 }
 			}
@@ -395,7 +395,11 @@ namespace net.minecraft.src
 
 		public virtual int getTextureForDownloadableImage(string string1, string string2)
 		{
-			ThreadDownloadImageData threadDownloadImageData3 = (ThreadDownloadImageData)this.urlToImageDataMap[string1];
+			ThreadDownloadImageData? threadDownloadImageData3 = null;
+            
+			if (string1 != null && urlToImageDataMap.Contains(string1))
+				threadDownloadImageData3 = (ThreadDownloadImageData?)this.urlToImageDataMap[string1];
+
 			if (threadDownloadImageData3 != null && threadDownloadImageData3.image != null && !threadDownloadImageData3.textureSetupComplete)
 			{
 				if (threadDownloadImageData3.textureName < 0)
@@ -522,11 +526,11 @@ namespace net.minecraft.src
 			TexturePackBase texturePackBase1 = this.texturePack.selectedTexturePack;
 			System.Collections.IEnumerator iterator2 = this.textureNameToImageMap.KeySet.GetEnumerator();
 
-			Image<Rgba32> bufferedImage4;
+			Image<Bgra32> bufferedImage4;
 			while (iterator2.MoveNext())
 			{
 				int i3 = ((int?)iterator2.Current).Value;
-				bufferedImage4 = (Image<Rgba32>)this.textureNameToImageMap.lookup(i3);
+				bufferedImage4 = (Image<Bgra32>)this.textureNameToImageMap.lookup(i3);
 				this.setupTexture(bufferedImage4, i3);
 			}
 
@@ -622,9 +626,9 @@ namespace net.minecraft.src
 
 		}
         
-		private Image<Rgba32> readTextureImage(Stream inputStream1)
+		private Image<Bgra32> readTextureImage(Stream inputStream1)
 		{
-			Image<Rgba32> bufferedImage2 = Image.Load<Rgba32>(inputStream1);
+			Image<Bgra32> bufferedImage2 = Image.Load<Bgra32>(inputStream1);
 			inputStream1.Close();
 			return bufferedImage2;
 		}
@@ -637,7 +641,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public static void FillIntBufferWithImage(Image<Rgba32> img, int[] buffer)
+		public static void FillIntBufferWithImage(Image<Bgra32> img, int[] buffer)
         {
 			if (img == null || buffer == null)
 				return;
@@ -646,16 +650,34 @@ namespace net.minecraft.src
 			{
 				for (int y = 0; y < img.Height; y++)
 				{
-					Rgba32 color = img[x, y];
+					Bgra32 color = img[x, y];
 
-					buffer[x + y * img.Width] = new IntByteUnion() { byte0 = color.R, byte1 = color.G, byte2 = color.B, byte3 = color.A }.integer;
+					buffer[x + y * img.Width] = new IntByteUnion() { byte0 = color.B, byte1 = color.G, byte2 = color.R, byte3 = color.A }.integer;
+				}
+			}
+		}
+
+		public static void FillIntBufferWithImage(Image<Bgra32> img, int[] buffer, int srcX, int srcY, int srcWidth, int srcHeight)
+		{
+			if (img == null || buffer == null)
+				return;
+
+			int iter = 0;
+			for (int x = srcX; x < srcX + srcWidth; x++)
+			{
+				for (int y = srcY; y < srcY + srcHeight; y++)
+				{
+					Bgra32 color = img[x, y];
+
+					buffer[iter] = new IntByteUnion() { byte0 = color.B, byte1 = color.G, byte2 = color.R, byte3 = color.A }.integer;
+					iter++;
 				}
 			}
 		}
 	}
 
 	[StructLayout(LayoutKind.Explicit)]
-	struct IntByteUnion
+	public struct IntByteUnion
     {
 		[FieldOffset(0)]
 		public byte byte0;

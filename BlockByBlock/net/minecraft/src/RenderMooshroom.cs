@@ -1,6 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderMooshroom : RenderLiving
 	{
@@ -19,24 +20,24 @@
 			if (!entityMooshroom1.Child)
 			{
 				this.loadTexture("/terrain.png");
-				GL11.glEnable(GL11.GL_CULL_FACE);
-				GL11.glPushMatrix();
-				GL11.glScalef(1.0F, -1.0F, 1.0F);
-				GL11.glTranslatef(0.2F, 0.4F, 0.5F);
-				GL11.glRotatef(42.0F, 0.0F, 1.0F, 0.0F);
+				GL.Enable(EnableCap.CullFace);
+				GL.PushMatrix();
+				GL.Scale(1.0F, -1.0F, 1.0F);
+				GL.Translate(0.2F, 0.4F, 0.5F);
+				GL.Rotate(42.0F, 0.0F, 1.0F, 0.0F);
 				this.renderBlocks.renderBlockAsItem(Block.mushroomRed, 0, 1.0F);
-				GL11.glTranslatef(0.1F, 0.0F, -0.6F);
-				GL11.glRotatef(42.0F, 0.0F, 1.0F, 0.0F);
+				GL.Translate(0.1F, 0.0F, -0.6F);
+				GL.Rotate(42.0F, 0.0F, 1.0F, 0.0F);
 				this.renderBlocks.renderBlockAsItem(Block.mushroomRed, 0, 1.0F);
-				GL11.glPopMatrix();
-				GL11.glPushMatrix();
+				GL.PopMatrix();
+				GL.PushMatrix();
 				((ModelQuadruped)this.mainModel).head.postRender(0.0625F);
-				GL11.glScalef(1.0F, -1.0F, 1.0F);
-				GL11.glTranslatef(0.0F, 0.75F, -0.2F);
-				GL11.glRotatef(12.0F, 0.0F, 1.0F, 0.0F);
+				GL.Scale(1.0F, -1.0F, 1.0F);
+				GL.Translate(0.0F, 0.75F, -0.2F);
+				GL.Rotate(12.0F, 0.0F, 1.0F, 0.0F);
 				this.renderBlocks.renderBlockAsItem(Block.mushroomRed, 0, 1.0F);
-				GL11.glPopMatrix();
-				GL11.glDisable(GL11.GL_CULL_FACE);
+				GL.PopMatrix();
+				GL.Disable(EnableCap.CullFace);
 			}
 		}
 

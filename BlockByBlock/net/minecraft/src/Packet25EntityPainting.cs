@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet25EntityPainting : Packet
@@ -26,22 +28,22 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			entityId = dataInputStream1.ReadInt32();
+			entityId = dataInputStream1.ReadInt32BigEndian();
 			title = readString(dataInputStream1, EnumArt.maxArtTitleLength);
-			xPosition = dataInputStream1.ReadInt32();
-			yPosition = dataInputStream1.ReadInt32();
-			zPosition = dataInputStream1.ReadInt32();
-			direction = dataInputStream1.ReadInt32();
+			xPosition = dataInputStream1.ReadInt32BigEndian();
+			yPosition = dataInputStream1.ReadInt32BigEndian();
+			zPosition = dataInputStream1.ReadInt32BigEndian();
+			direction = dataInputStream1.ReadInt32BigEndian();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(entityId);
+			dataOutputStream1.WriteBigEndian(entityId);
 			writeString(title, dataOutputStream1);
-			dataOutputStream1.Write(xPosition);
-			dataOutputStream1.Write(yPosition);
-			dataOutputStream1.Write(zPosition);
-			dataOutputStream1.Write(direction);
+			dataOutputStream1.WriteBigEndian(xPosition);
+			dataOutputStream1.WriteBigEndian(yPosition);
+			dataOutputStream1.WriteBigEndian(zPosition);
+			dataOutputStream1.WriteBigEndian(direction);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

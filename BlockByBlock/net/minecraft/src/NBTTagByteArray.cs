@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 using System.Linq;
 
 namespace net.minecraft.src
@@ -19,7 +20,7 @@ namespace net.minecraft.src
 
 		internal override void write(BinaryWriter dataOutput1)
 		{
-			dataOutput1.Write(this.byteArray.Length);
+			dataOutput1.WriteBigEndian(this.byteArray.Length);
             
 			foreach (sbyte b in byteArray)
 				dataOutput1.Write(b);
@@ -27,13 +28,15 @@ namespace net.minecraft.src
         
 		internal override void load(BinaryReader dataInput1)
 		{
-			int len = dataInput1.ReadInt32();
+			int len = dataInput1.ReadInt32BigEndian();
 			sbyte[] sbytes = new sbyte[len];
 			
 			for(int i = 0; i < len; i++)
             {
 				sbytes[i] = dataInput1.ReadSByte();
             }
+
+			byteArray = sbytes;
 		}
 
 		public override sbyte Id

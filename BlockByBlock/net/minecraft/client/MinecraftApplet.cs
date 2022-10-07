@@ -9,27 +9,30 @@ using System.Threading;
 
 namespace net.minecraft.client
 {
-
-	using CanvasMinecraftApplet = net.minecraft.src.CanvasMinecraftApplet;
+    
 	using MinecraftAppletImpl = net.minecraft.src.MinecraftAppletImpl;
 	using Session = net.minecraft.src.Session;
 
-	public class MinecraftApplet : NativeWindow
+	public class MinecraftApplet : GameWindow
 	{
 		private Minecraft mc;
-		private Thread mcThread = null;
+		public Thread mcThread = null;
 
 		private List<KeyEvent> _events = new(128);
 		private List<MouseEvent> _mouseEvents = new(128);
+
+		private MouseEvent? currentMouseEvent = null;
+		private KeyEvent? currentKeyEvent = null;
 
 		protected NativeWindowSettings windowSettings { get; set; }
 
 		public static MinecraftApplet mcWindow; // I will be lazy and set static references and YOU CAN'T STOP ME!!!! >:((((
 
 		public static HashSet<string> OpenGLExtensions { get; set; } = new();
-
-		public MinecraftApplet(NativeWindowSettings settings) : base(settings)
+        
+		public MinecraftApplet(NativeWindowSettings settings) : base(new GameWindowSettings() { }, settings)
 		{
+			
 			windowSettings = settings;
 			mcWindow = this;
 
@@ -40,6 +43,10 @@ namespace net.minecraft.client
 				var extension = GL.GetString(StringNameIndexed.Extensions, i);
 				OpenGLExtensions.Add(extension);
 			}
+
+			init();
+
+			//RenderFrame?.Invoke(null);
 		}
 
 		public virtual void init()
@@ -61,27 +68,26 @@ namespace net.minecraft.client
 
 			KeyDown += MinecraftApplet_KeyDown;
 			KeyUp += MinecraftApplet_KeyUp;
+
 			// PORTING TODO: may need to call mc.SetServer (?) I don't think so, but check what this does for sure.
 		}
-
-        
 
         #region MOUSE INPUT
         private void MinecraftApplet_MouseUp(MouseButtonEventArgs e)
 		{
-			DoMouseEvent(new MouseEvent(MouseEventType.BUTTON, MouseState.ScrollDelta.Y, mc.MouseScrollDelta, null, null, 
+			DoMouseEvent(new MouseEvent(MouseEventType.BUTTON, 0, 0, null, null, 
 				(int)MouseState.Position.X, (int)MouseState.Position.Y, e.Action, e.Button));
 		}
 
 		private void MinecraftApplet_MouseDown(MouseButtonEventArgs e)
 		{
-			DoMouseEvent(new MouseEvent(MouseEventType.BUTTON, MouseState.ScrollDelta.Y, mc.MouseScrollDelta, null, null, 
+			DoMouseEvent(new MouseEvent(MouseEventType.BUTTON, 0, 0, null, null, 
 				(int)MouseState.Position.X, (int)MouseState.Position.Y, e.Action, e.Button));
 			
 		}
 		private void MinecraftApplet_MouseMove(MouseMoveEventArgs e)
 		{
-			DoMouseEvent(new MouseEvent(MouseEventType.MOVED, MouseState.ScrollDelta.Y, mc.MouseScrollDelta, (int)e.DeltaX, 
+			DoMouseEvent(new MouseEvent(MouseEventType.MOVED, 0, 0, (int)e.DeltaX, 
 				(int)e.DeltaY, (int)MouseState.Position.X, (int)MouseState.Position.Y, null, null));
 		}
 
@@ -144,17 +150,7 @@ namespace net.minecraft.client
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			mc.shutdown();
-
-			try
-			{
-				mcThread.Join();
-			}
-			catch (ThreadInterruptedException ex)
-			{
-				Console.WriteLine(ex.ToString());
-				Console.Write(ex.StackTrace);
-			}
-
+            
 			base.OnClosing(e);
 
 			Environment.Exit(0);
@@ -168,35 +164,43 @@ namespace net.minecraft.client
 		// Keyboard events
 		public virtual bool NextKeyEvent()
 		{
+			bool hasEvent = false;
+            
 			if (_events.Count > 0)
+			{
+				hasEvent = true;
+				currentKeyEvent = _events[0];
 				_events.RemoveAt(0);
+			}
 
-			return _events.Count > 0;
+
+			return hasEvent;
 		}
 
 		public virtual KeyEvent? CurrentKeyEvent()
 		{
-			if (_events.Count > 0)
-				return _events[0];
-
-			return null;
+			return currentKeyEvent;
 		}
 
 		// Mouse events
 		public virtual bool NextMouseEvent()
 		{
-			if (_mouseEvents.Count > 0)
-				_mouseEvents.RemoveAt(0);
+			bool hasEvent = false;
 
-			return _mouseEvents.Count > 0;
+			if (_mouseEvents.Count > 0)
+            {
+				hasEvent = true;
+				currentMouseEvent = _mouseEvents[0];
+				_mouseEvents.RemoveAt(0);
+			}
+
+
+			return hasEvent;
 		}
 
 		public virtual MouseEvent? CurrentMouseEvent()
 		{
-			if (_mouseEvents.Count > 0)
-				return _mouseEvents[0];
-
-			return null;
+			return currentMouseEvent;
 		}
 
 		public virtual void start()

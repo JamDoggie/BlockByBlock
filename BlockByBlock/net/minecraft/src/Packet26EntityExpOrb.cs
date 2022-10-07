@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet26EntityExpOrb : Packet
@@ -24,20 +26,20 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			entityId = dataInputStream1.ReadInt32();
-			posX = dataInputStream1.ReadInt32();
-			posY = dataInputStream1.ReadInt32();
-			posZ = dataInputStream1.ReadInt32();
-			xpValue = dataInputStream1.ReadInt16();
+			entityId = dataInputStream1.ReadInt32BigEndian();
+			posX = dataInputStream1.ReadInt32BigEndian();
+			posY = dataInputStream1.ReadInt32BigEndian();
+			posZ = dataInputStream1.ReadInt32BigEndian();
+			xpValue = dataInputStream1.ReadInt16BigEndian();
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(entityId);
-			dataOutputStream1.Write(posX);
-			dataOutputStream1.Write(posY);
-			dataOutputStream1.Write(posZ);
-			dataOutputStream1.Write((short)xpValue);
+			dataOutputStream1.WriteBigEndian(entityId);
+			dataOutputStream1.WriteBigEndian(posX);
+			dataOutputStream1.WriteBigEndian(posY);
+			dataOutputStream1.WriteBigEndian(posZ);
+			dataOutputStream1.WriteBigEndian((short)xpValue);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

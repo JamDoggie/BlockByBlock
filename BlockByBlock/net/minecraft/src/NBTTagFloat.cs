@@ -1,4 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.helpers;
+using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class NBTTagFloat : NBTBase
@@ -16,12 +19,12 @@
         
 		internal override void write(BinaryWriter dataOutput1)
 		{
-			dataOutput1.Write(data);
+			dataOutput1.WriteBigEndian(data);
 		}
         
 		internal override void load(BinaryReader dataInput1)
 		{
-			data = dataInput1.ReadSingle();
+			data = dataInput1.ReadSingleBigEndian();
 		}
 
 		public override sbyte Id
@@ -55,12 +58,9 @@
 			}
 		}
 
-		public unsafe override int GetHashCode()
+		public override int GetHashCode()
 		{
-            fixed (float* f = &data)
-            {
-                return base.GetHashCode() ^ *(int*)f; // It's... It's beautiful...
-            }
+            return base.GetHashCode() ^ JTypes.FloatToRawIntBits(data);
 		}
 	}
 }

@@ -1,7 +1,7 @@
-﻿namespace net.minecraft.src
-{
-	using GL11 = org.lwjgl.opengl.GL11;
+﻿using OpenTK.Graphics.OpenGL;
 
+namespace net.minecraft.src
+{
 	public class RenderSpider : RenderLiving
 	{
 		public RenderSpider() : base(new ModelSpider(), 1.0F)
@@ -24,15 +24,15 @@
 			{
 				this.loadTexture("/mob/spider_eyes.png");
 				float f4 = 1.0F;
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glDisable(GL11.GL_ALPHA_TEST);
-				GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+				GL.Enable(EnableCap.Blend);
+				GL.Disable(EnableCap.AlphaTest);
+				GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
 				int i5 = 61680;
 				int i6 = i5 % 65536;
 				int i7 = i5 / 65536;
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i6 / 1.0F, (float)i7 / 1.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, f4);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, f4);
 				return 1;
 			}
 		}
@@ -40,7 +40,7 @@
 		protected internal virtual void scaleSpider(EntitySpider entitySpider1, float f2)
 		{
 			float f3 = entitySpider1.spiderScaleAmount();
-			GL11.glScalef(f3, f3, f3);
+			GL.Scale(f3, f3, f3);
 		}
 
 		protected internal override void preRenderCallback(EntityLiving entityLiving1, float f2)

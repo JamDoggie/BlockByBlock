@@ -1,6 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderSnowMan : RenderLiving
 	{
@@ -29,18 +30,18 @@
 			ItemStack itemStack3 = new ItemStack(Block.pumpkin, 1);
 			if (itemStack3 != null && itemStack3.Item.shiftedIndex < 256)
 			{
-				GL11.glPushMatrix();
+				GL.PushMatrix();
 				this.snowmanModel.field_40305_c.postRender(0.0625F);
 				if (RenderBlocks.renderItemIn3d(Block.blocksList[itemStack3.itemID].RenderType))
 				{
 					float f4 = 0.625F;
-					GL11.glTranslatef(0.0F, -0.34375F, 0.0F);
-					GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
-					GL11.glScalef(f4, -f4, f4);
+					GL.Translate(0.0F, -0.34375F, 0.0F);
+					GL.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
+					GL.Scale(f4, -f4, f4);
 				}
 
 				this.renderManager.itemRenderer.renderItem(entitySnowman1, itemStack3, 0);
-				GL11.glPopMatrix();
+				GL.PopMatrix();
 			}
 
 		}

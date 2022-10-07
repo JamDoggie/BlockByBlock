@@ -1,19 +1,19 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
+
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderLightningBolt : Render
 	{
 		public virtual void doRenderLightningBolt(EntityLightningBolt entityLightningBolt1, double d2, double d4, double d6, float f8, float f9)
 		{
 			Tessellator tessellator10 = Tessellator.instance;
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+			GL.Disable(EnableCap.Texture2D);
+			GL.Disable(EnableCap.Lighting);
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.One);
 			double[] d11 = new double[8];
 			double[] d12 = new double[8];
 			double d13 = 0.0D;
@@ -113,10 +113,9 @@ namespace net.minecraft.src
 					}
 				}
 			}
-
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL.Enable(EnableCap.Blend);
+			GL.Enable(EnableCap.Lighting);
+			GL.Disable(EnableCap.Texture2D);
 		}
 
 		public override void doRender(Entity entity1, double d2, double d4, double d6, float f8, float f9)

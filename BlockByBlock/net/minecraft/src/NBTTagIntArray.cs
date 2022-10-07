@@ -1,11 +1,12 @@
 ﻿using System;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
 
 	public class NBTTagIntArray : NBTBase
 	{
-		public int[] field_48181_a;
+		public int[] data;
 
 		public NBTTagIntArray(string string1) : base(string1)
 		{
@@ -13,28 +14,28 @@ namespace net.minecraft.src
 
 		public NBTTagIntArray(string string1, int[] i2) : base(string1)
 		{
-			this.field_48181_a = i2;
+			this.data = i2;
 		}
 
 		internal override void write(BinaryWriter dataOutput1)
 		{
-			dataOutput1.Write(this.field_48181_a.Length);
+			dataOutput1.WriteBigEndian(this.data.Length);
 
-			for (int i2 = 0; i2 < this.field_48181_a.Length; ++i2)
+			for (int i2 = 0; i2 < this.data.Length; ++i2)
 			{
-				dataOutput1.Write(this.field_48181_a[i2]);
+				dataOutput1.WriteBigEndian(this.data[i2]);
 			}
 
 		}
 
 		internal override void load(BinaryReader dataInput1)
 		{
-			int i2 = dataInput1.ReadInt32();
-			this.field_48181_a = new int[i2];
+			int i2 = dataInput1.ReadInt32BigEndian();
+			this.data = new int[i2];
 
 			for (int i3 = 0; i3 < i2; ++i3)
 			{
-				this.field_48181_a[i3] = dataInput1.ReadInt32();
+				this.data[i3] = dataInput1.ReadInt32BigEndian();
 			}
 
 		}
@@ -49,13 +50,13 @@ namespace net.minecraft.src
 
 		public override string ToString()
 		{
-			return "[" + this.field_48181_a.Length + " bytes]";
+			return "[" + this.data.Length + " bytes]";
 		}
 
 		public override NBTBase copy()
 		{
-			int[] i1 = new int[this.field_48181_a.Length];
-			Array.Copy(this.field_48181_a, 0, i1, 0, this.field_48181_a.Length);
+			int[] i1 = new int[this.data.Length];
+			Array.Copy(this.data, 0, i1, 0, this.data.Length);
 			return new NBTTagIntArray(this.Name, i1);
 		}
 
@@ -68,13 +69,13 @@ namespace net.minecraft.src
 			else
 			{
 				NBTTagIntArray nBTTagIntArray2 = (NBTTagIntArray)object1;
-				return this.field_48181_a == null && nBTTagIntArray2.field_48181_a == null || this.field_48181_a != null && this.field_48181_a.Equals(nBTTagIntArray2.field_48181_a);
+				return this.data == null && nBTTagIntArray2.data == null || this.data != null && this.data.Equals(nBTTagIntArray2.data);
 			}
 		}
 
 		public override int GetHashCode()
 		{
-			return base.GetHashCode() ^ field_48181_a.GetHashCode();
+			return base.GetHashCode() ^ data.GetHashCode();
 		}
 	}
 

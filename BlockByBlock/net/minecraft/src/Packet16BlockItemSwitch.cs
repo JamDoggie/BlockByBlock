@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet16BlockItemSwitch : Packet
@@ -16,12 +18,12 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			id = dataInputStream1.ReadInt16();
+			id = dataInputStream1.ReadInt16BigEndian();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write((short)id);
+			dataOutputStream1.WriteBigEndian((short)id);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

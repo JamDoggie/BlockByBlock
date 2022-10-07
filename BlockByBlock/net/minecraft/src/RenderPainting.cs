@@ -1,11 +1,9 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
 
 	public class RenderPainting : Render
 	{
@@ -15,17 +13,17 @@ namespace net.minecraft.src
 		{
 			//this.rand.setSeed(187L); // PORTING TODO: RandomExtended.setSeed
 			rand = new RandomExtended(187L);
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float)d2, (float)d4, (float)d6);
-			GL11.glRotatef(f8, 0.0F, 1.0F, 0.0F);
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL.PushMatrix();
+			GL.Translate((float)d2, (float)d4, (float)d6);
+			GL.Rotate(f8, 0.0F, 1.0F, 0.0F);
+			GL.Enable(EnableCap.RescaleNormal);
 			this.loadTexture("/art/kz.png");
 			EnumArt enumArt10 = entityPainting1.art;
 			float f11 = 0.0625F;
-			GL11.glScalef(f11, f11, f11);
+			GL.Scale(f11, f11, f11);
 			this.func_159_a(entityPainting1, enumArt10.sizeX, enumArt10.sizeY, enumArt10.offsetX, enumArt10.offsetY);
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
+			GL.Disable(EnableCap.RescaleNormal);
+			GL.PopMatrix();
 		}
 
 		private void func_159_a(EntityPainting entityPainting1, int i2, int i3, int i4, int i5)
@@ -127,7 +125,7 @@ namespace net.minecraft.src
 			int i8 = i7 % 65536;
 			int i9 = i7 / 65536;
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i8, (float)i9);
-			GL11.glColor3f(1.0F, 1.0F, 1.0F);
+			GL.Color3(1.0F, 1.0F, 1.0F);
 		}
 
 		public override void doRender(Entity entity1, double d2, double d4, double d6, float f8, float f9)

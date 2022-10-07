@@ -127,8 +127,8 @@ namespace net.minecraft.src
 
 			if (e.IsPressed)
 			{
-				i1 = e.posX * this.width / this.mc.displayWidth;
-				i2 = this.height - e.posY * this.height / this.mc.displayHeight - 1;
+				i1 = (int)mc.MouseX * this.width / this.mc.displayWidth;
+				i2 = this.height - (int)mc.MouseY * this.height / this.mc.displayHeight - 1;
 				this.mouseClicked(i1, i2, (int)e.button!.Value);
 			}
 			else

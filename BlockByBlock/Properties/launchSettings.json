@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BlockByBlock": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

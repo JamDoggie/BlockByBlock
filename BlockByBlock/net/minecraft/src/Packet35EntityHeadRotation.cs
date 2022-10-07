@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet35EntityHeadRotation : Packet
@@ -8,13 +10,13 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			entityId = dataInputStream1.ReadInt32();
+			entityId = dataInputStream1.ReadInt32BigEndian();
 			headRotationYaw = dataInputStream1.ReadSByte();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(entityId);
+			dataOutputStream1.WriteBigEndian(entityId);
 			dataOutputStream1.Write(headRotationYaw);
 		}
 

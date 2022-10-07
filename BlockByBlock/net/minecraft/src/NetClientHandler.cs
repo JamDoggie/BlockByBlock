@@ -1,4 +1,5 @@
-﻿using BlockByBlock.java_extensions;
+﻿using BlockByBlock.helpers;
+using BlockByBlock.java_extensions;
 using System;
 using System.Collections;
 using System.IO;
@@ -29,12 +30,18 @@ namespace net.minecraft.src
 		public NetClientHandler(Minecraft minecraft1, string address, int port)
 		{
 			this.mc = minecraft1;
-            
+
 			IPHostEntry host = Dns.GetHostEntry(address);
 			IPAddress ip = host.AddressList[0];
 			IPEndPoint endPoint = new IPEndPoint(ip, port);
             
 			Socket socket4 = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+			socket4.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TypeOfService, 24);
+			socket4.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
+			socket4.Connect(endPoint);
+			
+
 			this.netManager = new NetworkManager(socket4, "Client", this);
 		}
 
@@ -569,8 +576,8 @@ namespace net.minecraft.src
 				{
 					try
 					{
-						Convert.ToInt64(string3, 16);
-					}
+                        long l = JTypes.JavaParseLong(string3, 16);
+                    }
 					catch (System.FormatException)
 					{
 						z2 = false;
@@ -584,7 +591,7 @@ namespace net.minecraft.src
 
 			if (!z2)
 			{
-				this.netManager.networkShutdown("disconnect.genericReason", new object[]{"The server responded with an invalid server key"});
+				this.netManager.networkShutdown("disconnect.genericReason", new object[] {"The server responded with an invalid server key"});
 			}
 			else if (packet2Handshake1.username.Equals("-"))
 			{

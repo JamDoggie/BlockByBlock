@@ -49,7 +49,7 @@ namespace net.minecraft.src
 			this.biome = biomeGenBase1;
 		}
 
-		public virtual void decorate(World world1, Random random2, int i3, int i4)
+		public virtual void decorate(World world1, RandomExtended random2, int i3, int i4)
 		{
 			if (this.currentWorld != null)
 			{

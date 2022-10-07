@@ -53,7 +53,7 @@ namespace net.minecraft.src
 
 		public virtual WorldInfo? getWorldInfo(string worldName)
 		{
-			FileInfo file2 = new FileInfo(savesDirectory + "/" + worldName);
+			DirectoryInfo file2 = new DirectoryInfo(savesDirectory + "/" + worldName);
             
 			if (!file2.Exists)
 			{

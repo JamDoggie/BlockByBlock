@@ -110,6 +110,7 @@ namespace net.minecraft.client
 
 	using OpenTK.Graphics.OpenGL;
     using OpenTK.Windowing.GraphicsLibraryFramework;
+    using OpenTK.Graphics.Wgl;
 
     public abstract class Minecraft
 	{
@@ -185,7 +186,7 @@ namespace net.minecraft.client
 		private int joinPlayerCounter = 0;
 
 		public float MouseX => mcApplet.MousePosition.X;
-		public float MouseY => mcApplet.MousePosition.Y;
+		public float MouseY => mcApplet.Bounds.Size.Y - mcApplet.MousePosition.Y;
 
 
 		public Minecraft(NativeWindow window, MinecraftApplet minecraftApplet3, int displayWidth, int displayHeight, bool fullscreen)
@@ -230,10 +231,9 @@ namespace net.minecraft.client
         
 		public virtual void startGame()
 		{
+
 			if (this.mcApplet != null)
 			{
-				GL.ClearColor(Color4.Black);
-
 				if (this.fullscreen)
 				{
 					mcApplet.WindowState = WindowState.Fullscreen;
@@ -396,6 +396,8 @@ namespace net.minecraft.client
 
 		public static DirectoryInfo getAppDir(string string0)
 		{
+			return new DirectoryInfo("C:\\Users\\JamDo\\Documents\\Minecraft 1.2.5 Game Folder\\");
+
 			string string1 = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 			DirectoryInfo file2;
 			switch (EnumOSMappingHelper.enumOSMappingArray[(int)Os])
@@ -588,13 +590,15 @@ namespace net.minecraft.client
 			System.GC.Collect();
 		}
 
-		public virtual void run()
+		public unsafe virtual void run()
 		{
 			this.running = true;
 
 			try
 			{
 				this.startGame();
+				mcApplet.Context.MakeCurrent();
+				mcApplet.Context.SwapBuffers();
 			}
 			catch (Exception exception11)
 			{
@@ -611,6 +615,7 @@ namespace net.minecraft.client
 					try
 					{
 						this.runGameLoop();
+						//mcApplet.Context.SwapBuffers();
 					}
 					catch (MinecraftException)
 					{
@@ -643,6 +648,9 @@ namespace net.minecraft.client
 
 		}
 
+		public static double? previousMouseX = null;
+		public static double? previousMouseY = null;
+
 		private void runGameLoop()
 		{
 			if (this.mcApplet != null && !mcApplet.Exists)
@@ -672,7 +680,7 @@ namespace net.minecraft.client
 
 				long j6 = JTime.NanoTime();
 				Profiler.startSection("tick");
-
+				NativeWindow.ProcessWindowEvents(false);
 				for (int i3 = 0; i3 < this.timer.elapsedTicks; ++i3)
 				{
 					++this.ticksRan;
@@ -705,10 +713,10 @@ namespace net.minecraft.client
 				Profiler.startSection("render");
 				Profiler.startSection("display");
 				GL.Enable(EnableCap.Texture2D);
-				//if (!Keyboard.isKeyDown(Keyboard.KEY_F7))
-				//{
-				//	Display.update();
-				//} // PORTING TODO: Not sure what this is for
+
+				mcApplet.SwapBuffers();
+
+				mcApplet.IsVisible = true;
 
 				if (this.thePlayer != null && this.thePlayer.EntityInsideOpaqueBlock)
 				{
@@ -790,7 +798,13 @@ namespace net.minecraft.client
 				}
 
 				Profiler.endSection();
-			}
+                unsafe
+                {
+                    GLFW.GetCursorPos(mcApplet.WindowPtr, out double prevX, out double prevY);
+					previousMouseX = prevX;
+					previousMouseY = prevY;
+                }
+            }
 		}
 
 		public virtual void freeMemory()
@@ -1290,6 +1304,7 @@ namespace net.minecraft.client
 		{
 			
 
+
 			if (rightClickDelayTimer > 0)
 			{
 				--rightClickDelayTimer;
@@ -1368,7 +1383,7 @@ namespace net.minecraft.client
 				}
 			}
 
-			NativeWindow.ProcessWindowEvents(false);
+			
 
 			if (currentScreen == null || currentScreen.allowUserInput)
 			{
@@ -1379,7 +1394,8 @@ namespace net.minecraft.client
 
 					MouseEvent e = mcApplet.CurrentMouseEvent()!.Value;
 
-					KeyBinding.setKeyBindState((int)e.button - 100, e.IsPressed);
+					if (e.button != null)
+						KeyBinding.setKeyBindState((int)e.button - 100, e.IsPressed);
 
 					long j5 = DateTimeHelper.CurrentUnixTimeMillis() - systemTime;
 					if (j5 <= 200L)
@@ -1695,13 +1711,13 @@ namespace net.minecraft.client
 			}
 		}
 
-		public virtual void startWorld(string string1, string string2, WorldSettings worldSettings3)
+		public virtual void startWorld(string world, string string2, WorldSettings worldSettings3)
 		{
 			this.changeWorld1((World)null);
-			System.GC.Collect();
-			if (this.saveLoader.isOldMapFormat(string1))
+			GC.Collect();
+			if (this.saveLoader.isOldMapFormat(world))
 			{
-				this.convertMapFormat(string1, string2);
+				this.convertMapFormat(world, string2);
 			}
 			else
 			{
@@ -1711,7 +1727,7 @@ namespace net.minecraft.client
 					this.loadingScreen.displayLoadingString("");
 				}
 
-				ISaveHandler iSaveHandler4 = this.saveLoader.getSaveLoader(string1, false);
+				ISaveHandler iSaveHandler4 = this.saveLoader.getSaveLoader(world, false);
 				World world5 = null;
 				world5 = new World(iSaveHandler4, string2, worldSettings3);
 				if (world5.isNewWorld)
@@ -2135,14 +2151,15 @@ namespace net.minecraft.client
 
 			NativeWindowSettings windowSettings = new()
 			{
-				Size = new Vector2i(854, 480)
+				Size = new Vector2i(854, 480),
+				Profile = ContextProfile.Compatability
 			};
 
 			MinecraftApplet applet = new(windowSettings);
 
 			MinecraftImpl minecraftImpl7 = new MinecraftImpl(applet, 854, 480, fullscreen);
-			Thread thread8 = new Thread(() => minecraftImpl7.run());
-			thread8.Priority = ThreadPriority.Highest;
+			//Thread thread8 = new Thread(() => minecraftImpl7.run());
+			//thread8.Priority = ThreadPriority.Highest;
 			minecraftImpl7.minecraftUri = "www.minecraft.net";
 			if (!string.ReferenceEquals(string0, null) && !string.ReferenceEquals(string1, null))
 			{
@@ -2158,8 +2175,12 @@ namespace net.minecraft.client
 				string[] string9 = string2.Split(":", true);
 				minecraftImpl7.setServer(string9[0], int.Parse(string9[1]));
 			}
-            
-			thread8.Start();
+
+			//applet.mcThread = thread8;
+
+			//thread8.Start();
+
+			minecraftImpl7.run();
 		}
 
 		public virtual NetClientHandler SendQueue
@@ -2241,7 +2262,7 @@ namespace net.minecraft.client
 		{
 			if (string1.StartsWith("/", StringComparison.Ordinal))
 			{
-				;
+				return true;
 			}
 
 			return false;
@@ -2299,7 +2320,7 @@ namespace net.minecraft.client
 
 		}
 
-		public static string func_52003_C()
+		public static string Version()
 		{
 			return "1.2.5";
 		}
@@ -2311,7 +2332,7 @@ namespace net.minecraft.client
 			double physicalMemory = installedMemory / 1048576.0D;
 
 			PlayerUsageSnooper playerUsageSnooper0 = new PlayerUsageSnooper("client");
-			playerUsageSnooper0.func_52022_a("version", func_52003_C());
+			playerUsageSnooper0.func_52022_a("version", Version());
 			playerUsageSnooper0.func_52022_a("os_name", Environment.OSVersion);
 			playerUsageSnooper0.func_52022_a("os_version", Environment.OSVersion.Version);
             playerUsageSnooper0.func_52022_a("os_architecture", Environment.Is64BitOperatingSystem ? "x86_64" : "x86");

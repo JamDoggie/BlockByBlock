@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet9Respawn : Packet
@@ -29,10 +31,10 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			respawnDimension = dataInputStream1.ReadInt32();
+			respawnDimension = dataInputStream1.ReadInt32BigEndian();
 			difficulty = dataInputStream1.ReadSByte();
 			creativeMode = dataInputStream1.ReadSByte();
-			worldHeight = dataInputStream1.ReadInt16();
+			worldHeight = dataInputStream1.ReadInt16BigEndian();
 			string string2 = readString(dataInputStream1, 16);
 			terrainType = WorldType.parseWorldType(string2);
 			if (terrainType == null)
@@ -44,10 +46,10 @@
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(respawnDimension);
+			dataOutputStream1.WriteBigEndian(respawnDimension);
 			dataOutputStream1.Write((sbyte)difficulty);
 			dataOutputStream1.Write((sbyte)creativeMode);
-			dataOutputStream1.Write((short)worldHeight);
+			dataOutputStream1.WriteBigEndian((short)worldHeight);
 			writeString(terrainType.func_48628_a(), dataOutputStream1);
 		}
 

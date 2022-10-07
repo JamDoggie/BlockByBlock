@@ -1,4 +1,4 @@
-﻿namespace net.minecraft.src
+﻿/*namespace net.minecraft.src
 {
 
 	internal class CanvasCrashReport : Canvas
@@ -10,4 +10,4 @@
 		}
 	}
 
-}
+}*/

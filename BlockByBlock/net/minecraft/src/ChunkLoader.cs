@@ -41,7 +41,7 @@
 				i3[i4] = anvilConverterData0.heightmap[i4];
 			}
 
-			nBTTagCompound1.func_48183_a("HeightMap", i3);
+			nBTTagCompound1.setIntArray("HeightMap", i3);
 			nBTTagCompound1.setBoolean("TerrainPopulated", anvilConverterData0.terrainPopulated);
 			NBTTagList nBTTagList16 = new NBTTagList("Sections");
 

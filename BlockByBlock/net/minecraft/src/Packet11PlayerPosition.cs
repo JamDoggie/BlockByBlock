@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet11PlayerPosition : Packet10Flying
@@ -20,19 +22,19 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			xPosition = dataInputStream1.ReadDouble();
-			yPosition = dataInputStream1.ReadDouble();
-			stance = dataInputStream1.ReadDouble();
-			zPosition = dataInputStream1.ReadDouble();
+			xPosition = dataInputStream1.ReadDoubleBigEndian();
+			yPosition = dataInputStream1.ReadDoubleBigEndian();
+			stance = dataInputStream1.ReadDoubleBigEndian();
+			zPosition = dataInputStream1.ReadDoubleBigEndian();
 			base.readPacketData(dataInputStream1);
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(xPosition);
-			dataOutputStream1.Write(yPosition);
-			dataOutputStream1.Write(stance);
-			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.WriteBigEndian(xPosition);
+			dataOutputStream1.WriteBigEndian(yPosition);
+			dataOutputStream1.WriteBigEndian(stance);
+			dataOutputStream1.WriteBigEndian(zPosition);
 			base.writePacketData(dataOutputStream1);
 		}
 

@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet106Transaction : Packet
@@ -26,14 +28,14 @@
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
 			windowId = dataInputStream1.ReadSByte();
-			shortWindowId = dataInputStream1.ReadInt16();
+			shortWindowId = dataInputStream1.ReadInt16BigEndian();
 			accepted = dataInputStream1.ReadByte() != 0;
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
 			dataOutputStream1.Write((sbyte)windowId);
-			dataOutputStream1.Write(shortWindowId);
+			dataOutputStream1.WriteBigEndian(shortWindowId);
 			dataOutputStream1.Write(accepted ? (byte)1 : (byte)0);
 		}
 

@@ -32,6 +32,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="font.txt" />
+    <None Remove="pack.png" />
+    <None Remove="pack.txt" />
+    <None Remove="particles.png" />
+    <None Remove="terrain.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="font.txt" />
+    <EmbeddedResource Include="pack.png" />
+    <EmbeddedResource Include="pack.txt" />
+    <EmbeddedResource Include="particles.png" />
+    <EmbeddedResource Include="terrain.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="OpenTK" Version="4.7.5" />
     <PackageReference Include="SharpZipLib" Version="1.4.0" />

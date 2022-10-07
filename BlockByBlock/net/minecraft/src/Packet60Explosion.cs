@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BlockByBlock.java_extensions;
+using System.Collections.Generic;
 
 namespace net.minecraft.src
 {
@@ -13,11 +14,11 @@ namespace net.minecraft.src
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			explosionX = dataInputStream1.ReadDouble();
-			explosionY = dataInputStream1.ReadDouble();
-			explosionZ = dataInputStream1.ReadDouble();
-			explosionSize = dataInputStream1.ReadSingle();
-			int i2 = dataInputStream1.ReadInt32();
+			explosionX = dataInputStream1.ReadDoubleBigEndian();
+			explosionY = dataInputStream1.ReadDoubleBigEndian();
+			explosionZ = dataInputStream1.ReadDoubleBigEndian();
+			explosionSize = dataInputStream1.ReadSingleBigEndian();
+			int i2 = dataInputStream1.ReadInt32BigEndian();
 			destroyedBlockPositions = new HashSet<object>();
 			int i3 = (int)explosionX;
 			int i4 = (int)explosionY;
@@ -35,11 +36,11 @@ namespace net.minecraft.src
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(explosionX);
-			dataOutputStream1.Write(explosionY);
-			dataOutputStream1.Write(explosionZ);
-			dataOutputStream1.Write(explosionSize);
-			dataOutputStream1.Write(destroyedBlockPositions.Count);
+			dataOutputStream1.WriteBigEndian(explosionX);
+			dataOutputStream1.WriteBigEndian(explosionY);
+			dataOutputStream1.WriteBigEndian(explosionZ);
+			dataOutputStream1.WriteBigEndian(explosionSize);
+			dataOutputStream1.WriteBigEndian(destroyedBlockPositions.Count);
 			int i2 = (int)explosionX;
 			int i3 = (int)explosionY;
 			int i4 = (int)explosionZ;

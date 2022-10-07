@@ -37,7 +37,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual object getValueByKey(long j1)
+		public virtual object? getValueByKey(long j1)
 		{
 			int i3 = getHashedKey(j1);
 

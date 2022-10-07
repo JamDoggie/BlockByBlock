@@ -1,11 +1,12 @@
-﻿using System;
+﻿using BlockByBlock;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using System;
 
 namespace net.minecraft.src
 {
 
 	using Minecraft = net.minecraft.client.Minecraft;
-
-	// PORTING TODO: Java image stuff.
 
 	public class TextureWatchFX : TextureFX
 	{
@@ -22,12 +23,12 @@ namespace net.minecraft.src
 
 			try
 			{
-				BufferedImage bufferedImage2 = ImageIO.read(typeof(Minecraft).getResource("/gui/items.png"));
+				Image<Bgra32> bufferedImage2 = Image.Load<Bgra32>(GameEnv.GetResourceAsStream("/gui/items.png"));
 				int i3 = this.iconIndex % 16 * 16;
 				int i4 = this.iconIndex / 16 * 16;
-				bufferedImage2.getRGB(i3, i4, 16, 16, this.watchIconImageData, 0, 16);
-				bufferedImage2 = ImageIO.read(typeof(Minecraft).getResource("/misc/dial.png"));
-				bufferedImage2.getRGB(0, 0, 16, 16, this.dialImageData, 0, 16);
+				RenderEngine.FillIntBufferWithImage(bufferedImage2, watchIconImageData, i3, i4, 16, 16);
+				bufferedImage2 = Image.Load<Bgra32>(GameEnv.GetResourceAsStream("/misc/dial.png"));
+				RenderEngine.FillIntBufferWithImage(bufferedImage2, dialImageData);
 			}
 			catch (IOException iOException5)
 			{

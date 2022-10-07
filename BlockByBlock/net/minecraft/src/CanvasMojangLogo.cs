@@ -1,6 +1,6 @@
-﻿namespace net.minecraft.src
+﻿/*namespace net.minecraft.src
 {
-
+    
 	internal class CanvasMojangLogo : Canvas
 	{
 		private BufferedImage logo;
@@ -27,4 +27,4 @@
 		}
 	}
 
-}
+}*/

@@ -1,6 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderTNTPrimed : Render
 	{
@@ -13,8 +14,8 @@
 
 		public virtual void func_153_a(EntityTNTPrimed entityTNTPrimed1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float)d2, (float)d4, (float)d6);
+			GL.PushMatrix();
+			GL.Translate((float)d2, (float)d4, (float)d6);
 			float f10;
 			if ((float)entityTNTPrimed1.fuse - f9 + 1.0F < 10.0F)
 			{
@@ -32,7 +33,7 @@
 				f10 *= f10;
 				f10 *= f10;
 				float f11 = 1.0F + f10 * 0.3F;
-				GL11.glScalef(f11, f11, f11);
+				GL.Scale(f11, f11, f11);
 			}
 
 			f10 = (1.0F - ((float)entityTNTPrimed1.fuse - f9 + 1.0F) / 100.0F) * 0.8F;
@@ -40,19 +41,19 @@
 			this.blockRenderer.renderBlockAsItem(Block.tnt, 0, entityTNTPrimed1.getBrightness(f9));
 			if (entityTNTPrimed1.fuse / 5 % 2 == 0)
 			{
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				GL11.glDisable(GL11.GL_LIGHTING);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_DST_ALPHA);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, f10);
+				GL.Disable(EnableCap.Texture2D);
+				GL.Disable(EnableCap.Lighting);
+				GL.Enable(EnableCap.Blend);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.DstAlpha);
+				GL.Color4(1.0F, 1.0F, 1.0F, f10);
 				this.blockRenderer.renderBlockAsItem(Block.tnt, 0, 1.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glEnable(GL11.GL_LIGHTING);
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Disable(EnableCap.Blend);
+				GL.Enable(EnableCap.Lighting);
+				GL.Enable(EnableCap.Texture2D);
 			}
 
-			GL11.glPopMatrix();
+			GL.PopMatrix();
 		}
 
 		public override void doRender(Entity entity1, double d2, double d4, double d6, float f8, float f9)

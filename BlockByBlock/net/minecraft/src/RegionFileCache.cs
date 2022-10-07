@@ -12,10 +12,10 @@ namespace net.minecraft.src
 		{
 			lock (typeof(RegionFileCache))
 			{
-				FileInfo file3 = new FileInfo(file0 + "/region");
+				DirectoryInfo file3 = new DirectoryInfo(file0 + "/region");
 				FileInfo file4 = new FileInfo(file3 + "/r." + (i1 >> 5) + "." + (i2 >> 5) + ".mca");
                 
-				RegionFile regionFile6 = regionsByFilename[file4];
+				regionsByFilename.TryGetValue(file4, out RegionFile? regionFile6);
                 
 				if (regionFile6 != null)
 				{

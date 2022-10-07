@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet34EntityTeleport : Packet
@@ -26,20 +28,20 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			entityId = dataInputStream1.ReadInt32();
-			xPosition = dataInputStream1.ReadInt32();
-			yPosition = dataInputStream1.ReadInt32();
-			zPosition = dataInputStream1.ReadInt32();
+			entityId = dataInputStream1.ReadInt32BigEndian();
+			xPosition = dataInputStream1.ReadInt32BigEndian();
+			yPosition = dataInputStream1.ReadInt32BigEndian();
+			zPosition = dataInputStream1.ReadInt32BigEndian();
 			yaw = dataInputStream1.ReadSByte();
 			pitch = dataInputStream1.ReadSByte();
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(entityId);
-			dataOutputStream1.Write(xPosition);
-			dataOutputStream1.Write(yPosition);
-			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.WriteBigEndian(entityId);
+			dataOutputStream1.WriteBigEndian(xPosition);
+			dataOutputStream1.WriteBigEndian(yPosition);
+			dataOutputStream1.WriteBigEndian(zPosition);
 			dataOutputStream1.Write(yaw);
 			dataOutputStream1.Write(pitch);
 		}

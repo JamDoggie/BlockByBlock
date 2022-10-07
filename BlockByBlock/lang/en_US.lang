@@ -119,14 +119,14 @@ connect.connecting=Connecting to the server...
 connect.authorizing=Logging in...
 connect.failed=Failed to connect to the server
 
-disconnect.genericReason=%s
+disconnect.genericReason={0}
 disconnect.disconnected=Disconnected by Server
 disconnect.lost=Connection Lost
 disconnect.kicked=Was kicked from the game
 disconnect.timeout=Timed out
 disconnect.closed=Connection closed
 disconnect.loginFailed=Failed to login
-disconnect.loginFailedInfo=Failed to login: %s
+disconnect.loginFailedInfo=Failed to login: {0}
 disconnect.quitting=Quitting
 disconnect.endOfStream=End of stream
 disconnect.overflow=Buffer overflow

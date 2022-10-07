@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet13PlayerLookMove : Packet10Flying
@@ -24,23 +26,23 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			xPosition = dataInputStream1.ReadDouble();
-			yPosition = dataInputStream1.ReadDouble();
-			stance = dataInputStream1.ReadDouble();
-			zPosition = dataInputStream1.ReadDouble();
-			yaw = dataInputStream1.ReadSingle();
-			pitch = dataInputStream1.ReadSingle();
+			xPosition = dataInputStream1.ReadDoubleBigEndian();
+			yPosition = dataInputStream1.ReadDoubleBigEndian();
+			stance = dataInputStream1.ReadDoubleBigEndian();
+			zPosition = dataInputStream1.ReadDoubleBigEndian();
+			yaw = dataInputStream1.ReadSingleBigEndian();
+			pitch = dataInputStream1.ReadSingleBigEndian();
 			base.readPacketData(dataInputStream1);
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(xPosition);
-			dataOutputStream1.Write(yPosition);
-			dataOutputStream1.Write(stance);
-			dataOutputStream1.Write(zPosition);
-			dataOutputStream1.Write(yaw);
-			dataOutputStream1.Write(pitch);
+			dataOutputStream1.WriteBigEndian(xPosition);
+			dataOutputStream1.WriteBigEndian(yPosition);
+			dataOutputStream1.WriteBigEndian(stance);
+			dataOutputStream1.WriteBigEndian(zPosition);
+			dataOutputStream1.WriteBigEndian(yaw);
+			dataOutputStream1.WriteBigEndian(pitch);
 			base.writePacketData(dataOutputStream1);
 		}
 

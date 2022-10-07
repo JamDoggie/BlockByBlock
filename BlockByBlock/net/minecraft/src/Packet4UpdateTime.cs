@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet4UpdateTime : Packet
@@ -7,12 +9,12 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			this.time = dataInputStream1.ReadInt64();
+			this.time = dataInputStream1.ReadInt64BigEndian();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(time);
+			dataOutputStream1.WriteBigEndian(time);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

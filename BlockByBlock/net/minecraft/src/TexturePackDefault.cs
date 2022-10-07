@@ -1,18 +1,18 @@
 ﻿using System;
+using BlockByBlock;
+using OpenTK.Graphics.OpenGL;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace net.minecraft.src
 {
 
 	using Minecraft = net.minecraft.client.Minecraft;
 
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code, and Java image stuff
-
 	public class TexturePackDefault : TexturePackBase
 	{
 		private int texturePackName = -1;
-		private BufferedImage texturePackThumbnail;
+		private Image<Bgra32> texturePackThumbnail;
 
 		public TexturePackDefault()
 		{
@@ -21,7 +21,7 @@ namespace net.minecraft.src
 
 			try
 			{
-				this.texturePackThumbnail = ImageIO.read(typeof(TexturePackDefault).getResource("/pack.png"));
+				this.texturePackThumbnail = Image.Load<Bgra32>(GameEnv.GetResourceAsStream("/pack.png"));
 			}
 			catch (IOException iOException2)
 			{
@@ -53,7 +53,7 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft1.renderEngine.getTexture("/gui/unknown_pack.png"));
+				GL.BindTexture(TextureTarget.Texture2D, minecraft1.renderEngine.getTexture("/gui/unknown_pack.png"));
 			}
 
 		}

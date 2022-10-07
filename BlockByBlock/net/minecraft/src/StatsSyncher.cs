@@ -110,7 +110,7 @@ namespace net.minecraft.src
         
 		private void func_27410_a(System.Collections.IDictionary map1, FileInfo file2, FileInfo file3, FileInfo file4)
 		{
-			StreamWriter printWriter5 = new StreamWriter(new FileStream(file3.FullName, FileMode.Open, FileAccess.ReadWrite));
+			StreamWriter printWriter5 = new StreamWriter(new FileStream(file3.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite));
 
 			try
 			{

@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet22Collect : Packet
@@ -8,14 +10,14 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			collectedEntityId = dataInputStream1.ReadInt32();
-			collectorEntityId = dataInputStream1.ReadInt32();
+			collectedEntityId = dataInputStream1.ReadInt32BigEndian();
+			collectorEntityId = dataInputStream1.ReadInt32BigEndian();
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(collectedEntityId);
-			dataOutputStream1.Write(collectorEntityId);
+			dataOutputStream1.WriteBigEndian(collectedEntityId);
+			dataOutputStream1.WriteBigEndian(collectorEntityId);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

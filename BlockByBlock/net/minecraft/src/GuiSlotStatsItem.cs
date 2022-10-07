@@ -10,7 +10,7 @@ namespace net.minecraft.src
 		public GuiSlotStatsItem(GuiStats guiStats1) : base(guiStats1)
 		{
 			this.field_27275_a = guiStats1;
-			this.field_27273_c = new ArrayList();
+			this.field_27273_c = new();
 			System.Collections.IEnumerator iterator2 = StatList.itemStats.GetEnumerator();
 
 			while (iterator2.MoveNext())

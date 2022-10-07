@@ -101,7 +101,7 @@ namespace net.minecraft.src
 			this.tagMap[string1] = new NBTTagByteArray(string1, b2);
 		}
 
-		public virtual void func_48183_a(string string1, int[] i2)
+		public virtual void setIntArray(string string1, int[] i2)
 		{
 			this.tagMap[string1] = new NBTTagIntArray(string1, i2);
 		}
@@ -166,9 +166,9 @@ namespace net.minecraft.src
 			return !this.tagMap.Contains(string1) ? new sbyte[0] : ((NBTTagByteArray)this.tagMap[string1]).byteArray;
 		}
 
-		public virtual int[] func_48182_l(string string1)
+		public virtual int[] getIntArray(string string1)
 		{
-			return !this.tagMap.Contains(string1) ? new int[0] : ((NBTTagIntArray)this.tagMap[string1]).field_48181_a;
+			return !this.tagMap.Contains(string1) ? new int[0] : ((NBTTagIntArray)this.tagMap[string1]).data;
 		}
 
 		public virtual NBTTagCompound getCompoundTag(string string1)

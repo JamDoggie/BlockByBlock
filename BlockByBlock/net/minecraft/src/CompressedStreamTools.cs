@@ -6,8 +6,6 @@ namespace net.minecraft.src
 
 	public class CompressedStreamTools
 	{
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static NBTTagCompound readCompressed(java.io.InputStream inputStream0) throws java.io.IOException
 		public static NBTTagCompound readCompressed(Stream inputStream0)
 		{
 			using(BinaryReader dataInputStream1 = new BinaryReader(new GZipStream(inputStream0, CompressionMode.Decompress)))
@@ -17,9 +15,7 @@ namespace net.minecraft.src
 				return nBTTagCompound2;
 			}
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static void writeCompressed(NBTTagCompound nBTTagCompound0, java.io.OutputStream outputStream1) throws java.io.IOException
+        
 		public static void writeCompressed(NBTTagCompound nBTTagCompound0, Stream outputStream1)
 		{
 			using (BinaryWriter dataOutputStream2 = new BinaryWriter(new GZipStream(outputStream1, CompressionMode.Compress)))
@@ -28,8 +24,6 @@ namespace net.minecraft.src
 			}
 		}
 
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static NBTTagCompound decompress(byte[] b0) throws java.io.IOException
 		public static NBTTagCompound decompress(byte[] b0)
 		{
 			using (BinaryReader dataInputStream1 = new BinaryReader(new GZipStream(new MemoryStream(b0), CompressionMode.Decompress)))
@@ -38,9 +32,7 @@ namespace net.minecraft.src
 				return nBTTagCompound2;
 			}
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static byte[] compress(NBTTagCompound nBTTagCompound0) throws java.io.IOException
+        
 		public static byte[] compress(NBTTagCompound nBTTagCompound0)
 		{
 			MemoryStream byteArrayOutputStream1 = new MemoryStream();
@@ -52,8 +44,6 @@ namespace net.minecraft.src
 			}
 		}
         
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static void safeWrite(NBTTagCompound nBTTagCompound0, java.io.File file1) throws java.io.IOException
 
 		/// <summary>
 		/// Safely writes a given NBTTagCompound to a file by first creating a temporary file, writing to it, then replacing the file that already exists if there is one.
@@ -85,9 +75,7 @@ namespace net.minecraft.src
                 file2.MoveTo(file1.FullName, true);
             }
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static void write(NBTTagCompound nBTTagCompound0, java.io.File file1) throws java.io.IOException
+        
 		public static void write(NBTTagCompound nBTTagCompound0, FileInfo file1)
 		{
 			using (BinaryWriter dataOutputStream2 = new BinaryWriter(new FileStream(file1.FullName, FileMode.Create, FileAccess.Write)))
@@ -95,9 +83,7 @@ namespace net.minecraft.src
 				write(nBTTagCompound0, dataOutputStream2);
 			}
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static NBTTagCompound read(java.io.File file0) throws java.io.IOException
+        
 		public static NBTTagCompound? read(FileInfo file0)
 		{
 			if (!file0.Exists)
@@ -113,9 +99,7 @@ namespace net.minecraft.src
 				}
 			}
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static NBTTagCompound read(java.io.DataInput dataInput0) throws java.io.IOException
+        
 		public static NBTTagCompound read(BinaryReader dataInput0)
 		{
 			NBTBase nBTBase1 = NBTBase.readNamedTag(dataInput0);
@@ -129,8 +113,6 @@ namespace net.minecraft.src
 			}
 		}
 
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static void write(NBTTagCompound nBTTagCompound0, java.io.DataOutput dataOutput1) throws java.io.IOException
 		public static void write(NBTTagCompound nBTTagCompound0, BinaryWriter dataOutput1)
 		{
 			NBTBase.writeNamedTag(nBTTagCompound0, dataOutput1);

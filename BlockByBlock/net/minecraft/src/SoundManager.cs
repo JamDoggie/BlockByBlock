@@ -2,13 +2,6 @@
 
 namespace net.minecraft.src
 {
-
-	using SoundSystem = paulscode.sound.SoundSystem;
-	using SoundSystemConfig = paulscode.sound.SoundSystemConfig;
-	using CodecJOrbis = paulscode.sound.codecs.CodecJOrbis;
-	using CodecWav = paulscode.sound.codecs.CodecWav;
-	using LibraryLWJGLOpenAL = paulscode.sound.libraries.LibraryLWJGLOpenAL;
-
 	// PORTING TODO: sound
 
 	public class SoundManager
@@ -29,7 +22,7 @@ namespace net.minecraft.src
 			ticksBeforeMusic = this.rand.Next(12000);
 		}
 
-		private static SoundSystem sndSystem;
+		//private static SoundSystem sndSystem;
 		private SoundPool soundPoolSounds = new SoundPool();
 		private SoundPool soundPoolStreaming = new SoundPool();
 		private SoundPool soundPoolMusic = new SoundPool();
@@ -52,7 +45,7 @@ namespace net.minecraft.src
 
 		private void tryToSetLibraryAndCodecs()
 		{
-			try
+			/*try
 			{
 				float f1 = this.options.soundVolume;
 				float f2 = this.options.musicVolume;
@@ -75,12 +68,12 @@ namespace net.minecraft.src
 				Console.Error.WriteLine("error linking with the LibraryJavaSound plug-in");
 			}
 
-			loaded = true;
+			loaded = true;*/
 		}
 
 		public virtual void onSoundOptionsChanged()
 		{
-			if (!loaded && (this.options.soundVolume != 0.0F || this.options.musicVolume != 0.0F))
+			/*if (!loaded && (this.options.soundVolume != 0.0F || this.options.musicVolume != 0.0F))
 			{
 				this.tryToSetLibraryAndCodecs();
 			}
@@ -95,7 +88,7 @@ namespace net.minecraft.src
 				{
 					sndSystem.setVolume("BgMusic", this.options.musicVolume);
 				}
-			}
+			}*/
 
 		}
 
@@ -103,7 +96,7 @@ namespace net.minecraft.src
 		{
 			if (loaded)
 			{
-				sndSystem.cleanup();
+				//sndSystem.cleanup();
 			}
 
 		}
@@ -127,7 +120,7 @@ namespace net.minecraft.src
 		{
 			if (loaded && this.options.musicVolume != 0.0F)
 			{
-				if (!sndSystem.playing("BgMusic") && !sndSystem.playing("streaming"))
+				/*if (!sndSystem.playing("BgMusic") && !sndSystem.playing("streaming"))
 				{
 					if (this.ticksBeforeMusic > 0)
 					{
@@ -143,7 +136,7 @@ namespace net.minecraft.src
 						sndSystem.setVolume("BgMusic", this.options.musicVolume);
 						sndSystem.play("BgMusic");
 					}
-				}
+				}*/
 
 			}
 		}
@@ -152,7 +145,7 @@ namespace net.minecraft.src
 		{
 			if (loaded && this.options.soundVolume != 0.0F)
 			{
-				if (entityLiving1 != null)
+				/*if (entityLiving1 != null)
 				{
 					float f3 = entityLiving1.prevRotationYaw + (entityLiving1.rotationYaw - entityLiving1.prevRotationYaw) * f2;
 					double d4 = entityLiving1.prevPosX + (entityLiving1.posX - entityLiving1.prevPosX) * (double)f2;
@@ -168,7 +161,7 @@ namespace net.minecraft.src
 					float f17 = 0.0F;
 					sndSystem.setListenerPosition((float)d4, (float)d6, (float)d8);
 					sndSystem.setListenerOrientation(f12, f13, f14, f15, f16, f17);
-				}
+				}*/
 			}
 		}
 
@@ -176,7 +169,7 @@ namespace net.minecraft.src
 		{
 			if (loaded && (this.options.soundVolume != 0.0F || string.ReferenceEquals(string1, null)))
 			{
-				string string7 = "streaming";
+				/*string string7 = "streaming";
 				if (sndSystem.playing("streaming"))
 				{
 					sndSystem.stop("streaming");
@@ -198,7 +191,7 @@ namespace net.minecraft.src
 						sndSystem.play(string7);
 					}
 
-				}
+				}*/
 			}
 		}
 
@@ -206,7 +199,7 @@ namespace net.minecraft.src
 		{
 			if (loaded && this.options.soundVolume != 0.0F)
 			{
-				SoundPoolEntry soundPoolEntry7 = this.soundPoolSounds.getRandomSoundFromSoundPool(string1);
+				/*SoundPoolEntry soundPoolEntry7 = this.soundPoolSounds.getRandomSoundFromSoundPool(string1);
 				if (soundPoolEntry7 != null && f5 > 0.0F)
 				{
 					this.latestSoundID = (this.latestSoundID + 1) % 256;
@@ -226,7 +219,7 @@ namespace net.minecraft.src
 
 					sndSystem.setVolume(string8, f5 * this.options.soundVolume);
 					sndSystem.play(string8);
-				}
+				}*/
 
 			}
 		}
@@ -235,7 +228,7 @@ namespace net.minecraft.src
 		{
 			if (loaded && this.options.soundVolume != 0.0F)
 			{
-				SoundPoolEntry soundPoolEntry4 = this.soundPoolSounds.getRandomSoundFromSoundPool(string1);
+				/*SoundPoolEntry soundPoolEntry4 = this.soundPoolSounds.getRandomSoundFromSoundPool(string1);
 				if (soundPoolEntry4 != null)
 				{
 					this.latestSoundID = (this.latestSoundID + 1) % 256;
@@ -250,7 +243,7 @@ namespace net.minecraft.src
 					sndSystem.setPitch(string5, f3);
 					sndSystem.setVolume(string5, f2 * this.options.soundVolume);
 					sndSystem.play(string5);
-				}
+				}*/
 
 			}
 		}

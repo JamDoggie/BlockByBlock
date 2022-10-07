@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using BlockByBlock.helpers;
+using System.Collections;
 
 namespace net.minecraft.src
 {
@@ -145,7 +146,7 @@ namespace net.minecraft.src
 
 		}
 
-		public virtual void func_28171_a(sbyte[] b1)
+		public virtual void func_28171_a(byte[] b1)
 		{
 			int i2;
 			if (b1[0] == 0)
@@ -155,7 +156,7 @@ namespace net.minecraft.src
 
 				for (int i4 = 0; i4 < b1.Length - 3; ++i4)
 				{
-					this.colors[(i4 + i3) * 128 + i2] = b1[i4 + 3];
+					this.colors[(i4 + i3) * 128 + i2] = JTypes.ByteToRawSByteBits(b1[i4 + 3]);
 				}
 
 				this.markDirty();
@@ -166,10 +167,10 @@ namespace net.minecraft.src
 
 				for (i2 = 0; i2 < (b1.Length - 1) / 3; ++i2)
 				{
-					sbyte b7 = (sbyte)(b1[i2 * 3 + 1] % 16);
-					sbyte b8 = b1[i2 * 3 + 2];
-					sbyte b5 = b1[i2 * 3 + 3];
-					sbyte b6 = (sbyte)(b1[i2 * 3 + 1] / 16);
+					sbyte b7 = (sbyte)(JTypes.ByteToRawSByteBits(b1[i2 * 3 + 1]) % 16);
+					sbyte b8 = JTypes.ByteToRawSByteBits(b1[i2 * 3 + 2]);
+					sbyte b5 = JTypes.ByteToRawSByteBits(b1[i2 * 3 + 3]);
+					sbyte b6 = (sbyte)(JTypes.ByteToRawSByteBits(b1[i2 * 3 + 1]) / 16);
 					this.playersVisibleOnMap.Add(new MapCoord(this, b7, b8, b5, b6));
 				}
 			}

@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet52MultiBlockChange : Packet
@@ -16,10 +18,10 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			xPosition = dataInputStream1.ReadInt32();
-			zPosition = dataInputStream1.ReadInt32();
-			size = dataInputStream1.ReadInt16() & 65535;
-			int i2 = dataInputStream1.ReadInt32();
+			xPosition = dataInputStream1.ReadInt32BigEndian();
+			zPosition = dataInputStream1.ReadInt32BigEndian();
+			size = dataInputStream1.ReadInt16BigEndian() & 65535;
+			int i2 = dataInputStream1.ReadInt32BigEndian();
 			if (i2 > 0)
 			{
 				metadataArray = new byte[i2];
@@ -30,17 +32,17 @@
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(xPosition);
-			dataOutputStream1.Write(zPosition);
-			dataOutputStream1.Write((short)size);
+			dataOutputStream1.WriteBigEndian(xPosition);
+			dataOutputStream1.WriteBigEndian(zPosition);
+			dataOutputStream1.WriteBigEndian((short)size);
 			if (metadataArray != null)
 			{
-				dataOutputStream1.Write(metadataArray.Length);
+				dataOutputStream1.WriteBigEndian(metadataArray.Length);
 				dataOutputStream1.Write(metadataArray);
 			}
 			else
 			{
-				dataOutputStream1.Write(0);
+				dataOutputStream1.WriteBigEndian(0);
 			}
 
 		}

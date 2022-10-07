@@ -19,7 +19,7 @@
 		{
 			get
 			{
-				return (sbyte)0;
+				return 0;
 			}
 		}
         

@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet132TileEntityData : Packet
@@ -18,24 +20,24 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			xPosition = dataInputStream1.ReadInt32();
-			yPosition = dataInputStream1.ReadInt16();
-			zPosition = dataInputStream1.ReadInt32();
+			xPosition = dataInputStream1.ReadInt32BigEndian();
+			yPosition = dataInputStream1.ReadInt16BigEndian();
+			zPosition = dataInputStream1.ReadInt32BigEndian();
 			actionType = dataInputStream1.ReadSByte();
-			customParam1 = dataInputStream1.ReadInt32();
-			customParam2 = dataInputStream1.ReadInt32();
-			customParam3 = dataInputStream1.ReadInt32();
+			customParam1 = dataInputStream1.ReadInt32BigEndian();
+			customParam2 = dataInputStream1.ReadInt32BigEndian();
+			customParam3 = dataInputStream1.ReadInt32BigEndian();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(xPosition);
-			dataOutputStream1.Write((short)yPosition);
-			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.WriteBigEndian(xPosition);
+			dataOutputStream1.WriteBigEndian((short)yPosition);
+			dataOutputStream1.WriteBigEndian(zPosition);
 			dataOutputStream1.Write((sbyte)actionType);
-			dataOutputStream1.Write(customParam1);
-			dataOutputStream1.Write(customParam2);
-			dataOutputStream1.Write(customParam3);
+			dataOutputStream1.WriteBigEndian(customParam1);
+			dataOutputStream1.WriteBigEndian(customParam2);
+			dataOutputStream1.WriteBigEndian(customParam3);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

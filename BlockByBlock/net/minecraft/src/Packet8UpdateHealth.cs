@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet8UpdateHealth : Packet
@@ -9,16 +11,16 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			healthMP = dataInputStream1.ReadInt16();
-			food = dataInputStream1.ReadInt16();
-			foodSaturation = dataInputStream1.ReadSingle();
+			healthMP = dataInputStream1.ReadInt16BigEndian();
+			food = dataInputStream1.ReadInt16BigEndian();
+			foodSaturation = dataInputStream1.ReadSingleBigEndian();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write((short)healthMP);
-			dataOutputStream1.Write((short)food);
-			dataOutputStream1.Write(foodSaturation);
+			dataOutputStream1.WriteBigEndian((short)healthMP);
+			dataOutputStream1.WriteBigEndian((short)food);
+			dataOutputStream1.WriteBigEndian(foodSaturation);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

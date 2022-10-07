@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet21PickupSpawn : Packet
@@ -34,13 +36,13 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			entityId = dataInputStream1.ReadInt32();
-			itemID = dataInputStream1.ReadInt16();
+			entityId = dataInputStream1.ReadInt32BigEndian();
+			itemID = dataInputStream1.ReadInt16BigEndian();
 			count = dataInputStream1.ReadSByte();
-			itemDamage = dataInputStream1.ReadInt16();
-			xPosition = dataInputStream1.ReadInt32();
-			yPosition = dataInputStream1.ReadInt32();
-			zPosition = dataInputStream1.ReadInt32();
+			itemDamage = dataInputStream1.ReadInt16BigEndian();
+			xPosition = dataInputStream1.ReadInt32BigEndian();
+			yPosition = dataInputStream1.ReadInt32BigEndian();
+			zPosition = dataInputStream1.ReadInt32BigEndian();
 			rotation = dataInputStream1.ReadSByte();
 			pitch = dataInputStream1.ReadSByte();
 			roll = dataInputStream1.ReadSByte();
@@ -48,13 +50,13 @@
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(entityId);
-			dataOutputStream1.Write((short)itemID);
+			dataOutputStream1.WriteBigEndian(entityId);
+			dataOutputStream1.WriteBigEndian((short)itemID);
 			dataOutputStream1.Write((sbyte)count);
-			dataOutputStream1.Write((short)itemDamage);
-			dataOutputStream1.Write(xPosition);
-			dataOutputStream1.Write(yPosition);
-			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.WriteBigEndian((short)itemDamage);
+			dataOutputStream1.WriteBigEndian(xPosition);
+			dataOutputStream1.WriteBigEndian(yPosition);
+			dataOutputStream1.WriteBigEndian(zPosition);
 			dataOutputStream1.Write(rotation);
 			dataOutputStream1.Write(pitch);
 			dataOutputStream1.Write(roll);

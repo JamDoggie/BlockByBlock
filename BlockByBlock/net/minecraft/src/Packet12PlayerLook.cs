@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet12PlayerLook : Packet10Flying
@@ -18,15 +20,15 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			yaw = dataInputStream1.ReadSingle();
-			pitch = dataInputStream1.ReadSingle();
+			yaw = dataInputStream1.ReadSingleBigEndian();
+			pitch = dataInputStream1.ReadSingleBigEndian();
 			base.readPacketData(dataInputStream1);
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(yaw);
-			dataOutputStream1.Write(pitch);
+			dataOutputStream1.WriteBigEndian(yaw);
+			dataOutputStream1.WriteBigEndian(pitch);
 			base.writePacketData(dataOutputStream1);
 		}
 

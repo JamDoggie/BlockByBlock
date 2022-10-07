@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet7UseEntity : Packet
@@ -20,15 +22,15 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			playerEntityId = dataInputStream1.ReadInt32();
-			targetEntity = dataInputStream1.ReadInt32();
+			playerEntityId = dataInputStream1.ReadInt32BigEndian();
+			targetEntity = dataInputStream1.ReadInt32BigEndian();
 			isLeftClick = dataInputStream1.ReadSByte();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(playerEntityId);
-			dataOutputStream1.Write(targetEntity);
+			dataOutputStream1.WriteBigEndian(playerEntityId);
+			dataOutputStream1.WriteBigEndian(targetEntity);
 			dataOutputStream1.Write((sbyte)isLeftClick);
 		}
 

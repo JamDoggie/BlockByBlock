@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using BlockByBlock.java_extensions;
+using System.Collections;
 
 namespace net.minecraft.src
 {
@@ -63,8 +64,6 @@ namespace net.minecraft.src
 
 		}
 
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static void writeObjectsInListToStream(java.util.List list0, java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
 		public static void writeObjectsInListToStream(System.Collections.IList list0, BinaryWriter dataOutputStream1)
 		{
 			if (list0 != null)
@@ -81,8 +80,6 @@ namespace net.minecraft.src
 			dataOutputStream1.Write((sbyte)127);
 		}
 
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public void writeWatchableObjects(java.io.DataOutputStream dataOutputStream1) throws java.io.IOException
 		public virtual void writeWatchableObjects(BinaryWriter dataOutputStream1)
 		{
 			System.Collections.IEnumerator iterator2 = this.watchedObjects.Values.GetEnumerator();
@@ -96,8 +93,6 @@ namespace net.minecraft.src
 			dataOutputStream1.Write((sbyte)127);
 		}
         
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: private static void writeWatchableObject(java.io.DataOutputStream dataOutputStream0, WatchableObject watchableObject1) throws java.io.IOException
 		private static void writeWatchableObject(BinaryWriter dataOutputStream0, WatchableObject watchableObject1)
 		{
 			int i2 = (watchableObject1.ObjectType << 5 | watchableObject1.DataValueId & 31) & 255;
@@ -108,35 +103,33 @@ namespace net.minecraft.src
 				dataOutputStream0.Write(((sbyte?)watchableObject1.Object).Value);
 				break;
 			case 1:
-				dataOutputStream0.Write(((short?)watchableObject1.Object).Value);
+				dataOutputStream0.WriteBigEndian(((short?)watchableObject1.Object).Value);
 				break;
 			case 2:
-				dataOutputStream0.Write(((int?)watchableObject1.Object).Value);
+				dataOutputStream0.WriteBigEndian(((int?)watchableObject1.Object).Value);
 				break;
 			case 3:
-				dataOutputStream0.Write(((float?)watchableObject1.Object).Value);
+				dataOutputStream0.WriteBigEndian(((float?)watchableObject1.Object).Value);
 				break;
 			case 4:
 				Packet.writeString((string)watchableObject1.Object, dataOutputStream0);
 				break;
 			case 5:
 				ItemStack itemStack4 = (ItemStack)watchableObject1.Object;
-				dataOutputStream0.Write((short)itemStack4.Item.shiftedIndex);
+				dataOutputStream0.WriteBigEndian((short)itemStack4.Item.shiftedIndex);
 				dataOutputStream0.Write((sbyte)itemStack4.stackSize);
-				dataOutputStream0.Write((short)itemStack4.ItemDamage);
+				dataOutputStream0.WriteBigEndian((short)itemStack4.ItemDamage);
 				break;
 			case 6:
 				ChunkCoordinates chunkCoordinates3 = (ChunkCoordinates)watchableObject1.Object;
-				dataOutputStream0.Write(chunkCoordinates3.posX);
-				dataOutputStream0.Write(chunkCoordinates3.posY);
-				dataOutputStream0.Write(chunkCoordinates3.posZ);
+				dataOutputStream0.WriteBigEndian(chunkCoordinates3.posX);
+				dataOutputStream0.WriteBigEndian(chunkCoordinates3.posY);
+				dataOutputStream0.WriteBigEndian(chunkCoordinates3.posZ);
 			break;
 			}
             
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static java.util.List readWatchableObjects(java.io.DataInputStream dataInputStream0) throws java.io.IOException
+        
 		public static System.Collections.IList readWatchableObjects(BinaryReader dataInputStream0)
 		{
 			ArrayList arrayList1 = null;
@@ -157,27 +150,27 @@ namespace net.minecraft.src
 					watchableObject5 = new WatchableObject(i3, i4, dataInputStream0.ReadSByte());
 					break;
 				case 1:
-					watchableObject5 = new WatchableObject(i3, i4, dataInputStream0.ReadInt16());
+					watchableObject5 = new WatchableObject(i3, i4, dataInputStream0.ReadInt16BigEndian());
 					break;
 				case 2:
-					watchableObject5 = new WatchableObject(i3, i4, dataInputStream0.ReadInt32());
+					watchableObject5 = new WatchableObject(i3, i4, dataInputStream0.ReadInt32BigEndian());
 					break;
 				case 3:
-					watchableObject5 = new WatchableObject(i3, i4, dataInputStream0.ReadSingle());
+					watchableObject5 = new WatchableObject(i3, i4, dataInputStream0.ReadSingleBigEndian());
 					break;
 				case 4:
 					watchableObject5 = new WatchableObject(i3, i4, Packet.readString(dataInputStream0, 64));
 					break;
 				case 5:
-					short s9 = dataInputStream0.ReadInt16();
+					short s9 = dataInputStream0.ReadInt16BigEndian();
 					sbyte b10 = dataInputStream0.ReadSByte();
-					short s11 = dataInputStream0.ReadInt16();
+					short s11 = dataInputStream0.ReadInt16BigEndian();
 					watchableObject5 = new WatchableObject(i3, i4, new ItemStack(s9, b10, s11));
 					break;
 				case 6:
-					int i6 = dataInputStream0.ReadInt32();
-					int i7 = dataInputStream0.ReadInt32();
-					int i8 = dataInputStream0.ReadInt32();
+					int i6 = dataInputStream0.ReadInt32BigEndian();
+					int i7 = dataInputStream0.ReadInt32BigEndian();
+					int i8 = dataInputStream0.ReadInt32BigEndian();
 					watchableObject5 = new WatchableObject(i3, i4, new ChunkCoordinates(i6, i7, i8));
 				break;
 				}

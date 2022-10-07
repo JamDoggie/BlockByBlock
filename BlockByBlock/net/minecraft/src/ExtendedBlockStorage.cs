@@ -5,7 +5,21 @@
 		private int yBase;
 		private int blockRefCount;
 		private int tickRefCount;
-		private sbyte[] blockLSBArray;
+		private sbyte[] _blockLSBArray;
+		private sbyte[] blockLSBArray
+        {
+            get
+            {
+				return _blockLSBArray;
+
+			}
+
+			set
+            {
+				sbyte[] test = value;
+                _blockLSBArray = value;
+            }
+        }
 		private NibbleArray blockMSBArray;
 		private NibbleArray blockMetadataArray;
 		private NibbleArray blocklightArray;

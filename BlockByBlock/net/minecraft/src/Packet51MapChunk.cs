@@ -1,4 +1,5 @@
-﻿using ICSharpCode.SharpZipLib.Zip.Compression;
+﻿using BlockByBlock.java_extensions;
+using ICSharpCode.SharpZipLib.Zip.Compression;
 
 namespace net.minecraft.src
 {
@@ -22,13 +23,13 @@ namespace net.minecraft.src
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			xCh = dataInputStream1.ReadInt32();
-			zCh = dataInputStream1.ReadInt32();
+			xCh = dataInputStream1.ReadInt32BigEndian();
+			zCh = dataInputStream1.ReadInt32BigEndian();
 			includeInitialize = dataInputStream1.ReadBoolean();
-			yChMin = dataInputStream1.ReadUInt16();
-			yChMax = dataInputStream1.ReadUInt16();
-			tempLength = dataInputStream1.ReadInt32();
-			field_48178_h = dataInputStream1.ReadInt32();
+			yChMin = dataInputStream1.ReadUInt16BigEndian();
+			yChMax = dataInputStream1.ReadUInt16BigEndian();
+			tempLength = dataInputStream1.ReadInt32BigEndian();
+			field_48178_h = dataInputStream1.ReadInt32BigEndian();
 			if (temp.Length < tempLength)
 			{
 				temp = new byte[tempLength];
@@ -70,13 +71,13 @@ namespace net.minecraft.src
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(xCh);
-			dataOutputStream1.Write(zCh);
+			dataOutputStream1.WriteBigEndian(xCh);
+			dataOutputStream1.WriteBigEndian(zCh);
 			dataOutputStream1.Write(includeInitialize);
-			dataOutputStream1.Write(unchecked((ushort)(yChMin & 65535)));
-			dataOutputStream1.Write(unchecked((ushort)(yChMax & 65535)));
-			dataOutputStream1.Write(tempLength);
-			dataOutputStream1.Write(field_48178_h);
+			dataOutputStream1.WriteBigEndian(checked((ushort)(yChMin & 65535)));
+			dataOutputStream1.WriteBigEndian(checked((ushort)(yChMax & 65535)));
+			dataOutputStream1.WriteBigEndian(tempLength);
+			dataOutputStream1.WriteBigEndian(field_48178_h);
 			dataOutputStream1.Write(chunkData, 0, tempLength);
 		}
 

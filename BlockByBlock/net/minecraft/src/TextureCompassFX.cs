@@ -1,16 +1,17 @@
-﻿using System;
+﻿using BlockByBlock;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using System;
 
 namespace net.minecraft.src
 {
 
 	using Minecraft = net.minecraft.client.Minecraft;
 
-	// PORTING TODO: Java image stuff.
-
 	public class TextureCompassFX : TextureFX
 	{
 		private Minecraft mc;
-		private int[] compassIconImageData = new int[256];
+		private int[] compassIconImageData = new int[256]; // 16x16
 		private double field_4229_i;
 		private double field_4228_j;
 
@@ -21,10 +22,10 @@ namespace net.minecraft.src
 
 			try
 			{
-				BufferedImage bufferedImage2 = ImageIO.read(typeof(Minecraft).getResource("/gui/items.png"));
+				Image<Bgra32> bufferedImage2 = Image.Load<Bgra32>(GameEnv.GetResourceAsStream("/gui/items.png"));
 				int i3 = this.iconIndex % 16 * 16;
 				int i4 = this.iconIndex / 16 * 16;
-				bufferedImage2.getRGB(i3, i4, 16, 16, this.compassIconImageData, 0, 16);
+				RenderEngine.FillIntBufferWithImage(bufferedImage2, compassIconImageData, i3, i4, 16, 16);
 			}
 			catch (IOException iOException5)
 			{

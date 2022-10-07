@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet105UpdateProgressbar : Packet
@@ -15,15 +17,15 @@
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
 			windowId = dataInputStream1.ReadSByte();
-			progressBar = dataInputStream1.ReadInt16();
-			progressBarValue = dataInputStream1.ReadInt16();
+			progressBar = dataInputStream1.ReadInt16BigEndian();
+			progressBarValue = dataInputStream1.ReadInt16BigEndian();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
 			dataOutputStream1.Write((sbyte)windowId);
-			dataOutputStream1.Write((short)progressBar);
-			dataOutputStream1.Write((short)progressBarValue);
+			dataOutputStream1.WriteBigEndian((short)progressBar);
+			dataOutputStream1.WriteBigEndian((short)progressBarValue);
 		}
 
 		public override int PacketSize

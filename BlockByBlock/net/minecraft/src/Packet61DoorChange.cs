@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet61DoorChange : Packet
@@ -11,20 +13,20 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			sfxID = dataInputStream1.ReadInt32();
-			posX = dataInputStream1.ReadInt32();
+			sfxID = dataInputStream1.ReadInt32BigEndian();
+			posX = dataInputStream1.ReadInt32BigEndian();
 			posY = dataInputStream1.ReadSByte() & 255;
-			posZ = dataInputStream1.ReadInt32();
-			auxData = dataInputStream1.ReadInt32();
+			posZ = dataInputStream1.ReadInt32BigEndian();
+			auxData = dataInputStream1.ReadInt32BigEndian();
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(sfxID);
-			dataOutputStream1.Write(posX);
+			dataOutputStream1.WriteBigEndian(sfxID);
+			dataOutputStream1.WriteBigEndian(posX);
 			dataOutputStream1.Write((byte)(posY & 255));
-			dataOutputStream1.Write(posZ);
-			dataOutputStream1.Write(auxData);
+			dataOutputStream1.WriteBigEndian(posZ);
+			dataOutputStream1.WriteBigEndian(auxData);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

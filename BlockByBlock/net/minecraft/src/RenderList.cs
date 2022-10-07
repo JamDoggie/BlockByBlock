@@ -1,8 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-
+    
 	public class RenderList
 	{
 		private int field_1242_a;
@@ -11,7 +11,7 @@
 		private double field_1239_d;
 		private double field_1238_e;
 		private double field_1237_f;
-		private IntBuffer field_1236_g = GLAllocation.createDirectIntBuffer(65536);
+		private ByteBuffer field_1236_g = GLAllocation.createDirectIntBuffer(65536);
 		private bool field_1235_h = false;
 		private bool field_1234_i = false;
 
@@ -42,7 +42,9 @@
 
 		}
 
-		public virtual void func_860_a()
+        byte[] intBufCache = new byte[65536 * 4];
+
+        public virtual void func_860_a()
 		{
 			if (this.field_1235_h)
 			{
@@ -54,10 +56,14 @@
 
 				if (this.field_1236_g.remaining() > 0)
 				{
-					GL11.glPushMatrix();
-					GL11.glTranslatef((float)((double)this.field_1242_a - this.field_1239_d), (float)((double)this.field_1241_b - this.field_1238_e), (float)((double)this.field_1240_c - this.field_1237_f));
-					GL11.glCallLists(this.field_1236_g);
-					GL11.glPopMatrix();
+					GL.PushMatrix();
+					GL.Translate((float)((double)this.field_1242_a - this.field_1239_d), (float)((double)this.field_1241_b - this.field_1238_e), (float)((double)this.field_1240_c - this.field_1237_f));
+					long pos = field_1236_g.position();
+					field_1236_g.get(intBufCache, 0, intBufCache.Length);
+					field_1236_g.position(pos);
+					GL.CallLists((int)field_1236_g.remaining(), ListNameType.UnsignedInt, intBufCache); // PORTING TODO: this is sus because I ported this while tired.
+					
+					GL.PopMatrix();
 				}
 
 			}

@@ -16,9 +16,7 @@ namespace net.minecraft.src
 		{
 			this.chunkSaveLocation = file1;
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public Chunk loadChunk(World world1, int i2, int i3) throws java.io.IOException
+        
 		public virtual Chunk loadChunk(World world1, int i2, int i3)
 		{
 			NBTTagCompound nBTTagCompound4 = null;
@@ -67,13 +65,13 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				Chunk chunk5 = this.func_48444_a(world1, nBTTagCompound4.getCompoundTag("Level"));
+				Chunk chunk5 = this.getChunkFromLevelTag(world1, nBTTagCompound4.getCompoundTag("Level"));
 				if (!chunk5.isAtLocation(i2, i3))
 				{
 					Console.WriteLine("Chunk file at " + i2 + "," + i3 + " is in the wrong location; relocating. (Expected " + i2 + ", " + i3 + ", got " + chunk5.xPosition + ", " + chunk5.zPosition + ")");
 					nBTTagCompound4.setInteger("xPos", i2);
 					nBTTagCompound4.setInteger("zPos", i3);
-					chunk5 = this.func_48444_a(world1, nBTTagCompound4.getCompoundTag("Level"));
+					chunk5 = this.getChunkFromLevelTag(world1, nBTTagCompound4.getCompoundTag("Level"));
 				}
 
 				chunk5.removeUnknownBlocks();
@@ -190,7 +188,7 @@ namespace net.minecraft.src
 			nBTTagCompound3.setInteger("xPos", chunk1.xPosition);
 			nBTTagCompound3.setInteger("zPos", chunk1.zPosition);
 			nBTTagCompound3.setLong("LastUpdate", world2.WorldTime);
-			nBTTagCompound3.func_48183_a("HeightMap", chunk1.heightMap);
+			nBTTagCompound3.setIntArray("HeightMap", chunk1.heightMap);
 			nBTTagCompound3.setBoolean("TerrainPopulated", chunk1.isTerrainPopulated);
 			ExtendedBlockStorage[] extendedBlockStorage4 = chunk1.BlockStorageArray;
 			NBTTagList nBTTagList5 = new NBTTagList("Sections");
@@ -277,12 +275,12 @@ namespace net.minecraft.src
 
 		}
 
-		private Chunk func_48444_a(World world1, NBTTagCompound nBTTagCompound2)
+		private Chunk getChunkFromLevelTag(World world1, NBTTagCompound nBTTagCompound2)
 		{
 			int i3 = nBTTagCompound2.getInteger("xPos");
 			int i4 = nBTTagCompound2.getInteger("zPos");
 			Chunk chunk5 = new Chunk(world1, i3, i4);
-			chunk5.heightMap = nBTTagCompound2.func_48182_l("HeightMap");
+			chunk5.heightMap = nBTTagCompound2.getIntArray("HeightMap");
 			chunk5.isTerrainPopulated = nBTTagCompound2.getBoolean("TerrainPopulated");
 			NBTTagList nBTTagList6 = nBTTagCompound2.getTagList("Sections");
 			sbyte b7 = 16;

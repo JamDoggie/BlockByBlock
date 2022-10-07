@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet41EntityEffect : Packet
@@ -10,18 +12,18 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			entityId = dataInputStream1.ReadInt32();
+			entityId = dataInputStream1.ReadInt32BigEndian();
 			effectId = dataInputStream1.ReadSByte();
 			effectAmp = dataInputStream1.ReadSByte();
-			duration = dataInputStream1.ReadInt16();
+			duration = dataInputStream1.ReadInt16BigEndian();
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(entityId);
+			dataOutputStream1.WriteBigEndian(entityId);
 			dataOutputStream1.Write(effectId);
 			dataOutputStream1.Write(effectAmp);
-			dataOutputStream1.Write(duration);
+			dataOutputStream1.WriteBigEndian(duration);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

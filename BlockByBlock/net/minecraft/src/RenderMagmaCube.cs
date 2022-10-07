@@ -1,8 +1,8 @@
-﻿using System;
+﻿using OpenTK.Graphics.OpenGL;
+using System;
 
 namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderMagmaCube : RenderLiving
 	{
@@ -43,7 +43,7 @@ namespace net.minecraft.src
 			float f4 = (entityMagmaCube1.field_767_b + (entityMagmaCube1.field_768_a - entityMagmaCube1.field_767_b) * f2) / ((float)i3 * 0.5F + 1.0F);
 			float f5 = 1.0F / (f4 + 1.0F);
 			float f6 = (float)i3;
-			GL11.glScalef(f5 * f6, 1.0F / f5 * f6, f5 * f6);
+			GL.Scale(f5 * f6, 1.0F / f5 * f6, f5 * f6);
 		}
 
 		protected internal override void preRenderCallback(EntityLiving entityLiving1, float f2)

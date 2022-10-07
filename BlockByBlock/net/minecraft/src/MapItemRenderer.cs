@@ -16,7 +16,7 @@ namespace net.minecraft.src
 		{
 			gameSettings = gameSettings2;
 			fontRenderer = fontRenderer1;
-			bufferedImage = renderEngine3.allocateAndSetupTexture(new Image<Rgba32>(128, 128));
+			bufferedImage = renderEngine3.allocateAndSetupTexture(new Image<Bgra32>(128, 128));
 
 			for (int i4 = 0; i4 < 16384; ++i4)
 			{

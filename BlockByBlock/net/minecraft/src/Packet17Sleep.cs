@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet17Sleep : Packet
@@ -11,20 +13,20 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			entityID = dataInputStream1.ReadInt32();
+			entityID = dataInputStream1.ReadInt32BigEndian();
 			field_22046_e = dataInputStream1.ReadSByte();
-			bedX = dataInputStream1.ReadInt32();
+			bedX = dataInputStream1.ReadInt32BigEndian();
 			bedY = dataInputStream1.ReadSByte();
-			bedZ = dataInputStream1.ReadInt32();
+			bedZ = dataInputStream1.ReadInt32BigEndian();
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(entityID);
+			dataOutputStream1.WriteBigEndian(entityID);
 			dataOutputStream1.Write((sbyte)field_22046_e);
-			dataOutputStream1.Write(bedX);
+			dataOutputStream1.WriteBigEndian(bedX);
 			dataOutputStream1.Write((sbyte)bedY);
-			dataOutputStream1.Write(bedZ);
+			dataOutputStream1.WriteBigEndian(bedZ);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

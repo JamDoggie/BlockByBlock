@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet39AttachEntity : Packet
@@ -16,14 +18,14 @@
 
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			entityId = dataInputStream1.ReadInt32();
-			vehicleEntityId = dataInputStream1.ReadInt32();
+			entityId = dataInputStream1.ReadInt32BigEndian();
+			vehicleEntityId = dataInputStream1.ReadInt32BigEndian();
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(entityId);
-			dataOutputStream1.Write(vehicleEntityId);
+			dataOutputStream1.WriteBigEndian(entityId);
+			dataOutputStream1.WriteBigEndian(vehicleEntityId);
 		}
 
 		public override void processPacket(NetHandler netHandler1)

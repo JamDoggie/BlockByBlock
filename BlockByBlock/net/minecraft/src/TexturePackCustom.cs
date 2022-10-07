@@ -1,5 +1,8 @@
 ﻿using BlockByBlock;
 using ICSharpCode.SharpZipLib.Zip;
+using OpenTK.Graphics.OpenGL;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.IO;
 
@@ -8,15 +11,11 @@ namespace net.minecraft.src
 
 	using Minecraft = net.minecraft.client.Minecraft;
 
-	using GL11 = org.lwjgl.opengl.GL11;
-
-	// PORTING TODO: OpenGL code
-
 	public class TexturePackCustom : TexturePackBase
 	{
 		private ZipFile texturePackZipFile;
 		private int texturePackName = -1;
-		private BufferedImage texturePackThumbnail;
+		private Image<Bgra32> texturePackThumbnail;
 		private FileInfo texturePackFile;
 
 		public TexturePackCustom(FileInfo file1)
@@ -60,7 +59,7 @@ namespace net.minecraft.src
 				try
 				{
 					inputStream3 = zipFile2.GetInputStream(zipFile2.GetEntry("pack.png"));
-					this.texturePackThumbnail = ImageIO.read(inputStream3);
+					this.texturePackThumbnail = Image.Load<Bgra32>(inputStream3);
 					inputStream3.Close();
 				}
 				catch (Exception)
@@ -119,7 +118,7 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft1.renderEngine.getTexture("/gui/unknown_pack.png"));
+				GL.BindTexture(TextureTarget.Texture2D, minecraft1.renderEngine.getTexture("/gui/unknown_pack.png"));
 			}
 
 		}

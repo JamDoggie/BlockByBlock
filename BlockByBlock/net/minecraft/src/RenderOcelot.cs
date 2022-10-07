@@ -1,6 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderOcelot : RenderLiving
 	{
@@ -18,7 +19,7 @@
 			base.preRenderCallback(entityOcelot1, f2);
 			if (entityOcelot1.Tamed)
 			{
-				GL11.glScalef(0.8F, 0.8F, 0.8F);
+				GL.Scale(0.8F, 0.8F, 0.8F);
 			}
 
 		}

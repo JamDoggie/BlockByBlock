@@ -1,6 +1,7 @@
-﻿namespace net.minecraft.src
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace net.minecraft.src
 {
-	using GL11 = org.lwjgl.opengl.GL11;
 
 	public class RenderSquid : RenderLiving
 	{
@@ -17,11 +18,11 @@
 		{
 			float f5 = entitySquid1.field_21088_b + (entitySquid1.field_21089_a - entitySquid1.field_21088_b) * f4;
 			float f6 = entitySquid1.field_21086_f + (entitySquid1.field_21087_c - entitySquid1.field_21086_f) * f4;
-			GL11.glTranslatef(0.0F, 0.5F, 0.0F);
-			GL11.glRotatef(180.0F - f3, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(f5, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(f6, 0.0F, 1.0F, 0.0F);
-			GL11.glTranslatef(0.0F, -1.2F, 0.0F);
+			GL.Translate(0.0F, 0.5F, 0.0F);
+			GL.Rotate(180.0F - f3, 0.0F, 1.0F, 0.0F);
+			GL.Rotate(f5, 1.0F, 0.0F, 0.0F);
+			GL.Rotate(f6, 0.0F, 1.0F, 0.0F);
+			GL.Translate(0.0F, -1.2F, 0.0F);
 		}
 
 		protected internal virtual void func_21005_a(EntitySquid entitySquid1, float f2)

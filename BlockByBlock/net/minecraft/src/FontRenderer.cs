@@ -42,9 +42,9 @@ namespace net.minecraft.src
 			this.renderEngine = renderEngine3;
 			this.unicodeFlag = z4;
 
-			Image<Rgba32> bufferedImage5;
+			Image<Bgra32> bufferedImage5;
             
-			bufferedImage5 =  Image.Load<Rgba32>(GameEnv.GetResourceAsStream(string2));
+			bufferedImage5 =  Image.Load<Bgra32>(GameEnv.GetResourceAsStream(string2));
 			Stream? inputStream6 = GameEnv.GetResourceAsStream("/font/glyph_sizes.bin");
                 
 			if (inputStream6 != null)
@@ -164,8 +164,8 @@ namespace net.minecraft.src
 		{
 			string string3 = string.Format("/font/glyph_{0:X2}.png", new object[]{i1});
 
-			Image<Rgba32> bufferedImage2;
-			bufferedImage2 = Image.Load<Rgba32>(GameEnv.GetResourceAsStream(string3));
+			Image<Bgra32> bufferedImage2;
+			bufferedImage2 = Image.Load<Bgra32>(GameEnv.GetResourceAsStream(string3));
 
 			this.glyphTextureName[i1] = this.renderEngine.allocateAndSetupTexture(bufferedImage2);
 			this.boundTextureName = this.glyphTextureName[i1];

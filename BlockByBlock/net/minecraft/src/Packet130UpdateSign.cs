@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet130UpdateSign : Packet
@@ -24,9 +26,9 @@
         
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
-			xPosition = dataInputStream1.ReadInt32();
-			yPosition = dataInputStream1.ReadInt16();
-			zPosition = dataInputStream1.ReadInt32();
+			xPosition = dataInputStream1.ReadInt32BigEndian();
+			yPosition = dataInputStream1.ReadInt16BigEndian();
+			zPosition = dataInputStream1.ReadInt32BigEndian();
 			signLines = new string[4];
 
 			for (int i2 = 0; i2 < 4; ++i2)
@@ -38,9 +40,9 @@
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
-			dataOutputStream1.Write(xPosition);
-			dataOutputStream1.Write((short)yPosition);
-			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.WriteBigEndian(xPosition);
+			dataOutputStream1.WriteBigEndian((short)yPosition);
+			dataOutputStream1.WriteBigEndian(zPosition);
 
 			for (int i2 = 0; i2 < 4; ++i2)
 			{

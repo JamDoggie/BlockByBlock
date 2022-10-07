@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System.Buffers.Binary;
+using System.Collections;
 using System.Linq;
+using BlockByBlock.java_extensions;
 
 namespace net.minecraft.src
 {
@@ -29,7 +31,7 @@ namespace net.minecraft.src
 			}
 
 			dataOutput1.Write(tagType);
-			dataOutput1.Write(tagList.Count);
+			dataOutput1.WriteBigEndian(tagList.Count);
 
 			for (int i2 = 0; i2 < tagList.Count; ++i2)
 			{
@@ -41,7 +43,7 @@ namespace net.minecraft.src
 		internal override void load(BinaryReader dataInput1)
 		{
 			tagType = dataInput1.ReadSByte();
-			int i2 = dataInput1.ReadInt32();
+			int i2 = dataInput1.ReadInt32BigEndian();
 			tagList = new();
 
 			for (int i3 = 0; i3 < i2; ++i3)

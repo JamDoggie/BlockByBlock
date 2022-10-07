@@ -1,4 +1,5 @@
-﻿using BlockByBlock.logging;
+﻿using BlockByBlock.java_extensions;
+using BlockByBlock.logging;
 using System;
 using System.IO;
 
@@ -39,7 +40,7 @@ namespace net.minecraft.src
 				
 				using (BinaryWriter dataOutputStream2 = new BinaryWriter(new FileStream(sessionFile.FullName, FileMode.Create, FileAccess.Write)))
                 {
-					dataOutputStream2.Write(initializationTime);
+					dataOutputStream2.WriteBigEndian(initializationTime);
 				}
 			}
 			catch (IOException iOException7)
@@ -66,7 +67,7 @@ namespace net.minecraft.src
 				
 				using (BinaryReader dataInputStream2 = new BinaryReader(new FileStream(file1.FullName, FileMode.Open, FileAccess.Read)))
                 {
-					if (dataInputStream2.ReadInt64() != this.initializationTime)
+					if (dataInputStream2.ReadInt64BigEndian() != this.initializationTime)
 					{
 						throw new MinecraftException("The save is being accessed from another location, aborting");
 					}
@@ -131,28 +132,18 @@ namespace net.minecraft.src
 
 			try
 			{
-				FileInfo file5 = new FileInfo(this.saveDirectory + "/level.dat_new");
-				FileInfo file6 = new FileInfo(this.saveDirectory + "/level.dat_old");
-				FileInfo file7 = new FileInfo(this.saveDirectory + "/level.dat");
+				string file5 = saveDirectory + "/level.dat_new";
+				string file6 = saveDirectory + "/level.dat_old";
+				string file7 = saveDirectory + "/level.dat";
                 
-				CompressedStreamTools.writeCompressed(nBTTagCompound4, new FileStream(file5.FullName, FileMode.Create, FileAccess.Write));
+				CompressedStreamTools.writeCompressed(nBTTagCompound4, new FileStream(file5, FileMode.OpenOrCreate, FileAccess.ReadWrite));
 
-				if (file6.Exists)
-				{
-					file6.Delete();
-				}
+				if (File.Exists(file7))
+                {
+					File.Move(file7, file6, true);
+                }
 
-				file7.MoveTo(file6.FullName, true);
-				if (file7.Exists)
-				{
-					file7.Delete();
-				}
-                
-				file5.MoveTo(file7.FullName, true);
-				if (file5.Exists)
-				{
-					file5.Delete();
-				}
+				File.Move(file5, file7, true);
 			}
 			catch (Exception exception8)
 			{
@@ -170,28 +161,18 @@ namespace net.minecraft.src
 
 			try
 			{
-				FileInfo file4 = new FileInfo(this.saveDirectory + "/level.dat_new");
-				FileInfo file5 = new FileInfo(this.saveDirectory + "/level.dat_old");
-				FileInfo file6 = new FileInfo(this.saveDirectory + "/level.dat");
+				string file5 = saveDirectory + "/level.dat_new";
+				string file6 = saveDirectory + "/level.dat_old";
+				string file7 = saveDirectory + "/level.dat";
 
-				CompressedStreamTools.writeCompressed(nBTTagCompound3, new FileStream(file4.FullName, FileMode.Create, FileAccess.Write));
+				CompressedStreamTools.writeCompressed(nBTTagCompound3, new FileStream(file5, FileMode.Create, FileAccess.Write));
 
-				if (file5.Exists)
+				if (File.Exists(file7))
 				{
-					file5.Delete();
+					File.Move(file7, file6, true);
 				}
 
-				file6.MoveTo(file5.FullName, true);
-				if (file6.Exists)
-				{
-					file6.Delete();
-				}
-
-				file4.MoveTo(file6.FullName, true);
-				if (file4.Exists)
-				{
-					file4.Delete();
-				}
+				File.Move(file5, file7, true);
 			}
 			catch (Exception exception7)
 			{

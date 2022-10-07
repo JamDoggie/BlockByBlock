@@ -333,7 +333,7 @@
 			tessellator18.addVertexWithUV((double)this.left, (double)(this.bottom - b19), 0.0D, 0.0D, 0.0D);
 			tessellator18.draw();
 			i20 = this.ContentHeight - (this.bottom - this.top - 4);
-			if (i20 > 0)
+			if (i20 > 0 && this.ContentHeight > 0)
 			{
 				i13 = (this.bottom - this.top) * (this.bottom - this.top) / this.ContentHeight;
 				if (i13 < 32)

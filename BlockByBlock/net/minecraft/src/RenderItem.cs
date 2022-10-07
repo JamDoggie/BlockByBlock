@@ -1,11 +1,9 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
-
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GL12 = org.lwjgl.opengl.GL12;
 
 	public class RenderItem : Render
 	{
@@ -25,7 +23,7 @@ namespace net.minecraft.src
 			//this.random.setSeed(187L); // RandomExtended.setSeed
 			random = new RandomExtended(187L);
 			ItemStack itemStack10 = entityItem1.item;
-			GL11.glPushMatrix();
+			GL.PushMatrix();
 			float f11 = MathHelper.sin(((float)entityItem1.age + f9) / 10.0F + entityItem1.field_804_d) * 0.1F + 0.1F;
 			float f12 = (((float)entityItem1.age + f9) / 20.0F + entityItem1.field_804_d) * 57.295776F;
 			sbyte b13 = 1;
@@ -44,15 +42,15 @@ namespace net.minecraft.src
 				b13 = 4;
 			}
 
-			GL11.glTranslatef((float)d2, (float)d4 + f11, (float)d6);
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL.Translate((float)d2, (float)d4 + f11, (float)d6);
+			GL.Enable(EnableCap.RescaleNormal);
 			int i15;
 			float f18;
 			float f19;
 			float f23;
 			if (itemStack10.itemID < 256 && RenderBlocks.renderItemIn3d(Block.blocksList[itemStack10.itemID].RenderType))
 			{
-				GL11.glRotatef(f12, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(f12, 0.0F, 1.0F, 0.0F);
 				this.loadTexture("/terrain.png");
 				float f21 = 0.25F;
 				i15 = Block.blocksList[itemStack10.itemID].RenderType;
@@ -60,23 +58,23 @@ namespace net.minecraft.src
 				{
 					f21 = 0.5F;
 				}
-
-				GL11.glScalef(f21, f21, f21);
+                
+				GL.Scale(f21, f21, f21);
 
 				for (int i22 = 0; i22 < b13; ++i22)
 				{
-					GL11.glPushMatrix();
+					GL.PushMatrix();
 					if (i22 > 0)
 					{
 						f23 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.2F / f21;
 						f18 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.2F / f21;
 						f19 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.2F / f21;
-						GL11.glTranslatef(f23, f18, f19);
+						GL.Translate(f23, f18, f19);
 					}
 
 					f23 = 1.0F;
 					this.renderBlocks.renderBlockAsItem(Block.blocksList[itemStack10.itemID], itemStack10.ItemDamage, f23);
-					GL11.glPopMatrix();
+					GL.PopMatrix();
 				}
 			}
 			else
@@ -85,7 +83,7 @@ namespace net.minecraft.src
 				float f16;
 				if (itemStack10.Item.func_46058_c())
 				{
-					GL11.glScalef(0.5F, 0.5F, 0.5F);
+					GL.Scale(0.5F, 0.5F, 0.5F);
 					this.loadTexture("/gui/items.png");
 
 					for (i14 = 0; i14 <= 1; ++i14)
@@ -98,7 +96,7 @@ namespace net.minecraft.src
 							f18 = (float)(i17 >> 16 & 255) / 255.0F;
 							f19 = (float)(i17 >> 8 & 255) / 255.0F;
 							float f20 = (float)(i17 & 255) / 255.0F;
-							GL11.glColor4f(f18 * f16, f19 * f16, f20 * f16, 1.0F);
+							GL.Color4(f18 * f16, f19 * f16, f20 * f16, 1.0F);
 						}
 
 						this.func_40267_a(i15, b13);
@@ -106,7 +104,7 @@ namespace net.minecraft.src
 				}
 				else
 				{
-					GL11.glScalef(0.5F, 0.5F, 0.5F);
+					GL.Scale(0.5F, 0.5F, 0.5F);
 					i14 = itemStack10.IconIndex;
 					if (itemStack10.itemID < 256)
 					{
@@ -124,15 +122,15 @@ namespace net.minecraft.src
 						f23 = (float)(i15 >> 8 & 255) / 255.0F;
 						f18 = (float)(i15 & 255) / 255.0F;
 						f19 = 1.0F;
-						GL11.glColor4f(f16 * f19, f23 * f19, f18 * f19, 1.0F);
+						GL.Color4(f16 * f19, f23 * f19, f18 * f19, 1.0F);
 					}
 
 					this.func_40267_a(i14, b13);
 				}
 			}
 
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
+			GL.Disable(EnableCap.RescaleNormal);
+			GL.PopMatrix();
 		}
 
 		private void func_40267_a(int i1, int i2)
@@ -148,16 +146,16 @@ namespace net.minecraft.src
 
 			for (int i11 = 0; i11 < i2; ++i11)
 			{
-				GL11.glPushMatrix();
+				GL.PushMatrix();
 				if (i11 > 0)
 				{
 					float f12 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.3F;
 					float f13 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.3F;
 					float f14 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.3F;
-					GL11.glTranslatef(f12, f13, f14);
+					GL.Translate(f12, f13, f14);
 				}
 
-				GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 				tessellator3.startDrawingQuads();
 				tessellator3.setNormal(0.0F, 1.0F, 0.0F);
 				tessellator3.addVertexWithUV((double)(0.0F - f9), (double)(0.0F - f10), 0.0D, (double)f4, (double)f7);
@@ -165,7 +163,7 @@ namespace net.minecraft.src
 				tessellator3.addVertexWithUV((double)(f8 - f9), (double)(1.0F - f10), 0.0D, (double)f5, (double)f6);
 				tessellator3.addVertexWithUV((double)(0.0F - f9), (double)(1.0F - f10), 0.0D, (double)f4, (double)f6);
 				tessellator3.draw();
-				GL11.glPopMatrix();
+				GL.PopMatrix();
 			}
 
 		}
@@ -180,34 +178,34 @@ namespace net.minecraft.src
 			{
 				renderEngine2.bindTexture(renderEngine2.getTexture("/terrain.png"));
 				Block block15 = Block.blocksList[i3];
-				GL11.glPushMatrix();
-				GL11.glTranslatef((float)(i6 - 2), (float)(i7 + 3), -3.0F + this.zLevel);
-				GL11.glScalef(10.0F, 10.0F, 10.0F);
-				GL11.glTranslatef(1.0F, 0.5F, 1.0F);
-				GL11.glScalef(1.0F, 1.0F, -1.0F);
-				GL11.glRotatef(210.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+				GL.PushMatrix();
+				GL.Translate((float)(i6 - 2), (float)(i7 + 3), -3.0F + this.zLevel);
+				GL.Scale(10.0F, 10.0F, 10.0F);
+				GL.Translate(1.0F, 0.5F, 1.0F);
+				GL.Scale(1.0F, 1.0F, -1.0F);
+				GL.Rotate(210.0F, 1.0F, 0.0F, 0.0F);
+				GL.Rotate(45.0F, 0.0F, 1.0F, 0.0F);
 				i10 = Item.itemsList[i3].getColorFromDamage(i4, 0);
 				f11 = (float)(i10 >> 16 & 255) / 255.0F;
 				f12 = (float)(i10 >> 8 & 255) / 255.0F;
 				f13 = (float)(i10 & 255) / 255.0F;
 				if (this.field_27004_a)
 				{
-					GL11.glColor4f(f11, f12, f13, 1.0F);
+					GL.Color4(f11, f12, f13, 1.0F);
 				}
 
-				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
 				this.renderBlocks.useInventoryTint = this.field_27004_a;
 				this.renderBlocks.renderBlockAsItem(block15, i4, 1.0F);
 				this.renderBlocks.useInventoryTint = true;
-				GL11.glPopMatrix();
+				GL.PopMatrix();
 			}
 			else
 			{
 				int i8;
 				if (Item.itemsList[i3].func_46058_c())
 				{
-					GL11.glDisable(GL11.GL_LIGHTING);
+					GL.Disable(EnableCap.Lighting);
 					renderEngine2.bindTexture(renderEngine2.getTexture("/gui/items.png"));
 
 					for (i8 = 0; i8 <= 1; ++i8)
@@ -219,17 +217,17 @@ namespace net.minecraft.src
 						f13 = (float)(i10 & 255) / 255.0F;
 						if (this.field_27004_a)
 						{
-							GL11.glColor4f(f11, f12, f13, 1.0F);
+							GL.Color4(f11, f12, f13, 1.0F);
 						}
 
 						this.renderTexturedQuad(i6, i7, i9 % 16 * 16, i9 / 16 * 16, 16, 16);
 					}
 
-					GL11.glEnable(GL11.GL_LIGHTING);
+					GL.Enable(EnableCap.Lighting);
 				}
 				else if (i5 >= 0)
 				{
-					GL11.glDisable(GL11.GL_LIGHTING);
+					GL.Disable(EnableCap.Lighting);
 					if (i3 < 256)
 					{
 						renderEngine2.bindTexture(renderEngine2.getTexture("/terrain.png"));
@@ -245,15 +243,15 @@ namespace net.minecraft.src
 					f11 = (float)(i8 & 255) / 255.0F;
 					if (this.field_27004_a)
 					{
-						GL11.glColor4f(f14, f16, f11, 1.0F);
+						GL.Color4(f14, f16, f11, 1.0F);
 					}
 
 					this.renderTexturedQuad(i6, i7, i5 % 16 * 16, i5 / 16 * 16, 16, 16);
-					GL11.glEnable(GL11.GL_LIGHTING);
+					GL.Enable(EnableCap.Lighting);
 				}
 			}
 
-			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL.Enable(EnableCap.CullFace);
 		}
 
 		public virtual void renderItemIntoGUI(FontRenderer fontRenderer1, RenderEngine renderEngine2, ItemStack itemStack3, int i4, int i5)
@@ -263,20 +261,20 @@ namespace net.minecraft.src
 				this.drawItemIntoGui(fontRenderer1, renderEngine2, itemStack3.itemID, itemStack3.ItemDamage, itemStack3.IconIndex, i4, i5);
 				if (itemStack3 != null && itemStack3.hasEffect())
 				{
-					GL11.glDepthFunc(GL11.GL_GREATER);
-					GL11.glDisable(GL11.GL_LIGHTING);
-					GL11.glDepthMask(false);
+					GL.DepthFunc(DepthFunction.Greater);
+					GL.Disable(EnableCap.Lighting);
+					GL.DepthMask(false);
 					renderEngine2.bindTexture(renderEngine2.getTexture("%blur%/misc/glint.png"));
 					this.zLevel -= 50.0F;
-					GL11.glEnable(GL11.GL_BLEND);
-					GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_DST_COLOR);
-					GL11.glColor4f(0.5F, 0.25F, 0.8F, 1.0F);
+					GL.Enable(EnableCap.Blend);
+					GL.BlendFunc(BlendingFactor.DstColor, BlendingFactor.DstColor);
+					GL.Color4(0.5F, 0.25F, 0.8F, 1.0F);
 					this.func_40266_a(i4 * 431278612 + i5 * 32178161, i4 - 2, i5 - 2, 20, 20);
-					GL11.glDisable(GL11.GL_BLEND);
-					GL11.glDepthMask(true);
+					GL.Disable(EnableCap.Blend);
+					GL.DepthMask(true);
 					this.zLevel += 50.0F;
-					GL11.glEnable(GL11.GL_LIGHTING);
-					GL11.glDepthFunc(GL11.GL_LEQUAL);
+					GL.Enable(EnableCap.Lighting);
+					GL.DepthFunc(DepthFunction.Lequal);
 				}
 
 			}
@@ -288,12 +286,12 @@ namespace net.minecraft.src
 			{
 				if (i6 == 0)
 				{
-					GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+					GL.BlendFunc(BlendingFactor.SrcColor, BlendingFactor.One);
 				}
 
 				if (i6 == 1)
 				{
-					GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+					GL.BlendFunc(BlendingFactor.SrcColor, BlendingFactor.One);
 				}
 
 				float f7 = 0.00390625F;
@@ -324,30 +322,30 @@ namespace net.minecraft.src
 				if (itemStack3.stackSize > 1)
 				{
 					string string6 = "" + itemStack3.stackSize;
-					GL11.glDisable(GL11.GL_LIGHTING);
-					GL11.glDisable(GL11.GL_DEPTH_TEST);
+					GL.Disable(EnableCap.Lighting);
+					GL.Disable(EnableCap.DepthTest);
 					fontRenderer1.drawStringWithShadow(string6, i4 + 19 - 2 - fontRenderer1.getStringWidth(string6), i5 + 6 + 3, 0xFFFFFF);
-					GL11.glEnable(GL11.GL_LIGHTING);
-					GL11.glEnable(GL11.GL_DEPTH_TEST);
+					GL.Enable(EnableCap.Lighting);
+					GL.Enable(EnableCap.DepthTest);
 				}
 
 				if (itemStack3.ItemDamaged)
 				{
 					int i11 = (int)(long)Math.Round(13.0D - (double)itemStack3.ItemDamageForDisplay * 13.0D / (double)itemStack3.MaxDamage, MidpointRounding.AwayFromZero);
 					int i7 = (int)(long)Math.Round(255.0D - (double)itemStack3.ItemDamageForDisplay * 255.0D / (double)itemStack3.MaxDamage, MidpointRounding.AwayFromZero);
-					GL11.glDisable(GL11.GL_LIGHTING);
-					GL11.glDisable(GL11.GL_DEPTH_TEST);
-					GL11.glDisable(GL11.GL_TEXTURE_2D);
+					GL.Disable(EnableCap.Lighting);
+					GL.Disable(EnableCap.DepthTest);
+					GL.Disable(EnableCap.Texture2D);
 					Tessellator tessellator8 = Tessellator.instance;
 					int i9 = 255 - i7 << 16 | i7 << 8;
 					int i10 = (255 - i7) / 4 << 16 | 16128;
 					this.renderQuad(tessellator8, i4 + 2, i5 + 13, 13, 2, 0);
 					this.renderQuad(tessellator8, i4 + 2, i5 + 13, 12, 1, i10);
 					this.renderQuad(tessellator8, i4 + 2, i5 + 13, i11, 1, i9);
-					GL11.glEnable(GL11.GL_TEXTURE_2D);
-					GL11.glEnable(GL11.GL_LIGHTING);
-					GL11.glEnable(GL11.GL_DEPTH_TEST);
-					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+					GL.Enable(EnableCap.Texture2D);
+					GL.Enable(EnableCap.Lighting);
+					GL.Enable(EnableCap.DepthTest);
+					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				}
 
 			}

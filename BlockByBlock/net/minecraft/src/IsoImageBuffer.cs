@@ -1,9 +1,12 @@
-﻿namespace net.minecraft.src
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
+namespace net.minecraft.src
 {
 
 	public class IsoImageBuffer
 	{
-		public BufferedImage image;
+		public Image<Bgra32> image;
 		public World level;
 		public int x;
 		public int y;

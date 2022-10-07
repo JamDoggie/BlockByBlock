@@ -7,7 +7,7 @@ namespace net.minecraft.src
 		private static ClippingHelperImpl instance = new ClippingHelperImpl();
 		private float[] projectionMatrixBuffer = new float[16];
 		private float[] modelviewMatrixBuffer = new float[16];
-		private FloatBuffer field_1691_h = GLAllocation.createDirectFloatBuffer(16);
+		private ByteBuffer field_1691_h = GLAllocation.createDirectFloatBuffer(16);
 
 		public static ClippingHelper Instance
 		{

@@ -75,7 +75,7 @@ namespace net.minecraft.src
 		{
 			this.mc = minecraft1;
 			this.itemRenderer = new ItemRenderer(minecraft1);
-			this.lightmapTexture = minecraft1.renderEngine.allocateAndSetupTexture(new Image<Rgba32>(16, 16));
+			this.lightmapTexture = minecraft1.renderEngine.allocateAndSetupTexture(new Image<Bgra32>(16, 16));
 			this.lightmapColors = new int[256];
 		}
 

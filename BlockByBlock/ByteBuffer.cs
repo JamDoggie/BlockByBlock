@@ -32,11 +32,18 @@ public class ByteBuffer
 	private BinaryReader reader;
 	private BinaryWriter writer;
 
-	protected ByteBuffer()
+	private int streamLimit;
+
+	private byte[] underlyingBuffer;
+
+	protected ByteBuffer(int capacity)
 	{
-		stream = new MemoryStream();
+		underlyingBuffer = new byte[capacity];
+
+		stream = new MemoryStream(underlyingBuffer);
 		reader = new BinaryReader(stream);
 		writer = new BinaryWriter(stream);
+		streamLimit = 0;
 	}
 
 	~ByteBuffer()
@@ -49,7 +56,7 @@ public class ByteBuffer
 
 	public static ByteBuffer allocate(int capacity)
 	{
-		ByteBuffer buffer = new ByteBuffer();
+		ByteBuffer buffer = new ByteBuffer(capacity);
 		buffer.stream.Capacity = capacity;
 		buffer.mode = Mode.Write;
 		return buffer;
@@ -57,7 +64,7 @@ public class ByteBuffer
 
 	public static ByteBuffer allocateDirect(int capacity)
 	{
-		//this wrapper class makes no distinction between 'allocate' & 'allocateDirect'
+		// This wrapper class makes no distinction between 'allocate' & 'allocateDirect'
 		return allocate(capacity);
 	}
 
@@ -69,8 +76,10 @@ public class ByteBuffer
 	public ByteBuffer flip()
 	{
 		mode = Mode.Read;
+		streamLimit = (int)stream.Position;
 		stream.SetLength(stream.Position);
 		stream.Position = 0;
+		
 		return this;
 	}
 
@@ -98,15 +107,17 @@ public class ByteBuffer
 
 	public long getLimit()
 	{
+		return streamLimit;
+
 		if (mode == Mode.Write)
 			return stream.Capacity;
 		else
-			return stream.Length;
+			return streamLimit;
 	}
 
 	public void limit(int newLimit)
     {
-		stream.Capacity = newLimit;
+		streamLimit = newLimit;
     }
     
 	public long position()
@@ -212,6 +223,11 @@ public class ByteBuffer
 		else
 			return false;
 	}
+
+    public virtual byte[] GetUnderlyingBuffer()
+    {
+		return underlyingBuffer;
+    }
 
 	//methods using the internal BinaryReader:
 	public char getChar()
@@ -371,20 +387,5 @@ public class ByteBuffer
 		writer.Write(value);
 		stream.Position = originalPosition;
 		return this;
-	}
-
-	public IntBuffer asIntBuffer()
-    {
-		return (IntBuffer)this;
-    }
-
-	public FloatBuffer asFloatBuffer()
-	{
-		return (FloatBuffer)this;
-	}
-    
-	public ShortBuffer asShortBuffer()
-	{
-		return (ShortBuffer)this;
 	}
 }

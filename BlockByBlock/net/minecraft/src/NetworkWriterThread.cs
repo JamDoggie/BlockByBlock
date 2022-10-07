@@ -41,7 +41,7 @@ namespace net.minecraft.src
 					{
 						if (NetworkManager.getOutputStream(this.netManager) != null)
 						{
-							NetworkManager.getOutputStream(this.netManager).Flush();
+							NetworkManager.getOutputStream(netManager).Flush();
 						}
 					}
 					catch (IOException iOException18)

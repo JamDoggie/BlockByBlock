@@ -1,22 +1,15 @@
 ﻿namespace net.minecraft.src
 {
-
-	using ARBVertexBufferObject = org.lwjgl.opengl.ARBVertexBufferObject;
-	using GL11 = org.lwjgl.opengl.GL11;
-	using GLContext = org.lwjgl.opengl.GLContext;
-	using GL15 = org.lwjgl.opengl.GL15;
     using BlockByBlock.helpers;
-
-    // PORTING TODO: OpenGL code, and lots of it.
+    using net.minecraft.client;
+    using OpenTK.Graphics.OpenGL;
+    using System.Runtime.InteropServices;
 
     public class Tessellator
 	{
 		private static bool convertQuadsToTriangles = false;
 		private static bool tryVBO = false;
 		private ByteBuffer byteBuffer;
-		private IntBuffer intBuffer;
-		private FloatBuffer floatBuffer;
-		private ShortBuffer shortBuffer;
 		private int[] rawBuffer;
 		private int vertexCount = 0;
 		private double textureU;
@@ -38,29 +31,37 @@
 		public static readonly Tessellator instance = new Tessellator(2097152);
 		private bool isDrawing = false;
 		private bool useVBO = false;
-		private IntBuffer vertexBuffers;
+		private int[] vertexBuffers;
 		private int vboIndex = 0;
 		private int vboCount = 10;
 		private int bufferSize;
+		private IntPtr bufferPointer;
 
 		private Tessellator(int i1)
 		{
 			bufferSize = i1;
 			byteBuffer = GLAllocation.createDirectByteBuffer(i1 * 4);
-			intBuffer = byteBuffer.asIntBuffer();
-			floatBuffer = byteBuffer.asFloatBuffer();
-			shortBuffer = byteBuffer.asShortBuffer();
+            
+			byte[] underlyingBuffer = byteBuffer.GetUnderlyingBuffer();
+			bufferPointer = Marshal.AllocHGlobal(underlyingBuffer.Length);
 			rawBuffer = new int[i1];
-			useVBO = tryVBO && GLContext.getCapabilities().GL_ARB_vertex_buffer_object;
+			useVBO = tryVBO && MinecraftApplet.OpenGLExtensions.Contains("GL_ARB_vertex_buffer_object");
 			if (useVBO)
 			{
-				vertexBuffers = GLAllocation.createDirectIntBuffer(vboCount);
-				ARBVertexBufferObject.glGenBuffersARB(vertexBuffers);
+				vertexBuffers = new int[vboCount];
+				GL.Arb.GenBuffers(vertexBuffers.Length, vertexBuffers);
 			}
 
 		}
 
-		public virtual int draw()
+        ~Tessellator()
+        {
+            Marshal.FreeHGlobal(bufferPointer);
+        }
+
+		private bool hasCopiedBuffer = false;
+
+		public unsafe virtual int draw()
 		{
 			if (!isDrawing)
 			{
@@ -71,30 +72,34 @@
 				isDrawing = false;
 				if (vertexCount > 0)
 				{
-					intBuffer.clear();
-					intBuffer.Put(rawBuffer, rawBufferIndex);
+					byteBuffer.clear();
+					byteBuffer.Put(rawBuffer, rawBufferIndex);
 					byteBuffer.position(0);
 					byteBuffer.limit(rawBufferIndex * 4);
-					if (useVBO)
+
+					Marshal.Copy(byteBuffer.GetUnderlyingBuffer(), 0, bufferPointer, rawBufferIndex * 4);
+                    
+
+                    if (useVBO)
 					{
 						vboIndex = (vboIndex + 1) % vboCount;
-						ARBVertexBufferObject.glBindBufferARB(GL15.GL_ARRAY_BUFFER, vertexBuffers.get(vboIndex));
-						ARBVertexBufferObject.glBufferDataARB(GL15.GL_ARRAY_BUFFER, byteBuffer, GL15.GL_STREAM_DRAW);
+						GL.Arb.BindBuffer(BufferTargetArb.ArrayBuffer, vertexBuffers[vboIndex]);
+						GL.Arb.BufferData(BufferTargetArb.ArrayBuffer, (int)byteBuffer.getLimit(), byteBuffer.GetUnderlyingBuffer(), BufferUsageArb.StreamDraw);
 					}
-
+                    
 					if (hasTexture)
 					{
 						if (useVBO)
 						{
-							GL11.glTexCoordPointer(2, GL11.GL_FLOAT, 32, 12L);
+							GL.TexCoordPointer(2, TexCoordPointerType.Float, 32, 12);
 						}
 						else
 						{
-							floatBuffer.position(3);
-							GL11.glTexCoordPointer(2, 32, floatBuffer);
+							IntPtr ptr2 = bufferPointer + 3 * sizeof(float); 
+							GL.TexCoordPointer(2, TexCoordPointerType.Float, 32, ptr2);
 						}
 
-						GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+                        GL.EnableClientState(ArrayCap.TextureCoordArray);
 					}
 
 					if (hasBrightness)
@@ -102,15 +107,15 @@
 						OpenGlHelper.ClientActiveTexture = OpenGlHelper.lightmapTexUnit;
 						if (useVBO)
 						{
-							GL11.glTexCoordPointer(2, GL11.GL_SHORT, 32, 28L);
+							GL.TexCoordPointer(2, TexCoordPointerType.Short, 32, 28);
 						}
 						else
 						{
-							shortBuffer.position(14);
-							GL11.glTexCoordPointer(2, 32, shortBuffer);
+							IntPtr ptr2 = bufferPointer + 14 * sizeof(short);
+							GL.TexCoordPointer(2, TexCoordPointerType.Short, 32, ptr2);
 						}
-
-						GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+                        
+						GL.EnableClientState(ArrayCap.TextureCoordArray);
 						OpenGlHelper.ClientActiveTexture = OpenGlHelper.defaultTexUnit;
 					}
 
@@ -118,73 +123,73 @@
 					{
 						if (useVBO)
 						{
-							GL11.glColorPointer(4, GL11.GL_UNSIGNED_BYTE, 32, 20L);
+							GL.ColorPointer(4, ColorPointerType.UnsignedByte, 32, 20);
 						}
 						else
 						{
-							byteBuffer.position(20);
-							GL11.glColorPointer(4, true, 32, byteBuffer);
+							IntPtr ptr2 = bufferPointer + 20 * sizeof(byte);
+							GL.ColorPointer(4, ColorPointerType.UnsignedByte, 32, ptr2);
 						}
 
-						GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+						GL.EnableClientState(ArrayCap.ColorArray);
 					}
 
 					if (hasNormals)
 					{
 						if (useVBO)
 						{
-							GL11.glNormalPointer(GL11.GL_UNSIGNED_BYTE, 32, 24L);
+							GL.NormalPointer(NormalPointerType.Byte, 32, 24);
 						}
 						else
 						{
-							byteBuffer.position(24);
-							GL11.glNormalPointer(32, byteBuffer);
+							IntPtr ptr2 = bufferPointer + 24 * sizeof(byte);
+							GL.NormalPointer(NormalPointerType.Byte, 32, ptr2);
 						}
 
-						GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+						GL.EnableClientState(ArrayCap.NormalArray);
 					}
 
 					if (useVBO)
 					{
-						GL11.glVertexPointer(3, GL11.GL_FLOAT, 32, 0L);
+						GL.VertexPointer(3, VertexPointerType.Float, 32, 0);
 					}
 					else
 					{
-						floatBuffer.position(0);
-						GL11.glVertexPointer(3, 32, floatBuffer);
+						IntPtr ptr2 = bufferPointer;
+						GL.VertexPointer(3, VertexPointerType.Float, 32, ptr2);
 					}
 
-					GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+					GL.EnableClientState(ArrayCap.VertexArray);
 					if (drawMode == 7 && convertQuadsToTriangles)
 					{
-						GL11.glDrawArrays(GL11.GL_TRIANGLES, GL11.GL_POINTS, vertexCount);
+						GL.DrawArrays(PrimitiveType.Triangles, 0, vertexCount);
 					}
 					else
 					{
-						GL11.glDrawArrays(drawMode, GL11.GL_POINTS, vertexCount);
+						GL.DrawArrays((PrimitiveType)drawMode, 0, vertexCount);
 					}
 
-					GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+					GL.DisableClientState(ArrayCap.VertexArray);
 					if (hasTexture)
 					{
-						GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+						GL.DisableClientState(ArrayCap.TextureCoordArray);
 					}
 
 					if (hasBrightness)
 					{
 						OpenGlHelper.ClientActiveTexture = OpenGlHelper.lightmapTexUnit;
-						GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+						GL.DisableClientState(ArrayCap.TextureCoordArray);
 						OpenGlHelper.ClientActiveTexture = OpenGlHelper.defaultTexUnit;
 					}
 
 					if (hasColor)
 					{
-						GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
+						GL.DisableClientState(ArrayCap.ColorArray);
 					}
 
 					if (hasNormals)
 					{
-						GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
+						GL.DisableClientState(ArrayCap.NormalArray);
 					}
 				}
 

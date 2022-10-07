@@ -209,17 +209,28 @@ namespace net.minecraft.src
 			{
 				if (this.droppedChunksSet.Count > 0)
 				{
-					long? long2 = (long?)droppedChunksSet.GetEnumerator().Current; // PORTING TODO: I'm pretty sure this works correctly, but make sure it behaves as originally;
-																				   // Java iterators are weird.
-					droppedChunksSet.GetEnumerator().MoveNext();
-                    
-					Chunk chunk3 = (Chunk)chunkMap.getValueByKey(long2.Value);
-					chunk3.onChunkUnload();
-					this.saveChunkData(chunk3);
-					this.saveChunkExtraData(chunk3);
-					this.droppedChunksSet.Remove(long2);
-					this.chunkMap.remove(long2.Value);
-					this.chunkList.Remove(chunk3);
+					bool hadNext = droppedChunksSet.GetEnumerator().MoveNext();
+					long? long2 = null;
+
+					if (hadNext)
+                    {
+						long2 = (long?)droppedChunksSet.GetEnumerator().Current;
+
+						if (long2 != null)
+                        {
+							Chunk? chunk3 = (Chunk?)chunkMap.getValueByKey(long2.Value);
+
+							if (chunk3 != null)
+							{
+								chunk3.onChunkUnload();
+								this.saveChunkData(chunk3);
+								this.saveChunkExtraData(chunk3);
+								this.droppedChunksSet.Remove(long2);
+								this.chunkMap.remove(long2.Value);
+								this.chunkList.Remove(chunk3);
+							}
+						}
+					}
 				}
 			}
 

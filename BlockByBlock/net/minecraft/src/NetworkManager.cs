@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Immutable;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 
 namespace net.minecraft.src
@@ -19,9 +20,9 @@ namespace net.minecraft.src
 		private BinaryReader? socketInputStream;
 		private BinaryWriter? socketOutputStream;
 		private bool isRunning = true;
-		private ImmutableList<Packet> readPackets = ImmutableList.Create<Packet>();
-		private ImmutableList<Packet> dataPackets = ImmutableList.Create<Packet>();
-		private ImmutableList<Packet> chunkDataPackets = ImmutableList.Create<Packet>();
+		private List<Packet> readPackets = new();
+		private List<Packet> dataPackets = new();
+		private List<Packet> chunkDataPackets = new();
 		private NetHandler netHandler;
 		private bool isServerTerminating_Conflict = false;
 		private NetworkWriterThread writeThread;
@@ -50,11 +51,12 @@ namespace net.minecraft.src
 				Console.Error.WriteLine(socketException5.Message);
 			}
 
-			networkStream = new NetworkStream(socket1);
+			networkStream = new NetworkStream(socket1, true);
 			
+
             socketInputStream = new BinaryReader(networkStream);
             socketOutputStream = new BinaryWriter(networkStream);
-			
+
             readThread = new NetworkReaderThread(this, new CancellationTokenSource(), string2 + " read thread");
 			writeThread = new NetworkWriterThread(this, new CancellationTokenSource(), string2 + " write thread");
 			readThread.startThread();
@@ -81,11 +83,10 @@ namespace net.minecraft.src
 				}
 			}
 		}
-
 		private bool sendPacket()
 		{
 			bool z1 = false;
-
+			
 			try
 			{
 				int[] i10000;
@@ -101,7 +102,7 @@ namespace net.minecraft.src
 						this.sendQueueByteLength -= packet2.PacketSize + 1;
 					}
 
-					Packet.writePacket(packet2, this.socketOutputStream);
+					Packet.writePacket(packet2, socketOutputStream);
 					i10000 = field_28144_e;
 					i10001 = packet2.PacketId;
 					i10000[i10001] += packet2.PacketSize + 1;
@@ -117,7 +118,7 @@ namespace net.minecraft.src
 						this.sendQueueByteLength -= packet2.PacketSize + 1;
 					}
 
-					Packet.writePacket(packet2, this.socketOutputStream);
+					Packet.writePacket(packet2, socketOutputStream);
 					i10000 = field_28144_e;
 					i10001 = packet2.PacketId;
 					i10000[i10001] += packet2.PacketSize + 1;
@@ -143,12 +144,12 @@ namespace net.minecraft.src
 			this.readThread.thread.Interrupt();
 			this.writeThread.thread.Interrupt();
 		}
-
+        
 		private bool readPacket()
 		{
 			bool z1 = false;
 
-			try
+            try
 			{
 				Packet packet2 = Packet.readPacket(this.socketInputStream, this.netHandler.ServerHandler);
 				if (packet2 != null)
@@ -172,6 +173,8 @@ namespace net.minecraft.src
 			}
 			catch (Exception exception3)
 			{
+
+
 				if (!this.isTerminating)
 				{
 					this.onNetworkError(exception3);
@@ -180,6 +183,7 @@ namespace net.minecraft.src
 				return false;
 			}
 		}
+        
 
 		private void onNetworkError(Exception exception1)
 		{
@@ -251,8 +255,10 @@ namespace net.minecraft.src
 
 			while (this.readPackets.Count > 0 && i1-- >= 0)
 			{
-				Packet packet2 = (Packet)this.readPackets.RemoveAndReturn(0);
-				packet2.processPacket(this.netHandler);
+				Packet? packet2 = (Packet?)this.readPackets.RemoveAndReturn(0);
+
+				if (packet2 != null)
+					packet2.processPacket(this.netHandler);
 			}
 
 			this.wakeThreads();
@@ -297,6 +303,11 @@ namespace net.minecraft.src
 		internal static BinaryWriter? getOutputStream(NetworkManager networkManager0)
 		{
 			return networkManager0.socketOutputStream;
+		}
+
+		internal static NetworkStream? getNetworkStream(NetworkManager networkManager0)
+		{
+			return networkManager0.networkStream;
 		}
 
 		internal static bool getIsTerminating(NetworkManager networkManager0)

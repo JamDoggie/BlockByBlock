@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.java_extensions;
+
+namespace net.minecraft.src
 {
 
 	public class Packet14BlockDig : Packet
@@ -25,18 +27,18 @@
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
 			status = dataInputStream1.ReadSByte();
-			xPosition = dataInputStream1.ReadInt32();
+			xPosition = dataInputStream1.ReadInt32BigEndian();
 			yPosition = dataInputStream1.ReadSByte();
-			zPosition = dataInputStream1.ReadInt32();
+			zPosition = dataInputStream1.ReadInt32BigEndian();
 			face = dataInputStream1.ReadSByte();
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)
 		{
 			dataOutputStream1.Write((sbyte)status);
-			dataOutputStream1.Write(xPosition);
+			dataOutputStream1.WriteBigEndian(xPosition);
 			dataOutputStream1.Write((sbyte)yPosition);
-			dataOutputStream1.Write(zPosition);
+			dataOutputStream1.WriteBigEndian(zPosition);
 			dataOutputStream1.Write((sbyte)face);
 		}
 

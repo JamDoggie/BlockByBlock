@@ -1,4 +1,6 @@
 ﻿using BlockByBlock.helpers;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Threading;
 
@@ -12,8 +14,6 @@ namespace net.minecraft.src
 		internal readonly ThreadDownloadImageData imageData;
 
 		public Thread thread;
-
-		// PORTING TODO: Java image stuff
 
 		internal ThreadDownloadImage(ThreadDownloadImageData threadDownloadImageData1, string string2, ImageBuffer imageBuffer3)
 		{
@@ -42,11 +42,11 @@ namespace net.minecraft.src
 
 				if (buffer == null)
 				{
-					imageData.image = ImageIO.read(httpURLConnection1.getInputStream());
+					imageData.image = Image.Load<Bgra32>(response.Content.ReadAsStream());
 				}
 				else
 				{
-					imageData.image = buffer.parseUserSkin(ImageIO.read(httpURLConnection1.getInputStream()));
+					imageData.image = buffer.parseUserSkin(Image.Load<Bgra32>(response.Content.ReadAsStream()));
 				}
 			}
 			catch (Exception exception6)

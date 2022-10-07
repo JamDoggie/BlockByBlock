@@ -4,7 +4,7 @@ using System.IO;
 namespace net.minecraft.src
 {
 
-	internal class MusInputStream
+	/*internal class MusInputStream
 	{
 		private int hash;
 		private Stream inputStream;
@@ -39,6 +39,6 @@ namespace net.minecraft.src
 
 			return i3;
 		}
-	}
+	}*/
 
 }
