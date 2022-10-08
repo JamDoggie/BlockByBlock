@@ -1035,13 +1035,7 @@ namespace net.minecraft.src
 					{
 						this.storageArrays[i6] = new ExtendedBlockStorage(i6 << 4);
 					}
-					sbyte[] sBArray = this.storageArrays[i6].func_48692_g();
-					byte[] b7 = new byte[sBArray.Length];
-
-                    for(int i = 0; i < sBArray.Length; i++)
-                    {
-                        b7[i] = JTypes.SByteToRawByteBits(sBArray[i]);
-					}
+					sbyte[] b7 = this.storageArrays[i6].func_48692_g();
 
 					Array.Copy(b1, i5, b7, 0, b7.Length);
 					i5 += b7.Length;

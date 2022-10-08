@@ -27,7 +27,7 @@ namespace net.minecraft.src
 		public RegionFile(FileInfo file1)
 		{
 			this.fileName = file1;
-			this.debugln("REGION LOAD " + this.fileName);
+			//this.debugln("REGION LOAD " + this.fileName);
 			this.sizeDelta = 0;
 
 			try
@@ -234,7 +234,7 @@ namespace net.minecraft.src
         
 					if (i6 != 0 && i7 == i8)
 					{
-						this.debug("SAVE", i1, i2, i4, "rewrite");
+						//this.debug("SAVE", i1, i2, i4, "rewrite");
 						this.write(i6, b3, i4);
 					}
 					else
@@ -278,7 +278,7 @@ namespace net.minecraft.src
         
 						if (i10 >= i8)
 						{
-							this.debug("SAVE", i1, i2, i4, "reuse");
+							//this.debug("SAVE", i1, i2, i4, "reuse");
 							i6 = i9;
 							this.setOffset(i1, i2, i9 << 8 | i8);
         
@@ -291,7 +291,7 @@ namespace net.minecraft.src
 						}
 						else
 						{
-							this.debug("SAVE", i1, i2, i4, "grow");
+							//this.debug("SAVE", i1, i2, i4, "grow");
 							binaryWriter.Seek((int)dataFile.Length, SeekOrigin.Begin);
 							i6 = this.sectorFree.Count;
         
@@ -317,9 +317,7 @@ namespace net.minecraft.src
         
 			}
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: private void write(int i1, byte[] b2, int i3) throws java.io.IOException
+        
 		private void write(int i1, byte[] b2, int i3)
 		{
 			debugln(" " + i1);
@@ -344,8 +342,6 @@ namespace net.minecraft.src
 			return this.getOffset(x, z) != 0;
 		}
 
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: private void setOffset(int i1, int i2, int i3) throws java.io.IOException
 		private void setOffset(int i1, int i2, int value)
 		{
 			this.offsets[i1 + i2 * 32] = value;
@@ -353,17 +349,13 @@ namespace net.minecraft.src
 			binaryWriter.WriteBigEndian(value);
 		}
         
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: private void setChunkTimestamp(int i1, int i2, int i3) throws java.io.IOException
 		private void setChunkTimestamp(int i1, int i2, int timeStamp)
 		{
 			this.chunkTimestamps[i1 + i2 * 32] = timeStamp;
 			binaryWriter.Seek((4096 + (i1 + i2 * 32) * 4), SeekOrigin.Begin);
 			binaryWriter.WriteBigEndian(timeStamp);
 		}
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public void close() throws java.io.IOException
+        
 		public virtual void close()
 		{
 			dataFile.Dispose();

@@ -352,6 +352,7 @@ public class ByteBuffer
 	public ByteBuffer putInt(int value)
 	{
 		writer.Write(value);
+		streamLimit += 4;
 		return this;
 	}
 	public ByteBuffer putInt(int index, int value)

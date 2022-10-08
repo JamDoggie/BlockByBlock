@@ -132,7 +132,7 @@ namespace net.minecraft.src
 				file2.MoveTo(file4.FullName);
 			}
 
-			file3.MoveTo(file2.FullName);
+			file3.MoveTo(file2.FullName, true);
 		}
 
 		public virtual void beginReceiveStats()

@@ -6,7 +6,7 @@ namespace net.minecraft.src
 	public class ChunkProviderClient : IChunkProvider
 	{
 		private Chunk blankChunk;
-		private LongHashMap chunkMapping = new LongHashMap();
+		private LongHashMap chunkMapping { get; set; } = new LongHashMap();
 		private System.Collections.IList field_889_c = new ArrayList();
 		private World worldObj;
 

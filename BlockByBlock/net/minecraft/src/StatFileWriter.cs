@@ -118,13 +118,14 @@ namespace net.minecraft.src
 			try
 			{
 				StatFileJson? statFile = JsonConvert.DeserializeObject<StatFileJson>(string0);
-
-				if (statFile == null)
+                
+				if (statFile == null || statFile.stats == null)
 					return null;
 
 				string string2 = "local";
 				StringBuilder stringBuilder3 = new StringBuilder();
 				
+
 				foreach (KeyValuePair<string,int> pair in statFile.stats)
 				{
 					int k = int.Parse(pair.Key);

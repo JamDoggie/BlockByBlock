@@ -14,7 +14,7 @@ namespace net.minecraft.src
 		private World worldObj;
 		private RenderEngine renderEngine;
 		private List<WorldRenderer> worldRenderersToUpdate = new();
-		private WorldRenderer[] sortedWorldRenderers;
+		private WorldRenderer[] sortedWorldRenderers { get; set; }
 		private WorldRenderer[] worldRenderers;
 		private int renderChunksWide;
 		private int renderChunksTall;
@@ -23,7 +23,7 @@ namespace net.minecraft.src
 		private Minecraft mc;
 		private RenderBlocks globalRenderBlocks;
 		private int[] glOcclusionQueryBase;
-		private bool occlusionEnabled = false;
+		private bool occlusionEnabled { get; set; } = false;
 		private int cloudOffsetX = 0;
 		private int starGLCallList;
 		private int glSkyList;
@@ -218,19 +218,19 @@ namespace net.minecraft.src
 					i1 = 400;
 				}
 
-				this.renderChunksWide = i1 / 16 + 1;
-				this.renderChunksTall = 16;
-				this.renderChunksDeep = i1 / 16 + 1;
-				this.worldRenderers = new WorldRenderer[this.renderChunksWide * this.renderChunksTall * this.renderChunksDeep];
-				this.sortedWorldRenderers = new WorldRenderer[this.renderChunksWide * this.renderChunksTall * this.renderChunksDeep];
+				renderChunksWide = i1 / 16 + 1;
+				renderChunksTall = 16;
+				renderChunksDeep = i1 / 16 + 1;
+				worldRenderers = new WorldRenderer[this.renderChunksWide * this.renderChunksTall * this.renderChunksDeep];
+				sortedWorldRenderers = new WorldRenderer[this.renderChunksWide * this.renderChunksTall * this.renderChunksDeep];
 				int i2 = 0;
 				int i3 = 0;
-				this.minBlockX = 0;
-				this.minBlockY = 0;
-				this.minBlockZ = 0;
-				this.maxBlockX = this.renderChunksWide;
-				this.maxBlockY = this.renderChunksTall;
-				this.maxBlockZ = this.renderChunksDeep;
+				minBlockX = 0;
+				minBlockY = 0;
+				minBlockZ = 0;
+				maxBlockX = renderChunksWide;
+				maxBlockY = renderChunksTall;
+				maxBlockZ = renderChunksDeep;
 
 				int i4;
 				for (i4 = 0; i4 < this.worldRenderersToUpdate.Count; ++i4)
@@ -612,7 +612,8 @@ namespace net.minecraft.src
 			{
 				if (this.sortedWorldRenderers[i3].isWaitingOnOcclusionQuery)
 				{
-					GL.Arb.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, QueryObjectParameterName.QueryResultAvailable, this.occlusionResult);
+                    //Console.WriteLine($"World Renderer {i3} is waiting on occlusion query ({i1},{i2})");
+                    GL.Arb.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, QueryObjectParameterName.QueryResultAvailable, this.occlusionResult);
 					if (this.occlusionResult[0] != 0)
 					{
 						this.sortedWorldRenderers[i3].isWaitingOnOcclusionQuery = false;

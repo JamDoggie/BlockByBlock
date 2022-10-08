@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.helpers;
+using System;
 using System.Collections;
 
 namespace net.minecraft.src
@@ -304,12 +305,16 @@ namespace net.minecraft.src
             }
 		}
 
+		List<VillageDoorInfo> doorsToRemove = new();
+
 		private void removeDeadAndOutOfRangeDoors()
 		{
 			bool z1 = false;
 			bool z2 = worldObj.rand.Next(50) == 0;
 			System.Collections.IEnumerator iterator3 = villageDoorInfoList.GetEnumerator();
-            
+
+			doorsToRemove.Clear();
+
 			while (true)
 			{
 				VillageDoorInfo villageDoorInfo4;
@@ -322,7 +327,7 @@ namespace net.minecraft.src
 							updateVillageRadiusAndCenter();
 						}
 
-						return;
+						goto doorRemove;
 					}
                     
 					villageDoorInfo4 = (VillageDoorInfo)iterator3.Current;
@@ -332,15 +337,26 @@ namespace net.minecraft.src
 					}
 				} while (isBlockDoor(villageDoorInfo4.posX, villageDoorInfo4.posY, villageDoorInfo4.posZ) && Math.Abs(tickCounter - villageDoorInfo4.lastActivityTimestamp) <= 1200);
 
-				centerHelper.posX -= villageDoorInfo4.posX;
-				centerHelper.posY -= villageDoorInfo4.posY;
-				centerHelper.posZ -= villageDoorInfo4.posZ;
-				z1 = true;
-				villageDoorInfo4.isDetachedFromVillageFlag = true;
+				if (villageDoorInfo4 == null)
+					continue;
 
-				villageDoorInfoList.Remove(iterator3.Current); // PORTING TODO: This was fucked because I was coding while tired. Luckily I caught it. Double check this again later.
+				if (!isBlockDoor(villageDoorInfo4.posX, villageDoorInfo4.posY, villageDoorInfo4.posZ) || Math.Abs(tickCounter - villageDoorInfo4.lastActivityTimestamp) > 1200)
+                {
+					centerHelper.posX -= villageDoorInfo4.posX;
+					centerHelper.posY -= villageDoorInfo4.posY;
+					centerHelper.posZ -= villageDoorInfo4.posZ;
+					z1 = true;
+					villageDoorInfo4.isDetachedFromVillageFlag = true;
+
+					doorsToRemove.Add((VillageDoorInfo)iterator3.Current);
+					Console.WriteLine("door gone!");
+				}
 			}
-        }
+
+            doorRemove:
+			villageDoorInfoList.RemoveAll(doorsToRemove);
+
+		}
 
 		private bool isBlockDoor(int i1, int i2, int i3)
 		{

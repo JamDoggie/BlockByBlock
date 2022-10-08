@@ -16,7 +16,7 @@ namespace net.minecraft.src
 		public static readonly StepSound soundGlassFootstep = new StepSoundStone("stone", 1.0F, 1.0F);
 		public static readonly StepSound soundClothFootstep = new StepSound("cloth", 1.0F, 1.0F);
 		public static readonly StepSound soundSandFootstep = new StepSoundSand("sand", 1.0F, 1.0F);
-		public static readonly Block[] blocksList = new Block[4096];
+		public static volatile Block[] blocksList = new Block[4096];
 		public static readonly bool[] opaqueCubeLookup = new bool[4096];
 		public static readonly int[] lightOpacity = new int[4096];
 		public static readonly bool[] canBlockGrass = new bool[4096];

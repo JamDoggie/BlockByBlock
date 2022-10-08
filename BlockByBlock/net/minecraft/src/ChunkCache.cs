@@ -15,8 +15,7 @@
 			this.chunkZ = i4 >> 4;
 			int i8 = i5 >> 4;
 			int i9 = i7 >> 4;
-			//JAVA TO C# CONVERTER NOTE: The following call to the 'RectangularArrays' helper class reproduces the rectangular array initialization that is automatic in Java:
-			//ORIGINAL LINE: this.chunkArray = new Chunk[i8 - this.chunkX + 1][i9 - this.chunkZ + 1];
+            
 			this.chunkArray = RectangularArrays.RectangularChunkArray(i8 - this.chunkX + 1, i9 - this.chunkZ + 1);
 			this.field_48467_d = true;
 

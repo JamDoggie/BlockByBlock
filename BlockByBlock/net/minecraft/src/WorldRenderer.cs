@@ -129,7 +129,7 @@ namespace net.minecraft.src
 											GL.NewList(this.glRenderList + i11, ListMode.Compile);
 											GL.PushMatrix();
 											this.setupGLTranslation();
-											float f19 = 1.000001F;
+											float f19 = 1F;
 											GL.Translate(-8.0F, -8.0F, -8.0F);
 											GL.Scale(f19, f19, f19);
 											GL.Translate(8.0F, 8.0F, 8.0F);
@@ -156,6 +156,7 @@ namespace net.minecraft.src
 										{
 											z13 |= renderBlocks10.renderBlockByRenderType(block24, i17, i15, i16);
 										}
+										
 									}
 								}
 							}

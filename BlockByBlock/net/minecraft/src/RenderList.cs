@@ -58,10 +58,8 @@ namespace net.minecraft.src
 				{
 					GL.PushMatrix();
 					GL.Translate((float)((double)this.field_1242_a - this.field_1239_d), (float)((double)this.field_1241_b - this.field_1238_e), (float)((double)this.field_1240_c - this.field_1237_f));
-					long pos = field_1236_g.position();
-					field_1236_g.get(intBufCache, 0, intBufCache.Length);
-					field_1236_g.position(pos);
-					GL.CallLists((int)field_1236_g.remaining(), ListNameType.UnsignedInt, intBufCache); // PORTING TODO: this is sus because I ported this while tired.
+					Array.Copy(field_1236_g.GetUnderlyingBuffer(), intBufCache, field_1236_g.remaining());
+					GL.CallLists((int)field_1236_g.remaining() / 4, ListNameType.UnsignedInt, intBufCache); // PORTING TODO: this is sus because I ported this while tired.
 					
 					GL.PopMatrix();
 				}
