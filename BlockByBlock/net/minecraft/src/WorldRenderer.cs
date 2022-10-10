@@ -102,7 +102,7 @@ namespace net.minecraft.src
 				this.tileEntityRenderers.Clear();
 				sbyte b8 = 1;
 				ChunkCache chunkCache9 = new ChunkCache(this.worldObj, i1 - b8, i2 - b8, i3 - b8, i4 + b8, i5 + b8, i6 + b8);
-				if (!chunkCache9.func_48452_a())
+				if (!chunkCache9.getChunksEmpty_IDK())
 				{
 					++chunksUpdated;
 					RenderBlocks renderBlocks10 = new RenderBlocks(chunkCache9);
@@ -136,7 +136,7 @@ namespace net.minecraft.src
 											tessellator.startDrawingQuads();
 											tessellator.setTranslation((double)(-this.posX), (double)(-this.posY), (double)(-this.posZ));
 										}
-
+                                        
 										if (i11 == 0 && Block.blocksList[i18].hasTileEntity())
 										{
 											TileEntity tileEntity23 = chunkCache9.getBlockTileEntity(i17, i15, i16);
@@ -156,7 +156,6 @@ namespace net.minecraft.src
 										{
 											z13 |= renderBlocks10.renderBlockByRenderType(block24, i17, i15, i16);
 										}
-										
 									}
 								}
 							}

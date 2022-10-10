@@ -326,7 +326,8 @@ public class ByteBuffer
 	public ByteBuffer putDouble(double value)
 	{
 		writer.Write(value);
-		return this;
+        streamLimit += 8;
+        return this;
 	}
 	public ByteBuffer putDouble(int index, double value)
 	{
@@ -339,7 +340,8 @@ public class ByteBuffer
 	public ByteBuffer putFloat(float value)
 	{
 		writer.Write(value);
-		return this;
+        streamLimit += 4;
+        return this;
 	}
 	public ByteBuffer putFloat(int index, float value)
 	{
@@ -366,7 +368,8 @@ public class ByteBuffer
 	public ByteBuffer putLong(long value)
 	{
 		writer.Write(value);
-		return this;
+        streamLimit += 8;
+        return this;
 	}
 	public ByteBuffer putLong(int index, long value)
 	{
@@ -379,7 +382,8 @@ public class ByteBuffer
 	public ByteBuffer putShort(short value)
 	{
 		writer.Write(value);
-		return this;
+        streamLimit += 2;
+        return this;
 	}
 	public ByteBuffer putShort(int index, short value)
 	{

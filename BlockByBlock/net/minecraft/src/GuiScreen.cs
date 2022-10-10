@@ -122,7 +122,7 @@ namespace net.minecraft.src
 
 			if (mc.mcApplet.CurrentMouseEvent() == null)
 				return;
-
+            
 			MouseEvent e = mc.mcApplet.CurrentMouseEvent()!.Value;
 
 			if (e.IsPressed)

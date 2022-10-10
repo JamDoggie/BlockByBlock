@@ -5,9 +5,9 @@
 		private int chunkX;
 		private int chunkZ;
 		private Chunk[][] chunkArray;
-		private bool field_48467_d;
+		private bool areChunksEmpty_IDK;
 		private World worldObj;
-
+        
 		public ChunkCache(World world1, int i2, int i3, int i4, int i5, int i6, int i7)
 		{
 			this.worldObj = world1;
@@ -17,7 +17,7 @@
 			int i9 = i7 >> 4;
             
 			this.chunkArray = RectangularArrays.RectangularChunkArray(i8 - this.chunkX + 1, i9 - this.chunkZ + 1);
-			this.field_48467_d = true;
+			this.areChunksEmpty_IDK = true;
 
 			for (int i10 = this.chunkX; i10 <= i8; ++i10)
 			{
@@ -29,7 +29,7 @@
 						this.chunkArray[i10 - this.chunkX][i11 - this.chunkZ] = chunk12;
 						if (!chunk12.getAreLevelsEmpty(i3, i6))
 						{
-							this.field_48467_d = false;
+							this.areChunksEmpty_IDK = false;
 						}
 					}
 				}
@@ -37,9 +37,10 @@
 
 		}
 
-		public virtual bool func_48452_a()
+		// TODO: lol I have no idea what this should be named or what this really does.
+		public virtual bool getChunksEmpty_IDK()
 		{
-			return this.field_48467_d;
+			return this.areChunksEmpty_IDK;
 		}
 
 		public virtual int getBlockId(int i1, int i2, int i3)

@@ -19,7 +19,7 @@ namespace net.minecraft.src
 			itemID = dataInputStream1.ReadInt16BigEndian();
 			uniqueID = dataInputStream1.ReadInt16BigEndian();
 			itemData = new byte[dataInputStream1.ReadByte() & 255];
-            dataInputStream1.Read(itemData, 0, itemData.Length);
+            int bytesRead = dataInputStream1.Read(itemData, 0, itemData.Length);
         }
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)

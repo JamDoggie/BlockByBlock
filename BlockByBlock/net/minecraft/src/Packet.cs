@@ -71,8 +71,6 @@ namespace net.minecraft.src
 			}
 		}
 
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: public static Packet readPacket(java.io.DataInputStream dataInputStream0, boolean z1) throws java.io.IOException
 		public static Packet readPacket(BinaryReader dataInputStream0, bool z1)
 		{
 			bool z2 = false;

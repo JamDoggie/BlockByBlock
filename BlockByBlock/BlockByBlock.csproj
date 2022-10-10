@@ -49,6 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="IKVM" Version="8.2.2-prerelease0553" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="OpenTK" Version="4.7.5" />
     <PackageReference Include="SharpZipLib" Version="1.4.0" />

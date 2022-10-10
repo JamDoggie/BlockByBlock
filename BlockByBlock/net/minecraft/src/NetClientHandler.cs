@@ -23,9 +23,11 @@ namespace net.minecraft.src
 		private System.Collections.IDictionary playerInfoMap = new Hashtable();
 		public System.Collections.IList playerNames = new ArrayList();
 		public int currentServerMaxPlayers = 20;
-		internal RandomExtended rand = new RandomExtended();
+		internal RandomExtended rand = new();
 
-		static HttpClient httpClient = new HttpClient();
+		static HttpClient httpClient = new();
+
+		internal static object ReadQueueLock = new();
 
 		public NetClientHandler(Minecraft minecraft1, string address, int port)
 		{
@@ -38,7 +40,6 @@ namespace net.minecraft.src
 			Socket socket4 = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
 			socket4.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TypeOfService, 24);
-			socket4.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
 			socket4.Connect(endPoint);
 			
 
@@ -47,12 +48,15 @@ namespace net.minecraft.src
 
 		public virtual void processReadPackets()
 		{
+			this.netManager.wakeThreads();
+
 			if (!this.disconnected)
 			{
-				this.netManager.processReadPackets();
+				lock (NetworkManager.threadSyncObject)
+                {
+					this.netManager.processReadPackets();
+				}
 			}
-
-			this.netManager.wakeThreads();
 		}
 
 		public override void handleLogin(Packet1Login packet1Login1)
@@ -394,14 +398,14 @@ namespace net.minecraft.src
 			int i3 = packet52MultiBlockChange1.zPosition * 16;
 			if (packet52MultiBlockChange1.metadataArray != null)
 			{
-				BinaryReader dataInputStream4 = new BinaryReader(new MemoryStream((byte[])(Array)packet52MultiBlockChange1.metadataArray));
+				BinaryReader dataInputStream4 = new BinaryReader(new MemoryStream(packet52MultiBlockChange1.metadataArray));
 
 				try
 				{
 					for (int i5 = 0; i5 < packet52MultiBlockChange1.size; ++i5)
 					{
-						short s6 = dataInputStream4.ReadInt16();
-						short s7 = dataInputStream4.ReadInt16();
+						short s6 = dataInputStream4.ReadInt16BigEndian();
+						short s7 = dataInputStream4.ReadInt16BigEndian();
 						int i8 = (s7 & 4095) >> 4;
 						int i9 = s7 & 15;
 						int i10 = s6 >> 12 & 15;
@@ -429,7 +433,7 @@ namespace net.minecraft.src
 
 			if (chunk2 != null)
 			{
-				chunk2.func_48494_a(packet51MapChunk1.chunkData, packet51MapChunk1.yChMin, packet51MapChunk1.yChMax, packet51MapChunk1.includeInitialize);
+				chunk2.GetDataFromDataArray(packet51MapChunk1.chunkData, packet51MapChunk1.yChMin, packet51MapChunk1.yChMax, packet51MapChunk1.includeInitialize);
 				this.worldClient.markBlocksDirty(packet51MapChunk1.xCh << 4, 0, packet51MapChunk1.zCh << 4, (packet51MapChunk1.xCh << 4) + 15, 256, (packet51MapChunk1.zCh << 4) + 15);
 				if (!packet51MapChunk1.includeInitialize || !(this.worldClient.worldProvider is WorldProviderSurface))
 				{

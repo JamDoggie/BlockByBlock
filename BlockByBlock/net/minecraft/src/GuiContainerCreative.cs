@@ -135,32 +135,32 @@ namespace net.minecraft.src
 		public override void handleMouseInput()
 		{
 			base.handleMouseInput();
-			int i1 = mc.MouseScrollDelta;
+			float i1 = mc.MouseScrollDelta;
 			if (i1 != 0)
 			{
-				int i2 = ((ContainerCreative)this.inventorySlots).itemList.Count / 8 - 8 + 1;
-				if (i1 > 0)
+				int i2 = ((ContainerCreative)inventorySlots).itemList.Count / 8 - 8 + 1;
+				if (i1 > 0F)
 				{
 					i1 = 1;
 				}
 
-				if (i1 < 0)
+				if (i1 < 0F)
 				{
 					i1 = -1;
 				}
 
-				this.currentScroll = (float)((double)this.currentScroll - (double)i1 / (double)i2);
-				if (this.currentScroll < 0.0F)
+				currentScroll = currentScroll - i1 / (float)i2;
+				if (currentScroll < 0.0F)
 				{
-					this.currentScroll = 0.0F;
+					currentScroll = 0.0F;
 				}
 
-				if (this.currentScroll > 1.0F)
+				if (currentScroll > 1.0F)
 				{
-					this.currentScroll = 1.0F;
+					currentScroll = 1.0F;
 				}
 
-				((ContainerCreative)this.inventorySlots).scrollTo(this.currentScroll);
+				((ContainerCreative)inventorySlots).scrollTo(currentScroll);
 			}
 
 		}

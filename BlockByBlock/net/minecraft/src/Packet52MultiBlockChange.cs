@@ -27,7 +27,6 @@ namespace net.minecraft.src
 				metadataArray = new byte[i2];
 				dataInputStream1.Read(metadataArray);
 			}
-
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)

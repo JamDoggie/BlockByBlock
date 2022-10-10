@@ -650,6 +650,7 @@ namespace net.minecraft.client
 
 		public static double? previousMouseX = null;
 		public static double? previousMouseY = null;
+		public static double? previousScrollDelta = null;
 
 		private void runGameLoop()
 		{
@@ -798,11 +799,13 @@ namespace net.minecraft.client
 				}
 
 				Profiler.endSection();
+                
                 unsafe
                 {
                     GLFW.GetCursorPos(mcApplet.WindowPtr, out double prevX, out double prevY);
 					previousMouseX = prevX;
 					previousMouseY = prevY;
+					previousScrollDelta = mcApplet.MouseState.ScrollDelta.Y;
                 }
             }
 		}
@@ -1392,12 +1395,19 @@ namespace net.minecraft.client
 					if (mcApplet.CurrentMouseEvent() == null)
 						continue; // This should never happen.
 
-					MouseEvent e = mcApplet.CurrentMouseEvent()!.Value;
+                    MouseEvent e = mcApplet.CurrentMouseEvent()!.Value;
+                    
+                    if (e.button != null)
+					{
+                        KeyBinding.setKeyBindState((int)e.button - 100, e.IsPressed);
+                    }
 
-					if (e.button != null)
-						KeyBinding.setKeyBindState((int)e.button - 100, e.IsPressed);
+                    if (e.IsPressed)
+                    {
+                        KeyBinding.onTick((int)e.button - 100);
+                    }
 
-					long j5 = DateTimeHelper.CurrentUnixTimeMillis() - systemTime;
+                    long j5 = DateTimeHelper.CurrentUnixTimeMillis() - systemTime;
 					if (j5 <= 200L)
 					{
 						i3 = e.scrollDelta;
@@ -1520,7 +1530,12 @@ namespace net.minecraft.client
 							}
 
 							KeyBinding.setKeyBindState((int)mcApplet.CurrentKeyEvent().Value.e.Key, mcApplet.CurrentKeyEvent().Value.isPressed);
-						} while (!mcApplet.CurrentKeyEvent().Value.isPressed);
+
+                            if (mcApplet.CurrentKeyEvent()!.Value.isPressed)
+                            {
+                                KeyBinding.onTick((int)mcApplet.CurrentKeyEvent()!.Value.e.Key);
+                            }
+                        } while (!mcApplet.CurrentKeyEvent().Value.isPressed);
 
 						if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.F11)
 						{
@@ -1615,12 +1630,6 @@ namespace net.minecraft.client
 					label361Continue:;
 				}
 				label361Break:;
-
-				foreach (KeyBinding binding in KeyBinding.keybindArray)
-				{
-					if (binding.pressed)
-						KeyBinding.onTick(binding.keyCode);
-				}
 			}
 
 			if (theWorld != null)
@@ -2167,7 +2176,8 @@ namespace net.minecraft.client
 			}
 			else
 			{
-				minecraftImpl7.session = new Session("Player" + DateTimeHelper.CurrentUnixTimeMillis() % 1000L, "");
+				//minecraftImpl7.session = new Session("Player" + DateTimeHelper.CurrentUnixTimeMillis() % 1000L, "");
+				minecraftImpl7.session = new Session("Player735", "");
 			}
 
 			if (!string.ReferenceEquals(string2, null))
@@ -2242,20 +2252,12 @@ namespace net.minecraft.client
 			}
 		}
 
-        public int MouseScrollDelta
+        public float MouseScrollDelta
         {
 			get
             {
-				int scrollDelta = 0;
-
-				if (mcApplet.MouseState.ScrollDelta.Y > 0)
-					scrollDelta = 1;
-
-				if (mcApplet.MouseState.ScrollDelta.Y < 0)
-					scrollDelta = -1;
-
-				return scrollDelta;
-			}
+				return mcApplet.CurrentMouseEvent()!.Value.rawScrollDelta;
+            }
         }
 
         public virtual bool lineIsCommand(string string1)

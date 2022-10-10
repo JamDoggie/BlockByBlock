@@ -1022,7 +1022,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual void func_48494_a(byte[] b1, int i2, int i3, bool z4)
+		public virtual void GetDataFromDataArray(byte[] b1, int i2, int i3, bool z4)
 		{
 			int i5 = 0;
 
@@ -1036,9 +1036,9 @@ namespace net.minecraft.src
 						this.storageArrays[i6] = new ExtendedBlockStorage(i6 << 4);
 					}
 					sbyte[] b7 = this.storageArrays[i6].func_48692_g();
-
-					Array.Copy(b1, i5, b7, 0, b7.Length);
-					i5 += b7.Length;
+                    
+                    Buffer.BlockCopy(b1, i5, b7, 0, b7.Length);
+                    i5 += b7.Length;
 				}
 				else if (z4 && this.storageArrays[i6] != null)
 				{
@@ -1052,7 +1052,7 @@ namespace net.minecraft.src
 				if ((i2 & 1 << i6) != 0 && this.storageArrays[i6] != null)
 				{
 					nibbleArray8 = this.storageArrays[i6].func_48697_j();
-					Array.Copy(b1, i5, nibbleArray8.data, 0, nibbleArray8.data.Length);
+					Buffer.BlockCopy(b1, i5, nibbleArray8.data, 0, nibbleArray8.data.Length);
 					i5 += nibbleArray8.data.Length;
 				}
 			}
@@ -1062,8 +1062,8 @@ namespace net.minecraft.src
 				if ((i2 & 1 << i6) != 0 && this.storageArrays[i6] != null)
 				{
 					nibbleArray8 = this.storageArrays[i6].BlocklightArray;
-					Array.Copy(b1, i5, nibbleArray8.data, 0, nibbleArray8.data.Length);
-					i5 += nibbleArray8.data.Length;
+                    Buffer.BlockCopy(b1, i5, nibbleArray8.data, 0, nibbleArray8.data.Length);
+                    i5 += nibbleArray8.data.Length;
 				}
 			}
 
@@ -1072,8 +1072,8 @@ namespace net.minecraft.src
 				if ((i2 & 1 << i6) != 0 && this.storageArrays[i6] != null)
 				{
 					nibbleArray8 = this.storageArrays[i6].SkylightArray;
-					Array.Copy(b1, i5, nibbleArray8.data, 0, nibbleArray8.data.Length);
-					i5 += nibbleArray8.data.Length;
+                    Buffer.BlockCopy(b1, i5, nibbleArray8.data, 0, nibbleArray8.data.Length);
+                    i5 += nibbleArray8.data.Length;
 				}
 			}
 
@@ -1093,7 +1093,8 @@ namespace net.minecraft.src
 							nibbleArray8 = this.storageArrays[i6].createBlockMSBArray();
 						}
 
-						Array.Copy(b1, i5, nibbleArray8.data, 0, nibbleArray8.data.Length);
+						Buffer.BlockCopy(b1, i5, nibbleArray8.data, 0, nibbleArray8.data.Length);
+                        
 						i5 += nibbleArray8.data.Length;
 					}
 				}
@@ -1105,7 +1106,7 @@ namespace net.minecraft.src
 
 			if (z4)
 			{
-				Array.Copy(b1, i5, this.blockBiomeArray, 0, this.blockBiomeArray.Length);
+				Buffer.BlockCopy(b1, i5, this.blockBiomeArray, 0, this.blockBiomeArray.Length);
 				int i10000 = i5 + this.blockBiomeArray.Length;
 			}
 

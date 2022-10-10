@@ -75,12 +75,20 @@ namespace net.minecraft.client
         #region MOUSE INPUT
         private void MinecraftApplet_MouseUp(MouseButtonEventArgs e)
 		{
-			DoMouseEvent(new MouseEvent(MouseEventType.BUTTON, 0, 0, null, null, 
+            if (e.Action != InputAction.Release)
+                return;
+
+            DoMouseEvent(new MouseEvent(MouseEventType.BUTTON, 0, 0, null, null, 
 				(int)MouseState.Position.X, (int)MouseState.Position.Y, e.Action, e.Button));
 		}
 
 		private void MinecraftApplet_MouseDown(MouseButtonEventArgs e)
 		{
+			if (e.Action != InputAction.Press || !e.IsPressed)
+				return;
+
+			Console.WriteLine("pressed");
+
 			DoMouseEvent(new MouseEvent(MouseEventType.BUTTON, 0, 0, null, null, 
 				(int)MouseState.Position.X, (int)MouseState.Position.Y, e.Action, e.Button));
 			
@@ -91,13 +99,15 @@ namespace net.minecraft.client
 				(int)e.DeltaY, (int)MouseState.Position.X, (int)MouseState.Position.Y, null, null));
 		}
 
+		float previousScrollDelta = 0;
+
 		private void MinecraftApplet_MouseWheel(MouseWheelEventArgs e)
 		{
-			DoMouseEvent(new MouseEvent(MouseEventType.SCROLL, e.OffsetY, (int)e.OffsetY, null,
-				null, (int)MouseState.Position.X, (int)MouseState.Position.Y, null, null));
-		}
+            DoMouseEvent(new MouseEvent(MouseEventType.SCROLL, e.OffsetY, (int)e.OffsetY, null,
+                null, (int)MouseState.Position.X, (int)MouseState.Position.Y, null, null));
+        }
 
-		private void DoMouseEvent(MouseEvent e)
+        private void DoMouseEvent(MouseEvent e)
 		{
 			_mouseEvents.Add(e);
 		}

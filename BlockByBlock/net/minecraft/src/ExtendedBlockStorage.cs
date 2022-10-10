@@ -5,19 +5,23 @@
 		private int yBase;
 		private int blockRefCount;
 		private int tickRefCount;
-		private sbyte[] _blockLSBArray;
+		private volatile sbyte[] _blockLSBArray;
 		private sbyte[] blockLSBArray
         {
             get
             {
-				return _blockLSBArray;
-
+				lock(typeof(ExtendedBlockStorage))
+                {
+					return _blockLSBArray;
+				}
 			}
 
 			set
             {
-				sbyte[] test = value;
-                _blockLSBArray = value;
+                lock(typeof(ExtendedBlockStorage))
+                {
+					_blockLSBArray = value;
+				}
             }
         }
 		private NibbleArray blockMSBArray;

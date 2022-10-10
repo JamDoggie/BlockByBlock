@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Kajabity.Tools.Java;
+using System.Text.RegularExpressions;
 
 namespace net.minecraft.src
 {
@@ -15,8 +16,9 @@ namespace net.minecraft.src
 		private Dictionary<string,string> languageList;
 		private string currentLanguage;
 		private bool isUnicode;
+		private Regex pattern = new Regex(@"%[+\-0-9]*\.*([0-9]*)([xXeEfFdDgG])");
 
-		private StringTranslate()
+        private StringTranslate()
 		{
 			loadLanguageList();
 			Language = "en_US";
@@ -180,10 +182,11 @@ namespace net.minecraft.src
 		public virtual string translateKeyFormat(string string1, params object[] object2)
 		{
 			string string3 = translateTable.GetProperty(string1, string1);
-			return string.Format(string3, object2);
-		}
 
-		public virtual string translateNamedKey(string string1)
+            return java.lang.String.format(string3, object2);
+        }
+
+        public virtual string translateNamedKey(string string1)
 		{
 			return translateTable.GetProperty(string1 + ".name", "");
 		}

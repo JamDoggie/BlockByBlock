@@ -290,7 +290,7 @@ namespace net.minecraft.src
 			imageData.Put(b6, 0, b6.Length);
 			imageData.position(0).limit(b6.Length);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, i3, i4, 0, PixelFormat.Rgba, PixelType.UnsignedByte, b6);
-            if (useMipmaps)
+			/*if (useMipmaps)
 			{
 				for (i7 = 1; i7 <= 4; ++i7)
 				{
@@ -314,41 +314,48 @@ namespace net.minecraft.src
 					byte[] buff = new byte[imageData.getLimit()];
 					imageData.get(buff, 0, buff.Length);
 					imageData.position(0);
-					GL.TexImage2D(TextureTarget.Texture2D, i7, PixelInternalFormat.Rgba, i9, i10, 0, PixelFormat.Rgba, PixelType.UnsignedByte, buff);
-                }
-			}
 
-		}
+					GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 4);
+
+                    GL.TexImage2D(TextureTarget.Texture2D, i7, PixelInternalFormat.Rgba, i9, i10, 0, PixelFormat.Rgba, PixelType.UnsignedByte, buff);
+                }
+			}*/
+
+			GL.BlendFunc(BlendingFactor.One, BlendingFactor.OneMinusSrcAlpha);
+			GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+        }
 
 		public virtual void createTextureFromBytes(int[] i1, int i2, int i3, int i4)
 		{
             GL.BindTexture(TextureTarget.Texture2D, i4);
             if (useMipmaps)
 			{
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.NearestMipmapLinear });
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.NearestMipmapLinear });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
 			}
 			else
 			{
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Nearest });
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Nearest });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
 			}
 
 			if (blurTexture)
 			{
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Linear });
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Linear });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Linear });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Linear });
 			}
 
 			if (clampTexture)
 			{
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Clamp });
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Clamp });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Clamp });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Clamp });
 			}
 			else
 			{
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Repeat });
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Repeat });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Repeat });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Repeat });
 			}
 
 			byte[] b5 = new byte[i2 * i3 * 4];

@@ -1472,7 +1472,9 @@ namespace net.minecraft.src
 				f12 = f12 * (1.0F - f15) + 1.0F * f15;
 			}
 
-			return Vec3D.createVector((double)f10, (double)f11, (double)f12);
+            
+
+			return Vec3D.createVector((double)f12, (double)f11, (double)f10);
 		}
 
 		public virtual float getCelestialAngle(float f1)
@@ -3831,7 +3833,7 @@ namespace net.minecraft.src
 			return this.ChunkProvider.findClosestStructure(this, string1, i2, i3, i4);
 		}
 
-		public virtual bool func_48452_a()
+		public virtual bool getChunksEmpty_IDK()
 		{
 			return false;
 		}

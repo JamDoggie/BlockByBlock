@@ -51,7 +51,6 @@ namespace net.minecraft.src
 			}
 
 			networkStream = new NetworkStream(socket1, true);
-			
 
             socketInputStream = new BinaryReader(networkStream);
             socketOutputStream = new BinaryWriter(networkStream);
@@ -140,8 +139,8 @@ namespace net.minecraft.src
 
 		public virtual void wakeThreads()
 		{
-			this.readThread.thread.Interrupt();
-			this.writeThread.thread.Interrupt();
+			//this.readThread.thread.Interrupt();
+			//this.writeThread.thread.Interrupt();
 		}
         
 		private bool readPacket()
@@ -150,24 +149,27 @@ namespace net.minecraft.src
 
             try
 			{
-				Packet packet2 = Packet.readPacket(this.socketInputStream, this.netHandler.ServerHandler);
-				if (packet2 != null)
-				{
-					int[] i10000 = field_28145_d;
-					int i10001 = packet2.PacketId;
-					i10000[i10001] += packet2.PacketSize + 1;
-					if (!this.isServerTerminating_Conflict)
+					Packet packet2 = Packet.readPacket(this.socketInputStream, this.netHandler.ServerHandler);
+					if (packet2 != null)
 					{
-						this.readPackets.Add(packet2);
+						int[] i10000 = field_28145_d;
+						int i10001 = packet2.PacketId;
+						i10000[i10001] += packet2.PacketSize + 1;
+						if (!isServerTerminating_Conflict)
+						{
+							lock (NetworkManager.threadSyncObject)
+							{
+								readPackets.Add(packet2);
+							}
+						}
+                        
+						z1 = true;
 					}
-
-					z1 = true;
-				}
-				else
-				{
-					this.networkShutdown("disconnect.endOfStream", new object[0]);
-				}
-
+					else
+					{
+						networkShutdown("disconnect.endOfStream", new object[0]);
+					}
+				
 				return z1;
 			}
 			catch (Exception exception3)
@@ -256,8 +258,8 @@ namespace net.minecraft.src
 			{
 				Packet? packet2 = (Packet?)this.readPackets.RemoveAndReturn(0);
 
-				if (packet2 != null)
-					packet2.processPacket(this.netHandler);
+                if (packet2 != null)
+                    packet2.processPacket(this.netHandler);
 			}
 
 			this.wakeThreads();

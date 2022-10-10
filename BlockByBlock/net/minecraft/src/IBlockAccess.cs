@@ -26,7 +26,7 @@
 
 		int Height {get;}
 
-		bool func_48452_a();
+		bool getChunksEmpty_IDK();
 	}
 
 }

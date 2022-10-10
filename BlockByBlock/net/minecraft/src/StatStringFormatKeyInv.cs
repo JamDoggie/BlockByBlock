@@ -17,7 +17,7 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				return string.Format(string1, new object[]{GameSettings.getKeyDisplayString(this.mc.gameSettings.keyBindInventory.keyCode)});
+				return java.lang.String.format(string1, new object[] { GameSettings.getKeyDisplayString(this.mc.gameSettings.keyBindInventory.keyCode) });
 			}
 			catch (Exception exception3)
 			{
