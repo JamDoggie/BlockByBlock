@@ -162,11 +162,7 @@ namespace net.minecraft.src
 
 		public virtual Chunk provideChunk(int i1, int i2)
 		{
-			/*this.endRNG.setSeed((long)i1 * 341873128712L + (long)i2 * 132897987541L);*/ // PORTING TODO: this was the original line which was technically more efficient
-																						  // because it didn't make a new instance of Random. Revert back to this after porting Java Random.
-																						  // PORTING TODO: RandomExtended.setSeed
-
-			endRNG = new RandomExtended((long)i1 * 341873128712L + (long)i2 * 132897987541L);
+			endRNG.SetSeed((long)i1 * 341873128712L + (long)i2 * 132897987541L);
 			sbyte[] b3 = new sbyte[32768];;
 			this.biomesForGeneration = this.endWorld.WorldChunkManager.loadBlockGeneratorData(this.biomesForGeneration, i1 * 16, i2 * 16, 16, 16);
 			this.func_40380_a(i1, i2, b3, this.biomesForGeneration);

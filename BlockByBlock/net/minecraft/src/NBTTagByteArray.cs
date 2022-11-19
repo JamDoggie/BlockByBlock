@@ -1,6 +1,7 @@
 ﻿using BlockByBlock.java_extensions;
 using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace net.minecraft.src
 {
@@ -21,9 +22,11 @@ namespace net.minecraft.src
 		internal override void write(BinaryWriter dataOutput1)
 		{
 			dataOutput1.WriteBigEndian(this.byteArray.Length);
-            
-			foreach (sbyte b in byteArray)
-				dataOutput1.Write(b);
+
+			ReadOnlySpan<sbyte> signedBytes = byteArray;
+			ReadOnlySpan<byte> unsignedBytes = MemoryMarshal.Cast<sbyte, byte>(signedBytes);
+
+			dataOutput1.Write(unsignedBytes);
 		}
         
 		internal override void load(BinaryReader dataInput1)

@@ -1391,7 +1391,7 @@ namespace net.minecraft.src
 			return (int)(f3 * 11.0F);
 		}
 
-		public virtual float func_35464_b(float f1)
+		public virtual float getSkyBrightness(float f1)
 		{
 			float f2 = this.getCelestialAngle(f1);
 			float f3 = 1.0F - (MathHelper.cos(f2 * (float)Math.PI * 2.0F) * 2.0F + 0.2F);
@@ -2607,6 +2607,7 @@ namespace net.minecraft.src
 			int i2 = 0;
 			System.Collections.IEnumerator iterator3 = this.activeChunkSet.GetEnumerator();
 
+			Profiler.startSection("iterator");
 			while (iterator3.MoveNext())
 			{
 				ChunkCoordIntPair chunkCoordIntPair4 = (ChunkCoordIntPair)iterator3.Current;
@@ -2675,6 +2676,7 @@ namespace net.minecraft.src
 							if (block18 != null && block18.TickRandomly)
 							{
 								++i1;
+								// NOTE: this is slow sometimes. Investigate.
 								block18.updateTick(this, i14 + i5, i16 + extendedBlockStorage20.YLocation, i15 + i6, this.rand);
 							}
 						}
@@ -2684,6 +2686,7 @@ namespace net.minecraft.src
 				Profiler.endSection();
 			}
 
+			Profiler.endSection();
 		}
 
 		public virtual bool isBlockHydratedDirectly(int i1, int i2, int i3)
@@ -3812,8 +3815,7 @@ namespace net.minecraft.src
 		public virtual RandomExtended setRandomSeed(int i1, int i2, int i3)
 		{
 			long j4 = (long)i1 * 341873128712L + (long)i2 * 132897987541L + this.WorldInfo.Seed + (long)i3;
-			//this.rand.setSeed(j4); // RandomExtended.setSeed
-			rand = new RandomExtended(j4);
+			rand.SetSeed(j4);
 			return this.rand;
 		}
 

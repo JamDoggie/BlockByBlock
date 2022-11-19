@@ -16,7 +16,7 @@ namespace net.minecraft.src
 
 			for (int i3 = 0; i3 < s2; ++i3)
 			{
-				itemStack[i3] = readItemStack(dataInputStream1);
+				itemStack[i3] = ReadItemStack(dataInputStream1);
 			}
 
 		}

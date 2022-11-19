@@ -52,7 +52,7 @@ namespace net.minecraft.src
 			this.controlList.Add(this.worldTypeButton = new GuiButton(5, this.width / 2 + 5, 100, 150, 20, stringTranslate1.translateKey("selectWorld.mapType")));
 			this.worldTypeButton.shouldDrawButton = false;
 			this.textboxWorldName = new GuiTextField(this.fontRenderer, this.width / 2 - 100, 60, 200, 20);
-			this.textboxWorldName.func_50033_b(true);
+			this.textboxWorldName.setFocused(true);
 			this.textboxWorldName.Text = this.localizedNewWorldText;
 			this.textboxSeed = new GuiTextField(this.fontRenderer, this.width / 2 - 100, 60, 200, 20);
 			this.textboxSeed.Text = this.seed;
@@ -240,12 +240,12 @@ namespace net.minecraft.src
 		{
 			if (this.textboxWorldName.func_50025_j() && !this.moreOptions)
 			{
-				this.textboxWorldName.func_50037_a(c1, i2);
+				this.textboxWorldName.keyTyped(c1, i2);
 				this.localizedNewWorldText = this.textboxWorldName.Text;
 			}
 			else if (this.textboxSeed.func_50025_j() && this.moreOptions)
 			{
-				this.textboxSeed.func_50037_a(c1, i2);
+				this.textboxSeed.keyTyped(c1, i2);
 				this.seed = this.textboxSeed.Text;
 			}
 

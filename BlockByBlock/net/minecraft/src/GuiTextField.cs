@@ -23,13 +23,13 @@ namespace net.minecraft.src
 		private int field_50047_q = 14737632;
 		private int field_50046_r = 7368816;
 
-		public GuiTextField(FontRenderer fontRenderer1, int i2, int i3, int i4, int i5)
+		public GuiTextField(FontRenderer fontRenderer1, int xPos, int yPos, int width, int height)
 		{
 			this.fontRenderer = fontRenderer1;
-			this.xPos = i2;
-			this.yPos = i3;
-			this.width = i4;
-			this.height = i5;
+			this.xPos = xPos;
+			this.yPos = yPos;
+			this.width = width;
+			this.height = height;
 		}
 
 		public virtual void updateCursorCounter()
@@ -59,14 +59,14 @@ namespace net.minecraft.src
 		}
 
 
-		public virtual string func_50039_c()
+		public virtual string getSelectedText()
 		{
 			int i1 = this.field_50042_o < this.field_50048_p ? this.field_50042_o : this.field_50048_p;
 			int i2 = this.field_50042_o < this.field_50048_p ? this.field_50048_p : this.field_50042_o;
 			return this.text.Substring(i1, i2 - i1);
 		}
 
-		public virtual void func_50031_b(string string1)
+		public virtual void writeText(string string1)
 		{
 			string string2 = "";
 			string string3 = ChatAllowedCharacters.func_52019_a(string1);
@@ -106,22 +106,22 @@ namespace net.minecraft.src
 			{
 				if (this.field_50048_p != this.field_50042_o)
 				{
-					this.func_50031_b("");
+					this.writeText("");
 				}
 				else
 				{
-					this.func_50020_b(this.func_50028_c(i1) - this.field_50042_o);
+					this.deleteFromCursor(this.getNthWordFromCursor(i1) - this.field_50042_o);
 				}
 			}
 		}
 
-		public virtual void func_50020_b(int i1)
+		public virtual void deleteFromCursor(int i1)
 		{
 			if (this.text.Length != 0)
 			{
 				if (this.field_50048_p != this.field_50042_o)
 				{
-					this.func_50031_b("");
+					this.writeText("");
 				}
 				else
 				{
@@ -149,12 +149,12 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual int func_50028_c(int i1)
+		public virtual int getNthWordFromCursor(int i1)
 		{
-			return this.func_50024_a(i1, this.func_50035_h());
+			return this.getNthWordFromPos(i1, this.getCursorPosition());
 		}
 
-		public virtual int func_50024_a(int i1, int i2)
+		public virtual int getNthWordFromPos(int i1, int i2)
 		{
 			int i3 = i2;
 			bool z4 = i1 < 0;
@@ -227,7 +227,7 @@ namespace net.minecraft.src
 			this.func_50030_e(this.text.Length);
 		}
 
-		public virtual bool func_50037_a(char c1, int i2)
+		public virtual bool keyTyped(char c1, int i2)
 		{
 			if (this.field_50043_m && this.isFocused)
 			{
@@ -238,14 +238,14 @@ namespace net.minecraft.src
 					this.func_50032_g(0);
 					return true;
 				case '\u0003':
-					GuiScreen.setClipboardString(this.func_50039_c());
+					GuiScreen.setClipboardString(this.getSelectedText());
 					return true;
 				case '\u0016':
-					this.func_50031_b(GuiScreen.ClipboardString);
+					this.writeText(GuiScreen.ClipboardString);
 					return true;
 				case '\u0018':
-					GuiScreen.setClipboardString(this.func_50039_c());
-					this.func_50031_b("");
+					GuiScreen.setClipboardString(this.getSelectedText());
+					this.writeText("");
 					return true;
 				default:
 					switch (i2)
@@ -257,7 +257,7 @@ namespace net.minecraft.src
 						}
 						else
 						{
-							this.func_50020_b(-1);
+							this.deleteFromCursor(-1);
 						}
 
 						return true;
@@ -277,7 +277,7 @@ namespace net.minecraft.src
 						{
 							if (GuiScreen.isControlDown())
 							{
-								this.func_50032_g(this.func_50024_a(-1, this.func_50036_k()));
+								this.func_50032_g(this.getNthWordFromPos(-1, this.func_50036_k()));
 							}
 							else
 							{
@@ -286,7 +286,7 @@ namespace net.minecraft.src
 						}
 						else if (GuiScreen.isControlDown())
 						{
-							this.func_50030_e(this.func_50028_c(-1));
+							this.func_50030_e(this.getNthWordFromCursor(-1));
 						}
 						else
 						{
@@ -299,7 +299,7 @@ namespace net.minecraft.src
 						{
 							if (GuiScreen.isControlDown())
 							{
-								this.func_50032_g(this.func_50024_a(1, this.func_50036_k()));
+								this.func_50032_g(this.getNthWordFromPos(1, this.func_50036_k()));
 							}
 							else
 							{
@@ -308,7 +308,7 @@ namespace net.minecraft.src
 						}
 						else if (GuiScreen.isControlDown())
 						{
-							this.func_50030_e(this.func_50028_c(1));
+							this.func_50030_e(this.getNthWordFromCursor(1));
 						}
 						else
 						{
@@ -334,14 +334,14 @@ namespace net.minecraft.src
 						}
 						else
 						{
-							this.func_50020_b(1);
+							this.deleteFromCursor(1);
 						}
 
 						return true;
 					default:
 						if (ChatAllowedCharacters.isAllowedCharacter(c1))
 						{
-							this.func_50031_b(Convert.ToString(c1));
+							this.writeText(Convert.ToString(c1));
 							return true;
 						}
 						else
@@ -363,7 +363,7 @@ namespace net.minecraft.src
 			bool z4 = i1 >= this.xPos && i1 < this.xPos + this.width && i2 >= this.yPos && i2 < this.yPos + this.height;
 			if (this.field_50045_k)
 			{
-				this.func_50033_b(this.field_50043_m && z4);
+				this.setFocused(this.field_50043_m && z4);
 			}
 
 			if (this.isFocused && i3 == 0)
@@ -495,7 +495,7 @@ namespace net.minecraft.src
 			return this.maxStringLength;
 		}
 
-		public virtual int func_50035_h()
+		public virtual int getCursorPosition()
 		{
 			return this.field_50042_o;
 		}
@@ -510,7 +510,7 @@ namespace net.minecraft.src
 			this.field_50044_j = z1;
 		}
 
-		public virtual void func_50033_b(bool z1)
+		public virtual void setFocused(bool z1)
 		{
 			if (z1 && !this.isFocused)
 			{

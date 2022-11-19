@@ -203,6 +203,9 @@ namespace net.minecraft.src
 
 		}
 
+		/// <summary>
+		/// This function does literally nothing. What.
+		/// </summary>
 		public virtual void func_4143_d()
 		{
 		}
@@ -394,7 +397,7 @@ namespace net.minecraft.src
 
 		public virtual int getBlockID(int i1, int i2, int i3)
 		{
-			if (i2 >> 4 >= this.storageArrays.Length)
+			if (i2 >> 4 >= storageArrays.Length)
 			{
 				return 0;
 			}

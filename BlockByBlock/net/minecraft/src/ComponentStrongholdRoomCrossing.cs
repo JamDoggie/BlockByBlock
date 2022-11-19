@@ -19,7 +19,7 @@ namespace net.minecraft.src
 		protected internal readonly EnumDoor doorType;
 		protected internal readonly int roomType;
 
-		public ComponentStrongholdRoomCrossing(int i1, Random random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
+		public ComponentStrongholdRoomCrossing(int i1, RandomExtended random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
 		{
 			this.coordBaseMode = i4;
 			this.doorType = this.getRandomDoor(random2);

@@ -20,8 +20,7 @@ namespace net.minecraft.src
 
 		public virtual void doRenderItem(EntityItem entityItem1, double d2, double d4, double d6, float f8, float f9)
 		{
-			//this.random.setSeed(187L); // RandomExtended.setSeed
-			random = new RandomExtended(187L);
+			random.SetSeed(187L); 
 			ItemStack itemStack10 = entityItem1.item;
 			GL.PushMatrix();
 			float f11 = MathHelper.sin(((float)entityItem1.age + f9) / 10.0F + entityItem1.field_804_d) * 0.1F + 0.1F;
@@ -177,7 +176,11 @@ namespace net.minecraft.src
 			if (i3 < 256 && RenderBlocks.renderItemIn3d(Block.blocksList[i3].RenderType))
 			{
 				renderEngine2.bindTexture(renderEngine2.getTexture("/terrain.png"));
-				Block block15 = Block.blocksList[i3];
+
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 0);
+
+                Block block15 = Block.blocksList[i3];
 				GL.PushMatrix();
 				GL.Translate((float)(i6 - 2), (float)(i7 + 3), -3.0F + this.zLevel);
 				GL.Scale(10.0F, 10.0F, 10.0F);
@@ -199,7 +202,10 @@ namespace net.minecraft.src
 				this.renderBlocks.renderBlockAsItem(block15, i4, 1.0F);
 				this.renderBlocks.useInventoryTint = true;
 				GL.PopMatrix();
-			}
+
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 4);
+            }
 			else
 			{
 				int i8;
@@ -208,7 +214,10 @@ namespace net.minecraft.src
 					GL.Disable(EnableCap.Lighting);
 					renderEngine2.bindTexture(renderEngine2.getTexture("/gui/items.png"));
 
-					for (i8 = 0; i8 <= 1; ++i8)
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 0);
+
+                    for (i8 = 0; i8 <= 1; ++i8)
 					{
 						int i9 = Item.itemsList[i3].func_46057_a(i4, i8);
 						i10 = Item.itemsList[i3].getColorFromDamage(i4, i8);
@@ -223,7 +232,10 @@ namespace net.minecraft.src
 						this.renderTexturedQuad(i6, i7, i9 % 16 * 16, i9 / 16 * 16, 16, 16);
 					}
 
-					GL.Enable(EnableCap.Lighting);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 4);
+
+                    GL.Enable(EnableCap.Lighting);
 				}
 				else if (i5 >= 0)
 				{
@@ -237,7 +249,10 @@ namespace net.minecraft.src
 						renderEngine2.bindTexture(renderEngine2.getTexture("/gui/items.png"));
 					}
 
-					i8 = Item.itemsList[i3].getColorFromDamage(i4, 0);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 0);
+
+                    i8 = Item.itemsList[i3].getColorFromDamage(i4, 0);
 					float f14 = (float)(i8 >> 16 & 255) / 255.0F;
 					float f16 = (float)(i8 >> 8 & 255) / 255.0F;
 					f11 = (float)(i8 & 255) / 255.0F;
@@ -248,7 +263,10 @@ namespace net.minecraft.src
 
 					this.renderTexturedQuad(i6, i7, i5 % 16 * 16, i5 / 16 * 16, 16, 16);
 					GL.Enable(EnableCap.Lighting);
-				}
+
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 4);
+                }
 			}
 
 			GL.Enable(EnableCap.CullFace);

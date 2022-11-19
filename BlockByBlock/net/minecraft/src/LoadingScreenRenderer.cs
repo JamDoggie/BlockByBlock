@@ -1,5 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL;
+using OpenTK.Windowing.Common;
 using System;
+using System.Drawing;
 
 namespace net.minecraft.src
 {
@@ -84,7 +86,7 @@ namespace net.minecraft.src
 				}
 				else
 				{
-					long j2 = DateTimeHelper.CurrentUnixTimeMillis();
+                    long j2 = DateTimeHelper.CurrentUnixTimeMillis();
 					if (j2 - this.field_1006_d >= 100L)
 					{
 						this.field_1006_d = j2;
@@ -131,12 +133,13 @@ namespace net.minecraft.src
 							tessellator7.draw();
 							GL.Enable(EnableCap.Texture2D);
 						}
-						// PORTING TODO: There was a display.update here. Investigate.
+						
 
 						this.mc.fontRenderer.drawStringWithShadow(this.currentlyDisplayedText, (i5 - this.mc.fontRenderer.getStringWidth(this.currentlyDisplayedText)) / 2, i6 / 2 - 4 - 16, 0xFFFFFF);
 						this.mc.fontRenderer.drawStringWithShadow(this.field_1004_a, (i5 - this.mc.fontRenderer.getStringWidth(this.field_1004_a)) / 2, i6 / 2 - 4 + 8, 0xFFFFFF);
-    
-						try
+                        mc.mcApplet.Context.SwapBuffers();
+
+                        try
 						{
 							Thread.Yield();
 						}

@@ -14,8 +14,7 @@ namespace net.minecraft.src
 		{
 			int i6 = this.range;
 			worldObj = world2;
-			//rand.setSeed(world2.Seed); // PORTING TODO: RandomExtended.setSeed
-			rand = new RandomExtended(world2.Seed);
+			rand.SetSeed(world2.Seed);
 			long j7 = rand.NextInt64();
 			long j9 = rand.NextInt64();
 
@@ -25,8 +24,7 @@ namespace net.minecraft.src
 				{
 					long j13 = (long)i11 * j7;
 					long j15 = (long)i12 * j9;
-                    //this.rand.setSeed(j13 ^ j15 ^ world2.Seed); // PORTING TODO: RandomExtended.setSeed 
-                    rand = new RandomExtended(j13 ^ j15 ^ world2.Seed);
+                    rand.SetSeed(j13 ^ j15 ^ world2.Seed);
                     this.recursiveGenerate(world2, i11, i12, i3, i4, b5);
 				}
 			}

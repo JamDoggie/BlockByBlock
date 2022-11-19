@@ -86,7 +86,7 @@ namespace net.minecraft.src
 
 		private void sparkle(World world1, int i2, int i3, int i4)
 		{
-			Random random5 = world1.rand;
+			RandomExtended random5 = world1.rand;
 			double d6 = 0.0625D;
 
 			for (int i8 = 0; i8 < 6; ++i8)

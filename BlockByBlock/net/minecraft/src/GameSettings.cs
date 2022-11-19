@@ -1,4 +1,5 @@
-﻿using OpenTK.Windowing.GraphicsLibraryFramework;
+﻿using net.minecraft.input;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.IO;
 
@@ -99,10 +100,10 @@ namespace net.minecraft.src
 			int i2 = this.keyBindings[i1].keyCode;
 			return getKeyDisplayString(i2);
 		}
-
+        
 		public static string getKeyDisplayString(int i0)
 		{
-			return i0 < 0 ? StatCollector.translateToLocalFormatted("key.mouseButton", new object[]{i0 + 101}) : ((Keys)i0).ToString();
+			return i0 < 0 ? StatCollector.translateToLocalFormatted("key.mouseButton", new object[]{i0 + 101}) : ((KeyCode)i0).ToString();
 		}
 
 		public virtual void setKeyBinding(int i1, int i2)
@@ -420,7 +421,7 @@ namespace net.minecraft.src
 		{
 			try
 			{
-				StreamWriter optionsWriter = new StreamWriter(new FileStream(optionsFile.FullName, FileMode.Open, FileAccess.ReadWrite));
+				StreamWriter optionsWriter = new StreamWriter(new FileStream(optionsFile.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite));
 				optionsWriter.WriteLine("music:" + this.musicVolume);
 				optionsWriter.WriteLine("sound:" + this.soundVolume);
 				optionsWriter.WriteLine("invertYMouse:" + this.invertMouse);

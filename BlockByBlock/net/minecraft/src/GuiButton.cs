@@ -6,8 +6,8 @@ namespace net.minecraft.src
 
 	public class GuiButton : Gui
 	{
-		protected internal int field_52008_a;
-		protected internal int field_52007_b;
+		protected internal int width;
+		protected internal int height;
 		public int xPosition;
 		public int yPosition;
 		public string displayString;
@@ -19,18 +19,18 @@ namespace net.minecraft.src
 		{
 		}
 
-		public GuiButton(int i1, int i2, int i3, int i4, int i5, string string6)
+		public GuiButton(int id, int xPosition, int yPosition, int i4, int i5, string displayString)
 		{
-			this.field_52008_a = 200;
-			this.field_52007_b = 20;
+			this.width = 200;
+			this.height = 20;
 			this.enabled = true;
 			this.shouldDrawButton = true;
-			this.id = i1;
-			this.xPosition = i2;
-			this.yPosition = i3;
-			this.field_52008_a = i4;
-			this.field_52007_b = i5;
-			this.displayString = string6;
+			this.id = id;
+			this.xPosition = xPosition;
+			this.yPosition = yPosition;
+			this.width = i4;
+			this.height = i5;
+			this.displayString = displayString;
 		}
 
 		protected internal virtual int getHoverState(bool z1)
@@ -55,10 +55,10 @@ namespace net.minecraft.src
 				FontRenderer fontRenderer4 = minecraft1.fontRenderer;
 				GL.BindTexture(TextureTarget.Texture2D, minecraft1.renderEngine.getTexture("/gui/gui.png"));
 				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
-				bool z5 = i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.field_52008_a && i3 < this.yPosition + this.field_52007_b;
+				bool z5 = i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.width && i3 < this.yPosition + this.height;
 				int i6 = this.getHoverState(z5);
-				this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 46 + i6 * 20, this.field_52008_a / 2, this.field_52007_b);
-				this.drawTexturedModalRect(this.xPosition + this.field_52008_a / 2, this.yPosition, 200 - this.field_52008_a / 2, 46 + i6 * 20, this.field_52008_a / 2, this.field_52007_b);
+				this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 46 + i6 * 20, this.width / 2, this.height);
+				this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, 46 + i6 * 20, this.width / 2, this.height);
 				this.mouseDragged(minecraft1, i2, i3);
 				int i7 = 14737632;
 				if (!this.enabled)
@@ -70,7 +70,7 @@ namespace net.minecraft.src
 					i7 = 16777120;
 				}
 
-				this.drawCenteredString(fontRenderer4, this.displayString, this.xPosition + this.field_52008_a / 2, this.yPosition + (this.field_52007_b - 8) / 2, i7);
+				this.drawCenteredString(fontRenderer4, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, i7);
 			}
 		}
 
@@ -87,10 +87,10 @@ namespace net.minecraft.src
 			bool isEnabled = enabled;
 			bool shouldDraw = shouldDrawButton;
 			bool x1 = i2 >= this.xPosition;
-            bool x2 = i2 < this.xPosition + this.field_52008_a;
+            bool x2 = i2 < this.xPosition + this.width;
             bool y1 = i3 >= this.yPosition;
-            bool y2 = i3 < this.yPosition + this.field_52007_b;
-            return this.enabled && this.shouldDrawButton && i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.field_52008_a && i3 < this.yPosition + this.field_52007_b;
+            bool y2 = i3 < this.yPosition + this.height;
+            return this.enabled && this.shouldDrawButton && i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.width && i3 < this.yPosition + this.height;
 		}
 	}
 

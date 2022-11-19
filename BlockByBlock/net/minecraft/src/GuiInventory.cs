@@ -13,7 +13,7 @@ namespace net.minecraft.src
 		{
 			this.allowUserInput = true;
 			entityPlayer1.addStat(AchievementList.openInventory, 1);
-		}
+        }
 
 		public override void updateScreen()
 		{
@@ -39,12 +39,22 @@ namespace net.minecraft.src
 					this.guiLeft = 160 + (this.width - this.xSize - 200) / 2;
 				}
 			}
-
+#if DEBUGTOOLS
+            controlList.Add(new GuiButton(50, guiLeft + 200, guiTop, "Restore Hunger"));
+            controlList.Add(new GuiButton(51, guiLeft + 200, guiTop + 25, "Restore Health"));
+            controlList.Add(new GuiButton(52, guiLeft + 200, guiTop + 50, "Creative Mode"));
+            controlList.Add(new GuiButton(53, guiLeft + 200, guiTop + 75, "Survival Mode"));
+#endif
 		}
 
 		protected internal override void drawGuiContainerForegroundLayer()
 		{
 			this.fontRenderer.drawString(StatCollector.translateToLocal("container.crafting"), 86, 16, 4210752);
+
+#if DEBUGTOOLS
+            // Hax
+            fontRenderer.drawString("Hax Menu (only for singleplayer use)", 200, -15, 0xFFFFFF);
+#endif
 		}
 
 		public override void drawScreen(int i1, int i2, float f3)
@@ -92,7 +102,8 @@ namespace net.minecraft.src
 			GL.PopMatrix();
 			RenderHelper.disableStandardItemLighting();
 			GL.Disable(EnableCap.RescaleNormal);
-		}
+            GL.Disable(EnableCap.ColorMaterial);
+        }
 
 		protected internal override void actionPerformed(GuiButton guiButton1)
 		{
@@ -106,7 +117,35 @@ namespace net.minecraft.src
 				this.mc.displayGuiScreen(new GuiStats(this, this.mc.statFileWriter));
 			}
 
-		}
+			if (guiButton1.id == 50)
+			{
+                mc.thePlayer.FoodStats.FoodLevel = 20;
+				mc.thePlayer.FoodStats.FoodSaturationLevel = 5;
+            }
+
+            if (guiButton1.id == 51)
+            {
+				mc.thePlayer.Health = mc.thePlayer.MaxHealth;
+            }
+
+            if (guiButton1.id == 52)
+            {
+                mc.playerController = new PlayerControllerCreative(mc);
+				mc.thePlayer.addChatMessage("Updated gamemode to creative.");
+				mc.thePlayer.capabilities.allowFlying = true;
+				mc.thePlayer.capabilities.isCreativeMode = true;
+				mc.thePlayer.capabilities.disableDamage = true;
+            }
+
+            if (guiButton1.id == 53)
+            {
+                mc.playerController = new PlayerControllerSP(mc);
+                mc.thePlayer.addChatMessage("Updated gamemode to survival.");
+                mc.thePlayer.capabilities.allowFlying = false;
+                mc.thePlayer.capabilities.isCreativeMode = false;
+                mc.thePlayer.capabilities.disableDamage = false;
+            }
+        }
 
 		private void displayDebuffEffects()
 		{

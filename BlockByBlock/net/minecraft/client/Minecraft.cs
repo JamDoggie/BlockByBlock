@@ -111,8 +111,10 @@ namespace net.minecraft.client
 	using OpenTK.Graphics.OpenGL;
     using OpenTK.Windowing.GraphicsLibraryFramework;
     using OpenTK.Graphics.Wgl;
+	using com.sun.tools.corba.se.logutil;
+	using net.minecraft.input;
 
-    public abstract class Minecraft
+	public abstract class Minecraft
 	{
 		private bool InstanceFieldsInitialized = false;
 		
@@ -184,6 +186,7 @@ namespace net.minecraft.client
 		public bool isRaining = false;
 		internal long systemTime = DateTimeHelper.CurrentUnixTimeMillis();
 		private int joinPlayerCounter = 0;
+		public bool zoom = false;
 
 		public float MouseX => mcApplet.MousePosition.X;
 		public float MouseY => mcApplet.Bounds.Size.Y - mcApplet.MousePosition.Y;
@@ -587,7 +590,7 @@ namespace net.minecraft.client
 
 			}
 
-			System.GC.Collect();
+			GC.Collect();
 		}
 
 		public unsafe virtual void run()
@@ -615,7 +618,6 @@ namespace net.minecraft.client
 					try
 					{
 						this.runGameLoop();
-						//mcApplet.Context.SwapBuffers();
 					}
 					catch (MinecraftException)
 					{
@@ -627,7 +629,8 @@ namespace net.minecraft.client
 					{
 						this.freeMemory();
 						this.displayGuiScreen(new GuiMemoryErrorScreen());
-						System.GC.Collect(); // PORTING TODO: Come back to this, I'm pretty sure there's a better way to do GC collections.
+						System.GC.Collect(); //
+											 // : Come back to this, I'm pretty sure there's a better way to do GC collections.
 					}
 				}
 			}
@@ -681,7 +684,11 @@ namespace net.minecraft.client
 
 				long j6 = JTime.NanoTime();
 				Profiler.startSection("tick");
-				NativeWindow.ProcessWindowEvents(false);
+				Profiler.startSection("windowEvents");
+
+				// Clear currently typed keys if any are left from the last frame.
+                NativeWindow.ProcessWindowEvents(false);
+				Profiler.endSection();
 				for (int i3 = 0; i3 < this.timer.elapsedTicks; ++i3)
 				{
 					++this.ticksRan;
@@ -716,6 +723,7 @@ namespace net.minecraft.client
 				GL.Enable(EnableCap.Texture2D);
 
 				mcApplet.SwapBuffers();
+				GL.Finish();
 
 				mcApplet.IsVisible = true;
 
@@ -799,7 +807,9 @@ namespace net.minecraft.client
 				}
 
 				Profiler.endSection();
-                
+
+				sndManager.tick();
+
                 unsafe
                 {
                     GLFW.GetCursorPos(mcApplet.WindowPtr, out double prevX, out double prevY);
@@ -1451,10 +1461,17 @@ namespace net.minecraft.client
 				}
 
 				Profiler.endStartSection("keyboard");
+                
+                zoom = mcApplet.IsKeyDown(Keys.C);
 
-				while (true)
+				if (currentScreen == null)
 				{
-					while (true)
+					mcApplet.ClearKeyTypeQueue();
+				}
+
+                while (true)
+				{
+                    while (true)
 					{
 						do
 						{
@@ -1529,15 +1546,15 @@ namespace net.minecraft.client
 								goto label361Break;
 							}
 
-							KeyBinding.setKeyBindState((int)mcApplet.CurrentKeyEvent().Value.e.Key, mcApplet.CurrentKeyEvent().Value.isPressed);
+							KeyBinding.setKeyBindState((int)mcApplet.CurrentKeyEvent().Value.Key, mcApplet.CurrentKeyEvent().Value.IsPressed);
 
-                            if (mcApplet.CurrentKeyEvent()!.Value.isPressed)
+                            if (mcApplet.CurrentKeyEvent()!.Value.IsPressed)
                             {
-                                KeyBinding.onTick((int)mcApplet.CurrentKeyEvent()!.Value.e.Key);
+                                KeyBinding.onTick((int)mcApplet.CurrentKeyEvent()!.Value.Key);
                             }
-                        } while (!mcApplet.CurrentKeyEvent().Value.isPressed);
+                        } while (!mcApplet.CurrentKeyEvent().Value.IsPressed);
 
-						if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.F11)
+						if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.F11)
 						{
 							toggleFullscreen();
 						}
@@ -1545,48 +1562,48 @@ namespace net.minecraft.client
 						{
 							if (currentScreen != null)
 							{
-								currentScreen.handleKeyboardInput();
+                                currentScreen.handleKeyboardInput();
 							}
 							else
 							{
-								if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.Escape)
+								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.ESCAPE)
 								{
 									displayInGameMenu();
 								}
 
-								if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.S && mcApplet.KeyboardState.IsKeyDown(Keys.F3))
+								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.S && mcApplet.KeyboardState.IsKeyDown(Keys.F3))
 								{
 									forceReload();
 								}
 
-								if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.T && mcApplet.KeyboardState.IsKeyDown(Keys.F3))
+								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.T && mcApplet.KeyboardState.IsKeyDown(Keys.F3))
 								{
 									renderEngine.refreshTextures();
 								}
 
-								if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.F && mcApplet.KeyboardState.IsKeyDown(Keys.F3))
+								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.F && mcApplet.KeyboardState.IsKeyDown(Keys.F3))
 								{
 									bool z6 = mcApplet.KeyboardState.IsKeyDown(Keys.LeftShift) | mcApplet.KeyboardState.IsKeyDown(Keys.RightShift);
 									gameSettings.setOptionValue(EnumOptions.RENDER_DISTANCE, z6 ? -1 : 1);
 								}
 
-								if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.A && mcApplet.KeyboardState.IsKeyDown(Keys.F3))
+								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.A && mcApplet.KeyboardState.IsKeyDown(Keys.F3))
 								{
 									renderGlobal.loadRenderers();
 								}
-
-								if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.F1)
+                                
+								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.F1)
 								{
 									gameSettings.hideGUI = !gameSettings.hideGUI;
 								}
 
-								if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.F3)
+								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.F3)
 								{
 									gameSettings.showDebugInfo = !gameSettings.showDebugInfo;
 									gameSettings.field_50119_G = !GuiScreen.isShiftDown();
 								}
 
-								if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.F5)
+								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.F5)
 								{
 									++gameSettings.thirdPersonView;
 									if (gameSettings.thirdPersonView > 2)
@@ -1595,7 +1612,7 @@ namespace net.minecraft.client
 									}
 								}
 
-								if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.F8)
+								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.F8)
 								{
 									gameSettings.smoothCamera = !gameSettings.smoothCamera;
 								}
@@ -1604,7 +1621,7 @@ namespace net.minecraft.client
 							int i7;
 							for (i7 = 0; i7 < 9; ++i7)
 							{
-								if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.D1 + i7)
+								if (mcApplet.CurrentKeyEvent()?.Value.Key == KeyCode.One + i7)
 								{
 									thePlayer.inventory.currentItem = i7;
 								}
@@ -1612,14 +1629,14 @@ namespace net.minecraft.client
 
 							if (gameSettings.showDebugInfo && gameSettings.field_50119_G)
 							{
-								if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.D0)
+								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.Zero)
 								{
 									updateDebugProfilerName(0);
 								}
 
 								for (i7 = 0; i7 < 9; ++i7)
 								{
-									if (mcApplet.CurrentKeyEvent().Value.e.Key == Keys.D1 + i7)
+									if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.One + i7)
 									{
 										updateDebugProfilerName(i7 + 1);
 									}

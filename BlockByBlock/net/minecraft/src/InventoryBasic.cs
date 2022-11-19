@@ -13,7 +13,7 @@
 			this.inventoryTitle = string1;
 			this.slotsCount = i2;
 			this.inventoryContents = new ItemStack[i2];
-		}
+        }
 
 		public virtual ItemStack getStackInSlot(int i1)
 		{

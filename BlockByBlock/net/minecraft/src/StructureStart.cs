@@ -51,7 +51,7 @@ namespace net.minecraft.src
 
 		}
 
-		protected internal virtual void markAvailableHeight(World world1, Random random2, int i3)
+		protected internal virtual void markAvailableHeight(World world1, RandomExtended random2, int i3)
 		{
 			int i4 = 63 - i3;
 			int i5 = this.boundingBox.YSize + 1;
@@ -72,7 +72,7 @@ namespace net.minecraft.src
 
 		}
 
-		protected internal virtual void setRandomHeight(World world1, Random random2, int i3, int i4)
+		protected internal virtual void setRandomHeight(World world1, RandomExtended random2, int i3, int i4)
 		{
 			int i5 = i4 - i3 + 1 - this.boundingBox.YSize;
 			bool z6 = true;

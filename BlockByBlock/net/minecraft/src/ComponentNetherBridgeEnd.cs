@@ -27,7 +27,7 @@ namespace net.minecraft.src
 
 		public override bool addComponentParts(World world1, RandomExtended random2, StructureBoundingBox structureBoundingBox3)
 		{
-			Random random4 = new RandomExtended((long)this.fillSeed);
+            RandomExtended random4 = new RandomExtended((long)this.fillSeed);
 
 			int i5;
 			int i6;

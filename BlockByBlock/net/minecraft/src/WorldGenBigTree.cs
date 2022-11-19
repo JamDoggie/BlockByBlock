@@ -413,8 +413,7 @@ namespace net.minecraft.src
 		{
 			this.worldObj = world1;
 			long j6 = random2.NextInt64();
-			//this.rand.setSeed(j6); // PORTING TODO: RandomExtended.setSeed
-			rand = new RandomExtended(j6);
+			rand.SetSeed(j6);
 			this.basePos[0] = i3;
 			this.basePos[1] = i4;
 			this.basePos[2] = i5;

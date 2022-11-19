@@ -149,7 +149,9 @@ namespace net.minecraft.src
 
             try
 			{
-					Packet packet2 = Packet.readPacket(this.socketInputStream, this.netHandler.ServerHandler);
+
+
+					Packet packet2 = Packet.ReadPacket(this.socketInputStream, this.netHandler.ServerHandler);
 					if (packet2 != null)
 					{
 						int[] i10000 = field_28145_d;
@@ -157,7 +159,7 @@ namespace net.minecraft.src
 						i10000[i10001] += packet2.PacketSize + 1;
 						if (!isServerTerminating_Conflict)
 						{
-							lock (NetworkManager.threadSyncObject)
+							lock (threadSyncObject)
 							{
 								readPackets.Add(packet2);
 							}
@@ -190,7 +192,7 @@ namespace net.minecraft.src
 		{
 			Console.WriteLine(exception1.ToString());
 			Console.Write(exception1.StackTrace);
-			this.networkShutdown("disconnect.genericReason", new object[]{"Internal exception: " + exception1.ToString()});
+			this.networkShutdown("disconnect.genericReason", new object[]{"Internal exception: " + exception1.Message});
 		}
 
 		public virtual void networkShutdown(string string1, params object[] object2)

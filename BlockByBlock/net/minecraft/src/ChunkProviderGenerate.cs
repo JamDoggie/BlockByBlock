@@ -30,8 +30,6 @@ namespace net.minecraft.src
 		internal double[] noise5;
 		internal double[] noise6;
 		internal float[] field_35388_l;
-		// JAVA TO C# CONVERTER NOTE: The following call to the 'RectangularArrays' helper class reproduces the rectangular array initialization that is automatic in Java:
-		// ORIGINAL LINE: internal int[][] field_914_i = new int[32][32];
 		internal int[][] field_914_i = RectangularArrays.RectangularIntArray(32, 32);
 
 		public ChunkProviderGenerate(World world1, long j2, bool z4)
@@ -216,8 +214,7 @@ namespace net.minecraft.src
 
 		public virtual Chunk provideChunk(int i1, int i2)
 		{
-			//this.rand.setSeed((long)i1 * 341873128712L + (long)i2 * 132897987541L); PORTING TODO: RandomExtended.setSeed
-			rand = new RandomExtended((long)i1 * 341873128712L + (long)i2 * 132897987541L);
+			rand.SetSeed((long)i1 * 341873128712L + (long)i2 * 132897987541L);
 			sbyte[] b3 = new sbyte[32768];
 			this.generateTerrain(i1, i2, b3);
 			this.biomesForGeneration = this.worldObj.WorldChunkManager.loadBlockGeneratorData(this.biomesForGeneration, i1 * 16, i2 * 16, 16, 16);
@@ -394,11 +391,10 @@ namespace net.minecraft.src
 			int i4 = i2 * 16;
 			int i5 = i3 * 16;
 			BiomeGenBase biomeGenBase6 = this.worldObj.getBiomeGenForCoords(i4 + 16, i5 + 16);
-			//this.rand.setSeed(this.worldObj.Seed);										PORTING TODO: RandomExtended.setSeed
-			rand = new RandomExtended(worldObj.Seed);
+			rand.SetSeed(this.worldObj.Seed);
 			long j7 = this.rand.NextInt64() / 2L * 2L + 1L;
 			long j9 = this.rand.NextInt64() / 2L * 2L + 1L;
-			//this.rand.setSeed((long)i2 * j7 + (long)i3 * j9 ^ this.worldObj.Seed);		PORTING TODO: RandomExtended.setSeed
+			rand.SetSeed((long)i2 * j7 + (long)i3 * j9 ^ this.worldObj.Seed);		
 			rand = new RandomExtended(worldObj.Seed);
 			bool z11 = false;
 			if (this.mapFeaturesEnabled)

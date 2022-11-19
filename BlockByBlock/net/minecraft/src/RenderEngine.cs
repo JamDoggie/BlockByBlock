@@ -7,18 +7,19 @@ using System.Collections;
 using System.IO;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Compute.OpenCL;
 
 namespace net.minecraft.src
 {
 
 	public class RenderEngine
 	{
-		public static bool useMipmaps = false;
+		public static bool useMipmaps = true;
 		private Hashtable textureMap = new Hashtable();
 		private Hashtable textureContentsMap = new Hashtable();
 		private IntHashMap textureNameToImageMap = new IntHashMap();
 		private ByteBuffer singleIntBuffer = GLAllocation.createDirectIntBuffer(1);
-		private ByteBuffer imageData = GLAllocation.createDirectByteBuffer(16777216);
+		//private ByteBuffer imageData = GLAllocation.createDirectByteBuffer(16777216);
 		private System.Collections.IList textureList = new ArrayList();
 		private System.Collections.IDictionary urlToImageDataMap = new Hashtable();
 		private GameSettings options;
@@ -140,7 +141,7 @@ namespace net.minecraft.src
 			{
 				try
 				{
-					this.singleIntBuffer.clear();
+					this.singleIntBuffer.clear().position(0);
 					GLAllocation.generateTextureNames(this.singleIntBuffer);
 					int i6 = this.singleIntBuffer.getInt(0);
 					if (string1.StartsWith("##", StringComparison.Ordinal))
@@ -211,7 +212,7 @@ namespace net.minecraft.src
 
 		public virtual int allocateAndSetupTexture(Image<Bgra32> bufferedImage1)
 		{
-			singleIntBuffer.clear();
+			singleIntBuffer.clear().position(0);
 			GLAllocation.generateTextureNames(singleIntBuffer);
 			int i2 = singleIntBuffer.getInt(0);
 			setupTexture(bufferedImage1, i2);
@@ -224,117 +225,15 @@ namespace net.minecraft.src
 			GL.BindTexture(TextureTarget.Texture2D, i2);
 			if (useMipmaps)
 			{
-                GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.NearestMipmapLinear });
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
-			}
-			else
-			{
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Nearest });
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
-			}
-
-			if (blurTexture)
-			{
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Linear });
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Linear });
-			}
-
-			if (clampTexture)
-			{
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Clamp });
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Clamp });
-			}
-			else
-			{
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Repeat });
-				GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Repeat });
-			}
-
-			int i3 = bufferedImage1.Width;
-			int i4 = bufferedImage1.Height;
-			int[] i5 = new int[i3 * i4];
-			byte[] b6 = new byte[i3 * i4 * 4];
-			FillIntBufferWithImage(bufferedImage1, i5);
-
-			int i7;
-			int i8;
-			int i9;
-			int i10;
-			int i11;
-			int i12;
-			int i13;
-			int i14;
-			for (i7 = 0; i7 < i5.Length; ++i7)
-			{
-				i8 = i5[i7] >> 24 & 255;
-				i9 = i5[i7] >> 16 & 255;
-				i10 = i5[i7] >> 8 & 255;
-				i11 = i5[i7] & 255;
-				if (this.options != null && this.options.anaglyph)
-				{
-					i12 = (i9 * 30 + i10 * 59 + i11 * 11) / 100;
-					i13 = (i9 * 30 + i10 * 70) / 100;
-					i14 = (i9 * 30 + i11 * 70) / 100;
-					i9 = i12;
-					i10 = i13;
-					i11 = i14;
-				}
-
-				b6[i7 * 4 + 0] = (byte)(i9 & 255);
-				b6[i7 * 4 + 1] = (byte)(i10 & 255);
-				b6[i7 * 4 + 2] = (byte)(i11 & 255);
-				b6[i7 * 4 + 3] = (byte)(i8 & 255);
-			}
-
-			imageData.clear();
-			imageData.Put(b6, 0, b6.Length);
-			imageData.position(0).limit(b6.Length);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, i3, i4, 0, PixelFormat.Rgba, PixelType.UnsignedByte, b6);
-			/*if (useMipmaps)
-			{
-				for (i7 = 1; i7 <= 4; ++i7)
-				{
-					i8 = i3 >> i7 - 1;
-					i9 = i3 >> i7;
-					i10 = i4 >> i7;
-
-					for (i11 = 0; i11 < i9; ++i11)
-					{
-						for (i12 = 0; i12 < i10; ++i12)
-						{
-							i13 = this.imageData.getInt((i11 * 2 + 0 + (i12 * 2 + 0) * i8) * 4);
-							i14 = this.imageData.getInt((i11 * 2 + 1 + (i12 * 2 + 0) * i8) * 4);
-							int i15 = this.imageData.getInt((i11 * 2 + 1 + (i12 * 2 + 1) * i8) * 4);
-							int i16 = this.imageData.getInt((i11 * 2 + 0 + (i12 * 2 + 1) * i8) * 4);
-							int i17 = this.alphaBlend(this.alphaBlend(i13, i14), this.alphaBlend(i15, i16));
-							this.imageData.putInt((i11 + i12 * i9) * 4, i17);
-						}
-					}
-
-					byte[] buff = new byte[imageData.getLimit()];
-					imageData.get(buff, 0, buff.Length);
-					imageData.position(0);
-
-					GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 4);
-
-                    GL.TexImage2D(TextureTarget.Texture2D, i7, PixelInternalFormat.Rgba, i9, i10, 0, PixelFormat.Rgba, PixelType.UnsignedByte, buff);
-                }
-			}*/
-
-			GL.BlendFunc(BlendingFactor.One, BlendingFactor.OneMinusSrcAlpha);
-			GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-        }
-
-		public virtual void createTextureFromBytes(int[] i1, int i2, int i3, int i4)
-		{
-            GL.BindTexture(TextureTarget.Texture2D, i4);
-            if (useMipmaps)
-			{
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.NearestMipmapLinear });
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.NearestMipmapLinear });
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
-			}
+
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinLod, 0);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLod, 4);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureLodBias, 0.0f);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 4);
+            }
 			else
 			{
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Nearest });
@@ -358,7 +257,312 @@ namespace net.minecraft.src
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Repeat });
 			}
 
-			byte[] b5 = new byte[i2 * i3 * 4];
+			int width = bufferedImage1.Width;
+			int height = bufferedImage1.Height;
+
+            // If width /= height, then we need to resize the image to a square
+            if (width != height)
+            {
+                int size = Math.Max(width, height);
+                bufferedImage1.Mutate(x => x.Resize(size, size, new SixLabors.ImageSharp.Processing.Processors.Transforms.NearestNeighborResampler()));
+
+                width = size;
+                height = size;
+            }
+
+            int[] imageDataInts = new int[width * height];
+			byte[] imageDataBytes = new byte[width * height * sizeof(int)];
+			FillIntBufferWithImage(bufferedImage1, imageDataInts);
+
+			int i8;
+			int i9;
+			int i10;
+			int x;
+			int y;
+			int i13;
+			int i14;
+			for (int i = 0; i < imageDataInts.Length; ++i)
+			{
+				i8 = imageDataInts[i] >> 24 & 255;
+				i9 = imageDataInts[i] >> 16 & 255;
+				i10 = imageDataInts[i] >> 8 & 255;
+				x = imageDataInts[i] & 255;
+				if (this.options != null && this.options.anaglyph)
+				{
+					y = (i9 * 30 + i10 * 59 + x * 11) / 100;
+					i13 = (i9 * 30 + i10 * 70) / 100;
+					i14 = (i9 * 30 + x * 70) / 100;
+					i9 = y;
+					i10 = i13;
+					x = i14;
+				}
+
+				byte colorR = (byte)(i9 & 255);
+                byte colorG = (byte)(i10 & 255);
+                byte colorB = (byte)(x & 255);
+
+                byte alpha = (byte)(i8 & 255);
+                float alphaFloat = alpha / 255.0f;
+                
+                colorR = (byte)(colorR);
+                colorG = (byte)(colorG);
+                colorB = (byte)(colorB);
+
+                imageDataBytes[i * sizeof(int) + 0] = colorR;
+				imageDataBytes[i * sizeof(int) + 1] = colorG;
+				imageDataBytes[i * sizeof(int) + 2] = colorB;
+                imageDataBytes[i * sizeof(int) + 3] = alpha;
+			}
+
+            // Apply a solidify filter around fully transparent edges to prevent black fringing around the mipmaps.
+            byte[] solidifiedImageBytes = new byte[imageDataBytes.Length];
+            Array.Copy(imageDataBytes, solidifiedImageBytes, imageDataBytes.Length);
+
+            for (int i = 0; i < imageDataBytes.Length / sizeof(int); i++)
+            {
+                byte colorR = imageDataBytes[i * sizeof(int) + 0];
+                byte colorG = imageDataBytes[i * sizeof(int) + 1];
+                byte colorB = imageDataBytes[i * sizeof(int) + 2];
+                byte alpha = imageDataBytes[i * sizeof(int) + 3];
+
+                int currentPixelX = i % width;
+                int currentPixelY = i / width;
+
+
+                if (alpha > 0)
+                {
+                    // Up pixel
+                    if (currentPixelY - 1 >= 0)
+                    {
+                        int pixelIndex = (currentPixelY - 1) * width + currentPixelX;
+
+                        byte alpha2 = imageDataBytes[pixelIndex * sizeof(int) + 3];
+
+                        if (alpha2 == 0)
+                        {
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 0] = colorR;
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 1] = colorG;
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 2] = colorB;
+                        }
+                    }
+
+                    // Down pixel
+                    if (currentPixelY + 1 < height)
+                    {
+                        int pixelIndex = (currentPixelY + 1) * width + currentPixelX;
+
+                        byte alpha2 = imageDataBytes[pixelIndex * sizeof(int) + 3];
+
+                        if (alpha2 == 0)
+                        {
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 0] = colorR;
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 1] = colorG;
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 2] = colorB;
+                        }
+                    }
+
+                    // Left pixel
+                    if (currentPixelX - 1 >= 0)
+                    {
+                        int pixelIndex = currentPixelY * width + (currentPixelX - 1);
+
+                        byte alpha2 = imageDataBytes[pixelIndex * sizeof(int) + 3];
+
+                        if (alpha2 == 0)
+                        {
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 0] = colorR;
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 1] = colorG;
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 2] = colorB;
+                        }
+                    }
+
+                    // Right pixel
+                    if (currentPixelX + 1 < width)
+                    {
+                        int pixelIndex = currentPixelY * width + (currentPixelX + 1);
+
+                        byte alpha2 = imageDataBytes[pixelIndex * sizeof(int) + 3];
+
+                        if (alpha2 == 0)
+                        {
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 0] = colorR;
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 1] = colorG;
+                            solidifiedImageBytes[pixelIndex * sizeof(int) + 2] = colorB;
+                        }
+                    }
+                }
+            }
+
+            imageDataBytes = solidifiedImageBytes;
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, imageDataBytes);
+
+			if (useMipmaps)
+			{
+                // Generate, allocate and upload our own mipmaps.
+                int level = 0;
+
+				int width2 = width;
+				int height2 = height;
+
+				// Get the average color of the image in case we need it to fill in areas around the alpha.
+                int avgTexColorR = 0;
+                int avgTexColorG = 0;
+                int avgTexColorB = 0;
+
+                int numColors = 0;
+
+                for (int imageByteIndex = 0; imageByteIndex < imageDataBytes.Length / sizeof(int); imageByteIndex++)
+                {
+                    int pixelAlpha = imageDataBytes[imageByteIndex * sizeof(int) + 3];
+
+                    if (pixelAlpha > 0)
+                    {
+                        avgTexColorR += imageDataBytes[imageByteIndex * sizeof(int) + 0];
+                        avgTexColorG += imageDataBytes[imageByteIndex * sizeof(int) + 1];
+                        avgTexColorB += imageDataBytes[imageByteIndex * sizeof(int) + 2];
+
+                        numColors++;
+                    }
+                }
+
+                if (numColors > 0)
+                {
+                    avgTexColorR /= numColors;
+                    avgTexColorG /= numColors;
+                    avgTexColorB /= numColors;
+                }
+
+                while (width2 > 1 || height2 > 1)
+				{
+					int newWidth = Math.Max(width2 / 2, 1);
+					int newHeight = Math.Max(height2 / 2, 1);
+
+					byte[] newImageDataBytes = new byte[newWidth * newHeight * sizeof(int)];
+                    
+                    for (int y2 = 0; y2 < newHeight; y2++)
+					{
+						for (int x2 = 0; x2 < newWidth; x2++)
+						{
+                            int ii1 = (2 * x2 + 0 + (2 * y2 + 0) * width2) * sizeof(int);
+                            int ii2 = (2 * x2 + 1 + (2 * y2 + 0) * width2) * sizeof(int);
+                            int ii3 = (2 * x2 + 1 + (2 * y2 + 1) * width2) * sizeof(int);
+                            int ii4 = (2 * x2 + 0 + (2 * y2 + 1) * width2) * sizeof(int);
+
+                            byte r1 = imageDataBytes[ii1 + 0];
+                            byte g1 = imageDataBytes[ii1 + 1];
+                            byte b1 = imageDataBytes[ii1 + 2];
+                            byte a1 = imageDataBytes[ii1 + 3];
+
+                            byte r2 = imageDataBytes[ii2 + 0];
+                            byte g2 = imageDataBytes[ii2 + 1];
+                            byte b2 = imageDataBytes[ii2 + 2];
+                            byte a2 = imageDataBytes[ii2 + 3];
+
+							if (a2 == 0)
+							{
+								r2 = r1;
+                                g2 = g1;
+                                b2 = b1;
+                            }
+
+                            byte r3 = imageDataBytes[ii3 + 0];
+                            byte g3 = imageDataBytes[ii3 + 1];
+                            byte b3 = imageDataBytes[ii3 + 2];
+                            byte a3 = imageDataBytes[ii3 + 3];
+
+							if (a3 == 0)
+							{
+								r3 = r2;
+								g3 = g2;
+								b3 = b2;
+							}
+
+							byte r4 = imageDataBytes[ii4 + 0];
+                            byte g4 = imageDataBytes[ii4 + 1];
+                            byte b4 = imageDataBytes[ii4 + 2];
+                            byte a4 = imageDataBytes[ii4 + 3];
+
+							if (a4 == 0)
+							{
+                                r4 = r3;
+                                g4 = g3;
+                                b4 = b3;
+                            }
+
+                            byte r = (byte)((r1 + r2 + r3 + r4) / 4);
+                            byte g = (byte)((g1 + g2 + g3 + g4) / 4);
+                            byte b = (byte)((b1 + b2 + b3 + b4) / 4);
+                            byte a = (byte)((a1 + a2 + a3 + a4) / 4);
+
+                            int i5 = (x2 + y2 * newWidth) * sizeof(int);
+
+                            newImageDataBytes[i5 + 0] = r;
+                            newImageDataBytes[i5 + 1] = g;
+                            newImageDataBytes[i5 + 2] = b;
+                            newImageDataBytes[i5 + 3] = a;
+                        }
+					}
+
+                    GL.TexImage2D(TextureTarget.Texture2D, ++level, PixelInternalFormat.Rgba, newWidth, newHeight, 0, PixelFormat.Rgba, PixelType.UnsignedByte, newImageDataBytes);
+
+                    width2 = newWidth;
+                    height2 = newHeight;
+
+                    imageDataBytes = newImageDataBytes;
+                }
+			}
+        }
+
+		byte[] rawByteImageData;
+
+        public virtual void createTextureFromBytes(int[] i1, int i2, int i3, int i4)
+		{
+			Profiler.startSection("opengl_attributes");
+            GL.BindTexture(TextureTarget.Texture2D, i4);
+            
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, 0);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmapSgis, 0);
+
+            if (useMipmaps)
+			{
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.NearestMipmapLinear });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
+
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 4);
+            }
+			else
+			{
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Nearest });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Nearest });
+			}
+
+			if (blurTexture)
+			{
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new int[] { (int)TextureMinFilter.Linear });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new int[] { (int)TextureMagFilter.Linear });
+			}
+
+			if (clampTexture)
+			{
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Clamp });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Clamp });
+			}
+			else
+			{
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, new int[] { (int)TextureWrapMode.Repeat });
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, new int[] { (int)TextureWrapMode.Repeat });
+			}
+			Profiler.endStartSection("populate_arrays");
+            
+            if (rawByteImageData == null || rawByteImageData.Length < i2 * i3 * sizeof(int))
+			{
+                rawByteImageData = new byte[i2 * i3 * 4];
+            }
+
+			Array.Clear(rawByteImageData);
+			
 
 			for (int i6 = 0; i6 < i1.Length; ++i6)
 			{
@@ -376,16 +580,15 @@ namespace net.minecraft.src
 					i10 = i13;
 				}
 
-				b5[i6 * 4 + 0] = (byte)(i8 & 255);
-				b5[i6 * 4 + 1] = (byte)(i9 & 255);
-				b5[i6 * 4 + 2] = (byte)(i10 & 255);
-				b5[i6 * 4 + 3] = (byte)(i7 & 255);
+				rawByteImageData[i6 * 4 + 0] = (byte)(i8 & 255);
+				rawByteImageData[i6 * 4 + 1] = (byte)(i9 & 255);
+				rawByteImageData[i6 * 4 + 2] = (byte)(i10 & 255);
+				rawByteImageData[i6 * 4 + 3] = (byte)(i7 & 255);
 			}
-
-			this.imageData.clear();
-			this.imageData.Put(b5, 0, b5.Length);
-			this.imageData.position(0).limit(b5.Length);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, i2, i3, PixelFormat.Rgba, PixelType.UnsignedByte, b5);
+			Profiler.endStartSection("upload_texture");
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, i2, i3, PixelFormat.Rgba, PixelType.UnsignedInt8888Reversed, rawByteImageData);
+			Profiler.endSection();
+			
         }
 
 		int[] singleIntCache = new int[1];
@@ -393,8 +596,8 @@ namespace net.minecraft.src
 		public virtual void deleteTexture(int i1)
 		{
 			textureNameToImageMap.removeObject(i1);
-			singleIntBuffer.clear();
-			singleIntBuffer.putInt(i1); // PORTING TODO: this intbuffer is redundant because no methods take in ByteBuffers anyway since we're in C# land.
+			singleIntBuffer.clear().position(0);
+			singleIntBuffer.putInt(i1);
 			singleIntBuffer.flip();
             singleIntCache[0] = i1;
 			GL.DeleteTextures(1, singleIntCache);
@@ -473,9 +676,6 @@ namespace net.minecraft.src
 				TextureFX textureFX3 = (TextureFX)this.textureList[i2];
 				textureFX3.anaglyphEnabled = this.options.anaglyph;
 				textureFX3.onTick();
-				imageData.clear();
-				imageData.Put(textureFX3.imageData, 0, textureFX3.imageData.Length);
-				imageData.position(0).limit(textureFX3.imageData.Length);
 				if (textureFX3.iconIndex != i1)
 				{
 					textureFX3.bindImage(this);
@@ -492,41 +692,31 @@ namespace net.minecraft.src
 			}
 		}
 
-		private int alphaBlend(int i1, int i2)
+		private int alphaBlend(int color1, int color2)
 		{
-			int i3 = (int)((i1 & 0xFF000000) >> 24 & 255);
-			int i4 = (int)((i2 & 0xFF000000) >> 24 & 255);
-			short s5 = 255;
-			short s15;
-			short s16;
-			if (i3 + i4 < 255)
-			{
-				s5 = 0;
-				s15 = 1;
-				s16 = 1;
-			}
-			else if (i3 > i4)
-			{
-				s15 = 255;
-				s16 = 1;
-			}
-			else
-			{
-				s15 = 1;
-				s16 = 255;
-			}
+            IntByteUnion color1Union = new IntByteUnion() { integer = color1 };
+            IntByteUnion color2Union = new IntByteUnion() { integer = color2 };
 
-			int i6 = (i1 >> 16 & 255) * s15;
-			int i7 = (i1 >> 8 & 255) * s15;
-			int i8 = (i1 & 255) * s15;
-			int i9 = (i2 >> 16 & 255) * s16;
-			int i10 = (i2 >> 8 & 255) * s16;
-			int i11 = (i2 & 255) * s16;
-			int i12 = (i6 + i9) / (s15 + s16);
-			int i13 = (i7 + i10) / (s15 + s16);
-			int i14 = (i8 + i11) / (s15 + s16);
-			return s5 << 24 | i12 << 16 | i13 << 8 | i14;
-		}
+            byte alpha1 = color1Union.byte3;
+            byte alpha2 = color2Union.byte3;
+
+            if (alpha1 == 0)
+            {
+                return color2;
+            }
+            else if (alpha2 == 0)
+            {
+                return color1;
+            }
+            else
+            {
+                byte alpha3 = (byte)(alpha1 + alpha2 - alpha1 * alpha2 / 255);
+                byte red3 = (byte)((color1Union.byte0 * alpha1 + color2Union.byte0 * alpha2 * (255 - alpha1) / 255) / alpha3);
+                byte green3 = (byte)((color1Union.byte1 * alpha1 + color2Union.byte1 * alpha2 * (255 - alpha1) / 255) / alpha3);
+                byte blue3 = (byte)((color1Union.byte2 * alpha1 + color2Union.byte2 * alpha2 * (255 - alpha1) / 255) / alpha3);
+                return (alpha3 << 24) + (red3 << 16) + (green3 << 8) + blue3;
+            }
+        }
 
 		public virtual void refreshTextures()
 		{
@@ -670,9 +860,9 @@ namespace net.minecraft.src
 				return;
 
 			int iter = 0;
-			for (int x = srcX; x < srcX + srcWidth; x++)
-			{
-				for (int y = srcY; y < srcY + srcHeight; y++)
+            for (int y = srcY; y < srcY + srcHeight; y++)
+            {
+                for (int x = srcX; x < srcX + srcWidth; x++)
 				{
 					Bgra32 color = img[x, y];
 

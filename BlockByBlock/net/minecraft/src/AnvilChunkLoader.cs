@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace net.minecraft.src
 {
@@ -51,7 +52,7 @@ namespace net.minecraft.src
 			return this.func_48443_a(world1, i2, i3, nBTTagCompound4);
 		}
 
-		protected internal virtual Chunk func_48443_a(World world1, int i2, int i3, NBTTagCompound nBTTagCompound4)
+		protected internal virtual Chunk? func_48443_a(World world1, int i2, int i3, NBTTagCompound nBTTagCompound4)
 		{
 			if (!nBTTagCompound4.hasKey("Level"))
 			{
@@ -81,6 +82,7 @@ namespace net.minecraft.src
 
 		public virtual void saveChunk(World world1, Chunk chunk2)
 		{
+			Profiler.startSection("saveChunk");
 			world1.checkSessionLock();
 
 			try
@@ -96,7 +98,10 @@ namespace net.minecraft.src
 				Console.WriteLine(exception5.ToString());
 				Console.Write(exception5.StackTrace);
 			}
-
+			finally
+			{
+				Profiler.endSection();
+			}
 		}
 
 		protected internal virtual void func_48446_a(ChunkCoordIntPair chunkCoordIntPair1, NBTTagCompound nBTTagCompound2)
@@ -154,20 +159,25 @@ namespace net.minecraft.src
 			return true;
 		}
 
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: private void func_48447_a(AnvilChunkLoaderPending anvilChunkLoaderPending1) throws java.io.IOException
+		private Stopwatch saveTimer = new();
+
 		private void func_48447_a(AnvilChunkLoaderPending anvilChunkLoaderPending1)
 		{
-			BinaryWriter? dataOutputStream2 = RegionFileCache.getChunkOutputStream(this.chunkSaveLocation, anvilChunkLoaderPending1.field_48427_a.chunkXPos, anvilChunkLoaderPending1.field_48427_a.chunkZPos);
+			saveTimer.Start();
+            BinaryWriter? dataOutputStream2 = RegionFileCache.getChunkOutputStream(this.chunkSaveLocation, anvilChunkLoaderPending1.field_48427_a.chunkXPos, anvilChunkLoaderPending1.field_48427_a.chunkZPos);
 
-			if (dataOutputStream2 == null)
-				return;
+            if (dataOutputStream2 == null)
+                return;
 
-			using (dataOutputStream2)
+            using (dataOutputStream2)
             {
-				CompressedStreamTools.write(anvilChunkLoaderPending1.field_48426_b, dataOutputStream2);
-			}
-				
+                CompressedStreamTools.write(anvilChunkLoaderPending1.field_48426_b, dataOutputStream2);
+            }
+			saveTimer.Stop();
+
+			//Console.WriteLine(saveTimer.Elapsed.TotalMilliseconds);
+
+			saveTimer.Reset();
 		}
 
 		public virtual void saveExtraChunkData(World world1, Chunk chunk2)

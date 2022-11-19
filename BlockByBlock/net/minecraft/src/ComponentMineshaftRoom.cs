@@ -9,7 +9,7 @@ namespace net.minecraft.src
 	{
 		private LinkedList<StructureBoundingBox> chidStructures = new();
 
-		public ComponentMineshaftRoom(int i1, Random random2, int i3, int i4) : base(i1)
+		public ComponentMineshaftRoom(int i1, RandomExtended random2, int i3, int i4) : base(i1)
 		{
 			this.boundingBox = new StructureBoundingBox(i3, 50, i4, i3 + 7 + random2.Next(6), 54 + random2.Next(6), i4 + 7 + random2.Next(6));
 		}

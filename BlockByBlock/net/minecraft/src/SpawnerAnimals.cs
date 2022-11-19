@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 using System.Collections;
 
 namespace net.minecraft.src
@@ -60,6 +61,7 @@ namespace net.minecraft.src
 				EnumCreatureType[] enumCreatureType32 = EnumCreatureType.values();
 				i6 = enumCreatureType32.Length;
 
+				Profiler.startSection("animalspawnloop");
 				for (int i33 = 0; i33 < i6; ++i33)
 				{
 					EnumCreatureType enumCreatureType34 = enumCreatureType32[i33];
@@ -134,7 +136,7 @@ namespace net.minecraft.src
 												EntityLiving entityLiving38;
 												try
 												{
-                                                    entityLiving38 = (EntityLiving)Activator.CreateInstance(spawnListEntry21.entityClass, new object[] { world0 });
+                                                    entityLiving38 = (EntityLiving)Activator.CreateInstance(spawnListEntry21.entityClass, world0);
                                                 }
 												catch (Exception exception30)
 												{
@@ -167,9 +169,11 @@ namespace net.minecraft.src
 					}
 					label126Continue:;
 				}
-				label126Break:
+			label126Break:
 
-				return i3;
+				Profiler.endSection();
+
+                return i3;
 			}
 		}
 
@@ -212,7 +216,7 @@ namespace net.minecraft.src
 
 		}
 
-		public static void performWorldGenSpawning(World world0, BiomeGenBase biomeGenBase1, int i2, int i3, int i4, int i5, Random random6)
+		public static void performWorldGenSpawning(World world0, BiomeGenBase biomeGenBase1, int i2, int i3, int i4, int i5, RandomExtended random6)
 		{
 			System.Collections.IList list7 = biomeGenBase1.getSpawnableList(EnumCreatureType.creature);
 			if (list7.Count > 0)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -90,7 +91,7 @@ namespace net.minecraft.src
 			return string.ReferenceEquals(string0, null) || string0.Length == 0;
 		}
 
-		public static int getRandomIntegerInRange(Random random0, int i1, int i2)
+		public static int getRandomIntegerInRange(RandomExtended random0, int i1, int i2)
 		{
 			return i1 >= i2 ? i1 : random0.Next(i2 - i1 + 1) + i1;
 		}

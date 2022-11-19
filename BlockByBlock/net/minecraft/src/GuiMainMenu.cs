@@ -51,7 +51,9 @@ namespace net.minecraft.src
 
 		public override void updateScreen()
 		{
-			++this.panoramaTimer;
+			// PORTING TODO: TEMPORARY, DELETE LATER WHEN A PROPER AUTHENTICATION SYSTEM IS IN PLACE.
+			usernameField.updateCursorCounter();
+            ++this.panoramaTimer;
 		}
 
 		public override bool doesGuiPauseGame()
@@ -61,6 +63,8 @@ namespace net.minecraft.src
 
 		protected internal override void keyTyped(char c1, int i2)
 		{
+			usernameField.keyTyped(c1, i2);
+			mc.session.username = usernameField.Text;
 		}
 
 		public override void initGui()
@@ -100,12 +104,23 @@ namespace net.minecraft.src
 			}
 
 			this.controlList.Add(new GuiButtonLanguage(5, this.width / 2 - 124, i4 + 72 + 12));
-			if (this.mc.session == null)
+            
+            if (this.mc.session == null)
 			{
 				this.multiplayerButton.enabled = false;
 			}
 
-		}
+			temporaryUsernameTextInit();
+        }
+
+		// This will be replaced with proper authentication with a microsoft account.
+		private GuiTextField usernameField;
+
+		protected void temporaryUsernameTextInit()
+		{
+            usernameField = new GuiTextField(fontRenderer, width / 2 - 100, height / 4 + 48 + 72 + 12 + 30, 200, 20) { Text = "Yammy" };
+			usernameField.setFocused(true);
+        }
 
 		protected internal override void actionPerformed(GuiButton guiButton1)
 		{
@@ -322,6 +337,10 @@ namespace net.minecraft.src
 			this.drawString(this.fontRenderer, "Minecraft 1.2.5", 2, this.height - 10, 0xFFFFFF);
 			string string9 = "Copyright Mojang AB. Do not distribute!";
 			this.drawString(this.fontRenderer, string9, this.width - this.fontRenderer.getStringWidth(string9) - 2, this.height - 10, 0xFFFFFF);
+
+			// PORTING TODO: TEMPORARY, DELETE LATER WHEN A PROPER AUTHENTICATION SYSTEM IS IN PLACE.
+			usernameField.drawTextBox();
+
 			base.drawScreen(i1, i2, f3);
 		}
 	}

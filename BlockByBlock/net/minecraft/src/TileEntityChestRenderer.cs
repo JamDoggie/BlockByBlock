@@ -1,7 +1,6 @@
 ﻿namespace net.minecraft.src
 {
 	using OpenTK.Graphics.OpenGL;
-	// PORTING TODO: OpenGL code
 
 	public class TileEntityChestRenderer : TileEntitySpecialRenderer
 	{

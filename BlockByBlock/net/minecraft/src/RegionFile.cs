@@ -320,7 +320,6 @@ namespace net.minecraft.src
         
 		private void write(int i1, byte[] b2, int i3)
 		{
-			debugln(" " + i1);
 			binaryWriter.Seek(i1 * 4096, SeekOrigin.Begin);
 			binaryWriter.WriteBigEndian(i3 + 1);
 			binaryWriter.Write((sbyte)2);

@@ -11,7 +11,7 @@ namespace net.minecraft.src
 		private bool spawnerPlaced;
 		private int sectionCount;
 
-		public ComponentMineshaftCorridor(int i1, Random random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
+		public ComponentMineshaftCorridor(int i1, RandomExtended random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
 		{
 			this.coordBaseMode = i4;
 			this.boundingBox = structureBoundingBox3;
@@ -28,7 +28,7 @@ namespace net.minecraft.src
 
 		}
 
-		public static StructureBoundingBox findValidPlacement(System.Collections.IList list0, Random random1, int i2, int i3, int i4, int i5)
+		public static StructureBoundingBox findValidPlacement(System.Collections.IList list0, RandomExtended random1, int i2, int i3, int i4, int i5)
 		{
 			StructureBoundingBox structureBoundingBox6 = new StructureBoundingBox(i2, i3, i4, i2, i3 + 2, i4);
 

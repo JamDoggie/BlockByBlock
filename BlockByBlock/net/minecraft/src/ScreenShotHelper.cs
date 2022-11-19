@@ -38,7 +38,7 @@ namespace net.minecraft.src
 				GL.PixelStore(PixelStoreParameter.PackAlignment, 1);
 				GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
 				buffer.clear();
-				byte[] bytes = new byte[buffer.getLimit()];
+				byte[] bytes = new byte[i2 * i3 * 3];
 				GL.ReadPixels(0, 0, i2, i3, PixelFormat.Rgb, PixelType.UnsignedByte, bytes);
 				buffer.clear();
 				string string5 = DateTime.Now.ToString(dateFormat);
@@ -71,7 +71,20 @@ namespace net.minecraft.src
 				}
 
 				Image<Bgra32> bufferedImage15 = new Image<Bgra32>(i2, i3);
-				RenderEngine.FillIntBufferWithImage(bufferedImage15, imageData);
+
+                // Load the image data into bufferedImage15
+                for (int i8 = 0; i8 < i2; ++i8)
+                {
+                    for (int i9 = 0; i9 < i3; ++i9)
+                    {
+                        int i10 = imageData[i8 + i9 * i2];
+                        int i11 = i10 >> 16 & 255;
+                        int i12 = i10 >> 8 & 255;
+                        int i13 = i10 & 255;
+                        bufferedImage15[i8, i9] = new Bgra32((byte)i11, (byte)i12, (byte)i13, 255);
+                    }
+                }
+
                 bufferedImage15.SaveAsPng(file6.FullName);
                 return "Saved screenshot as " + file6.Name;
 			}

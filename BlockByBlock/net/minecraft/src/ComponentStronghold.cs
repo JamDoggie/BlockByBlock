@@ -57,7 +57,7 @@ namespace net.minecraft.src
 
 		}
 
-		protected internal virtual EnumDoor getRandomDoor(Random random1)
+		protected internal virtual EnumDoor getRandomDoor(RandomExtended random1)
 		{
 			int i2 = random1.Next(5);
 			switch (i2)

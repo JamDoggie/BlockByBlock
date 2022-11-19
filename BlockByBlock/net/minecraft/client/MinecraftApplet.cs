@@ -1,9 +1,11 @@
-﻿using net.minecraft.src;
+﻿using net.minecraft.input;
+using net.minecraft.src;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Threading;
 
@@ -20,11 +22,13 @@ namespace net.minecraft.client
 
 		private List<KeyEvent> _events = new(128);
 		private List<MouseEvent> _mouseEvents = new(128);
+        private ConcurrentQueue<KeyTypedEvent> _keyTypedEvents = new();
 
-		private MouseEvent? currentMouseEvent = null;
+        private MouseEvent? currentMouseEvent = null;
 		private KeyEvent? currentKeyEvent = null;
+        private KeyTypedEvent? currentKeyTypedEvent = null;
 
-		protected NativeWindowSettings windowSettings { get; set; }
+        protected NativeWindowSettings windowSettings { get; set; }
 
 		public static MinecraftApplet mcWindow; // I will be lazy and set static references and YOU CAN'T STOP ME!!!! >:((((
 
@@ -51,6 +55,8 @@ namespace net.minecraft.client
 
 		public virtual void init()
 		{
+			VSync = VSyncMode.Off;
+
 			// PORTING TODO: Launch parameters
 			bool fullscreen = false;
 
@@ -61,19 +67,31 @@ namespace net.minecraft.client
 
 			Closing += MinecraftApplet_Closed;
 			FocusedChanged += MinecraftApplet_FocusedChanged;
-			MouseDown +=MinecraftApplet_MouseDown;
+			MouseDown += MinecraftApplet_MouseDown;
 			MouseUp += MinecraftApplet_MouseUp;
 			MouseWheel += MinecraftApplet_MouseWheel;
             MouseMove += MinecraftApplet_MouseMove;
 
 			KeyDown += MinecraftApplet_KeyDown;
+			TextInput += MinecraftApplet_TextInput;
 			KeyUp += MinecraftApplet_KeyUp;
 
 			// PORTING TODO: may need to call mc.SetServer (?) I don't think so, but check what this does for sure.
 		}
 
-        #region MOUSE INPUT
-        private void MinecraftApplet_MouseUp(MouseButtonEventArgs e)
+		private void MinecraftApplet_TextInput(TextInputEventArgs e)
+		{
+			char? ch = null;
+
+			if (e.AsString.Length > 0)
+				ch = e.AsString[0];
+
+			if (ch != null)
+				DoKeyTypedEvent(new KeyTypedEvent(ch.Value));
+        }
+
+		#region MOUSE INPUT
+		private void MinecraftApplet_MouseUp(MouseButtonEventArgs e)
 		{
             if (e.Action != InputAction.Release)
                 return;
@@ -86,8 +104,6 @@ namespace net.minecraft.client
 		{
 			if (e.Action != InputAction.Press || !e.IsPressed)
 				return;
-
-			Console.WriteLine("pressed");
 
 			DoMouseEvent(new MouseEvent(MouseEventType.BUTTON, 0, 0, null, null, 
 				(int)MouseState.Position.X, (int)MouseState.Position.Y, e.Action, e.Button));
@@ -118,13 +134,13 @@ namespace net.minecraft.client
 		private void MinecraftApplet_KeyUp(KeyboardKeyEventArgs e)
 		{
 			if (mc.currentScreen == null || mc.currentScreen.allowUserInput)
-				KeyUpDown(new KeyEvent(e, false));
+				KeyUpDown(new KeyEvent(InputHelper.FromOpenTKKey(e.Key), false));
 		}
 
 		private void MinecraftApplet_KeyDown(KeyboardKeyEventArgs e)
 		{
 			if (mc.currentScreen == null || mc.currentScreen.allowUserInput)
-				KeyUpDown(new KeyEvent(e, true));
+				KeyUpDown(new KeyEvent(InputHelper.FromOpenTKKey(e.Key), true));
 		}
 
 		private void KeyUpDown(KeyEvent e)
@@ -132,9 +148,24 @@ namespace net.minecraft.client
 			_events.Add(e);
 		}
 
-		#endregion
+        private void DoKeyTypedEvent(KeyTypedEvent e)
+        {
+			while (_keyTypedEvents.Count > 128)
+			{
+                _keyTypedEvents.TryDequeue(out _);
+            }
+                
+            _keyTypedEvents.Enqueue(e);
+        }
 
-		private void MinecraftApplet_FocusedChanged(OpenTK.Windowing.Common.FocusedChangedEventArgs e)
+		public void ClearCurrentTypedKey()
+		{
+            currentKeyTypedEvent = null;
+        }
+
+        #endregion
+
+        private void MinecraftApplet_FocusedChanged(OpenTK.Windowing.Common.FocusedChangedEventArgs e)
 		{
 			if (e.IsFocused)
 				start();
@@ -183,17 +214,44 @@ namespace net.minecraft.client
 				_events.RemoveAt(0);
 			}
 
-
 			return hasEvent;
 		}
 
-		public virtual KeyEvent? CurrentKeyEvent()
+        public virtual bool NextKeyTypedEvent()
+        {
+            bool hasEvent = false;
+
+			KeyTypedEvent e;
+            if (_keyTypedEvents.TryDequeue(out e))
+            {
+				hasEvent = true;
+                currentKeyTypedEvent = e;
+            }
+
+			if (!hasEvent)
+				currentKeyEvent = null;
+
+            return hasEvent;
+        }
+
+        public virtual void ClearKeyTypeQueue()
+		{
+            _keyTypedEvents.Clear();
+			currentKeyEvent = null;
+        }
+
+        public virtual KeyEvent? CurrentKeyEvent()
 		{
 			return currentKeyEvent;
 		}
 
-		// Mouse events
-		public virtual bool NextMouseEvent()
+        public virtual KeyTypedEvent? CurrentKeyTypedEvent()
+        {
+            return currentKeyTypedEvent;
+        }
+
+        // Mouse events
+        public virtual bool NextMouseEvent()
 		{
 			bool hasEvent = false;
 
@@ -271,13 +329,13 @@ namespace net.minecraft.client
 
 	public struct KeyEvent
     {
-		public KeyboardKeyEventArgs e;
-        public bool isPressed;
+        public bool IsPressed;
+		public KeyCode Key;
 
-        public KeyEvent(KeyboardKeyEventArgs e, bool isPressed)
+        public KeyEvent(KeyCode key, bool isPressed)
         {
-            this.e = e;
-            this.isPressed = isPressed;
+            IsPressed = isPressed;
+			Key = key;
         }
     }
 
@@ -307,6 +365,16 @@ namespace net.minecraft.client
             this.button = button;
         }
     }
+
+	public struct KeyTypedEvent
+	{
+        public char keyChar;
+
+		public KeyTypedEvent(char keyChar)
+		{
+			this.keyChar = keyChar;
+		}
+	}
 
 	public enum MouseEventType
     {

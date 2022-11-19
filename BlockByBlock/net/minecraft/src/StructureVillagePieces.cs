@@ -7,7 +7,7 @@ namespace net.minecraft.src
 
 	public class StructureVillagePieces
 	{
-		public static List<StructureVillagePieceWeight> getStructureVillageWeightedPieceList(Random random0, int i1)
+		public static List<StructureVillagePieceWeight> getStructureVillageWeightedPieceList(RandomExtended random0, int i1)
 		{
 			List<StructureVillagePieceWeight> arrayList2 = new();
 			arrayList2.Add(new StructureVillagePieceWeight(typeof(ComponentVillageHouse4_Garden), 4, MathHelper.getRandomIntegerInRange(random0, 2 + i1, 4 + i1 * 2)));

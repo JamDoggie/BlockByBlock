@@ -92,7 +92,7 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				using (BinaryReader dataInputStream1 = new BinaryReader(new FileStream(file0.FullName, FileMode.Open, FileAccess.Read)))
+				using (BinaryReader dataInputStream1 = new BinaryReader(new FileStream(file0.FullName, FileMode.OpenOrCreate, FileAccess.Read)))
                 {
 					NBTTagCompound nBTTagCompound2 = read(dataInputStream1);
 					return nBTTagCompound2;

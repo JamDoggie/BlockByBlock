@@ -28,7 +28,7 @@
 			this.controlList.Add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + 12, stringTranslate1.translateKey("gui.cancel")));
 			this.serverTextField = new GuiTextField(this.fontRenderer, this.width / 2 - 100, 116, 200, 20);
 			this.serverTextField.MaxStringLength = 128;
-			this.serverTextField.func_50033_b(true);
+			this.serverTextField.setFocused(true);
 			this.serverTextField.Text = field_52009_d;
 			((GuiButton)this.controlList[0]).enabled = this.serverTextField.Text.Length > 0 && this.serverTextField.Text.Split(":", true).Length > 0;
 		}
@@ -58,7 +58,7 @@
 
 		protected internal override void keyTyped(char c1, int i2)
 		{
-			this.serverTextField.func_50037_a(c1, i2);
+			this.serverTextField.keyTyped(c1, i2);
 			if (c1 == (char)28)
 			{
 				this.actionPerformed((GuiButton)this.controlList[0]);

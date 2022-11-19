@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+	  <LangVersion>11</LangVersion>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="util\" />
+  </ItemGroup>
+
+  <Import Project="..\BlockByBlockShared\BlockByBlockShared.projitems" Label="Shared" />
+
+</Project>

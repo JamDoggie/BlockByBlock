@@ -54,57 +54,55 @@ namespace net.minecraft.src
 
 		public virtual Chunk provideChunk(int i1, int i2)
 		{
-			if (i1 == this.lastQueriedChunkXPos && i2 == this.lastQueriedChunkZPos && this.lastQueriedChunk != null)
-			{
-				return this.lastQueriedChunk;
-			}
-			else if (!this.worldObj.findingSpawnPoint && !this.canChunkExist(i1, i2))
-			{
-				return this.blankChunk;
-			}
-			else
-			{
-				int i3 = i1 & 31;
-				int i4 = i2 & 31;
-				int i5 = i3 + i4 * 32;
-				if (!this.chunkExists(i1, i2))
-				{
-					if (this.chunks[i5] != null)
-					{
-						this.chunks[i5].onChunkUnload();
-						this.saveChunk(this.chunks[i5]);
-						this.saveExtraChunkData(this.chunks[i5]);
-					}
+            if (i1 == this.lastQueriedChunkXPos && i2 == this.lastQueriedChunkZPos && this.lastQueriedChunk != null)
+            {
+                return this.lastQueriedChunk;
+            }
+            else if (!this.worldObj.findingSpawnPoint && !this.canChunkExist(i1, i2))
+            {
+                return this.blankChunk;
+            }
+            else
+            {
+                int i3 = i1 & 31;
+                int i4 = i2 & 31;
+                int i5 = i3 + i4 * 32;
+                if (!this.chunkExists(i1, i2))
+                {
+                    if (this.chunks[i5] != null)
+                    {
+                        this.chunks[i5].onChunkUnload();
+                        this.saveChunk(this.chunks[i5]);
+                        this.saveExtraChunkData(this.chunks[i5]);
+                    }
+                    Chunk chunk6 = this.func_542_c(i1, i2);
+                    if (chunk6 == null)
+                    {
+                        if (this.chunkProvider == null)
+                        {
+                            chunk6 = this.blankChunk;
+                        }
+                        else
+                        {
+                            chunk6 = this.chunkProvider.provideChunk(i1, i2);
+                            chunk6.removeUnknownBlocks();
+                        }
+                    }
 
-					Chunk chunk6 = this.func_542_c(i1, i2);
-					if (chunk6 == null)
-					{
-						if (this.chunkProvider == null)
-						{
-							chunk6 = this.blankChunk;
-						}
-						else
-						{
-							chunk6 = this.chunkProvider.provideChunk(i1, i2);
-							chunk6.removeUnknownBlocks();
-						}
-					}
+                    this.chunks[i5] = chunk6;
+                    chunk6.func_4143_d();
+                    if (this.chunks[i5] != null)
+                    {
+                        this.chunks[i5].onChunkLoad();
+                    }
+                    this.chunks[i5].populateChunk(this, this, i1, i2);
+                }
 
-					this.chunks[i5] = chunk6;
-					chunk6.func_4143_d();
-					if (this.chunks[i5] != null)
-					{
-						this.chunks[i5].onChunkLoad();
-					}
-
-					this.chunks[i5].populateChunk(this, this, i1, i2);
-				}
-
-				this.lastQueriedChunkXPos = i1;
-				this.lastQueriedChunkZPos = i2;
-				this.lastQueriedChunk = this.chunks[i5];
-				return this.chunks[i5];
-			}
+                this.lastQueriedChunkXPos = i1;
+                this.lastQueriedChunkZPos = i2;
+                this.lastQueriedChunk = this.chunks[i5];
+                return this.chunks[i5];
+            }
 		}
 
 		private Chunk func_542_c(int i1, int i2)

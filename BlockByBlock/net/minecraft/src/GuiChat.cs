@@ -36,7 +36,7 @@ namespace net.minecraft.src
 			this.field_50064_a = new GuiTextField(this.fontRenderer, 4, this.height - 12, this.width - 4, 12);
 			this.field_50064_a.MaxStringLength = 100;
 			this.field_50064_a.func_50027_a(false);
-			this.field_50064_a.func_50033_b(true);
+			this.field_50064_a.setFocused(true);
 			this.field_50064_a.Text = this.field_50066_k;
 			this.field_50064_a.func_50026_c(false);
 		}
@@ -70,7 +70,7 @@ namespace net.minecraft.src
 			else if (i2 == 28)
 			{
 				string string3 = this.field_50064_a.Text.Trim();
-				if (string3.Length > 0 && !this.mc.lineIsCommand(string3))
+				if (string3.Length > 0)
 				{
 					this.mc.thePlayer.sendChatMessage(string3);
 				}
@@ -95,7 +95,7 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				this.field_50064_a.func_50037_a(c1, i2);
+				this.field_50064_a.keyTyped(c1, i2);
 			}
 
 		}
@@ -184,8 +184,8 @@ namespace net.minecraft.src
 			}
 			else
 			{
-				int i1 = this.field_50064_a.func_50028_c(-1);
-				if (this.field_50064_a.func_50035_h() - i1 < 1)
+				int i1 = this.field_50064_a.getNthWordFromCursor(-1);
+				if (this.field_50064_a.getCursorPosition() - i1 < 1)
 				{
 					return;
 				}
@@ -211,7 +211,7 @@ namespace net.minecraft.src
 
 				this.field_50060_d = true;
 				this.field_50067_h = 0;
-				this.field_50064_a.func_50020_b(i1 - this.field_50064_a.func_50035_h());
+				this.field_50064_a.deleteFromCursor(i1 - this.field_50064_a.getCursorPosition());
 			}
 
 			if (this.field_50068_i.Count > 1)
@@ -230,7 +230,7 @@ namespace net.minecraft.src
 				this.mc.ingameGUI.addChatMessage(stringBuilder4.ToString());
 			}
 
-			this.field_50064_a.func_50031_b(((GuiPlayerInfo)this.field_50068_i[this.field_50067_h++]).name);
+			this.field_50064_a.writeText(((GuiPlayerInfo)this.field_50068_i[this.field_50067_h++]).name);
 		}
 
 		public virtual void func_50058_a(int i1)

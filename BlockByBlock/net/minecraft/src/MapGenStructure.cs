@@ -85,14 +85,12 @@ namespace net.minecraft.src
 		public virtual ChunkPosition getNearestInstance(World world1, int i2, int i3, int i4)
 		{
 			this.worldObj = world1;
-			//this.rand.setSeed(world1.Seed); // RandomExtended.setSeed
-			rand = new RandomExtended(world1.Seed);
+			rand.SetSeed(world1.Seed);
 			long j5 = this.rand.NextInt64();
 			long j7 = this.rand.NextInt64();
 			long j9 = (long)(i2 >> 4) * j5;
 			long j11 = (long)(i4 >> 4) * j7;
-            //this.rand.setSeed(j9 ^ j11 ^ world1.Seed); // RandomExtended.setSeed
-            rand = new RandomExtended(j9 ^ j11 ^ world1.Seed);
+            rand.SetSeed(j9 ^ j11 ^ world1.Seed);
             this.recursiveGenerate(world1, i2 >> 4, i4 >> 4, 0, 0, (sbyte[])null);
 			double d13 = double.MaxValue;
 			ChunkPosition chunkPosition15 = null;

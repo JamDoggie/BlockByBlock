@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 using System.Collections;
 
 namespace net.minecraft.src
@@ -6,8 +7,8 @@ namespace net.minecraft.src
 
 	public class SoundPool
 	{
-		private Random rand = new Random();
-		private System.Collections.IDictionary nameToSoundPoolEntriesMapping = new Hashtable();
+		private RandomExtended rand = new RandomExtended();
+		private Dictionary<string, System.Collections.IList> nameToSoundPoolEntriesMapping = new();
 		private System.Collections.IList allSoundPoolEntries = new ArrayList();
 		public int numberOfSoundPoolEntries = 0;
 		public bool isGetRandomSound = true;
@@ -27,7 +28,7 @@ namespace net.minecraft.src
 				}
 
 				string1 = string1.Replace("/", ".");
-				if (!this.nameToSoundPoolEntriesMapping.Contains(string1))
+				if (!this.nameToSoundPoolEntriesMapping.ContainsKey(string1))
 				{
 					this.nameToSoundPoolEntriesMapping[string1] = new ArrayList();
 				}
@@ -46,9 +47,12 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual SoundPoolEntry getRandomSoundFromSoundPool(string string1)
+		public virtual SoundPoolEntry? getRandomSoundFromSoundPool(string? string1)
 		{
-			System.Collections.IList list2 = (System.Collections.IList)this.nameToSoundPoolEntriesMapping[string1];
+			if (string1 == null)
+				return null;
+
+			this.nameToSoundPoolEntriesMapping.TryGetValue(string1, out IList? list2);
 			return list2 == null ? null : (SoundPoolEntry)list2[this.rand.Next(list2.Count)];
 		}
 

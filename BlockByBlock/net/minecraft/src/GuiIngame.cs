@@ -97,8 +97,7 @@ namespace net.minecraft.src
 
 				i12 = this.mc.thePlayer.Health;
 				i13 = this.mc.thePlayer.prevHealth;
-				//this.rand.setSeed((long)(this.updateCounter * 312871)); PORTING TODO: RandomExtended.setSeed
-				rand = new RandomExtended((long)(this.updateCounter * 312871));
+				rand.SetSeed((long)(this.updateCounter * 312871));
 				bool z14 = false;
 				FoodStats foodStats15 = this.mc.thePlayer.FoodStats;
 				i16 = foodStats15.FoodLevel;
@@ -336,7 +335,7 @@ namespace net.minecraft.src
 					GL.Translate(0.0F, 32.0F, 0.0F);
 				}
 
-				fontRenderer8.drawStringWithShadow("Minecraft 1.2.5 (" + this.mc.debug + ")", 2, 2, 0xFFFFFF);
+				fontRenderer8.drawStringWithShadow($"Minecraft 1.2.5 ({mc.debug}) Runtime: .Net {Environment.Version}", 2, 2, 0xFFFFFF);
 				fontRenderer8.drawStringWithShadow(this.mc.debugInfoRenders(), 2, 12, 0xFFFFFF);
 				fontRenderer8.drawStringWithShadow(this.mc.EntityDebug, 2, 22, 0xFFFFFF);
 				fontRenderer8.drawStringWithShadow(this.mc.debugInfoEntities(), 2, 32, 0xFFFFFF);

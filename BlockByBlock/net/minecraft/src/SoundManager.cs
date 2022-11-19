@@ -1,9 +1,10 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using BlockByBlock.sound;
+using OpenTK.Mathematics;
+using System;
 
 namespace net.minecraft.src
 {
-	// PORTING TODO: sound
-
 	public class SoundManager
 	{
 		private bool InstanceFieldsInitialized = false;
@@ -19,18 +20,20 @@ namespace net.minecraft.src
 
 		private void InitializeInstanceFields()
 		{
-			ticksBeforeMusic = this.rand.Next(12000);
+			//ticksBeforeMusic = this.rand.Next(12000);
+			ticksBeforeMusic = 10;
 		}
 
-		//private static SoundSystem sndSystem;
+		private static volatile SoundSystem sndSystem;
 		private SoundPool soundPoolSounds = new SoundPool();
 		private SoundPool soundPoolStreaming = new SoundPool();
 		private SoundPool soundPoolMusic = new SoundPool();
 		private int latestSoundID = 0;
 		private GameSettings options;
 		private static bool loaded = false;
-		private Random rand = new Random();
+		private RandomExtended rand = new RandomExtended();
 		private int ticksBeforeMusic;
+		internal Thread SoundThread;
 
 		public virtual void loadSoundSettings(GameSettings gameSettings1)
 		{
@@ -45,35 +48,39 @@ namespace net.minecraft.src
 
 		private void tryToSetLibraryAndCodecs()
 		{
-			/*try
+			float f1 = options.soundVolume;
+			float f2 = options.musicVolume;
+			options.soundVolume = 0.0F;
+			options.musicVolume = 0.0F;
+			options.saveOptions();
+            
+			SoundThread = new(() =>
 			{
-				float f1 = this.options.soundVolume;
-				float f2 = this.options.musicVolume;
-				this.options.soundVolume = 0.0F;
-				this.options.musicVolume = 0.0F;
-				this.options.saveOptions();
-				SoundSystemConfig.addLibrary(typeof(LibraryLWJGLOpenAL));
-				SoundSystemConfig.setCodec("ogg", typeof(CodecJOrbis));
-				SoundSystemConfig.setCodec("mus", typeof(CodecMus));
-				SoundSystemConfig.setCodec("wav", typeof(CodecWav));
-				sndSystem = new SoundSystem();
-				this.options.soundVolume = f1;
-				this.options.musicVolume = f2;
-				this.options.saveOptions();
-			}
-			catch (Exception throwable3)
+                sndSystem = new SoundSystem(null, null);
+				sndSystem.RunThread();
+            });
+			SoundThread.Start();
+			/*while(sndSystem == null)
 			{
-				Console.WriteLine(throwable3.ToString());
-				Console.Write(throwable3.StackTrace);
-				Console.Error.WriteLine("error linking with the LibraryJavaSound plug-in");
-			}
+                // Block until the sound system is initialized.
+            }*/
 
-			loaded = true;*/
+            options.soundVolume = f1;
+			options.musicVolume = f2;
+			options.saveOptions();
+
+			loaded = true;
+		}
+
+		internal void tick()
+		{
+			//if (sndSystem != null)
+			//	sndSystem.TickSoundSystem();
 		}
 
 		public virtual void onSoundOptionsChanged()
 		{
-			/*if (!loaded && (this.options.soundVolume != 0.0F || this.options.musicVolume != 0.0F))
+			if (!loaded && (this.options.soundVolume != 0.0F || this.options.musicVolume != 0.0F))
 			{
 				this.tryToSetLibraryAndCodecs();
 			}
@@ -82,13 +89,13 @@ namespace net.minecraft.src
 			{
 				if (this.options.musicVolume == 0.0F)
 				{
-					sndSystem.stop("BgMusic");
+					//sndSystem.Stop("BgMusic");
 				}
 				else
 				{
-					sndSystem.setVolume("BgMusic", this.options.musicVolume);
+					sndSystem.SetVolume("BgMusic", this.options.musicVolume);
 				}
-			}*/
+			}
 
 		}
 
@@ -96,8 +103,9 @@ namespace net.minecraft.src
 		{
 			if (loaded)
 			{
-				//sndSystem.cleanup();
-			}
+                sndSystem.Cleanup();
+                SoundThread.Join();
+            }
 
 		}
 
@@ -120,7 +128,7 @@ namespace net.minecraft.src
 		{
 			if (loaded && this.options.musicVolume != 0.0F)
 			{
-				/*if (!sndSystem.playing("BgMusic") && !sndSystem.playing("streaming"))
+				if (!sndSystem.Playing("BgMusic") && !sndSystem.Playing("streaming"))
 				{
 					if (this.ticksBeforeMusic > 0)
 					{
@@ -131,12 +139,13 @@ namespace net.minecraft.src
 					SoundPoolEntry soundPoolEntry1 = this.soundPoolMusic.RandomSound;
 					if (soundPoolEntry1 != null)
 					{
+						Console.WriteLine("Playing music");
 						this.ticksBeforeMusic = this.rand.Next(12000) + 12000;
-						sndSystem.backgroundMusic("BgMusic", soundPoolEntry1.soundUrl, soundPoolEntry1.soundName, false);
-						sndSystem.setVolume("BgMusic", this.options.musicVolume);
-						sndSystem.play("BgMusic");
+						sndSystem.BackgroundMusic("BgMusic", soundPoolEntry1.soundUrl, soundPoolEntry1.soundName, false);
+						sndSystem.SetVolume("BgMusic", this.options.musicVolume);
+						sndSystem.Play("BgMusic");
 					}
-				}*/
+				}
 
 			}
 		}
@@ -145,7 +154,7 @@ namespace net.minecraft.src
 		{
 			if (loaded && this.options.soundVolume != 0.0F)
 			{
-				/*if (entityLiving1 != null)
+				if (entityLiving1 != null)
 				{
 					float f3 = entityLiving1.prevRotationYaw + (entityLiving1.rotationYaw - entityLiving1.prevRotationYaw) * f2;
 					double d4 = entityLiving1.prevPosX + (entityLiving1.posX - entityLiving1.prevPosX) * (double)f2;
@@ -159,9 +168,9 @@ namespace net.minecraft.src
 					float f15 = 0.0F;
 					float f16 = 1.0F;
 					float f17 = 0.0F;
-					sndSystem.setListenerPosition((float)d4, (float)d6, (float)d8);
-					sndSystem.setListenerOrientation(f12, f13, f14, f15, f16, f17);
-				}*/
+					sndSystem.SetListenerPosition((float)d4, (float)d6, (float)d8);
+					sndSystem.SetListenerOrientation(f12, f13, f14, f15, f16, f17);
+				}
 			}
 		}
 
@@ -169,10 +178,10 @@ namespace net.minecraft.src
 		{
 			if (loaded && (this.options.soundVolume != 0.0F || string.ReferenceEquals(string1, null)))
 			{
-				/*string string7 = "streaming";
-				if (sndSystem.playing("streaming"))
+				string string7 = "streaming";
+				if (sndSystem.Playing("streaming"))
 				{
-					sndSystem.stop("streaming");
+					sndSystem.Stop("streaming");
 				}
 
 				if (!string.ReferenceEquals(string1, null))
@@ -180,46 +189,46 @@ namespace net.minecraft.src
 					SoundPoolEntry soundPoolEntry8 = this.soundPoolStreaming.getRandomSoundFromSoundPool(string1);
 					if (soundPoolEntry8 != null && f5 > 0.0F)
 					{
-						if (sndSystem.playing("BgMusic"))
+						if (sndSystem.Playing("BgMusic"))
 						{
-							sndSystem.stop("BgMusic");
+							sndSystem.Stop("BgMusic");
 						}
 
 						float f9 = 16.0F;
-						sndSystem.newStreamingSource(true, string7, soundPoolEntry8.soundUrl, soundPoolEntry8.soundName, false, f2, f3, f4, 2, f9 * 4.0F);
-						sndSystem.setVolume(string7, 0.5F * this.options.soundVolume);
-						sndSystem.play(string7);
+						sndSystem.NewStreamingSource(true, string7, soundPoolEntry8.soundUrl, soundPoolEntry8.soundName, false, new Vector3(f2, f3, f4), 2, f9 * 4.0F);
+						sndSystem.SetVolume(string7, 0.5F * this.options.soundVolume);
+						sndSystem.Play(string7);
 					}
 
-				}*/
+				}
 			}
 		}
 
-		public virtual void playSound(string string1, float f2, float f3, float f4, float f5, float f6)
+		public virtual void playSound(string string1, float x, float y, float z, float f5, float f6)
 		{
 			if (loaded && this.options.soundVolume != 0.0F)
 			{
-				/*SoundPoolEntry soundPoolEntry7 = this.soundPoolSounds.getRandomSoundFromSoundPool(string1);
+				SoundPoolEntry? soundPoolEntry7 = this.soundPoolSounds.getRandomSoundFromSoundPool(string1);
 				if (soundPoolEntry7 != null && f5 > 0.0F)
 				{
 					this.latestSoundID = (this.latestSoundID + 1) % 256;
-					string string8 = "sound_" + this.latestSoundID;
+					string sndIdentifier = "sound_" + this.latestSoundID;
 					float f9 = 16.0F;
 					if (f5 > 1.0F)
 					{
 						f9 *= f5;
 					}
-
-					sndSystem.newSource(f5 > 1.0F, string8, soundPoolEntry7.soundUrl, soundPoolEntry7.soundName, false, f2, f3, f4, 2, f9);
-					sndSystem.setPitch(string8, f6);
+                    
+					sndSystem.NewSource(f5 > 1.0F, sndIdentifier, soundPoolEntry7.soundUrl, soundPoolEntry7.soundName, false, new Vector3(x, y, z));
+					sndSystem.SetPitch(sndIdentifier, f6);
 					if (f5 > 1.0F)
 					{
 						f5 = 1.0F;
 					}
 
-					sndSystem.setVolume(string8, f5 * this.options.soundVolume);
-					sndSystem.play(string8);
-				}*/
+					sndSystem.SetVolume(sndIdentifier, f5 * this.options.soundVolume);
+					sndSystem.Play(sndIdentifier);
+				}
 
 			}
 		}
@@ -228,22 +237,22 @@ namespace net.minecraft.src
 		{
 			if (loaded && this.options.soundVolume != 0.0F)
 			{
-				/*SoundPoolEntry soundPoolEntry4 = this.soundPoolSounds.getRandomSoundFromSoundPool(string1);
+				SoundPoolEntry? soundPoolEntry4 = this.soundPoolSounds.getRandomSoundFromSoundPool(string1);
 				if (soundPoolEntry4 != null)
 				{
 					this.latestSoundID = (this.latestSoundID + 1) % 256;
 					string string5 = "sound_" + this.latestSoundID;
-					sndSystem.newSource(false, string5, soundPoolEntry4.soundUrl, soundPoolEntry4.soundName, false, 0.0F, 0.0F, 0.0F, 0, 0.0F);
+					sndSystem.NewSource(false, string5, soundPoolEntry4.soundUrl, soundPoolEntry4.soundName, false, null);
 					if (f2 > 1.0F)
 					{
 						f2 = 1.0F;
 					}
 
 					f2 *= 0.25F;
-					sndSystem.setPitch(string5, f3);
-					sndSystem.setVolume(string5, f2 * this.options.soundVolume);
-					sndSystem.play(string5);
-				}*/
+					sndSystem.SetPitch(string5, f3);
+					sndSystem.SetVolume(string5, f2 * this.options.soundVolume);
+					sndSystem.Play(string5);
+				}
 
 			}
 		}

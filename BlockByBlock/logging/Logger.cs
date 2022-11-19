@@ -8,7 +8,8 @@ namespace BlockByBlock.logging
 {
     /// <summary>
     /// This class is temporary.
-    /// TODO: Make more robust port of java.util.logging.Logger, or find a better logging library.
+    /// TODO: Make more robust port of java.util.logging.
+    /// , or find a better logging library.
     /// </summary>
     public class Logger
     {

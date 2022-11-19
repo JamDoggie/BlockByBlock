@@ -4,6 +4,7 @@ using TextCopy;
 using OpenTK.Graphics.OpenGL;
 using net.minecraft.client;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using net.minecraft.input;
 
 namespace net.minecraft.src
 {
@@ -35,7 +36,7 @@ namespace net.minecraft.src
 		{
 			if (i2 == 1)
 			{
-				this.mc.displayGuiScreen((GuiScreen)null);
+				this.mc.displayGuiScreen(null);
 				this.mc.setIngameFocus();
 			}
 
@@ -142,22 +143,37 @@ namespace net.minecraft.src
 
 		public virtual void handleKeyboardInput()
 		{
-			if (mc.mcApplet.CurrentKeyEvent() == null)
-				return;
-
-			KeyEvent e = mc.mcApplet.CurrentKeyEvent()!.Value;
-
-			if (e.isPressed)
+            if (mc.mcApplet.CurrentKeyEvent() != null)
 			{
-				if (e.e.Key == Keys.F11)
-				{
-					this.mc.toggleFullscreen();
-					return;
-				}
-				keyTyped((char)e.e.Key, (int)e.e.Key);
-			}
+                KeyEvent? e = mc.mcApplet.CurrentKeyEvent();
 
-		}
+				if (e != null)
+				{
+                    if (e.Value.IsPressed)
+                    {
+                        if (e.Value.Key == KeyCode.F11)
+                        {
+                            this.mc.toggleFullscreen();
+                            return;
+                        }
+
+                        keyTyped('\0', (int)e.Value.Key);
+                    }
+                }
+            }
+
+            while (mc.mcApplet.NextKeyTypedEvent())
+			{
+                KeyTypedEvent? typedEvent = mc.mcApplet.CurrentKeyTypedEvent();
+
+                if (typedEvent != null && typedEvent.Value.keyChar != '\0')
+                {
+                    keyTyped(typedEvent.Value.keyChar, (int)KeyCode.NONE);
+                }
+
+                mc.mcApplet.ClearCurrentTypedKey();
+            }
+        }
 
 		public virtual void updateScreen()
 		{

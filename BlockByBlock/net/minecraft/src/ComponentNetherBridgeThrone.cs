@@ -8,7 +8,7 @@ namespace net.minecraft.src
 	{
 		private bool hasSpawner;
 
-		public ComponentNetherBridgeThrone(int i1, Random random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
+		public ComponentNetherBridgeThrone(int i1, RandomExtended random2, StructureBoundingBox structureBoundingBox3, int i4) : base(i1)
 		{
 			this.coordBaseMode = i4;
 			this.boundingBox = structureBoundingBox3;

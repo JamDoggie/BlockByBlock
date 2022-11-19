@@ -55,7 +55,8 @@ namespace net.minecraft.src
 					return this.emptyChunk;
 				}
 
-				chunk5 = this.loadChunkFromFile(i1, i2);
+                Profiler.startSection("getChunk");
+                chunk5 = this.loadChunkFromFile(i1, i2);
 				if (chunk5 == null)
 				{
 					if (this.chunkProvider == null)
@@ -67,6 +68,7 @@ namespace net.minecraft.src
 						chunk5 = this.chunkProvider.provideChunk(i1, i2);
 					}
 				}
+				Profiler.endSection();
 
 				this.chunkMap.add(j3, chunk5);
 				this.chunkList.Add(chunk5);

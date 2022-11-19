@@ -30,7 +30,7 @@ namespace net.minecraft.src
 			yPosition = dataInputStream1.ReadByte();
 			zPosition = dataInputStream1.ReadInt32BigEndian();
 			direction = dataInputStream1.ReadSByte();
-			itemStack = readItemStack(dataInputStream1);
+			itemStack = ReadItemStack(dataInputStream1);
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)

@@ -28,7 +28,7 @@
 			WorldInfo worldInfo3 = iSaveFormat2.getWorldInfo(this.worldName);
 			string string4 = worldInfo3.WorldName;
 			this.theGuiTextField = new GuiTextField(this.fontRenderer, this.width / 2 - 100, 60, 200, 20);
-			this.theGuiTextField.func_50033_b(true);
+			this.theGuiTextField.setFocused(true);
 			this.theGuiTextField.Text = string4;
 		}
 
@@ -57,7 +57,7 @@
 
 		protected internal override void keyTyped(char c1, int i2)
 		{
-			this.theGuiTextField.func_50037_a(c1, i2);
+			this.theGuiTextField.keyTyped(c1, i2);
 			((GuiButton)this.controlList[0]).enabled = this.theGuiTextField.Text.Trim().Length > 0;
 			if (c1 == (char)13)
 			{

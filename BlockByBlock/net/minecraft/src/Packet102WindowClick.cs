@@ -38,7 +38,7 @@ namespace net.minecraft.src
 			mouseClick = dataInputStream1.ReadSByte();
 			action = dataInputStream1.ReadInt16BigEndian();
 			holdingShift = dataInputStream1.ReadBoolean();
-			itemStack = this.readItemStack(dataInputStream1);
+			itemStack = this.ReadItemStack(dataInputStream1);
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)

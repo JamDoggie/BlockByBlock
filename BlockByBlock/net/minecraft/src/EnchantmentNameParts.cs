@@ -32,8 +32,7 @@ namespace net.minecraft.src
 		{
 			set
 			{
-				/*this.rand.setSeed(value);*/ // PORTING TODO: RandomExtended.setSeed
-				rand = new RandomExtended(value);
+				rand.SetSeed(value);
 			}
 		}
 	}

@@ -220,8 +220,7 @@ namespace net.minecraft.src
 
 		public virtual Chunk provideChunk(int i1, int i2)
 		{
-			//this.hellRNG.setSeed((long)i1 * 341873128712L + (long)i2 * 132897987541L); PORTING TODO: RandomExtended.setSeed
-			hellRNG = new RandomExtended((long)i1 * 341873128712L + (long)i2 * 132897987541L);
+			hellRNG.SetSeed((long)i1 * 341873128712L + (long)i2 * 132897987541L);
 			sbyte[] b3 = new sbyte[32768];
 			this.generateNetherTerrain(i1, i2, b3);
 			this.func_4058_b(i1, i2, b3);

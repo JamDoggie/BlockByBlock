@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlockByBlock.java_extensions;
+using System;
 
 namespace net.minecraft.src
 {
@@ -63,7 +64,7 @@ namespace net.minecraft.src
 
 		private Vec3D findPossibleShelter()
 		{
-			Random random1 = this.theCreature.RNG;
+            RandomExtended random1 = this.theCreature.RNG;
 
 			for (int i2 = 0; i2 < 10; ++i2)
 			{

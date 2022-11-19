@@ -83,12 +83,11 @@ namespace net.minecraft.src
 
 		public virtual void populate(IChunkProvider iChunkProvider1, int i2, int i3)
 		{
-			//this.random.setSeed(this.worldObj.Seed); PORTING TODO: RandomExtended.setSeed
+			this.random.SetSeed(this.worldObj.Seed); 
 			random = new RandomExtended(this.worldObj.Seed);
             long j4 = this.random.NextInt64() / 2L * 2L + 1L;
 			long j6 = this.random.NextInt64() / 2L * 2L + 1L;
-			//this.random.setSeed((long)i2 * j4 + (long)i3 * j6 ^ this.worldObj.Seed);
-			random = new RandomExtended((long)i2 * j4 + (long)i3 * j6 ^ this.worldObj.Seed);
+			this.random.SetSeed((long)i2 * j4 + (long)i3 * j6 ^ this.worldObj.Seed);
 			if (this.useStructures)
 			{
 				this.villageGen.generateStructuresInChunk(this.worldObj, this.random, i2, i3);

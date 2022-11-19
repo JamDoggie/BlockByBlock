@@ -11,8 +11,7 @@ namespace net.minecraft.src
 
 		public virtual void func_158_a(EntityPainting entityPainting1, double d2, double d4, double d6, float f8, float f9)
 		{
-			//this.rand.setSeed(187L); // PORTING TODO: RandomExtended.setSeed
-			rand = new RandomExtended(187L);
+			rand.SetSeed(187L);
 			GL.PushMatrix();
 			GL.Translate((float)d2, (float)d4, (float)d6);
 			GL.Rotate(f8, 0.0F, 1.0F, 0.0F);

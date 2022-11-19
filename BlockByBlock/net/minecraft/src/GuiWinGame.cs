@@ -185,11 +185,10 @@ namespace net.minecraft.src
 					}
 					else
 					{
-						//this.fontRenderer.fontRandom.setSeed((long)i10 * 4238972211L + (long)(this.updateCounter / 4)); // PORTING TODO: RandomExtended.setSeed
+						fontRenderer.fontRandom.SetSeed((long)i10 * 4238972211L + (long)(this.updateCounter / 4));
 						fontRenderer.fontRandom = new RandomExtended((long)i10 * 4238972211L + (long)(this.updateCounter / 4));
 						this.fontRenderer.func_50101_a(string12, i6 + 1, i9 + 1, 0xFFFFFF, true);
-                        //this.fontRenderer.fontRandom.setSeed((long)i10 * 4238972211L + (long)(this.updateCounter / 4)); // PORTING TODO: RandomExtended.setSeed
-                        fontRenderer.fontRandom = new RandomExtended((long)i10 * 4238972211L + (long)(this.updateCounter / 4));
+                        fontRenderer.fontRandom.SetSeed((long)i10 * 4238972211L + (long)(this.updateCounter / 4));
                         this.fontRenderer.func_50101_a(string12, i6, i9, 0xFFFFFF, false);
 					}
 				}

@@ -86,6 +86,10 @@ namespace net.minecraft.src
 				this.itemList.Add(new ItemStack(Item.monsterPlacer.shiftedIndex, 1, integer17.Value));
 			}
 
+#if DEBUGTOOLS
+			itemList.Add(new ItemStack(Block.mobSpawner));
+#endif
+
 			InventoryPlayer inventoryPlayer16 = entityPlayer1.inventory;
 
 			for (i13 = 0; i13 < 9; ++i13)

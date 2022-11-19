@@ -37,11 +37,17 @@ namespace net.minecraft.src
 				temp = new byte[tempLength];
 			}
 			
-			int bytesRead = dataInputStream1.Read(temp, 0, tempLength);
+			int bytesRead = 0;
 
-            if (bytesRead != tempLength)
+            while (bytesRead < tempLength)
             {
-                Console.WriteLine("Chunk Packet " + xCh + "," + zCh + " truncated: expected " + tempLength + " bytes, read " + bytesRead);
+                bytesRead += dataInputStream1.Read(temp, bytesRead, tempLength - bytesRead);
+            }
+
+			if (bytesRead != tempLength)
+			{
+                Console.WriteLine("Chunk Packet " + xCh + "," + zCh + " truncated: expected " + tempLength + " bytes, read " + bytesRead); 
+				
             }
 
             int i2 = 0;

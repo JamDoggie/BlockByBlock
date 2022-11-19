@@ -206,8 +206,7 @@ namespace net.minecraft.src
 
 				for (i24 = 0; i24 * 16 - i14 < 224; ++i24)
 				{
-					//random21.setSeed((long)(1234 + i12 + i24)); PORTING TODO: RandomExtended.setSeed
-					random21 = new RandomExtended((long)(1234 + i12 + i24));
+					random21.SetSeed((long)(1234 + i12 + i24));
                     random21.Next();
 					i25 = random21.Next(1 + i13 + i22) + (i13 + i22) / 2;
 					i26 = Block.sand.blockIndexInTexture;

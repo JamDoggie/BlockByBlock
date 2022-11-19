@@ -167,7 +167,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		private void tryToCatchBlockOnFire(World world1, int i2, int i3, int i4, int i5, Random random6, int i7)
+		private void tryToCatchBlockOnFire(World world1, int i2, int i3, int i4, int i5, RandomExtended random6, int i7)
 		{
 			int i8 = this.abilityToCatchFire[world1.getBlockId(i2, i3, i4)];
 			if (random6.Next(i5) < i8)

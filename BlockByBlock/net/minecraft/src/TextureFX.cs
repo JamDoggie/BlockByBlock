@@ -5,7 +5,7 @@ namespace net.minecraft.src
 
 	public class TextureFX
 	{
-		public byte[] imageData = new byte[1024];
+		public byte[] imageData { get; set; } = new byte[1024];
 		public int iconIndex;
 		public bool anaglyphEnabled = false;
 		public int textureId = 0;

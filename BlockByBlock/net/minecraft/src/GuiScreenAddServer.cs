@@ -28,7 +28,7 @@
 			this.controlList.Add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 96 + 12, stringTranslate1.translateKey("addServer.add")));
 			this.controlList.Add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + 12, stringTranslate1.translateKey("gui.cancel")));
 			this.serverName = new GuiTextField(this.fontRenderer, this.width / 2 - 100, 76, 200, 20);
-			this.serverName.func_50033_b(true);
+			this.serverName.setFocused(true);
 			this.serverName.Text = this.serverNBTStorage.name;
 			this.serverAddress = new GuiTextField(this.fontRenderer, this.width / 2 - 100, 116, 200, 20);
 			this.serverAddress.MaxStringLength = 128;
@@ -61,19 +61,19 @@
 
 		protected internal override void keyTyped(char c1, int i2)
 		{
-			this.serverName.func_50037_a(c1, i2);
-			this.serverAddress.func_50037_a(c1, i2);
+			this.serverName.keyTyped(c1, i2);
+			this.serverAddress.keyTyped(c1, i2);
 			if (c1 == (char)9)
 			{
 				if (this.serverName.func_50025_j())
 				{
-					this.serverName.func_50033_b(false);
-					this.serverAddress.func_50033_b(true);
+					this.serverName.setFocused(false);
+					this.serverAddress.setFocused(true);
 				}
 				else
 				{
-					this.serverName.func_50033_b(true);
-					this.serverAddress.func_50033_b(false);
+					this.serverName.setFocused(true);
+					this.serverAddress.setFocused(false);
 				}
 			}
 

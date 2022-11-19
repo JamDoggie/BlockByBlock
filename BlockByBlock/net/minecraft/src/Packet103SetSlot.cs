@@ -18,7 +18,7 @@ namespace net.minecraft.src
 		{
 			windowId = dataInputStream1.ReadSByte();
 			itemSlot = dataInputStream1.ReadInt16BigEndian();
-			myItemStack = this.readItemStack(dataInputStream1);
+			myItemStack = this.ReadItemStack(dataInputStream1);
 		}
 
 		public override void writePacketData(BinaryWriter dataOutputStream1)

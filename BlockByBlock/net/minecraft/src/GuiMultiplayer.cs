@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections;
 using System.Net;
 using System.Net.Sockets;
@@ -46,6 +47,9 @@ namespace net.minecraft.src
 		{
 			try
 			{
+				if (!File.Exists(mc.mcDataDir + "/servers.dat"))
+					File.Create(mc.mcDataDir + "/servers.dat");
+
 				NBTTagCompound? nBTTagCompound1 = CompressedStreamTools.read(new FileInfo(mc.mcDataDir + "/servers.dat"));
 				NBTTagList nBTTagList2 = nBTTagCompound1.getTagList("servers");
 				this.serverList.Clear();
@@ -320,35 +324,47 @@ namespace net.minecraft.src
 			}
 
 			string ipAddress = addressSections[0];
-			int port = addressSections.Length > 1 ? this.parseIntWithDefault(addressSections[1], 25565) : 25565;
+			int port = addressSections.Length > 1 ? parseIntWithDefault(addressSections[1], 25565) : 25565;
 			Socket serverSocket = null;
-			BinaryReader dataInputStream7 = null;
-			BinaryWriter dataOutputStream8 = null;
+			BinaryReader reader = null;
+			BinaryWriter writer = null;
 
 			try
 			{
+				if (ipAddress == "localhost")
+					ipAddress = "127.0.0.1";
+
 				IPHostEntry host = Dns.GetHostEntry(ipAddress);
 				IPAddress ip = host.AddressList[0];
-				IPEndPoint endPoint = new IPEndPoint(ip, port);
+				IPEndPoint endPoint = new(ip, port);
 
-                serverSocket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-				serverSocket.Connect(endPoint);
+                serverSocket = new(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+				serverSocket.NoDelay = true;
+				serverSocket.SendTimeout = 30000;
+				serverSocket.ReceiveTimeout = 30000;
+				serverSocket.Blocking = true;
+				Console.WriteLine("Pre connect");
+                serverSocket.Connect(endPoint);
+				Console.WriteLine("Post connect");
 
-				NetworkStream networkStream = new NetworkStream(serverSocket);
+				NetworkStream networkStream = new(serverSocket);
 
-				dataInputStream7 = new BinaryReader(networkStream);
-				dataOutputStream8 = new BinaryWriter(networkStream);
+				reader = new BinaryReader(networkStream);
+				writer = new BinaryWriter(networkStream);
 
-				dataOutputStream8.Write((byte)254);
-				if (dataInputStream7.ReadByte() != 255)
-				{
-					throw new IOException("Bad message");
-				}
+                Console.WriteLine("Writing");
+                writer.Write((byte)254);
+                Console.WriteLine("Reading");
+                if (reader.ReadByte() != 255)
+                {
+                    throw new IOException("Bad message");
+                }
+                Console.WriteLine("readpacket");
+                string string9 = Packet.readString(reader, 256);
+                char[] c10 = string9.ToCharArray();
+                Console.WriteLine("donereadpacket");
 
-				string string9 = Packet.readString(dataInputStream7, 256);
-				char[] c10 = string9.ToCharArray();
-
-				int i11;
+                int i11;
 				for (i11 = 0; i11 < c10.Length; ++i11)
 				{
 					if (c10[i11] != (char)167 && ChatAllowedCharacters.allowedCharacters.IndexOf(c10[i11]) < 0)
@@ -382,42 +398,18 @@ namespace net.minecraft.src
 					serverNBTStorage1.playerCount = "\u00a78???";
 				}
 			}
+			catch(Exception e)
+			{
+				Console.WriteLine(e);
+                
+			}
 			finally
 			{
-				try
-				{
-					if (dataInputStream7 != null)
-					{
-						dataInputStream7.Dispose();
-					}
-				}
-				catch (Exception)
-				{
-				}
-
-				try
-				{
-					if (dataOutputStream8 != null)
-					{
-						dataOutputStream8.Dispose();
-					}
-				}
-				catch (Exception)
-				{
-				}
-
-				try
-				{
-					if (serverSocket != null)
-					{
-						serverSocket.Close();
-					}
-				}
-				catch (Exception)
-				{
-				}
-
-			}
+				serverSocket?.Disconnect(false);
+				serverSocket?.Close();
+                reader?.Dispose();
+                writer?.Dispose();
+            }
 
 		}
 
@@ -489,8 +481,6 @@ namespace net.minecraft.src
 			return threadsPending++;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-//ORIGINAL LINE: static void pollServer(GuiMultiplayer guiMultiplayer0, ServerNBTStorage serverNBTStorage1) throws java.io.IOException
 		internal static void pollServer(GuiMultiplayer guiMultiplayer0, ServerNBTStorage serverNBTStorage1)
 		{
 			guiMultiplayer0.pollServer(serverNBTStorage1);

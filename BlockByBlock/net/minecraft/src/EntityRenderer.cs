@@ -225,6 +225,11 @@ namespace net.minecraft.src
 				{
 					f4 = f4 * 60.0F / 70.0F;
 				}
+                
+				if (mc.zoom)
+				{
+					f4 = 10.0f;
+				}
 
 				return f4 + this.prevDebugCamFOV + (this.debugCamFOV - this.prevDebugCamFOV) * f1;
 			}
@@ -533,7 +538,7 @@ namespace net.minecraft.src
 			GL.Translate(8.0F, 8.0F, 8.0F);
 			GL.MatrixMode(MatrixMode.Modelview);
 			this.mc.renderEngine.bindTexture(this.lightmapTexture);
-            
+
             GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, RenderEngine.TextureFilterLinear);
 			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, RenderEngine.TextureFilterLinear);
 			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, RenderEngine.TextureFilterLinear);
@@ -561,9 +566,10 @@ namespace net.minecraft.src
 			World world1 = this.mc.theWorld;
 			if (world1 != null)
 			{
+				Profiler.startSection("sky_tex_world");
 				for (int i2 = 0; i2 < 256; ++i2)
 				{
-					float f3 = world1.func_35464_b(1.0F) * 0.95F + 0.05F;
+					float f3 = world1.getSkyBrightness(1.0F) * 0.95F + 0.05F;
 					float f4 = world1.worldProvider.lightBrightnessTable[i2 / 16] * f3;
 					float f5 = world1.worldProvider.lightBrightnessTable[i2 % 16] * (this.torchFlickerX * 0.1F + 1.5F);
 					if (world1.lightningFlash > 0)
@@ -571,8 +577,8 @@ namespace net.minecraft.src
 						f4 = world1.worldProvider.lightBrightnessTable[i2 / 16];
 					}
 
-					float f6 = f4 * (world1.func_35464_b(1.0F) * 0.65F + 0.35F);
-					float f7 = f4 * (world1.func_35464_b(1.0F) * 0.65F + 0.35F);
+					float f6 = f4 * (world1.getSkyBrightness(1.0F) * 0.65F + 0.35F);
+					float f7 = f4 * (world1.getSkyBrightness(1.0F) * 0.65F + 0.35F);
 					float f10 = f5 * ((f5 * 0.6F + 0.4F) * 0.6F + 0.4F);
 					float f11 = f5 * (f5 * f5 * 0.6F + 0.4F);
 					float f12 = f6 + f5;
@@ -653,7 +659,9 @@ namespace net.minecraft.src
 					this.lightmapColors[i2] = s19 << 24 | i20 << 16 | i21 << 8 | i22;
 				}
 
+				Profiler.endStartSection("sky_tex_create");
 				this.mc.renderEngine.createTextureFromBytes(this.lightmapColors, 16, 16, this.lightmapTexture);
+				Profiler.endSection();
 			}
 		}
 
@@ -711,6 +719,7 @@ namespace net.minecraft.src
 			Profiler.endSection();
 			if (!this.mc.skipRenderWorld)
 			{
+				Profiler.startSection("scale_resolution");
 				anaglyphEnable = this.mc.gameSettings.anaglyph;
 				ScaledResolution scaledResolution13 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
 				int i14 = scaledResolution13.ScaledWidth;
@@ -727,6 +736,8 @@ namespace net.minecraft.src
 				{
 					s18 = 40;
 				}
+
+				Profiler.endSection();
 
 				long sleepMs;
 				if (this.mc.theWorld != null)
@@ -784,12 +795,14 @@ namespace net.minecraft.src
 
 				if (this.mc.currentScreen != null)
 				{
+					Profiler.startSection("screen_render");
 					GL.Clear(ClearBufferMask.DepthBufferBit);
 					this.mc.currentScreen.drawScreen(i16, i17, f1);
 					if (this.mc.currentScreen != null && this.mc.currentScreen.guiParticles != null)
 					{
 						this.mc.currentScreen.guiParticles.draw(f1);
 					}
+					Profiler.endSection();
 				}
 
 			}
@@ -1026,8 +1039,7 @@ namespace net.minecraft.src
 
 			if (f1 != 0.0F)
 			{
-				//this.random.setSeed((long)this.rendererUpdateCount * 312987231L); PORTING TODO: RandomExtended.setSeed
-				random = new RandomExtended((long)this.rendererUpdateCount * 312987231L);
+				random.SetSeed((long)this.rendererUpdateCount * 312987231L);
 				EntityLiving entityLiving2 = this.mc.renderViewEntity;
 				World world3 = this.mc.theWorld;
 				int i4 = MathHelper.floor_double(entityLiving2.posX);
@@ -1186,8 +1198,7 @@ namespace net.minecraft.src
 
 							if (i27 != i28)
 							{
-								//this.random.setSeed((long)(i21 * i21 * 3121 + i21 * 45238971 ^ i20 * i20 * 418711 + i20 * 13761)); PORTING TODO: RandomExtended.setSeed
-								random = new RandomExtended((long)(i21 * i21 * 3121 + i21 * 45238971 ^ i20 * i20 * 418711 + i20 * 13761));
+								random.SetSeed((long)(i21 * i21 * 3121 + i21 * 45238971 ^ i20 * i20 * 418711 + i20 * 13761));
 								float f31 = biomeGenBase25.FloatTemperature;
 								float f32;
 								double d35;

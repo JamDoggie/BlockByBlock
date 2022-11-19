@@ -26,7 +26,7 @@ namespace net.minecraft.src
 		public override void readPacketData(BinaryReader dataInputStream1)
 		{
 			slot = dataInputStream1.ReadInt16BigEndian();
-			itemStack = readItemStack(dataInputStream1);
+			itemStack = ReadItemStack(dataInputStream1);
 		}
         
 		public override void writePacketData(BinaryWriter dataOutputStream1)

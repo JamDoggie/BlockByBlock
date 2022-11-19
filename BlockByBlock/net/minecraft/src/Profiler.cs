@@ -51,12 +51,12 @@ namespace net.minecraft.src
 					profilingMap[profilingSection] = j4;
 				}
 
-				profilingSection = sectionList.Count > 0 ? (string)sectionList[sectionList.Count - 1] : "";
-				if (j4 > 100000000L)
-				{
-					Console.WriteLine(profilingSection + " " + j4);
-				}
+                if (j4 > 100000000L)
+                {
+                    Console.WriteLine(profilingSection + " " + j4);
+                }
 
+                profilingSection = sectionList.Count > 0 ? (string)sectionList[sectionList.Count - 1] : "";
 			}
 		}
 

@@ -19,6 +19,8 @@ namespace net.minecraft.src
 			this.ySize = 208;
 		}
 
+		
+
 		public override void updateScreen()
 		{
 			if (!this.mc.playerController.InCreativeMode)

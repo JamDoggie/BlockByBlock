@@ -27,7 +27,7 @@ namespace net.minecraft.src
 			{
 				if (this.dragging)
 				{
-					this.sliderValue = (float)(i2 - (this.xPosition + 4)) / (float)(this.field_52008_a - 8);
+					this.sliderValue = (float)(i2 - (this.xPosition + 4)) / (float)(this.width - 8);
 					if (this.sliderValue < 0.0F)
 					{
 						this.sliderValue = 0.0F;
@@ -43,8 +43,8 @@ namespace net.minecraft.src
 				}
 
 				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
-				this.drawTexturedModalRect(this.xPosition + (int)(this.sliderValue * (float)(this.field_52008_a - 8)), this.yPosition, 0, 66, 4, 20);
-				this.drawTexturedModalRect(this.xPosition + (int)(this.sliderValue * (float)(this.field_52008_a - 8)) + 4, this.yPosition, 196, 66, 4, 20);
+				this.drawTexturedModalRect(this.xPosition + (int)(this.sliderValue * (float)(this.width - 8)), this.yPosition, 0, 66, 4, 20);
+				this.drawTexturedModalRect(this.xPosition + (int)(this.sliderValue * (float)(this.width - 8)) + 4, this.yPosition, 196, 66, 4, 20);
 			}
 		}
 
@@ -52,7 +52,7 @@ namespace net.minecraft.src
 		{
 			if (base.mousePressed(minecraft1, i2, i3))
 			{
-				this.sliderValue = (float)(i2 - (this.xPosition + 4)) / (float)(this.field_52008_a - 8);
+				this.sliderValue = (float)(i2 - (this.xPosition + 4)) / (float)(this.width - 8);
 				if (this.sliderValue < 0.0F)
 				{
 					this.sliderValue = 0.0F;
