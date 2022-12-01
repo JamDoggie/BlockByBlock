@@ -120,7 +120,11 @@
 		{
 		}
 
-		public virtual bool func_35643_e()
+		/// <summary>
+		/// TODO: check that this name is accurate. Changing this to true seems to make the player camera turn like the title screen panorama, even in game.
+		/// </summary>
+		/// <returns>false, always.</returns>
+		public virtual bool IsPanoramaCamera()
 		{
 			return false;
 		}
@@ -130,6 +134,10 @@
 			entityPlayer1.stopUsingItem();
 		}
 
+		/// <summary>
+		/// Mystery constant. This returns false.
+		/// </summary>
+		/// <returns>false, always.</returns>
 		public virtual bool func_35642_f()
 		{
 			return false;

@@ -43,9 +43,9 @@
 		{
 			GL.Viewport(0, 0, this.theGame.displayWidth, this.theGame.displayHeight);
 			GL.MatrixMode(MatrixMode.Projection);
-			GL.LoadIdentity();
-			GL.MatrixMode(MatrixMode.Modelview);
-			GL.LoadIdentity();
+			Minecraft.newRenderer.CameraMatrix.LoadIdentity();
+            GL.MatrixMode(MatrixMode.Modelview);
+            Minecraft.newRenderer.ModelMatrix.LoadIdentity();
 			this.achievementWindowWidth = this.theGame.displayWidth;
 			this.achievementWindowHeight = this.theGame.displayHeight;
 			ScaledResolution scaledResolution1 = new ScaledResolution(this.theGame.gameSettings, this.theGame.displayWidth, this.theGame.displayHeight);
@@ -53,11 +53,11 @@
 			this.achievementWindowHeight = scaledResolution1.ScaledHeight;
 			GL.Clear(ClearBufferMask.DepthBufferBit);
 			GL.MatrixMode(MatrixMode.Projection);
-			GL.LoadIdentity();
-			GL.Ortho(0.0D, (double)this.achievementWindowWidth, (double)this.achievementWindowHeight, 0.0D, 1000.0D, 3000.0D);
+            Minecraft.newRenderer.CameraMatrix.LoadIdentity();
+            Minecraft.newRenderer.CameraMatrix.Ortho(0.0D, (double)this.achievementWindowWidth, (double)this.achievementWindowHeight, 0.0D, 1000.0D, 3000.0D);
 			GL.MatrixMode(MatrixMode.Modelview);
-			GL.LoadIdentity();
-			GL.Translate(0.0F, 0.0F, -2000.0F);
+            Minecraft.newRenderer.ModelMatrix.LoadIdentity();
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -2000.0F);
 		}
 
 		public virtual void updateAchievementWindow()

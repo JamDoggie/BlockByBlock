@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 using System;
 
 namespace net.minecraft.src
@@ -16,13 +17,13 @@ namespace net.minecraft.src
 
 		public virtual void func_152_a(EntityMinecart entityMinecart1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
 			long j10 = (long)entityMinecart1.entityId * 493286711L;
 			j10 = j10 * j10 * 4392167121L + j10 * 98761L;
 			float f12 = (((float)(j10 >> 16 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
 			float f13 = (((float)(j10 >> 20 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
 			float f14 = (((float)(j10 >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
-			GL.Translate(f12, f13, f14);
+            Minecraft.newRenderer.ModelMatrix.Translate(f12, f13, f14);
 			double d15 = entityMinecart1.lastTickPosX + (entityMinecart1.posX - entityMinecart1.lastTickPosX) * (double)f9;
 			double d17 = entityMinecart1.lastTickPosY + (entityMinecart1.posY - entityMinecart1.lastTickPosY) * (double)f9;
 			double d19 = entityMinecart1.lastTickPosZ + (entityMinecart1.posZ - entityMinecart1.lastTickPosZ) * (double)f9;
@@ -55,9 +56,9 @@ namespace net.minecraft.src
 				}
 			}
 
-			GL.Translate((float)d2, (float)d4, (float)d6);
-			GL.Rotate(180.0F - f8, 0.0F, 1.0F, 0.0F);
-			GL.Rotate(-f24, 0.0F, 0.0F, 1.0F);
+            Minecraft.newRenderer.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
+            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F - f8, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(-f24, 0.0F, 0.0F, 1.0F);
 			float f28 = (float)entityMinecart1.func_41023_l() - f9;
 			float f29 = (float)entityMinecart1.func_41025_i() - f9;
 			if (f29 < 0.0F)
@@ -67,40 +68,40 @@ namespace net.minecraft.src
 
 			if (f28 > 0.0F)
 			{
-				GL.Rotate(MathHelper.sin(f28) * f28 * f29 / 10.0F * (float)entityMinecart1.func_41030_m(), 1.0F, 0.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(MathHelper.sin(f28) * f28 * f29 / 10.0F * (float)entityMinecart1.func_41030_m(), 1.0F, 0.0F, 0.0F);
 			}
 
 			if (entityMinecart1.minecartType != 0)
 			{
 				this.loadTexture("/terrain.png");
 				float f30 = 0.75F;
-				GL.Scale(f30, f30, f30);
+                Minecraft.newRenderer.ModelMatrix.Scale(f30, f30, f30);
 				if (entityMinecart1.minecartType == 1)
 				{
-					GL.Translate(-0.5F, 0.0F, 0.5F);
-					GL.Rotate(90.0F, 0.0F, 1.0F, 0.0F);
+					Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, 0.0F, 0.5F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(90.0F, 0.0F, 1.0F, 0.0F);
 					(new RenderBlocks()).renderBlockAsItem(Block.chest, 0, entityMinecart1.getBrightness(f9));
-					GL.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
-					GL.Translate(0.5F, 0.0F, -0.5F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.0F, -0.5F);
 					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				}
 				else if (entityMinecart1.minecartType == 2)
 				{
-					GL.Translate(0.0F, 0.3125F, 0.0F);
-					GL.Rotate(90.0F, 0.0F, 1.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.3125F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(90.0F, 0.0F, 1.0F, 0.0F);
 					(new RenderBlocks()).renderBlockAsItem(Block.stoneOvenIdle, 0, entityMinecart1.getBrightness(f9));
-					GL.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
-					GL.Translate(0.0F, -0.3125F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Translate(0.0F, -0.3125F, 0.0F);
 					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				}
 
-				GL.Scale(1.0F / f30, 1.0F / f30, 1.0F / f30);
+                Minecraft.newRenderer.ModelMatrix.Scale(1.0F / f30, 1.0F / f30, 1.0F / f30);
 			}
 
 			this.loadTexture("/item/cart.png");
-			GL.Scale(-1.0F, -1.0F, 1.0F);
+            Minecraft.newRenderer.ModelMatrix.Scale(-1.0F, -1.0F, 1.0F);
 			this.modelMinecart.render(entityMinecart1, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 		}
 
 		public override void doRender(Entity entity1, double d2, double d4, double d6, float f8, float f9)

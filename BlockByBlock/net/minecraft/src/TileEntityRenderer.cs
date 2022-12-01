@@ -13,7 +13,7 @@ namespace net.minecraft.src
 		public static double staticPlayerX;
 		public static double staticPlayerY;
 		public static double staticPlayerZ;
-		public RenderEngine renderEngine;
+		public TextureManager renderEngine;
 		public World worldObj;
 		public EntityLiving entityLivingPlayer;
 		public float playerYaw;
@@ -62,7 +62,7 @@ namespace net.minecraft.src
 			return tileEntity1 == null ? null : this.getSpecialRendererForClass(tileEntity1.GetType());
 		}
 
-		public virtual void cacheActiveRenderInfo(World world1, RenderEngine renderEngine2, FontRenderer fontRenderer3, EntityLiving entityLiving4, float f5)
+		public virtual void cacheActiveRenderInfo(World world1, TextureManager renderEngine2, FontRenderer fontRenderer3, EntityLiving entityLiving4, float f5)
 		{
 			if (this.worldObj != world1)
 			{

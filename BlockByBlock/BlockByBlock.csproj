@@ -83,4 +83,13 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="shaders\fragment\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="shaders\vertex\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -47,11 +47,11 @@ namespace net.minecraft.src
 				ScaledResolution scaledResolution2 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
 				GL.Clear(ClearBufferMask.DepthBufferBit);
 				GL.MatrixMode(MatrixMode.Projection);
-				GL.LoadIdentity();
-				GL.Ortho(0.0D, scaledResolution2.scaledWidthD, scaledResolution2.scaledHeightD, 0.0D, 100.0D, 300.0D);
+                Minecraft.newRenderer.CameraMatrix.LoadIdentity();
+                Minecraft.newRenderer.CameraMatrix.Ortho(0.0D, scaledResolution2.scaledWidthD, scaledResolution2.scaledHeightD, 0.0D, 100.0D, 300.0D);
 				GL.MatrixMode(MatrixMode.Modelview);
-				GL.LoadIdentity();
-				GL.Translate(0.0F, 0.0F, -200.0F);
+                Minecraft.newRenderer.ModelMatrix.LoadIdentity();
+                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -200.0F);
 			}
 		}
 
@@ -95,11 +95,11 @@ namespace net.minecraft.src
 						int i6 = scaledResolution4.ScaledHeight;
 						GL.Clear(ClearBufferMask.DepthBufferBit);
 						GL.MatrixMode(MatrixMode.Projection);
-						GL.LoadIdentity();
-						GL.Ortho(0.0D, scaledResolution4.scaledWidthD, scaledResolution4.scaledHeightD, 0.0D, 100.0D, 300.0D);
+                        Minecraft.newRenderer.CameraMatrix.LoadIdentity();
+                        Minecraft.newRenderer.CameraMatrix.Ortho(0.0D, scaledResolution4.scaledWidthD, scaledResolution4.scaledHeightD, 0.0D, 100.0D, 300.0D);
 						GL.MatrixMode(MatrixMode.Modelview);
-						GL.LoadIdentity();
-						GL.Translate(0.0F, 0.0F, -200.0F);
+                        Minecraft.newRenderer.ModelMatrix.LoadIdentity();
+                        Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -200.0F);
 						GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 						Tessellator tessellator7 = Tessellator.instance;
 						int i8 = this.mc.renderEngine.getTexture("/gui/background.png");

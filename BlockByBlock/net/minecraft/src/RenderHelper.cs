@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -55,11 +56,11 @@ namespace net.minecraft.src
 
 		public static void enableGUIStandardItemLighting()
 		{
-			GL.PushMatrix();
-			GL.Rotate(-30.0F, 0.0F, 1.0F, 0.0F);
-			GL.Rotate(165.0F, 1.0F, 0.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+			Minecraft.newRenderer.ModelMatrix.Rotate(-30.0F, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(165.0F, 1.0F, 0.0F, 0.0F);
 			enableStandardItemLighting();
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 		}
 	}
 

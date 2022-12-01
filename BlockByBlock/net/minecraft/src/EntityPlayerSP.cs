@@ -69,7 +69,7 @@
 				--this.sprintToggleTimer;
 			}
 
-			if (this.mc.playerController.func_35643_e())
+			if (this.mc.playerController.IsPanoramaCamera())
 			{
 				this.posX = this.posZ = 0.5D;
 				this.posX = 0.0D;

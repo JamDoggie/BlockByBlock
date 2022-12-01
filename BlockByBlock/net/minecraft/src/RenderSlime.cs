@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -39,7 +40,7 @@ namespace net.minecraft.src
 			float f4 = (entitySlime1.field_767_b + (entitySlime1.field_768_a - entitySlime1.field_767_b) * f2) / ((float)i3 * 0.5F + 1.0F);
 			float f5 = 1.0F / (f4 + 1.0F);
 			float f6 = (float)i3;
-			GL.Scale(f5 * f6, 1.0F / f5 * f6, f5 * f6);
+            Minecraft.newRenderer.ModelMatrix.Scale(f5 * f6, 1.0F / f5 * f6, f5 * f6);
 		}
 
 		protected internal override void preRenderCallback(EntityLiving entityLiving1, float f2)

@@ -330,7 +330,7 @@ namespace net.minecraft.src
 			float f8 = (float)(i7 >> 16 & 255) / 255.0F;
 			float f9 = (float)(i7 >> 8 & 255) / 255.0F;
 			float f10 = (float)(i7 & 255) / 255.0F;
-			if (EntityRenderer.anaglyphEnable)
+			if (GameRenderer.anaglyphEnable)
 			{
 				float f11 = (f8 * 30.0F + f9 * 59.0F + f10 * 11.0F) / 100.0F;
 				float f12 = (f8 * 30.0F + f9 * 70.0F) / 100.0F;
@@ -393,7 +393,7 @@ namespace net.minecraft.src
 			float f9 = (float)(i7 >> 8 & 255) / 255.0F;
 			float f10 = (float)(i7 & 255) / 255.0F;
 			float f12;
-			if (EntityRenderer.anaglyphEnable)
+			if (GameRenderer.anaglyphEnable)
 			{
 				float f11 = (f8 * 30.0F + f9 * 59.0F + f10 * 11.0F) / 100.0F;
 				f12 = (f8 * 30.0F + f9 * 70.0F) / 100.0F;
@@ -1691,7 +1691,7 @@ namespace net.minecraft.src
 			float f9 = (float)(i8 >> 16 & 255) / 255.0F;
 			float f10 = (float)(i8 >> 8 & 255) / 255.0F;
 			float f11 = (float)(i8 & 255) / 255.0F;
-			if (EntityRenderer.anaglyphEnable)
+			if (GameRenderer.anaglyphEnable)
 			{
 				float f12 = (f9 * 30.0F + f10 * 59.0F + f11 * 11.0F) / 100.0F;
 				float f13 = (f9 * 30.0F + f10 * 70.0F) / 100.0F;
@@ -2125,7 +2125,7 @@ namespace net.minecraft.src
 			float f8 = (float)(i7 >> 16 & 255) / 255.0F;
 			float f9 = (float)(i7 >> 8 & 255) / 255.0F;
 			float f10 = (float)(i7 & 255) / 255.0F;
-			if (EntityRenderer.anaglyphEnable)
+			if (GameRenderer.anaglyphEnable)
 			{
 				float f11 = (f8 * 30.0F + f9 * 59.0F + f10 * 11.0F) / 100.0F;
 				float f12 = (f8 * 30.0F + f9 * 70.0F) / 100.0F;
@@ -2162,7 +2162,7 @@ namespace net.minecraft.src
 			float f9 = (float)(i8 >> 16 & 255) / 255.0F;
 			float f10 = (float)(i8 >> 8 & 255) / 255.0F;
 			float f11 = (float)(i8 & 255) / 255.0F;
-			if (EntityRenderer.anaglyphEnable)
+			if (GameRenderer.anaglyphEnable)
 			{
 				float f12 = (f9 * 30.0F + f10 * 59.0F + f11 * 11.0F) / 100.0F;
 				float f13 = (f9 * 30.0F + f10 * 70.0F) / 100.0F;
@@ -2757,7 +2757,7 @@ namespace net.minecraft.src
 			float f6 = (float)(i5 >> 16 & 255) / 255.0F;
 			float f7 = (float)(i5 >> 8 & 255) / 255.0F;
 			float f8 = (float)(i5 & 255) / 255.0F;
-			if (EntityRenderer.anaglyphEnable)
+			if (GameRenderer.anaglyphEnable)
 			{
 				float f9 = (f6 * 30.0F + f7 * 59.0F + f8 * 11.0F) / 100.0F;
 				float f10 = (f6 * 30.0F + f7 * 70.0F) / 100.0F;
@@ -3696,7 +3696,7 @@ namespace net.minecraft.src
 			float f6 = (float)(i5 >> 16 & 255) / 255.0F;
 			float f7 = (float)(i5 >> 8 & 255) / 255.0F;
 			float f8 = (float)(i5 & 255) / 255.0F;
-			if (EntityRenderer.anaglyphEnable)
+			if (GameRenderer.anaglyphEnable)
 			{
 				float f9 = (f6 * 30.0F + f7 * 59.0F + f8 * 11.0F) / 100.0F;
 				float f10 = (f6 * 30.0F + f7 * 70.0F) / 100.0F;
@@ -4865,7 +4865,7 @@ namespace net.minecraft.src
 				else if (i6 == 13)
 				{
 					block1.setBlockBoundsForItemRender();
-					GL.Translate(-0.5F, -0.5F, -0.5F);
+                    Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 					f7 = 0.0625F;
 					tessellator4.startDrawingQuads();
 					tessellator4.setNormal(0.0F, -1.0F, 0.0F);
@@ -4899,7 +4899,7 @@ namespace net.minecraft.src
 					this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
 					tessellator4.addTranslation(f7, 0.0F, 0.0F);
 					tessellator4.draw();
-					GL.Translate(0.5F, 0.5F, 0.5F);
+                    Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 				}
 				else if (i6 == 22)
 				{
@@ -4934,7 +4934,7 @@ namespace net.minecraft.src
 							block1.setBlockBounds(0.0F, 0.0F, 0.5F, 1.0F, 0.5F, 1.0F);
 						}
 
-						GL.Translate(-0.5F, -0.5F, -0.5F);
+                        Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 						tessellator4.startDrawingQuads();
 						tessellator4.setNormal(0.0F, -1.0F, 0.0F);
 						this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(0));
@@ -4959,13 +4959,13 @@ namespace net.minecraft.src
 						tessellator4.setNormal(1.0F, 0.0F, 0.0F);
 						this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
 						tessellator4.draw();
-						GL.Translate(0.5F, 0.5F, 0.5F);
+                        Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 					}
 				}
 				else if (i6 == 27)
 				{
 					i14 = 0;
-					GL.Translate(-0.5F, -0.5F, -0.5F);
+                    Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 					tessellator4.startDrawingQuads();
 
 					for (int i15 = 0; i15 < 8; ++i15)
@@ -5036,7 +5036,7 @@ namespace net.minecraft.src
 					}
 
 					tessellator4.draw();
-					GL.Translate(0.5F, 0.5F, 0.5F);
+                    Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 					block1.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 				}
 				else if (i6 == 11)
@@ -5065,7 +5065,7 @@ namespace net.minecraft.src
 							block1.setBlockBounds(0.5F - f8, 0.5F - f8 * 3.0F, -f8 * 2.0F, 0.5F + f8, 0.5F - f8, 1.0F + f8 * 2.0F);
 						}
 
-						GL.Translate(-0.5F, -0.5F, -0.5F);
+                        Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 						tessellator4.startDrawingQuads();
 						tessellator4.setNormal(0.0F, -1.0F, 0.0F);
 						this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(0));
@@ -5090,7 +5090,7 @@ namespace net.minecraft.src
 						tessellator4.setNormal(1.0F, 0.0F, 0.0F);
 						this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
 						tessellator4.draw();
-						GL.Translate(0.5F, 0.5F, 0.5F);
+                        Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 					}
 
 					block1.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -5116,7 +5116,7 @@ namespace net.minecraft.src
 							block1.setBlockBounds(0.5F - f8, 0.5F, 0.0F, 0.5F + f8, 1.0F - f8, 1.0F);
 						}
 
-						GL.Translate(-0.5F, -0.5F, -0.5F);
+                        Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 						tessellator4.startDrawingQuads();
 						tessellator4.setNormal(0.0F, -1.0F, 0.0F);
 						this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(0));
@@ -5141,7 +5141,7 @@ namespace net.minecraft.src
 						tessellator4.setNormal(1.0F, 0.0F, 0.0F);
 						this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
 						tessellator4.draw();
-						GL.Translate(0.5F, 0.5F, 0.5F);
+                        Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 					}
 
 					block1.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -5155,7 +5155,7 @@ namespace net.minecraft.src
 				}
 
 				block1.setBlockBoundsForItemRender();
-				GL.Translate(-0.5F, -0.5F, -0.5F);
+                Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 				tessellator4.startDrawingQuads();
 				tessellator4.setNormal(0.0F, -1.0F, 0.0F);
 				this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSideAndMetadata(0, i2));
@@ -5194,7 +5194,7 @@ namespace net.minecraft.src
 				tessellator4.setNormal(1.0F, 0.0F, 0.0F);
 				this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSideAndMetadata(5, i2));
 				tessellator4.draw();
-				GL.Translate(0.5F, 0.5F, 0.5F);
+                Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 			}
 
 		}

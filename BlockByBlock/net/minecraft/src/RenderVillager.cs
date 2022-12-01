@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -55,7 +56,7 @@ namespace net.minecraft.src
 				this.shadowSize = 0.5F;
 			}
 
-			GL.Scale(f3, f3, f3);
+            Minecraft.newRenderer.ModelMatrix.Scale(f3, f3, f3);
 		}
 
 		protected internal override void passSpecialRender(EntityLiving entityLiving1, double d2, double d4, double d6)

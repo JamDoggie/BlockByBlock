@@ -22,9 +22,10 @@ namespace BlockByBlock.helpers
         /// <param name="aspect"></param>
         /// <param name="zNear"></param>
         /// <param name="zFar"></param>
-        public static void Perspective(float fovy, float aspect, float zNear, float zFar)
+        [Obsolete("This method uses the legacy OpenGL fixed pipeline. Please use the Perspective() method with the programmable pipeline instead.")]
+        public static void LegacyPipelinePerspective(float fovy, float aspect, float zNear, float zFar)
         {
-            float radians = fovy / 2.0F * 3.1415927F / 180.0F;
+            float radians = fovy / 2.0F * (float)Math.PI / 180.0F;
             float deltaZ = zFar - zNear;
             float sine = (float)Math.Sin((double)radians);
             if (deltaZ != 0.0F && sine != 0.0F && aspect != 0.0F)
@@ -43,6 +44,30 @@ namespace BlockByBlock.helpers
                 matrix[15] = 0.0F;
                 GL.MultMatrix(matrix);
             }
+        }
+
+        public static Matrix4 Perspective(float fovy, float aspect, float zNear, float zFar)
+        {
+            float radians = fovy / 2.0F * (float)Math.PI / 180.0F;
+            float deltaZ = zFar - zNear;
+            float sine = (float)Math.Sin((double)radians);
+            if (deltaZ != 0.0F && sine != 0.0F && aspect != 0.0F)
+            {
+                float cotangent = (float)Math.Cos((double)radians) / sine;
+
+                Matrix4 matrix = Matrix4.Identity;
+                
+                matrix.M11 = cotangent / aspect;
+                matrix.M22 = cotangent;
+                matrix.M33 = -(zFar + zNear) / deltaZ;
+                matrix.M34 = -1.0F;
+                matrix.M43 = -2.0F * zNear * zFar / deltaZ;
+                matrix.M44 = 0.0F;
+                
+                return matrix;
+            }
+
+            return Matrix4.Identity;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -13,8 +14,8 @@ namespace net.minecraft.src
 
 		public virtual void doRenderFallingSand(EntityFallingSand entityFallingSand1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL.PushMatrix();
-			GL.Translate((float)d2, (float)d4, (float)d6);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
 			this.loadTexture("/terrain.png");
 			Block block10 = Block.blocksList[entityFallingSand1.blockID];
 			World world11 = entityFallingSand1.World;
@@ -35,7 +36,7 @@ namespace net.minecraft.src
 			}
 
 			GL.Enable(EnableCap.Lighting);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 		}
 
 		public override void doRender(Entity entity1, double d2, double d4, double d6, float f8, float f9)

@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -32,24 +33,24 @@ namespace net.minecraft.src
 
 		public override void render(Entity entity1, float f2, float f3, float f4, float f5, float f6, float f7)
 		{
-			GL.PushMatrix();
-			GL.Scale(2.0F, 2.0F, 2.0F);
-			GL.Translate(0.0F, -0.5F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Scale(2.0F, 2.0F, 2.0F);
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, -0.5F, 0.0F);
 			this.field_41059_i.render(f7);
-			GL.Rotate(f3, 0.0F, 1.0F, 0.0F);
-			GL.Translate(0.0F, 0.8F + f4, 0.0F);
-			GL.Rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(f3, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.8F + f4, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
 			this.field_41058_h.render(f7);
 			float f8 = 0.875F;
-			GL.Scale(f8, f8, f8);
-			GL.Rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
-			GL.Rotate(f3, 0.0F, 1.0F, 0.0F);
+			Minecraft.newRenderer.ModelMatrix.Scale(f8, f8, f8);
+			Minecraft.newRenderer.ModelMatrix.Rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(f3, 0.0F, 1.0F, 0.0F);
 			this.field_41058_h.render(f7);
-			GL.Scale(f8, f8, f8);
-			GL.Rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
-			GL.Rotate(f3, 0.0F, 1.0F, 0.0F);
+			Minecraft.newRenderer.ModelMatrix.Scale(f8, f8, f8);
+			Minecraft.newRenderer.ModelMatrix.Rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(f3, 0.0F, 1.0F, 0.0F);
 			this.field_41057_g.render(f7);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 		}
 
 		public override void setRotationAngles(float f1, float f2, float f3, float f4, float f5, float f6)

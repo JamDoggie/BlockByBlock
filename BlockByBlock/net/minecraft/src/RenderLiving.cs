@@ -41,8 +41,8 @@ namespace net.minecraft.src
 
 		public virtual void doRenderLiving(EntityLiving entityLiving1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL.PushMatrix();
-			GL.Disable(EnableCap.CullFace);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            GL.Disable(EnableCap.CullFace);
 			this.mainModel.onGround = this.renderSwingProgress(entityLiving1, f9);
 			if (this.renderPassModel != null)
 			{
@@ -71,9 +71,9 @@ namespace net.minecraft.src
 				this.rotateCorpse(entityLiving1, f13, f10, f9);
 				float f14 = 0.0625F;
 				GL.Enable(EnableCap.RescaleNormal);
-				GL.Scale(-1.0F, -1.0F, 1.0F);
+                Minecraft.newRenderer.ModelMatrix.Scale(-1.0F, -1.0F, 1.0F);
 				this.preRenderCallback(entityLiving1, f9);
-				GL.Translate(0.0F, -24.0F * f14 - 0.0078125F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, -24.0F * f14 - 0.0078125F, 0.0F);
 				float f15 = entityLiving1.field_705_Q + (entityLiving1.field_704_R - entityLiving1.field_705_Q) * f9;
 				float f16 = entityLiving1.field_703_S - entityLiving1.field_704_R * (1.0F - f9);
 				if (entityLiving1.Child)
@@ -118,12 +118,12 @@ namespace net.minecraft.src
 								GL.Color4(0.5F * f22, 0.25F * f22, 0.8F * f22, 1.0F);
 								GL.BlendFunc(BlendingFactor.SrcColor, BlendingFactor.One);
 								GL.MatrixMode(MatrixMode.Texture);
-								GL.LoadIdentity();
+                                Minecraft.newRenderer.TextureMatrix.LoadIdentity();
 								float f23 = f19 * (0.001F + (float)i21 * 0.003F) * 20.0F;
 								float f24 = 0.33333334F;
-								GL.Scale(f24, f24, f24);
-								GL.Rotate(30.0F - (float)i21 * 60.0F, 0.0F, 0.0F, 1.0F);
-								GL.Translate(0.0F, f23, 0.0F);
+                                Minecraft.newRenderer.TextureMatrix.Scale(f24, f24, f24);
+                                Minecraft.newRenderer.TextureMatrix.Rotate(30.0F - (float)i21 * 60.0F, 0.0F, 0.0F, 1.0F);
+                                Minecraft.newRenderer.TextureMatrix.Translate(0.0F, f23, 0.0F);
 								GL.MatrixMode(MatrixMode.Modelview);
 								this.renderPassModel.render(entityLiving1, f16, f15, f13, f11 - f10, f12, f14);
 							}
@@ -131,7 +131,7 @@ namespace net.minecraft.src
 							GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 							GL.MatrixMode(MatrixMode.Texture);
 							GL.DepthMask(true);
-							GL.LoadIdentity();
+                            Minecraft.newRenderer.TextureMatrix.LoadIdentity();
 							GL.MatrixMode(MatrixMode.Modelview);
 							GL.Enable(EnableCap.Lighting);
 							GL.Disable(EnableCap.Blend);
@@ -208,7 +208,7 @@ namespace net.minecraft.src
 			GL.Enable(EnableCap.Texture2D);
 			OpenGlHelper.ActiveTexture = OpenGlHelper.defaultTexUnit;
 			GL.Enable(EnableCap.CullFace);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			this.passSpecialRender(entityLiving1, d2, d4, d6);
 		}
 
@@ -220,12 +220,12 @@ namespace net.minecraft.src
 
 		protected internal virtual void renderLivingAt(EntityLiving entityLiving1, double d2, double d4, double d6)
 		{
-			GL.Translate((float)d2, (float)d4, (float)d6);
+            Minecraft.newRenderer.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
 		}
 
 		protected internal virtual void rotateCorpse(EntityLiving entityLiving1, float f2, float f3, float f4)
 		{
-			GL.Rotate(180.0F - f3, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F - f3, 0.0F, 1.0F, 0.0F);
 			if (entityLiving1.deathTime > 0)
 			{
 				float f5 = ((float)entityLiving1.deathTime + f4 - 1.0F) / 20.0F * 1.6F;
@@ -235,7 +235,7 @@ namespace net.minecraft.src
 					f5 = 1.0F;
 				}
 
-				GL.Rotate(f5 * this.getDeathMaxRotation(entityLiving1), 0.0F, 0.0F, 1.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(f5 * this.getDeathMaxRotation(entityLiving1), 0.0F, 0.0F, 1.0F);
 			}
 
 		}
@@ -295,12 +295,12 @@ namespace net.minecraft.src
 				FontRenderer fontRenderer11 = this.FontRendererFromRenderManager;
 				float f12 = 1.6F;
 				float f13 = 0.016666668F * f12;
-				GL.PushMatrix();
-				GL.Translate((float)d3 + 0.0F, (float)d5 + 2.3F, (float)d7);
+				Minecraft.newRenderer.ModelMatrix.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.Translate((float)d3 + 0.0F, (float)d5 + 2.3F, (float)d7);
 				GL.Normal3(0.0F, 1.0F, 0.0F);
-				GL.Rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-				GL.Rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-				GL.Scale(-f13, -f13, f13);
+				Minecraft.newRenderer.ModelMatrix.Rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+				Minecraft.newRenderer.ModelMatrix.Rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Scale(-f13, -f13, f13);
 				GL.Disable(EnableCap.Lighting);
 				GL.DepthMask(false);
 				GL.Disable(EnableCap.DepthTest);
@@ -330,7 +330,7 @@ namespace net.minecraft.src
 				GL.Enable(EnableCap.Lighting);
 				GL.Disable(EnableCap.Blend);
 				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			}
 		}
 

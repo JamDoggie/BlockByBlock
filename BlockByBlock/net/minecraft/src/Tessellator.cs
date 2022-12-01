@@ -1,14 +1,15 @@
 ﻿namespace net.minecraft.src
 {
     using BlockByBlock.helpers;
-    using net.minecraft.client;
+	using BlockByBlock.net.minecraft.render;
+	using net.minecraft.client;
     using OpenTK.Graphics.OpenGL;
-    using System.Runtime.InteropServices;
+	using OpenTK.Mathematics;
+	using System.Runtime.InteropServices;
 
     public class Tessellator
 	{
-		private static bool convertQuadsToTriangles = false;
-		private static bool tryVBO = false;
+		private static bool convertQuadsToTriangles { get; set; } = false;
 		private ByteBuffer byteBuffer;
 		private int[] rawBuffer;
 		private int vertexCount = 0;
@@ -28,31 +29,33 @@
 		private double yOffset;
 		private double zOffset;
 		private int normal;
-		public static readonly Tessellator instance = new Tessellator(2097152);
+		public static readonly Tessellator instance = new(2097152);
 		private bool isDrawing = false;
-		private bool useVBO = false;
 		private int[] vertexBuffers;
 		private int vboIndex = 0;
 		private int vboCount = 10;
 		private int bufferSize;
 		private IntPtr bufferPointer;
+		private int VAO;
 
-		private Tessellator(int i1)
+		public bool CurrentlyBuildingVBO { get; set; } = false;
+        
+		private Tessellator(int bufSize)
 		{
-			bufferSize = i1;
-			byteBuffer = GLAllocation.createDirectByteBuffer(i1 * 4);
+			bufferSize = bufSize;
+			byteBuffer = GLAllocation.createDirectByteBuffer(bufSize * 4);
             
 			byte[] underlyingBuffer = byteBuffer.GetUnderlyingBuffer();
 			bufferPointer = Marshal.AllocHGlobal(underlyingBuffer.Length);
-			rawBuffer = new int[i1];
-			useVBO = tryVBO && MinecraftApplet.OpenGLExtensions.Contains("GL_ARB_vertex_buffer_object");
-			if (useVBO)
-			{
-				vertexBuffers = new int[vboCount];
-				GL.Arb.GenBuffers(vertexBuffers.Length, vertexBuffers);
-			}
+			rawBuffer = new int[bufSize];
 
-		}
+			// VBOs
+			vertexBuffers = new int[vboCount];
+			GL.GenBuffers(vertexBuffers.Length, vertexBuffers);
+
+            VAO = GL.GenVertexArray();
+			GL.BindVertexArray(VAO);
+        }
 
         ~Tessellator()
         {
@@ -60,9 +63,17 @@
         }
 
 		private bool hasCopiedBuffer = false;
+		private Random testRand = new();
+
+		private bool test = false;
 
 		public unsafe virtual int draw()
 		{
+			if (CurrentlyBuildingVBO)
+			{
+				throw new InvalidOperationException("Cannot draw while builing a VBO!");
+			}
+
 			if (!isDrawing)
 			{
 				throw new System.InvalidOperationException("Not tesselating!");
@@ -72,126 +83,26 @@
 				isDrawing = false;
 				if (vertexCount > 0)
 				{
-					byteBuffer.clear();
-					byteBuffer.Put(rawBuffer, rawBufferIndex);
-					byteBuffer.position(0);
-					byteBuffer.limit(rawBufferIndex * 4);
+                    byteBuffer.clear();
+                    byteBuffer.Put(rawBuffer, rawBufferIndex);
+                    byteBuffer.position(0);
+                    byteBuffer.limit(rawBufferIndex * 4);
 
-					Marshal.Copy(byteBuffer.GetUnderlyingBuffer(), 0, bufferPointer, rawBufferIndex * 4);
-                    
+                    vboIndex = (vboIndex + 1) % vboCount;
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffers[vboIndex]);
+                    GL.BufferData(BufferTarget.ArrayBuffer, (int)byteBuffer.getLimit(), byteBuffer.GetUnderlyingBuffer(), BufferUsageHint.StreamDraw);
 
-                    if (useVBO)
-					{
-						vboIndex = (vboIndex + 1) % vboCount;
-						GL.Arb.BindBuffer(BufferTargetArb.ArrayBuffer, vertexBuffers[vboIndex]);
-						GL.Arb.BufferData(BufferTargetArb.ArrayBuffer, (int)byteBuffer.getLimit(), byteBuffer.GetUnderlyingBuffer(), BufferUsageArb.StreamDraw);
-					}
-                    
-					if (hasTexture)
-					{
-						if (useVBO)
-						{
-							GL.TexCoordPointer(2, TexCoordPointerType.Float, 32, 12);
-						}
-						else
-						{
-							IntPtr ptr2 = bufferPointer + 3 * sizeof(float); 
-							GL.TexCoordPointer(2, TexCoordPointerType.Float, 32, ptr2);
-						}
+					setupVertexArrays(hasColor, hasTexture, hasBrightness, hasNormals);
 
-                        GL.EnableClientState(ArrayCap.TextureCoordArray);
-					}
-
-					if (hasBrightness)
-					{
-						OpenGlHelper.ClientActiveTexture = OpenGlHelper.lightmapTexUnit;
-						if (useVBO)
-						{
-							GL.TexCoordPointer(2, TexCoordPointerType.Short, 32, 28);
-						}
-						else
-						{
-							IntPtr ptr2 = bufferPointer + 14 * sizeof(short);
-							GL.TexCoordPointer(2, TexCoordPointerType.Short, 32, ptr2);
-						}
-                        
-						GL.EnableClientState(ArrayCap.TextureCoordArray);
-						OpenGlHelper.ClientActiveTexture = OpenGlHelper.defaultTexUnit;
-					}
-
-					if (hasColor)
-					{
-						if (useVBO)
-						{
-							GL.ColorPointer(4, ColorPointerType.UnsignedByte, 32, 20);
-						}
-						else
-						{
-							IntPtr ptr2 = bufferPointer + 20 * sizeof(byte);
-							GL.ColorPointer(4, ColorPointerType.UnsignedByte, 32, ptr2);
-						}
-
-						GL.EnableClientState(ArrayCap.ColorArray);
-					}
-
-					if (hasNormals)
-					{
-						if (useVBO)
-						{
-							GL.NormalPointer(NormalPointerType.Byte, 32, 24);
-						}
-						else
-						{
-							IntPtr ptr2 = bufferPointer + 24 * sizeof(byte);
-							GL.NormalPointer(NormalPointerType.Byte, 32, ptr2);
-						}
-
-						GL.EnableClientState(ArrayCap.NormalArray);
-					}
-
-					if (useVBO)
-					{
-						GL.VertexPointer(3, VertexPointerType.Float, 32, 0);
-					}
-					else
-					{
-						IntPtr ptr2 = bufferPointer;
-						GL.VertexPointer(3, VertexPointerType.Float, 32, ptr2);
-					}
-
-					GL.EnableClientState(ArrayCap.VertexArray);
-					if (drawMode == 7 && convertQuadsToTriangles)
-					{
-						GL.DrawArrays(PrimitiveType.Triangles, 0, vertexCount);
-					}
-					else
-					{
-						GL.DrawArrays((PrimitiveType)drawMode, 0, vertexCount);
-					}
-
-					GL.DisableClientState(ArrayCap.VertexArray);
-					if (hasTexture)
-					{
-						GL.DisableClientState(ArrayCap.TextureCoordArray);
-					}
-
-					if (hasBrightness)
-					{
-						OpenGlHelper.ClientActiveTexture = OpenGlHelper.lightmapTexUnit;
-						GL.DisableClientState(ArrayCap.TextureCoordArray);
-						OpenGlHelper.ClientActiveTexture = OpenGlHelper.defaultTexUnit;
-					}
-
-					if (hasColor)
-					{
-						GL.DisableClientState(ArrayCap.ColorArray);
-					}
-
-					if (hasNormals)
-					{
-						GL.DisableClientState(ArrayCap.NormalArray);
-					}
-				}
+                    if (drawMode == 7 && convertQuadsToTriangles)
+                    {
+                        GL.DrawArrays(PrimitiveType.Triangles, 0, vertexCount);
+                    }
+                    else
+                    {
+                        GL.DrawArrays((PrimitiveType)drawMode, 0, vertexCount);
+                    }
+                }
 
 				int i1 = rawBufferIndex * 4;
 				reset();
@@ -199,22 +110,62 @@
 			}
 		}
 
-		private void reset()
+		public virtual void drawVBO(VertexBuffer vbo)
+		{
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo.GLHandle);
+
+			setupVertexArrays(vbo.HasColor, vbo.HasTexture, vbo.HasBrightness, vbo.HasNormal);
+
+            if (drawMode == 7 && convertQuadsToTriangles)
+            {
+                GL.DrawArrays(PrimitiveType.Triangles, 0, vbo.VertexCount);
+            }
+            else
+            {
+                GL.DrawArrays((PrimitiveType)drawMode, 0, vbo.VertexCount);
+            }
+        }
+
+        private void setupVertexArrays(bool hasColor, bool hasTexture, bool hasBrightness, bool hasNormals)
+        {
+            // Vertex
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 32, 0);
+            GL.EnableVertexAttribArray(0);
+
+            // Texture Coords
+            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 32, 12);
+            GL.EnableVertexAttribArray(1);
+
+            // Color
+            GL.VertexAttribPointer(2, 1, VertexAttribPointerType.Float, false, 32, 20);
+            GL.EnableVertexAttribArray(2);
+
+            // Normal
+            GL.VertexAttribPointer(3, 1, VertexAttribPointerType.Float, false, 32, 24);
+            GL.EnableVertexAttribArray(3);
+
+            // Brightness
+            GL.VertexAttribPointer(4, 1, VertexAttribPointerType.Float, false, 32, 28);
+            GL.EnableVertexAttribArray(4);
+        }
+
+
+        private void reset()
 		{
 			vertexCount = 0;
 			byteBuffer.clear();
 			rawBufferIndex = 0;
 			addedVertices = 0;
-		}
+        }
 
 		public virtual void startDrawingQuads()
 		{
 			startDrawing(7);
 		}
 
-		public virtual void startDrawing(int i1)
+		public virtual void startDrawing(int mode)
 		{
-			if (isDrawing)
+            if (isDrawing)
 			{
 				throw new System.InvalidOperationException("Already tesselating!");
 			}
@@ -222,7 +173,7 @@
 			{
 				isDrawing = true;
 				reset();
-				drawMode = i1;
+				drawMode = mode;
 				hasNormals = false;
 				hasColor = false;
 				hasTexture = false;
@@ -230,6 +181,32 @@
 				isColorDisabled = false;
 			}
 		}
+
+        public virtual void StartBuildingVBO()
+		{
+			CurrentlyBuildingVBO = true;
+		}
+
+        public virtual VertexBuffer BuildCurrentVBO()
+		{
+            byteBuffer.clear();
+            byteBuffer.Put(rawBuffer, rawBufferIndex);
+            byteBuffer.position(0);
+            byteBuffer.limit(rawBufferIndex * 4);
+
+            int bufferHandle = GL.GenBuffer();
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, bufferHandle);
+            GL.BufferData(BufferTarget.ArrayBuffer, rawBufferIndex * 4, byteBuffer.GetUnderlyingBuffer(), BufferUsageHint.DynamicDraw);
+
+			CurrentlyBuildingVBO = false;
+            
+			VertexBuffer vbo = new(rawBufferIndex * 4, vertexCount, bufferHandle, hasBrightness, hasColor, hasTexture, hasNormals);
+
+			reset();
+
+            return vbo;
+        }
 
 		public virtual void setTextureUV(double d1, double d3)
 		{
@@ -343,11 +320,19 @@
 					{
 						rawBuffer[rawBufferIndex + 7] = rawBuffer[rawBufferIndex - i8 + 7];
 					}
+					else
+                    {
+                        rawBuffer[rawBufferIndex + 7] = 0x20;
+                    }
 
-					if (hasColor)
+                    if (hasColor)
 					{
 						rawBuffer[rawBufferIndex + 5] = rawBuffer[rawBufferIndex - i8 + 5];
 					}
+					else
+					{
+                        rawBuffer[rawBufferIndex + 5] = 0xFFFFFF;
+                    }
 
 					rawBuffer[rawBufferIndex + 0] = rawBuffer[rawBufferIndex - i8 + 0];
 					rawBuffer[rawBufferIndex + 1] = rawBuffer[rawBufferIndex - i8 + 1];
@@ -367,13 +352,21 @@
 			{
 				rawBuffer[rawBufferIndex + 7] = brightness;
 			}
+            else
+            {
+                rawBuffer[rawBufferIndex + 7] = 0x20;
+            }
 
-			if (hasColor)
+            if (hasColor)
 			{
 				rawBuffer[rawBufferIndex + 5] = color;
 			}
+            else
+            {
+                rawBuffer[rawBufferIndex + 5] = 0xFFFFFF;
+            }
 
-			if (hasNormals)
+            if (hasNormals)
 			{
 				rawBuffer[rawBufferIndex + 6] = normal;
 			}

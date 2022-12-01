@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -18,11 +19,11 @@ namespace net.minecraft.src
 		{
 			float f5 = entitySquid1.field_21088_b + (entitySquid1.field_21089_a - entitySquid1.field_21088_b) * f4;
 			float f6 = entitySquid1.field_21086_f + (entitySquid1.field_21087_c - entitySquid1.field_21086_f) * f4;
-			GL.Translate(0.0F, 0.5F, 0.0F);
-			GL.Rotate(180.0F - f3, 0.0F, 1.0F, 0.0F);
-			GL.Rotate(f5, 1.0F, 0.0F, 0.0F);
-			GL.Rotate(f6, 0.0F, 1.0F, 0.0F);
-			GL.Translate(0.0F, -1.2F, 0.0F);
+			Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.5F, 0.0F);
+			Minecraft.newRenderer.ModelMatrix.Rotate(180.0F - f3, 0.0F, 1.0F, 0.0F);
+			Minecraft.newRenderer.ModelMatrix.Rotate(f5, 1.0F, 0.0F, 0.0F);
+			Minecraft.newRenderer.ModelMatrix.Rotate(f6, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, -1.2F, 0.0F);
 		}
 
 		protected internal virtual void func_21005_a(EntitySquid entitySquid1, float f2)

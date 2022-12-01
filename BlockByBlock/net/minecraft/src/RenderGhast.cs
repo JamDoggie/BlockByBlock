@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -19,7 +20,7 @@ namespace net.minecraft.src
 			f4 = 1.0F / (f4 * f4 * f4 * f4 * f4 * 2.0F + 1.0F);
 			float f5 = (8.0F + f4) / 2.0F;
 			float f6 = (8.0F + 1.0F / f4) / 2.0F;
-			GL.Scale(f6, f5, f6);
+            Minecraft.newRenderer.ModelMatrix.Scale(f6, f5, f6);
 			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 		}
 

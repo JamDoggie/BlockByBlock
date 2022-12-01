@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -14,7 +15,7 @@ namespace net.minecraft.src
 
 		protected internal virtual void preRenderScale(EntityGiantZombie entityGiantZombie1, float f2)
 		{
-			GL.Scale(this.scale, this.scale, this.scale);
+            Minecraft.newRenderer.ModelMatrix.Scale(this.scale, this.scale, this.scale);
 		}
 
 		protected internal override void preRenderCallback(EntityLiving entityLiving1, float f2)

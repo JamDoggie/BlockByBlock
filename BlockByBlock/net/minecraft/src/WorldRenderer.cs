@@ -1,4 +1,6 @@
 ﻿using BlockByBlock.helpers;
+using BlockByBlock.net.minecraft.render;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +23,14 @@ namespace net.minecraft.src
 		public int posXClip;
 		public int posYClip;
 		public int posZClip;
+
+        public int X2 = 0;
+        public int Y2 = 0;
+        public int Z2 = 0;
+        public double X1 = 0;
+        public double Y1 = 0;
+        public double Z1 = 0;
+
 		public bool isInFrustum = false;
 		public bool[] skipRenderPass = new bool[2];
 		public int posXPlus;
@@ -37,6 +47,8 @@ namespace net.minecraft.src
 		public System.Collections.IList tileEntityRenderers = new ArrayList();
 		private System.Collections.IList tileEntities;
 		private int bytesDrawn;
+
+		public VertexBuffer?[] VBOsToRender { get; set; } = new VertexBuffer?[2];
 
 		public WorldRenderer(World world1, System.Collections.IList list2, int i3, int i4, int i5, int i6)
 		{
@@ -67,16 +79,24 @@ namespace net.minecraft.src
 				this.posZMinus = i3 - this.posZClip;
 				float f4 = 6.0F;
 				this.rendererBoundingBox = AxisAlignedBB.getBoundingBox((double)((float)i1 - f4), (double)((float)i2 - f4), (double)((float)i3 - f4), (double)((float)(i1 + 16) + f4), (double)((float)(i2 + 16) + f4), (double)((float)(i3 + 16) + f4));
-				GL.NewList(this.glRenderList + 2, ListMode.Compile);
-				RenderItem.renderAABB(AxisAlignedBB.getBoundingBoxFromPool((double)((float)this.posXClip - f4), (double)((float)this.posYClip - f4), (double)((float)this.posZClip - f4), (double)((float)(this.posXClip + 16) + f4), (double)((float)(this.posYClip + 16) + f4), (double)((float)(this.posZClip + 16) + f4)));
-				GL.EndList();
+				
 				this.markDirty();
 			}
 		}
 
-		private void setupGLTranslation()
+        public virtual void SetRenderPos(double x, double y, double z, int x2, int y2, int z2)
+        {
+            this.X1 = x;
+            this.Y1 = y;
+            this.Z1 = z;
+            this.X2 = x2;
+            this.Y2 = y2;
+            this.Z2 = z2;
+        }
+
+        internal void setupGLTranslation(MatrixStack stack)
 		{
-			GL.Translate((float)this.posXClip, (float)this.posYClip, (float)this.posZClip);
+			stack.Translate((float)this.posXClip, (float)this.posYClip, (float)this.posZClip);
 		}
 
 		public virtual void updateRenderer()
@@ -106,13 +126,13 @@ namespace net.minecraft.src
 				{
 					++chunksUpdated;
 					RenderBlocks renderBlocks10 = new RenderBlocks(chunkCache9);
-					this.bytesDrawn = 0;
+					//bytesDrawn = 0;
 
-					for (int i11 = 0; i11 < 2; ++i11)
+					for (int currentPass = 0; currentPass < 2; ++currentPass)
 					{
 						bool z12 = false;
-						bool z13 = false;
-						bool z14 = false;
+						bool rendererContainsBlocks = false;
+						bool blockFound = false;
 
 						for (int i15 = i2; i15 < i5; ++i15)
 						{
@@ -123,21 +143,23 @@ namespace net.minecraft.src
 									int i18 = chunkCache9.getBlockId(i17, i15, i16);
 									if (i18 > 0)
 									{
-										if (!z14)
+										if (!blockFound)
 										{
-											z14 = true;
-											GL.NewList(this.glRenderList + i11, ListMode.Compile);
-											GL.PushMatrix();
-											this.setupGLTranslation();
+											blockFound = true;
+
+											tessellator.StartBuildingVBO();
+
+                                            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+											this.setupGLTranslation(Minecraft.newRenderer.ModelMatrix);
 											float f19 = 1F;
-											GL.Translate(-8.0F, -8.0F, -8.0F);
-											GL.Scale(f19, f19, f19);
-											GL.Translate(8.0F, 8.0F, 8.0F);
-											tessellator.startDrawingQuads();
+											Minecraft.newRenderer.ModelMatrix.Translate(-8.0F, -8.0F, -8.0F);
+											Minecraft.newRenderer.ModelMatrix.Scale(f19, f19, f19);
+                                            Minecraft.newRenderer.ModelMatrix.Translate(8.0F, 8.0F, 8.0F);
+                                            
 											tessellator.setTranslation((double)(-this.posX), (double)(-this.posY), (double)(-this.posZ));
 										}
                                         
-										if (i11 == 0 && Block.blocksList[i18].hasTileEntity())
+										if (currentPass == 0 && Block.blocksList[i18].hasTileEntity())
 										{
 											TileEntity tileEntity23 = chunkCache9.getBlockTileEntity(i17, i15, i16);
 											if (TileEntityRenderer.instance.hasSpecialRenderer(tileEntity23))
@@ -147,35 +169,37 @@ namespace net.minecraft.src
 										}
 
 										Block block24 = Block.blocksList[i18];
-										int i20 = block24.RenderBlockPass;
-										if (i20 != i11)
+										int renderPass = block24.RenderBlockPass;
+										if (renderPass != currentPass)
 										{
 											z12 = true;
 										}
-										else if (i20 == i11)
+										else if (renderPass == currentPass)
 										{
-											z13 |= renderBlocks10.renderBlockByRenderType(block24, i17, i15, i16);
+											rendererContainsBlocks |= renderBlocks10.renderBlockByRenderType(block24, i17, i15, i16);
 										}
 									}
 								}
 							}
 						}
 
-						if (z14)
+						if (blockFound)
 						{
-							this.bytesDrawn += tessellator.draw();
-							GL.PopMatrix();
-							GL.EndList();
+							//this.bytesDrawn += tessellator.draw();
+                            Minecraft.newRenderer.ModelMatrix.PopMatrix();
+
+							VBOsToRender[currentPass] = tessellator.BuildCurrentVBO();
+
 							tessellator.setTranslation(0.0D, 0.0D, 0.0D);
 						}
 						else
 						{
-							z13 = false;
+							rendererContainsBlocks = false;
 						}
 
-						if (z13)
+						if (rendererContainsBlocks)
 						{
-							this.skipRenderPass[i11] = false;
+							this.skipRenderPass[currentPass] = false;
 						}
 
 						if (!z12)
@@ -233,8 +257,9 @@ namespace net.minecraft.src
 
 		public virtual void callOcclusionQueryList()
 		{
-			GL.CallList(this.glRenderList + 2);
-		}
+			float f4 = 6.0F;
+            Render.renderAABB(AxisAlignedBB.getBoundingBoxFromPool((double)((float)this.posXClip - f4), (double)((float)this.posYClip - f4), (double)((float)this.posZClip - f4), (double)((float)(this.posXClip + 16) + f4), (double)((float)(this.posYClip + 16) + f4), (double)((float)(this.posZClip + 16) + f4)));
+        }
 
 		public virtual bool skipAllRenderPasses()
 		{

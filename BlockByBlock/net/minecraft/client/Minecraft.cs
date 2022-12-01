@@ -7,112 +7,19 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using net.minecraft.src;
+
+using Timer = net.minecraft.src.Timer;
+using MathHelper = net.minecraft.src.MathHelper;
 
 namespace net.minecraft.client
 {
-
-	using AchievementList = net.minecraft.src.AchievementList;
-	using AnvilSaveConverter = net.minecraft.src.AnvilSaveConverter;
-	using AxisAlignedBB = net.minecraft.src.AxisAlignedBB;
-	using Block = net.minecraft.src.Block;
-	using ChunkCoordinates = net.minecraft.src.ChunkCoordinates;
-	using ChunkProviderLoadOrGenerate = net.minecraft.src.ChunkProviderLoadOrGenerate;
-	using ColorizerFoliage = net.minecraft.src.ColorizerFoliage;
-	using ColorizerGrass = net.minecraft.src.ColorizerGrass;
-	using ColorizerWater = net.minecraft.src.ColorizerWater;
-	using EffectRenderer = net.minecraft.src.EffectRenderer;
-	using EntityClientPlayerMP = net.minecraft.src.EntityClientPlayerMP;
-	using EntityLiving = net.minecraft.src.EntityLiving;
-	using EntityPlayer = net.minecraft.src.EntityPlayer;
-	using EntityPlayerSP = net.minecraft.src.EntityPlayerSP;
-	using EntityRenderer = net.minecraft.src.EntityRenderer;
-	using EnumMovingObjectType = net.minecraft.src.EnumMovingObjectType;
-	using EnumOS2 = net.minecraft.src.EnumOS2;
-	using EnumOSMappingHelper = net.minecraft.src.EnumOSMappingHelper;
-	using EnumOptions = net.minecraft.src.EnumOptions;
-	using FontRenderer = net.minecraft.src.FontRenderer;
-	using GLAllocation = net.minecraft.src.GLAllocation;
-	using GameSettings = net.minecraft.src.GameSettings;
-	using GameWindowListener = net.minecraft.src.GameWindowListener;
-	using GuiAchievement = net.minecraft.src.GuiAchievement;
-	using GuiChat = net.minecraft.src.GuiChat;
-	using GuiConflictWarning = net.minecraft.src.GuiConflictWarning;
-	using GuiConnecting = net.minecraft.src.GuiConnecting;
-	using GuiErrorScreen = net.minecraft.src.GuiErrorScreen;
-	using GuiGameOver = net.minecraft.src.GuiGameOver;
-	using GuiIngame = net.minecraft.src.GuiIngame;
-	using GuiIngameMenu = net.minecraft.src.GuiIngameMenu;
-	using GuiInventory = net.minecraft.src.GuiInventory;
-	using GuiMainMenu = net.minecraft.src.GuiMainMenu;
-	using GuiMemoryErrorScreen = net.minecraft.src.GuiMemoryErrorScreen;
-	using GuiScreen = net.minecraft.src.GuiScreen;
-	using GuiSleepMP = net.minecraft.src.GuiSleepMP;
-	using IChunkProvider = net.minecraft.src.IChunkProvider;
-	using ISaveFormat = net.minecraft.src.ISaveFormat;
-	using ISaveHandler = net.minecraft.src.ISaveHandler;
-	using Item = net.minecraft.src.Item;
-	using ItemBlock = net.minecraft.src.ItemBlock;
-	using ItemRenderer = net.minecraft.src.ItemRenderer;
-	using ItemStack = net.minecraft.src.ItemStack;
-	using KeyBinding = net.minecraft.src.KeyBinding;
-	using LoadingScreenRenderer = net.minecraft.src.LoadingScreenRenderer;
-	using MathHelper = net.minecraft.src.MathHelper;
-	using MinecraftError = net.minecraft.src.MinecraftError;
-	using MinecraftException = net.minecraft.src.MinecraftException;
-	using MinecraftImpl = net.minecraft.src.MinecraftImpl;
-	using ModelBiped = net.minecraft.src.ModelBiped;
-	using MouseHelper = net.minecraft.src.MouseHelper;
-	using MovementInputFromOptions = net.minecraft.src.MovementInputFromOptions;
-	using MovingObjectPosition = net.minecraft.src.MovingObjectPosition;
-	using NetClientHandler = net.minecraft.src.NetClientHandler;
-	using OpenGlCapsChecker = net.minecraft.src.OpenGlCapsChecker;
-	using OpenGlHelper = net.minecraft.src.OpenGlHelper;
-	using Packet3Chat = net.minecraft.src.Packet3Chat;
-	using PlayerController = net.minecraft.src.PlayerController;
-	using PlayerUsageSnooper = net.minecraft.src.PlayerUsageSnooper;
-	using Profiler = net.minecraft.src.Profiler;
-	using ProfilerResult = net.minecraft.src.ProfilerResult;
-	using RenderBlocks = net.minecraft.src.RenderBlocks;
-	using RenderEngine = net.minecraft.src.RenderEngine;
-	using RenderGlobal = net.minecraft.src.RenderGlobal;
-	using RenderManager = net.minecraft.src.RenderManager;
-	using ScaledResolution = net.minecraft.src.ScaledResolution;
-	using ScreenShotHelper = net.minecraft.src.ScreenShotHelper;
-	using Session = net.minecraft.src.Session;
-	using SoundManager = net.minecraft.src.SoundManager;
-	using StatCollector = net.minecraft.src.StatCollector;
-	using StatFileWriter = net.minecraft.src.StatFileWriter;
-	using StatList = net.minecraft.src.StatList;
-	using StatStringFormatKeyInv = net.minecraft.src.StatStringFormatKeyInv;
-	using StringTranslate = net.minecraft.src.StringTranslate;
-	using Teleporter = net.minecraft.src.Teleporter;
-	using Tessellator = net.minecraft.src.Tessellator;
-	using TextureCompassFX = net.minecraft.src.TextureCompassFX;
-	using TextureFlamesFX = net.minecraft.src.TextureFlamesFX;
-	using TextureLavaFX = net.minecraft.src.TextureLavaFX;
-	using TextureLavaFlowFX = net.minecraft.src.TextureLavaFlowFX;
-	using TexturePackList = net.minecraft.src.TexturePackList;
-	using TexturePortalFX = net.minecraft.src.TexturePortalFX;
-	using TextureWatchFX = net.minecraft.src.TextureWatchFX;
-	using TextureWaterFX = net.minecraft.src.TextureWaterFX;
-	using TextureWaterFlowFX = net.minecraft.src.TextureWaterFlowFX;
-	using ThreadCheckHasPaid = net.minecraft.src.ThreadCheckHasPaid;
-	using ThreadClientSleep = net.minecraft.src.ThreadClientSleep;
-	using ThreadDownloadResources = net.minecraft.src.ThreadDownloadResources;
-	using Timer = net.minecraft.src.Timer;
-	using UnexpectedThrowable = net.minecraft.src.UnexpectedThrowable;
-	using Vec3D = net.minecraft.src.Vec3D;
-	using World = net.minecraft.src.World;
-	using WorldProvider = net.minecraft.src.WorldProvider;
-	using WorldRenderer = net.minecraft.src.WorldRenderer;
-	using WorldSettings = net.minecraft.src.WorldSettings;
-	using WorldType = net.minecraft.src.WorldType;
-
 	using OpenTK.Graphics.OpenGL;
     using OpenTK.Windowing.GraphicsLibraryFramework;
     using OpenTK.Graphics.Wgl;
 	using com.sun.tools.corba.se.logutil;
 	using net.minecraft.input;
+	using net.minecraft.render;
 
 	public abstract class Minecraft
 	{
@@ -141,12 +48,13 @@ namespace net.minecraft.client
 		public string minecraftUri;
 		public bool hideQuitButton = false;
 		public volatile bool isGamePaused = false;
-		public RenderEngine renderEngine;
+		public TextureManager renderEngine;
 		public FontRenderer fontRenderer;
 		public FontRenderer standardGalacticFontRenderer;
 		public GuiScreen currentScreen = null;
 		public LoadingScreenRenderer loadingScreen;
-		public EntityRenderer entityRenderer;
+		public GameRenderer gameRenderer;
+		public static RenderPipeline newRenderer;
 		private ThreadDownloadResources downloadResourcesThread;
 		private int ticksRan = 0;
 		private int leftClickCounter = 0;
@@ -220,20 +128,22 @@ namespace net.minecraft.client
 
 		public virtual void onMinecraftCrash(UnexpectedThrowable unexpectedThrowable1)
 		{
-			this.hasCrashed = true;
-			this.displayUnexpectedThrowable(unexpectedThrowable1);
+			hasCrashed = true;
+			displayUnexpectedThrowable(unexpectedThrowable1);
 		}
 
 		public abstract void displayUnexpectedThrowable(UnexpectedThrowable unexpectedThrowable1);
 
 		public virtual void setServer(string string1, int i2)
 		{
-			this.serverName = string1;
-			this.serverPort = i2;
+			serverName = string1;
+			serverPort = i2;
 		}
         
 		public virtual void startGame()
 		{
+			newRenderer = new RenderPipeline();
+			newRenderer.InitRenderer();
 
 			if (this.mcApplet != null)
 			{
@@ -254,14 +164,14 @@ namespace net.minecraft.client
 				}
 			}
             
-			mcApplet.Title = "Minecraft 1.2.5";
+			mcApplet.Title = "Minecraft";
 
 			OpenGlHelper.initializeTextures();
 			this.mcDataDir = MinecraftDir;
 			this.saveLoader = new AnvilSaveConverter(new DirectoryInfo(mcDataDir + "/saves"));
 			this.gameSettings = new GameSettings(this, this.mcDataDir);
 			this.texturePackList = new TexturePackList(this, this.mcDataDir);
-			this.renderEngine = new RenderEngine(this.texturePackList, this.gameSettings);
+			this.renderEngine = new TextureManager(this.texturePackList, this.gameSettings);
 			this.loadScreen();
 			this.fontRenderer = new FontRenderer(this.gameSettings, "/font/default.png", this.renderEngine, false);
 			this.standardGalacticFontRenderer = new FontRenderer(this.gameSettings, "/font/alternate.png", this.renderEngine, false);
@@ -275,14 +185,14 @@ namespace net.minecraft.client
 			ColorizerWater.WaterBiomeColorizer = this.renderEngine.getTextureContents("/misc/watercolor.png");
 			ColorizerGrass.GrassBiomeColorizer = this.renderEngine.getTextureContents("/misc/grasscolor.png");
 			ColorizerFoliage.getFoilageBiomeColorizer(this.renderEngine.getTextureContents("/misc/foliagecolor.png"));
-			this.entityRenderer = new EntityRenderer(this);
+			this.gameRenderer = new GameRenderer(this);
 			RenderManager.instance.itemRenderer = new ItemRenderer(this);
 			this.statFileWriter = new StatFileWriter(this.session, this.mcDataDir);
 			AchievementList.openInventory.setStatStringFormatter(new StatStringFormatKeyInv(this));
 			this.loadScreen();
 			this.mouseHelper = new MouseHelper(mcApplet);
 
-			func_52004_D();
+			startSnooper();
 			this.checkGLError("Pre startup");
 			GL.Enable(EnableCap.Texture2D);
 			GL.ShadeModel(ShadingModel.Smooth);
@@ -294,7 +204,7 @@ namespace net.minecraft.client
 			GL.CullFace(CullFaceMode.Back);
 			GL.MatrixMode(MatrixMode.Projection);
 
-			GL.LoadIdentity();
+            newRenderer.CameraMatrix.LoadIdentity();
 			GL.MatrixMode(MatrixMode.Modelview);
 			checkGLError("Startup");
 			glCapabilities = new OpenGlCapsChecker();
@@ -340,11 +250,13 @@ namespace net.minecraft.client
 			ScaledResolution scaledResolution1 = new ScaledResolution(this.gameSettings, this.displayWidth, this.displayHeight);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			GL.MatrixMode(MatrixMode.Projection);
-			GL.LoadIdentity();
-			GL.Ortho(0.0D, scaledResolution1.scaledWidthD, scaledResolution1.scaledHeightD, 0.0D, 1000.0D, 3000.0D);
+            newRenderer.CameraMatrix.LoadIdentity();
+            
+			newRenderer.CameraMatrix.Ortho(0.0D, scaledResolution1.scaledWidthD, scaledResolution1.scaledHeightD, 0.0D, 1000.0D, 3000.0D);
 			GL.MatrixMode(MatrixMode.Modelview);
-			GL.LoadIdentity();
-			GL.Translate(0.0F, 0.0F, -2000.0F);
+			newRenderer.ModelMatrix.LoadIdentity();
+
+            newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -2000.0F);
 			GL.Viewport(0, 0, this.displayWidth, this.displayHeight);
 			GL.ClearColor(0.0F, 0.0F, 0.0F, 0.0F);
 			Tessellator tessellator2 = Tessellator.instance;
@@ -370,7 +282,7 @@ namespace net.minecraft.client
             GL.AlphaFunc(AlphaFunction.Greater, 0.1F);
 			mcApplet.Context.SwapBuffers(); // PORTING TODO: pretty sure this is correct, but might be wrong.
 		}
-
+		
 		public virtual void scaledTessellator(int i1, int i2, int i3, int i4, int i5, int i6)
 		{
 			float f7 = 0.00390625F;
@@ -685,8 +597,7 @@ namespace net.minecraft.client
 				long j6 = JTime.NanoTime();
 				Profiler.startSection("tick");
 				Profiler.startSection("windowEvents");
-
-				// Clear currently typed keys if any are left from the last frame.
+                
                 NativeWindow.ProcessWindowEvents(false);
 				Profiler.endSection();
 				for (int i3 = 0; i3 < this.timer.elapsedTicks; ++i3)
@@ -723,7 +634,6 @@ namespace net.minecraft.client
 				GL.Enable(EnableCap.Texture2D);
 
 				mcApplet.SwapBuffers();
-				GL.Finish();
 
 				mcApplet.IsVisible = true;
 
@@ -742,7 +652,7 @@ namespace net.minecraft.client
 					}
 
 					Profiler.endStartSection("gameRenderer");
-					this.entityRenderer.updateCameraAndRender(this.timer.renderPartialTicks);
+					this.gameRenderer.updateCameraAndRender(this.timer.renderPartialTicks);
 					Profiler.endSection();
 				}
 
@@ -921,12 +831,13 @@ namespace net.minecraft.client
 			GL.Clear(ClearBufferMask.DepthBufferBit);
 			GL.MatrixMode(MatrixMode.Projection);
 			GL.Enable(EnableCap.ColorMaterial);
-			GL.LoadIdentity();
-			GL.Ortho(0.0D, displayWidth, displayHeight, 0.0D, 1000.0D, 3000.0D);
+			newRenderer.CameraMatrix.LoadIdentity();
+
+            newRenderer.CameraMatrix.Ortho(0.0D, displayWidth, displayHeight, 0.0D, 1000.0D, 3000.0D);
 			GL.MatrixMode(MatrixMode.Modelview);
-			GL.LoadIdentity();
-			GL.Translate(0.0F, 0.0F, -2000.0F);
-			GL.LineWidth(1.0F);
+            newRenderer.ModelMatrix.LoadIdentity();
+            newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -2000.0F);
+			GL.LineWidth(1.0F); // OPENGL TODO: WTF?
 			GL.Disable(EnableCap.Texture2D);
 			Tessellator tessellator9 = Tessellator.instance;
 			tessellator9.startDrawing(7);
@@ -1213,7 +1124,7 @@ namespace net.minecraft.client
 						}
 						else if (itemStack3.stackSize != i9 || this.playerController.InCreativeMode)
 						{
-							this.entityRenderer.itemRenderer.func_9449_b();
+							this.gameRenderer.itemRenderer.func_9449_b();
 						}
 					}
 				}
@@ -1223,7 +1134,7 @@ namespace net.minecraft.client
 					ItemStack itemStack10 = this.thePlayer.inventory.CurrentItem;
 					if (itemStack10 != null && this.playerController.sendUseItem(this.thePlayer, this.theWorld, itemStack10))
 					{
-						this.entityRenderer.itemRenderer.func_9450_c();
+						this.gameRenderer.itemRenderer.func_9450_c();
 					}
 				}
 
@@ -1337,7 +1248,7 @@ namespace net.minecraft.client
 			}
 
 			Profiler.endStartSection("pick");
-			entityRenderer.getMouseOver(1.0F);
+			gameRenderer.getMouseOver(1.0F);
 			Profiler.endStartSection("centerChunkSource");
 			int i3;
 			if (thePlayer != null)
@@ -1587,23 +1498,23 @@ namespace net.minecraft.client
 									gameSettings.setOptionValue(EnumOptions.RENDER_DISTANCE, z6 ? -1 : 1);
 								}
 
-								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.A && mcApplet.KeyboardState.IsKeyDown(Keys.F3))
+								if (mcApplet.CurrentKeyEvent()?.Key == KeyCode.A && mcApplet.KeyboardState.IsKeyDown(Keys.F3))
 								{
 									renderGlobal.loadRenderers();
 								}
                                 
-								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.F1)
+								if (mcApplet.CurrentKeyEvent()?.Key == KeyCode.F1)
 								{
 									gameSettings.hideGUI = !gameSettings.hideGUI;
 								}
 
-								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.F3)
+								if (mcApplet.CurrentKeyEvent()?.Key == KeyCode.F3)
 								{
 									gameSettings.showDebugInfo = !gameSettings.showDebugInfo;
 									gameSettings.field_50119_G = !GuiScreen.isShiftDown();
 								}
 
-								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.F5)
+								if (mcApplet.CurrentKeyEvent()?.Key == KeyCode.F5)
 								{
 									++gameSettings.thirdPersonView;
 									if (gameSettings.thirdPersonView > 2)
@@ -1612,7 +1523,7 @@ namespace net.minecraft.client
 									}
 								}
 
-								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.F8)
+								if (mcApplet.CurrentKeyEvent()?.Key == KeyCode.F8)
 								{
 									gameSettings.smoothCamera = !gameSettings.smoothCamera;
 								}
@@ -1621,7 +1532,7 @@ namespace net.minecraft.client
 							int i7;
 							for (i7 = 0; i7 < 9; ++i7)
 							{
-								if (mcApplet.CurrentKeyEvent()?.Value.Key == KeyCode.One + i7)
+								if (mcApplet.CurrentKeyEvent()?.Key == KeyCode.One + i7)
 								{
 									thePlayer.inventory.currentItem = i7;
 								}
@@ -1629,14 +1540,14 @@ namespace net.minecraft.client
 
 							if (gameSettings.showDebugInfo && gameSettings.field_50119_G)
 							{
-								if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.Zero)
+								if (mcApplet.CurrentKeyEvent()?.Key == KeyCode.Zero)
 								{
 									updateDebugProfilerName(0);
 								}
 
 								for (i7 = 0; i7 < 9; ++i7)
 								{
-									if (mcApplet.CurrentKeyEvent().Value.Key == KeyCode.One + i7)
+									if (mcApplet.CurrentKeyEvent()?.Key == KeyCode.One + i7)
 									{
 										updateDebugProfilerName(i7 + 1);
 									}
@@ -1678,7 +1589,7 @@ namespace net.minecraft.client
 				Profiler.endStartSection("gameRenderer");
 				if (!isGamePaused)
 				{
-					entityRenderer.updateRenderer();
+					gameRenderer.updateRenderer();
 				}
 
 				Profiler.endStartSection("levelRenderer");
@@ -1982,7 +1893,7 @@ namespace net.minecraft.client
 			}
 
 			short s2 = 128;
-			if (this.playerController.func_35643_e())
+			if (this.playerController.IsPanoramaCamera())
 			{
 				s2 = 64;
 			}
@@ -2014,7 +1925,7 @@ namespace net.minecraft.client
 					}
 
 					this.theWorld.getBlockId(chunkCoordinates6.posX + i10, 64, chunkCoordinates6.posZ + i8);
-					if (!this.playerController.func_35643_e())
+					if (!this.playerController.IsPanoramaCamera())
 					{
 						while (this.theWorld.updatingLighting())
 						{
@@ -2023,7 +1934,7 @@ namespace net.minecraft.client
 				}
 			}
 
-			if (!this.playerController.func_35643_e())
+			if (!this.playerController.IsPanoramaCamera())
 			{
 				if (this.loadingScreen != null)
 				{
@@ -2344,7 +2255,7 @@ namespace net.minecraft.client
 			return "1.2.5";
 		}
 
-		public static void func_52004_D()
+		public static void startSnooper()
 		{
 			GCMemoryInfo gcMemoryInfo = GC.GetGCMemoryInfo();
 			long installedMemory = gcMemoryInfo.TotalAvailableMemoryBytes;

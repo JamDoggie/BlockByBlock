@@ -12,7 +12,7 @@ using OpenTK.Compute.OpenCL;
 namespace net.minecraft.src
 {
 
-	public class RenderEngine
+	public class TextureManager
 	{
 		public static bool useMipmaps = true;
 		private Hashtable textureMap = new Hashtable();
@@ -29,7 +29,7 @@ namespace net.minecraft.src
         private Image<Bgra32> missingTextureImage = new(64, 64, Color.Black);
         private int field_48512_n = 16;
 
-		public RenderEngine(TexturePackList texturePackList1, GameSettings gameSettings2)
+		public TextureManager(TexturePackList texturePackList1, GameSettings gameSettings2)
 		{
 			this.texturePack = texturePackList1;
 			this.options = gameSettings2;

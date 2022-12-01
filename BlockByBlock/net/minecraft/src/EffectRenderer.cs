@@ -9,10 +9,10 @@ namespace net.minecraft.src
 	{
 		protected internal World worldObj;
 		private System.Collections.IList[] fxLayers = new System.Collections.IList[4];
-		private RenderEngine renderer;
+		private TextureManager renderer;
 		private Random rand = new Random();
 
-		public EffectRenderer(World world1, RenderEngine renderEngine2)
+		public EffectRenderer(World world1, TextureManager renderEngine2)
 		{
 			if (world1 != null)
 			{

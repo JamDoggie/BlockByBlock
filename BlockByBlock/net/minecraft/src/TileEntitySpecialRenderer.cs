@@ -8,7 +8,7 @@
 
 		protected internal virtual void bindTextureByName(string string1)
 		{
-			RenderEngine renderEngine2 = this.tileEntityRenderer.renderEngine;
+			TextureManager renderEngine2 = this.tileEntityRenderer.renderEngine;
 			if (renderEngine2 != null)
 			{
 				renderEngine2.bindTexture(renderEngine2.getTexture(string1));

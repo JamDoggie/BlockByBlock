@@ -1,5 +1,6 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
@@ -47,13 +48,13 @@ namespace net.minecraft.src
 			if (entityEnderman1.Carried > 0)
 			{
 				GL.Enable(EnableCap.RescaleNormal);
-				GL.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
 				float f3 = 0.5F;
-				GL.Translate(0.0F, 0.6875F, -0.75F);
+                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.6875F, -0.75F);
 				f3 *= 1.0F;
-				GL.Rotate(20.0F, 1.0F, 0.0F, 0.0F);
-				GL.Rotate(45.0F, 0.0F, 1.0F, 0.0F);
-				GL.Scale(f3, -f3, f3);
+                Minecraft.newRenderer.ModelMatrix.Rotate(20.0F, 1.0F, 0.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(45.0F, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Scale(f3, -f3, f3);
 				int i4 = entityEnderman1.getBrightnessForRender(f2);
 				int i5 = i4 % 65536;
 				int i6 = i4 / 65536;
@@ -62,7 +63,7 @@ namespace net.minecraft.src
 				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				this.loadTexture("/terrain.png");
 				this.renderBlocks.renderBlockAsItem(Block.blocksList[entityEnderman1.Carried], entityEnderman1.CarryingData, 1.0F);
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				GL.Disable(EnableCap.RescaleNormal);
 			}
 

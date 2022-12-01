@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -29,7 +30,7 @@ namespace net.minecraft.src
 			f4 *= f4;
 			float f6 = (1.0F + f4 * 0.4F) * f5;
 			float f7 = (1.0F + f4 * 0.1F) / f5;
-			GL.Scale(f6, f7, f6);
+            Minecraft.newRenderer.ModelMatrix.Scale(f6, f7, f6);
 		}
 
 		protected internal virtual int updateCreeperColorMultiplier(EntityCreeper entityCreeper1, float f2, float f3)
@@ -68,10 +69,10 @@ namespace net.minecraft.src
 					float f4 = (float)entityCreeper1.ticksExisted + f3;
 					this.loadTexture("/armor/power.png");
 					GL.MatrixMode(MatrixMode.Texture);
-					GL.LoadIdentity();
+                    Minecraft.newRenderer.TextureMatrix.LoadIdentity();
 					float f5 = f4 * 0.01F;
 					float f6 = f4 * 0.01F;
-					GL.Translate(f5, f6, 0.0F);
+                    Minecraft.newRenderer.TextureMatrix.Translate(f5, f6, 0.0F);
 					this.RenderPassModel = this.field_27008_a;
 					GL.MatrixMode(MatrixMode.Modelview);
 					GL.Enable(EnableCap.Blend);
@@ -85,7 +86,7 @@ namespace net.minecraft.src
 				if (i2 == 2)
 				{
 					GL.MatrixMode(MatrixMode.Texture);
-					GL.LoadIdentity();
+                    Minecraft.newRenderer.TextureMatrix.LoadIdentity();
 					GL.MatrixMode(MatrixMode.Modelview);
 					GL.Enable(EnableCap.Lighting);
 					GL.Disable(EnableCap.Blend);

@@ -1,4 +1,5 @@
 ﻿using System;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
@@ -75,31 +76,31 @@ namespace net.minecraft.src
 			this.displayDebuffEffects();
 			GL.Enable(EnableCap.RescaleNormal);
 			GL.Enable(EnableCap.ColorMaterial);
-			GL.PushMatrix();
-			GL.Translate((float)(i5 + 51), (float)(i6 + 75), 50.0F);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate((float)(i5 + 51), (float)(i6 + 75), 50.0F);
 			float f7 = 30.0F;
-			GL.Scale(-f7, f7, f7);
-			GL.Rotate(180.0F, 0.0F, 0.0F, 1.0F);
+            Minecraft.newRenderer.ModelMatrix.Scale(-f7, f7, f7);
+            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F, 0.0F, 0.0F, 1.0F);
 			float f8 = this.mc.thePlayer.renderYawOffset;
 			float f9 = this.mc.thePlayer.rotationYaw;
 			float f10 = this.mc.thePlayer.rotationPitch;
 			float f11 = (float)(i5 + 51) - this.xSize_lo;
 			float f12 = (float)(i6 + 75 - 50) - this.ySize_lo;
-			GL.Rotate(135.0F, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(135.0F, 0.0F, 1.0F, 0.0F);
 			RenderHelper.enableStandardItemLighting();
-			GL.Rotate(-135.0F, 0.0F, 1.0F, 0.0F);
-			GL.Rotate(-((float)Math.Atan((double)(f12 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(-135.0F, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(-((float)Math.Atan((double)(f12 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
 			this.mc.thePlayer.renderYawOffset = (float)Math.Atan((double)(f11 / 40.0F)) * 20.0F;
 			this.mc.thePlayer.rotationYaw = (float)Math.Atan((double)(f11 / 40.0F)) * 40.0F;
 			this.mc.thePlayer.rotationPitch = -((float)Math.Atan((double)(f12 / 40.0F))) * 20.0F;
 			this.mc.thePlayer.rotationYawHead = this.mc.thePlayer.rotationYaw;
-			GL.Translate(0.0F, this.mc.thePlayer.yOffset, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, this.mc.thePlayer.yOffset, 0.0F);
 			RenderManager.instance.playerViewY = 180.0F;
 			RenderManager.instance.renderEntityWithPosYaw(this.mc.thePlayer, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
 			this.mc.thePlayer.renderYawOffset = f8;
 			this.mc.thePlayer.rotationYaw = f9;
 			this.mc.thePlayer.rotationPitch = f10;
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			RenderHelper.disableStandardItemLighting();
 			GL.Disable(EnableCap.RescaleNormal);
             GL.Disable(EnableCap.ColorMaterial);

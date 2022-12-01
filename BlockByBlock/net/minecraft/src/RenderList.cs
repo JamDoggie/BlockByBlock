@@ -1,67 +1,71 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
     
 	public class RenderList
 	{
-		private int field_1242_a;
-		private int field_1241_b;
-		private int field_1240_c;
-		private double field_1239_d;
-		private double field_1238_e;
-		private double field_1237_f;
-		private ByteBuffer field_1236_g = GLAllocation.createDirectIntBuffer(65536);
+		private int X2;
+		private int Y2;
+		private int Z2;
+		private double X1;
+		private double Y1;
+		private double Z1;
+		private ByteBuffer displayLists { get; set; } = GLAllocation.createDirectIntBuffer(65536);
 		private bool field_1235_h = false;
 		private bool field_1234_i = false;
 
-		public virtual void func_861_a(int i1, int i2, int i3, double d4, double d6, double d8)
+		public virtual void SetPosition(int i1, int i2, int i3, double d4, double d6, double d8)
 		{
 			field_1235_h = true;
-			field_1236_g.clear();
-			field_1242_a = i1;
-			field_1241_b = i2;
-			field_1240_c = i3;
-			field_1239_d = d4;
-			field_1238_e = d6;
-			field_1237_f = d8;
+			displayLists.clear();
+			X2 = i1;
+			Y2 = i2;
+			Z2 = i3;
+			X1 = d4;
+			Y1 = d6;
+			Z1 = d8;
 		}
 
-		public virtual bool func_862_a(int i1, int i2, int i3)
+		public virtual bool PositionMatches(int i1, int i2, int i3)
 		{
-			return !this.field_1235_h ? false : i1 == this.field_1242_a && i2 == this.field_1241_b && i3 == this.field_1240_c;
+			return !this.field_1235_h ? false : i1 == this.X2 && i2 == this.Y2 && i3 == this.Z2;
 		}
 
-		public virtual void func_858_a(int i1)
+		public virtual void AddRenderList(int i1)
 		{
-			this.field_1236_g.putInt(i1);
-			if (this.field_1236_g.remaining() == 0)
+			this.displayLists.putInt(i1);
+			if (this.displayLists.remaining() == 0)
 			{
-				this.func_860_a();
+				this.CallAndTransformDisplayLists();
 			}
 
 		}
 
         byte[] intBufCache = new byte[65536 * 4];
 
-        public virtual void func_860_a()
+		/// <summary>
+		/// Not really sure exactly what this does, name might not be quite right.
+		/// </summary>
+        public virtual void CallAndTransformDisplayLists()
 		{
 			if (this.field_1235_h)
 			{
 				if (!this.field_1234_i)
 				{
-					this.field_1236_g.flip();
+					this.displayLists.flip();
 					this.field_1234_i = true;
 				}
 
-				if (this.field_1236_g.remaining() > 0)
+				if (this.displayLists.remaining() > 0)
 				{
-					GL.PushMatrix();
-					GL.Translate((float)((double)this.field_1242_a - this.field_1239_d), (float)((double)this.field_1241_b - this.field_1238_e), (float)((double)this.field_1240_c - this.field_1237_f));
-					Array.Copy(field_1236_g.GetUnderlyingBuffer(), intBufCache, field_1236_g.remaining());
-					GL.CallLists((int)field_1236_g.remaining() / 4, ListNameType.UnsignedInt, intBufCache); // PORTING TODO: this is sus because I ported this while tired.
-					
-					GL.PopMatrix();
+                    Minecraft.newRenderer.ModelMatrix.PushMatrix();
+                    Minecraft.newRenderer.ModelMatrix.Translate((float)((double)this.X2 - this.X1), (float)((double)this.Y2 - this.Y1), (float)((double)this.Z2 - this.Z1));
+					Array.Copy(displayLists.GetUnderlyingBuffer(), intBufCache, displayLists.remaining());
+					GL.CallLists((int)displayLists.remaining() / 4, ListNameType.UnsignedInt, intBufCache); // PORTING TODO: this is sus because I ported this while tired.
+
+                    Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				}
 
 			}

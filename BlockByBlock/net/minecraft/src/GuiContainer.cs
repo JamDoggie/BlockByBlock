@@ -1,4 +1,5 @@
 ﻿using System;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
@@ -33,8 +34,8 @@ namespace net.minecraft.src
 			int i5 = this.guiTop;
 			this.drawGuiContainerBackgroundLayer(f3, i1, i2);
 			RenderHelper.enableGUIStandardItemLighting();
-			GL.PushMatrix();
-			GL.Translate((float)i4, (float)i5, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate((float)i4, (float)i5, 0.0F);
 			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			GL.Enable(EnableCap.RescaleNormal);
 			Slot slot6 = null;
@@ -65,7 +66,7 @@ namespace net.minecraft.src
 			InventoryPlayer inventoryPlayer21 = this.mc.thePlayer.inventory;
 			if (inventoryPlayer21.ItemStack != null)
 			{
-				GL.Translate(0.0F, 0.0F, 32.0F);
+                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, 32.0F);
 				this.zLevel = 200.0F;
 				itemRenderer.zLevel = 200.0F;
 				itemRenderer.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, inventoryPlayer21.ItemStack, i1 - i4 - 8, i2 - i5 - 8);
@@ -146,7 +147,7 @@ namespace net.minecraft.src
 				}
 			}
 
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			base.drawScreen(i1, i2, f3);
 			GL.Enable(EnableCap.Lighting);
 			GL.Enable(EnableCap.DepthTest);

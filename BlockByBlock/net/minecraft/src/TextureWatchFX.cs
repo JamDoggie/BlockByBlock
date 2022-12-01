@@ -26,9 +26,9 @@ namespace net.minecraft.src
 				Image<Bgra32> bufferedImage2 = Image.Load<Bgra32>(GameEnv.GetResourceAsStream("/gui/items.png"));
 				int i3 = this.iconIndex % 16 * 16;
 				int i4 = this.iconIndex / 16 * 16;
-				RenderEngine.FillIntBufferWithImage(bufferedImage2, watchIconImageData, i3, i4, 16, 16);
+				TextureManager.FillIntBufferWithImage(bufferedImage2, watchIconImageData, i3, i4, 16, 16);
 				bufferedImage2 = Image.Load<Bgra32>(GameEnv.GetResourceAsStream("/misc/dial.png"));
-				RenderEngine.FillIntBufferWithImage(bufferedImage2, dialImageData);
+				TextureManager.FillIntBufferWithImage(bufferedImage2, dialImageData);
 			}
 			catch (IOException iOException5)
 			{

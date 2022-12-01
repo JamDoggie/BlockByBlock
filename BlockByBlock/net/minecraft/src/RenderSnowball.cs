@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -14,10 +15,10 @@ namespace net.minecraft.src
 
 		public override void doRender(Entity entity1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL.PushMatrix();
-			GL.Translate((float)d2, (float)d4, (float)d6);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
 			GL.Enable(EnableCap.RescaleNormal);
-			GL.Scale(0.5F, 0.5F, 0.5F);
+            Minecraft.newRenderer.ModelMatrix.Scale(0.5F, 0.5F, 0.5F);
 			this.loadTexture("/gui/items.png");
 			Tessellator tessellator10 = Tessellator.instance;
 			if (this.itemIconIndex == 154)
@@ -27,15 +28,15 @@ namespace net.minecraft.src
 				float f13 = (float)(i11 >> 8 & 255) / 255.0F;
 				float f14 = (float)(i11 & 255) / 255.0F;
 				GL.Color3(f12, f13, f14);
-				GL.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
 				this.func_40265_a(tessellator10, 141);
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				GL.Color3(1.0F, 1.0F, 1.0F);
 			}
 
 			this.func_40265_a(tessellator10, this.itemIconIndex);
 			GL.Disable(EnableCap.RescaleNormal);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 		}
 
 		private void func_40265_a(Tessellator tessellator1, int i2)
@@ -47,8 +48,8 @@ namespace net.minecraft.src
 			float f7 = 1.0F;
 			float f8 = 0.5F;
 			float f9 = 0.25F;
-			GL.Rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-			GL.Rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 			tessellator1.startDrawingQuads();
 			tessellator1.setNormal(0.0F, 1.0F, 0.0F);
 			tessellator1.addVertexWithUV((double)(0.0F - f8), (double)(0.0F - f9), 0.0D, (double)f3, (double)f6);

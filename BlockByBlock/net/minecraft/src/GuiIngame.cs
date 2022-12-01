@@ -40,7 +40,7 @@ namespace net.minecraft.src
 			int i6 = scaledResolution5.ScaledWidth;
 			int i7 = scaledResolution5.ScaledHeight;
 			FontRenderer fontRenderer8 = this.mc.fontRenderer;
-			this.mc.entityRenderer.setupOverlayRendering();
+			this.mc.gameRenderer.setupOverlayRendering();
 			GL.Enable(EnableCap.Blend);
 			if (Minecraft.FancyGraphicsEnabled)
 			{
@@ -76,7 +76,7 @@ namespace net.minecraft.src
 			int i22;
 			int i23;
 			int i45;
-			if (!this.mc.playerController.func_35643_e())
+			if (!this.mc.playerController.IsPanoramaCamera())
 			{
 				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/gui/gui.png"));
@@ -329,10 +329,10 @@ namespace net.minecraft.src
 
 			if (this.mc.gameSettings.showDebugInfo)
 			{
-				GL.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
 				if (Minecraft.hasPaidCheckTime > 0L)
 				{
-					GL.Translate(0.0F, 32.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 32.0F, 0.0F);
 				}
 
 				fontRenderer8.drawStringWithShadow($"Minecraft 1.2.5 ({mc.debug}) Runtime: .Net {Environment.Version}", 2, 2, 0xFFFFFF);
@@ -366,7 +366,7 @@ namespace net.minecraft.src
 					this.drawString(fontRenderer8, "Seed: " + this.mc.theWorld.Seed, 2, 112, 14737632);
 				}
 
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			}
 
 			if (this.recordPlayingUpFor > 0)
@@ -380,8 +380,8 @@ namespace net.minecraft.src
 
 				if (i12 > 0)
 				{
-					GL.PushMatrix();
-					GL.Translate((float)(i6 / 2), (float)(i7 - 48), 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.PushMatrix();
+                    Minecraft.newRenderer.ModelMatrix.Translate((float)(i6 / 2), (float)(i7 - 48), 0.0F);
 					GL.Enable(EnableCap.Blend);
 					GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 					i13 = 0xFFFFFF;
@@ -392,17 +392,17 @@ namespace net.minecraft.src
 
 					fontRenderer8.drawString(this.recordPlaying, -fontRenderer8.getStringWidth(this.recordPlaying) / 2, -4, i13 + (i12 << 24));
 					GL.Disable(EnableCap.Blend);
-					GL.PopMatrix();
+                    Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				}
 			}
 
 			GL.Enable(EnableCap.Blend);
 			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 			GL.Disable(EnableCap.AlphaTest);
-			GL.PushMatrix();
-			GL.Translate(0.0F, (float)(i7 - 48), 0.0F);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, (float)(i7 - 48), 0.0F);
 			this.func_50010_a(fontRenderer8);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			if (this.mc.thePlayer is EntityClientPlayerMP && this.mc.gameSettings.keyBindPlayerList.pressed)
 			{
 				NetClientHandler netClientHandler37 = ((EntityClientPlayerMP)this.mc.thePlayer).sendQueue;
@@ -533,7 +533,7 @@ namespace net.minecraft.src
 
 				if (z3)
 				{
-					GL.Translate(0.0F, (float)fontRenderer1.FONT_HEIGHT, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Translate(0.0F, (float)fontRenderer1.FONT_HEIGHT, 0.0F);
 					i6 = i5 * fontRenderer1.FONT_HEIGHT + i5;
 					int i14 = i4 * fontRenderer1.FONT_HEIGHT + i4;
 					int i15 = this.field_50017_n * i14 / i5;
@@ -670,17 +670,17 @@ namespace net.minecraft.src
 				float f6 = (float)itemStack5.animationsToGo - f4;
 				if (f6 > 0.0F)
 				{
-					GL.PushMatrix();
+                    Minecraft.newRenderer.ModelMatrix.PushMatrix();
 					float f7 = 1.0F + f6 / 5.0F;
-					GL.Translate((float)(i2 + 8), (float)(i3 + 12), 0.0F);
-					GL.Scale(1.0F / f7, (f7 + 1.0F) / 2.0F, 1.0F);
-					GL.Translate((float)(-(i2 + 8)), (float)(-(i3 + 12)), 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Translate((float)(i2 + 8), (float)(i3 + 12), 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Scale(1.0F / f7, (f7 + 1.0F) / 2.0F, 1.0F);
+                    Minecraft.newRenderer.ModelMatrix.Translate((float)(-(i2 + 8)), (float)(-(i3 + 12)), 0.0F);
 				}
 
 				itemRenderer.renderItemIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, itemStack5, i2, i3);
 				if (f6 > 0.0F)
 				{
-					GL.PopMatrix();
+                    Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				}
 
 				itemRenderer.renderItemOverlayIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, itemStack5, i2, i3);

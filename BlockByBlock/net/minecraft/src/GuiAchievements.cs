@@ -1,4 +1,5 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
@@ -182,8 +183,8 @@ namespace net.minecraft.src
 			int i11 = i9 + 17;
 			this.zLevel = 0.0F;
 			GL.DepthFunc(DepthFunction.Gequal);
-			GL.PushMatrix();
-			GL.Translate(0.0F, 0.0F, -200.0F);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -200.0F);
 			GL.Enable(EnableCap.Texture2D);
 			GL.Disable(EnableCap.Lighting);
 			GL.Enable(EnableCap.RescaleNormal);
@@ -356,7 +357,7 @@ namespace net.minecraft.src
 			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i7);
 			this.drawTexturedModalRect(i8, i9, 0, 0, this.achievementsPaneWidth, this.achievementsPaneHeight);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			this.zLevel = 0.0F;
 			GL.DepthFunc(DepthFunction.Lequal);
 			GL.Disable(EnableCap.DepthTest);

@@ -1,5 +1,6 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
@@ -22,7 +23,7 @@ namespace net.minecraft.src
 		{
 			random.SetSeed(187L); 
 			ItemStack itemStack10 = entityItem1.item;
-			GL.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
 			float f11 = MathHelper.sin(((float)entityItem1.age + f9) / 10.0F + entityItem1.field_804_d) * 0.1F + 0.1F;
 			float f12 = (((float)entityItem1.age + f9) / 20.0F + entityItem1.field_804_d) * 57.295776F;
 			sbyte b13 = 1;
@@ -41,7 +42,7 @@ namespace net.minecraft.src
 				b13 = 4;
 			}
 
-			GL.Translate((float)d2, (float)d4 + f11, (float)d6);
+            Minecraft.newRenderer.ModelMatrix.Translate((float)d2, (float)d4 + f11, (float)d6);
 			GL.Enable(EnableCap.RescaleNormal);
 			int i15;
 			float f18;
@@ -49,7 +50,7 @@ namespace net.minecraft.src
 			float f23;
 			if (itemStack10.itemID < 256 && RenderBlocks.renderItemIn3d(Block.blocksList[itemStack10.itemID].RenderType))
 			{
-				GL.Rotate(f12, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(f12, 0.0F, 1.0F, 0.0F);
 				this.loadTexture("/terrain.png");
 				float f21 = 0.25F;
 				i15 = Block.blocksList[itemStack10.itemID].RenderType;
@@ -57,23 +58,23 @@ namespace net.minecraft.src
 				{
 					f21 = 0.5F;
 				}
-                
-				GL.Scale(f21, f21, f21);
+
+                Minecraft.newRenderer.ModelMatrix.Scale(f21, f21, f21);
 
 				for (int i22 = 0; i22 < b13; ++i22)
 				{
-					GL.PushMatrix();
+                    Minecraft.newRenderer.ModelMatrix.PushMatrix();
 					if (i22 > 0)
 					{
 						f23 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.2F / f21;
 						f18 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.2F / f21;
 						f19 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.2F / f21;
-						GL.Translate(f23, f18, f19);
+                        Minecraft.newRenderer.ModelMatrix.Translate(f23, f18, f19);
 					}
 
 					f23 = 1.0F;
 					this.renderBlocks.renderBlockAsItem(Block.blocksList[itemStack10.itemID], itemStack10.ItemDamage, f23);
-					GL.PopMatrix();
+                    Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				}
 			}
 			else
@@ -82,7 +83,7 @@ namespace net.minecraft.src
 				float f16;
 				if (itemStack10.Item.func_46058_c())
 				{
-					GL.Scale(0.5F, 0.5F, 0.5F);
+                    Minecraft.newRenderer.ModelMatrix.Scale(0.5F, 0.5F, 0.5F);
 					this.loadTexture("/gui/items.png");
 
 					for (i14 = 0; i14 <= 1; ++i14)
@@ -103,7 +104,7 @@ namespace net.minecraft.src
 				}
 				else
 				{
-					GL.Scale(0.5F, 0.5F, 0.5F);
+                    Minecraft.newRenderer.ModelMatrix.Scale(0.5F, 0.5F, 0.5F);
 					i14 = itemStack10.IconIndex;
 					if (itemStack10.itemID < 256)
 					{
@@ -129,7 +130,7 @@ namespace net.minecraft.src
 			}
 
 			GL.Disable(EnableCap.RescaleNormal);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 		}
 
 		private void func_40267_a(int i1, int i2)
@@ -145,16 +146,16 @@ namespace net.minecraft.src
 
 			for (int i11 = 0; i11 < i2; ++i11)
 			{
-				GL.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
 				if (i11 > 0)
 				{
 					float f12 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.3F;
 					float f13 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.3F;
 					float f14 = (this.random.NextSingle() * 2.0F - 1.0F) * 0.3F;
-					GL.Translate(f12, f13, f14);
+                    Minecraft.newRenderer.ModelMatrix.Translate(f12, f13, f14);
 				}
 
-				GL.Rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 				tessellator3.startDrawingQuads();
 				tessellator3.setNormal(0.0F, 1.0F, 0.0F);
 				tessellator3.addVertexWithUV((double)(0.0F - f9), (double)(0.0F - f10), 0.0D, (double)f4, (double)f7);
@@ -162,12 +163,12 @@ namespace net.minecraft.src
 				tessellator3.addVertexWithUV((double)(f8 - f9), (double)(1.0F - f10), 0.0D, (double)f5, (double)f6);
 				tessellator3.addVertexWithUV((double)(0.0F - f9), (double)(1.0F - f10), 0.0D, (double)f4, (double)f6);
 				tessellator3.draw();
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			}
 
 		}
 
-		public virtual void drawItemIntoGui(FontRenderer fontRenderer1, RenderEngine renderEngine2, int i3, int i4, int i5, int i6, int i7)
+		public virtual void drawItemIntoGui(FontRenderer fontRenderer1, TextureManager renderEngine2, int i3, int i4, int i5, int i6, int i7)
 		{
 			int i10;
 			float f11;
@@ -181,13 +182,13 @@ namespace net.minecraft.src
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 0);
 
                 Block block15 = Block.blocksList[i3];
-				GL.PushMatrix();
-				GL.Translate((float)(i6 - 2), (float)(i7 + 3), -3.0F + this.zLevel);
-				GL.Scale(10.0F, 10.0F, 10.0F);
-				GL.Translate(1.0F, 0.5F, 1.0F);
-				GL.Scale(1.0F, 1.0F, -1.0F);
-				GL.Rotate(210.0F, 1.0F, 0.0F, 0.0F);
-				GL.Rotate(45.0F, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.Translate((float)(i6 - 2), (float)(i7 + 3), -3.0F + this.zLevel);
+				Minecraft.newRenderer.ModelMatrix.Scale(10.0F, 10.0F, 10.0F);
+				Minecraft.newRenderer.ModelMatrix.Translate(1.0F, 0.5F, 1.0F);
+				Minecraft.newRenderer.ModelMatrix.Scale(1.0F, 1.0F, -1.0F);
+				Minecraft.newRenderer.ModelMatrix.Rotate(210.0F, 1.0F, 0.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(45.0F, 0.0F, 1.0F, 0.0F);
 				i10 = Item.itemsList[i3].getColorFromDamage(i4, 0);
 				f11 = (float)(i10 >> 16 & 255) / 255.0F;
 				f12 = (float)(i10 >> 8 & 255) / 255.0F;
@@ -197,11 +198,11 @@ namespace net.minecraft.src
 					GL.Color4(f11, f12, f13, 1.0F);
 				}
 
-				GL.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
 				this.renderBlocks.useInventoryTint = this.field_27004_a;
 				this.renderBlocks.renderBlockAsItem(block15, i4, 1.0F);
 				this.renderBlocks.useInventoryTint = true;
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 4);
@@ -272,7 +273,7 @@ namespace net.minecraft.src
 			GL.Enable(EnableCap.CullFace);
 		}
 
-		public virtual void renderItemIntoGUI(FontRenderer fontRenderer1, RenderEngine renderEngine2, ItemStack itemStack3, int i4, int i5)
+		public virtual void renderItemIntoGUI(FontRenderer fontRenderer1, TextureManager renderEngine2, ItemStack itemStack3, int i4, int i5)
 		{
 			if (itemStack3 != null)
 			{
@@ -333,7 +334,7 @@ namespace net.minecraft.src
 
 		}
 
-		public virtual void renderItemOverlayIntoGUI(FontRenderer fontRenderer1, RenderEngine renderEngine2, ItemStack itemStack3, int i4, int i5)
+		public virtual void renderItemOverlayIntoGUI(FontRenderer fontRenderer1, TextureManager renderEngine2, ItemStack itemStack3, int i4, int i5)
 		{
 			if (itemStack3 != null)
 			{

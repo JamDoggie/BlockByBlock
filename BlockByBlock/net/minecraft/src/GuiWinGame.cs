@@ -1,5 +1,6 @@
 ﻿using BlockByBlock;
 using BlockByBlock.java_extensions;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections;
@@ -155,8 +156,8 @@ namespace net.minecraft.src
 			int i6 = this.width / 2 - s5 / 2;
 			int i7 = this.height + 50;
 			float f8 = -((float)this.updateCounter + f3) * this.field_41043_e;
-			GL.PushMatrix();
-			GL.Translate(0.0F, f8, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, f8, 0.0F);
 			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/title/mclogo.png"));
 			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.drawTexturedModalRect(i6, i7, 0, 0, 155, 44);
@@ -172,7 +173,7 @@ namespace net.minecraft.src
 					float f11 = (float)i9 + f8 - (float)(this.height / 2 - 6);
 					if (f11 < 0.0F)
 					{
-						GL.Translate(0.0F, -f11, 0.0F);
+                        Minecraft.newRenderer.ModelMatrix.Translate(0.0F, -f11, 0.0F);
 					}
 				}
 
@@ -196,7 +197,7 @@ namespace net.minecraft.src
 				i9 += 12;
 			}
 
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("%blur%/misc/vignette.png"));
 			GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.Zero, BlendingFactor.OneMinusSrcColor);

@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 using System;
 
 namespace net.minecraft.src
@@ -36,7 +37,7 @@ namespace net.minecraft.src
 				float f5 = 13.0F;
 				float f6 = entityIronGolem1.field_703_S - entityIronGolem1.field_704_R * (1.0F - f4) + 6.0F;
 				float f7 = (Math.Abs(f6 % f5 - f5 * 0.5F) - f5 * 0.25F) / (f5 * 0.25F);
-				GL.Rotate(6.5F * f7, 0.0F, 0.0F, 1.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(6.5F * f7, 0.0F, 0.0F, 1.0F);
 			}
 		}
 
@@ -46,12 +47,12 @@ namespace net.minecraft.src
 			if (entityIronGolem1.func_48117_D_() != 0)
 			{
 				GL.Enable(EnableCap.RescaleNormal);
-				GL.PushMatrix();
-				GL.Rotate(5.0F + 180.0F * this.field_48422_c.field_48233_c.rotateAngleX / (float)Math.PI, 1.0F, 0.0F, 0.0F);
-				GL.Translate(-0.6875F, 1.25F, -0.9375F);
-				GL.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
+				Minecraft.newRenderer.ModelMatrix.PushMatrix();
+				Minecraft.newRenderer.ModelMatrix.Rotate(5.0F + 180.0F * this.field_48422_c.field_48233_c.rotateAngleX / (float)Math.PI, 1.0F, 0.0F, 0.0F);
+				Minecraft.newRenderer.ModelMatrix.Translate(-0.6875F, 1.25F, -0.9375F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
 				float f3 = 0.8F;
-				GL.Scale(f3, -f3, f3);
+                Minecraft.newRenderer.ModelMatrix.Scale(f3, -f3, f3);
 				int i4 = entityIronGolem1.getBrightnessForRender(f2);
 				int i5 = i4 % 65536;
 				int i6 = i4 / 65536;
@@ -60,7 +61,7 @@ namespace net.minecraft.src
 				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				this.loadTexture("/terrain.png");
 				this.renderBlocks.renderBlockAsItem(Block.plantRed, 0, 1.0F);
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				GL.Disable(EnableCap.RescaleNormal);
 			}
 		}

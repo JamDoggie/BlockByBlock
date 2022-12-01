@@ -1,18 +1,19 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
 
 	public class RenderEnchantmentTable : TileEntitySpecialRenderer
 	{
-		private ModelBook field_40450_a = new ModelBook();
+		private ModelBook bookModel = new();
 
 		public virtual void func_40449_a(TileEntityEnchantmentTable tileEntityEnchantmentTable1, double d2, double d4, double d6, float f8)
 		{
-			GL.PushMatrix();
-			GL.Translate((float)d2 + 0.5F, (float)d4 + 0.75F, (float)d6 + 0.5F);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate((float)d2 + 0.5F, (float)d4 + 0.75F, (float)d6 + 0.5F);
 			float f9 = (float)tileEntityEnchantmentTable1.tickCount + f8;
-			GL.Translate(0.0F, 0.1F + MathHelper.sin(f9 * 0.1F) * 0.01F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.1F + MathHelper.sin(f9 * 0.1F) * 0.01F, 0.0F);
 
 			float f10;
 			for (f10 = tileEntityEnchantmentTable1.bookRotation2 - tileEntityEnchantmentTable1.bookRotationPrev; f10 >= (float)Math.PI; f10 -= 6.2831855F)
@@ -25,8 +26,8 @@ namespace net.minecraft.src
 			}
 
 			float f11 = tileEntityEnchantmentTable1.bookRotationPrev + f10 * f8;
-			GL.Rotate(-f11 * 180.0F / (float)Math.PI, 0.0F, 1.0F, 0.0F);
-			GL.Rotate(80.0F, 0.0F, 0.0F, 1.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(-f11 * 180.0F / (float)Math.PI, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(80.0F, 0.0F, 0.0F, 1.0F);
 			this.bindTextureByName("/item/book.png");
 			float f12 = tileEntityEnchantmentTable1.pageFlipPrev + (tileEntityEnchantmentTable1.pageFlip - tileEntityEnchantmentTable1.pageFlipPrev) * f8 + 0.25F;
 			float f13 = tileEntityEnchantmentTable1.pageFlipPrev + (tileEntityEnchantmentTable1.pageFlip - tileEntityEnchantmentTable1.pageFlipPrev) * f8 + 0.75F;
@@ -53,8 +54,8 @@ namespace net.minecraft.src
 			}
 
 			float f14 = tileEntityEnchantmentTable1.bookSpreadPrev + (tileEntityEnchantmentTable1.bookSpread - tileEntityEnchantmentTable1.bookSpreadPrev) * f8;
-			this.field_40450_a.render((Entity)null, f9, f12, f13, f14, 0.0F, 0.0625F);
-			GL.PopMatrix();
+			this.bookModel.render((Entity)null, f9, f12, f13, f14, 0.0F, 0.0625F);
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 		}
 
 		public override void renderTileEntityAt(TileEntity tileEntity1, double d2, double d4, double d6, float f8)

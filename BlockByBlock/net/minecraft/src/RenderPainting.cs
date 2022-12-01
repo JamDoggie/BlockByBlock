@@ -1,5 +1,6 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
@@ -12,17 +13,17 @@ namespace net.minecraft.src
 		public virtual void func_158_a(EntityPainting entityPainting1, double d2, double d4, double d6, float f8, float f9)
 		{
 			rand.SetSeed(187L);
-			GL.PushMatrix();
-			GL.Translate((float)d2, (float)d4, (float)d6);
-			GL.Rotate(f8, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
+            Minecraft.newRenderer.ModelMatrix.Rotate(f8, 0.0F, 1.0F, 0.0F);
 			GL.Enable(EnableCap.RescaleNormal);
 			this.loadTexture("/art/kz.png");
 			EnumArt enumArt10 = entityPainting1.art;
 			float f11 = 0.0625F;
-			GL.Scale(f11, f11, f11);
+            Minecraft.newRenderer.ModelMatrix.Scale(f11, f11, f11);
 			this.func_159_a(entityPainting1, enumArt10.sizeX, enumArt10.sizeY, enumArt10.offsetX, enumArt10.offsetY);
 			GL.Disable(EnableCap.RescaleNormal);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 		}
 
 		private void func_159_a(EntityPainting entityPainting1, int i2, int i3, int i4, int i5)

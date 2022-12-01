@@ -23,7 +23,7 @@ namespace net.minecraft.src
 				this.imageHeight = 32;
 				Image<Bgra32> bufferedImage2 = new Image<Bgra32>(this.imageWidth, this.imageHeight);
 				bufferedImage2.Mutate(x => x.DrawImage(bufferedImage1, 1.0f));
-				RenderEngine.FillIntBufferWithImage(bufferedImage2, imageData);
+				TextureManager.FillIntBufferWithImage(bufferedImage2, imageData);
 				this.func_884_b(0, 0, 32, 16);
 				this.func_885_a(32, 0, 64, 32);
 				this.func_884_b(0, 16, 64, 32);

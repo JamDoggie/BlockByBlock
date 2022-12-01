@@ -1,6 +1,8 @@
 ﻿using System;
 using BlockByBlock.helpers;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 
 namespace net.minecraft.src
 {
@@ -78,29 +80,32 @@ namespace net.minecraft.src
 			int i5 = (this.width - this.xSize) / 2;
 			int i6 = (this.height - this.ySize) / 2;
 			this.drawTexturedModalRect(i5, i6, 0, 0, this.xSize, this.ySize);
-			GL.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
 			GL.MatrixMode(MatrixMode.Projection);
-			GL.PushMatrix();
-			GL.LoadIdentity();
+            Minecraft.newRenderer.CameraMatrix.PushMatrix();
+            Minecraft.newRenderer.CameraMatrix.LoadIdentity();
 			ScaledResolution scaledResolution7 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
 			GL.Viewport((scaledResolution7.ScaledWidth - 320) / 2 * scaledResolution7.scaleFactor, (scaledResolution7.ScaledHeight - 240) / 2 * scaledResolution7.scaleFactor, 320 * scaledResolution7.scaleFactor, 240 * scaledResolution7.scaleFactor);
-			GL.Translate(-0.34F, 0.23F, 0.0F);
-			Glu.Perspective(90.0F, 1.3333334F, 9.0F, 80.0F);
-			float f8 = 1.0F;
+            Minecraft.newRenderer.CameraMatrix.Translate(-0.34F, 0.23F, 0.0F);
+            
+			Matrix4 perspectiveMatrix = Glu.Perspective(90.0F, 1.3333334F, 9.0F, 80.0F);
+			Minecraft.newRenderer.CameraMatrix.MultMatrix(perspectiveMatrix);
+
+            float f8 = 1.0F;
 			GL.MatrixMode(MatrixMode.Modelview);
-			GL.LoadIdentity();
+            Minecraft.newRenderer.ModelMatrix.LoadIdentity();
 			RenderHelper.enableStandardItemLighting();
-			GL.Translate(0.0F, 3.3F, -16.0F);
-			GL.Scale(f8, f8, f8);
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 3.3F, -16.0F);
+            Minecraft.newRenderer.ModelMatrix.Scale(f8, f8, f8);
 			float f9 = 5.0F;
-			GL.Scale(f9, f9, f9);
-			GL.Rotate(180.0F, 0.0F, 0.0F, 1.0F);
+            Minecraft.newRenderer.ModelMatrix.Scale(f9, f9, f9);
+            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F, 0.0F, 0.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(this.mc.renderEngine.getTexture("/item/book.png"));
-			GL.Rotate(20.0F, 1.0F, 0.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(20.0F, 1.0F, 0.0F, 0.0F);
 			float f10 = this.field_40221_n + (this.field_40224_m - this.field_40221_n) * f1;
-			GL.Translate((1.0F - f10) * 0.2F, (1.0F - f10) * 0.1F, (1.0F - f10) * 0.25F);
-			GL.Rotate(-(1.0F - f10) * 90.0F - 90.0F, 0.0F, 1.0F, 0.0F);
-			GL.Rotate(180.0F, 1.0F, 0.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Translate((1.0F - f10) * 0.2F, (1.0F - f10) * 0.1F, (1.0F - f10) * 0.25F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(-(1.0F - f10) * 90.0F - 90.0F, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F, 1.0F, 0.0F, 0.0F);
 			float f11 = this.field_40225_j + (this.field_40229_i - this.field_40225_j) * f1 + 0.25F;
 			float f12 = this.field_40225_j + (this.field_40229_i - this.field_40225_j) * f1 + 0.75F;
 			f11 = (f11 - (float)MathHelper.func_40346_b((double)f11)) * 1.6F - 0.3F;
@@ -131,9 +136,9 @@ namespace net.minecraft.src
 			RenderHelper.disableStandardItemLighting();
 			GL.MatrixMode(MatrixMode.Projection);
 			GL.Viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
-			GL.PopMatrix();
+            Minecraft.newRenderer.CameraMatrix.PopMatrix();
 			GL.MatrixMode(MatrixMode.Modelview);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			RenderHelper.disableStandardItemLighting();
 			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i4);

@@ -21,7 +21,7 @@ namespace net.minecraft.src
 		{
 		}
 
-		public virtual void bindImage(RenderEngine renderEngine1)
+		public virtual void bindImage(TextureManager renderEngine1)
 		{
 			if (this.tileImage == 0)
 			{

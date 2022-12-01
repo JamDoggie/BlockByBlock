@@ -22,7 +22,7 @@ namespace net.minecraft.src
 		private readonly int[] glyphTextureName = new int[256];
 		private int[] colorCode = new int[32];
 		private int boundTextureName;
-		private readonly RenderEngine renderEngine;
+		private readonly TextureManager renderEngine;
 		private float posX;
 		private float posY;
 		private bool unicodeFlag;
@@ -37,7 +37,7 @@ namespace net.minecraft.src
 			this.renderEngine = null;
 		}
 
-		public FontRenderer(GameSettings gameSettings1, string string2, RenderEngine renderEngine3, bool z4)
+		public FontRenderer(GameSettings gameSettings1, string string2, TextureManager renderEngine3, bool z4)
 		{
 			this.renderEngine = renderEngine3;
 			this.unicodeFlag = z4;
@@ -53,7 +53,7 @@ namespace net.minecraft.src
 			int i19 = bufferedImage5.Width;
 			int i7 = bufferedImage5.Height;
 			int[] i8 = new int[i19 * i7];
-			RenderEngine.FillIntBufferWithImage(bufferedImage5, i8);
+			TextureManager.FillIntBufferWithImage(bufferedImage5, i8);
 			int i9;
 			int i10;
 			int i11;

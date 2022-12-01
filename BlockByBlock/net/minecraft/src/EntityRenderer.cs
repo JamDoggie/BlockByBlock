@@ -2,7 +2,9 @@
 using System.Threading;
 using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -11,7 +13,7 @@ namespace net.minecraft.src
 
 	using Minecraft = net.minecraft.client.Minecraft;
 
-	public class EntityRenderer
+	public class GameRenderer
 	{
 		public static bool anaglyphEnable = false;
 		public static int anaglyphField;
@@ -71,7 +73,7 @@ namespace net.minecraft.src
 		private float fogColor1;
 		public int debugViewDirection;
 
-		public EntityRenderer(Minecraft minecraft1)
+		public GameRenderer(Minecraft minecraft1)
 		{
 			this.mc = minecraft1;
 			this.itemRenderer = new ItemRenderer(minecraft1);
@@ -243,7 +245,7 @@ namespace net.minecraft.src
 			if (entityLiving2.Health <= 0)
 			{
 				f4 = (float)entityLiving2.deathTime + f1;
-				GL.Rotate(40.0F - 8000.0F / (f4 + 200.0F), 0.0F, 0.0F, 1.0F);
+				Minecraft.newRenderer.ModelMatrix.Rotate(40.0F - 8000.0F / (f4 + 200.0F), 0.0F, 0.0F, 1.0F);
 			}
 
 			if (f3 >= 0.0F)
@@ -251,9 +253,9 @@ namespace net.minecraft.src
 				f3 /= (float)entityLiving2.maxHurtTime;
 				f3 = MathHelper.sin(f3 * f3 * f3 * f3 * (float)Math.PI);
 				f4 = entityLiving2.attackedAtYaw;
-				GL.Rotate(-f4, 0.0F, 1.0F, 0.0F);
-				GL.Rotate(-f3 * 14.0F, 0.0F, 0.0F, 1.0F);
-				GL.Rotate(f4, 0.0F, 1.0F, 0.0F);
+				Minecraft.newRenderer.ModelMatrix.Rotate(-f4, 0.0F, 1.0F, 0.0F);
+				Minecraft.newRenderer.ModelMatrix.Rotate(-f3 * 14.0F, 0.0F, 0.0F, 1.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(f4, 0.0F, 1.0F, 0.0F);
 			}
 		}
 
@@ -266,10 +268,10 @@ namespace net.minecraft.src
 				float f4 = -(entityPlayer2.distanceWalkedModified + f3 * f1);
 				float f5 = entityPlayer2.prevCameraYaw + (entityPlayer2.cameraYaw - entityPlayer2.prevCameraYaw) * f1;
 				float f6 = entityPlayer2.prevCameraPitch + (entityPlayer2.cameraPitch - entityPlayer2.prevCameraPitch) * f1;
-				GL.Translate(MathHelper.sin(f4 * (float)Math.PI) * f5 * 0.5F, -Math.Abs(MathHelper.cos(f4 * (float)Math.PI) * f5), 0.0F);
-				GL.Rotate(MathHelper.sin(f4 * (float)Math.PI) * f5 * 3.0F, 0.0F, 0.0F, 1.0F);
-				GL.Rotate(Math.Abs(MathHelper.cos(f4 * (float)Math.PI - 0.2F) * f5) * 5.0F, 1.0F, 0.0F, 0.0F);
-				GL.Rotate(f6, 1.0F, 0.0F, 0.0F);
+				Minecraft.newRenderer.ModelMatrix.Translate(MathHelper.sin(f4 * (float)Math.PI) * f5 * 0.5F, -Math.Abs(MathHelper.cos(f4 * (float)Math.PI) * f5), 0.0F);
+				Minecraft.newRenderer.ModelMatrix.Rotate(MathHelper.sin(f4 * (float)Math.PI) * f5 * 3.0F, 0.0F, 0.0F, 1.0F);
+				Minecraft.newRenderer.ModelMatrix.Rotate(Math.Abs(MathHelper.cos(f4 * (float)Math.PI - 0.2F) * f5) * 5.0F, 1.0F, 0.0F, 0.0F);
+				Minecraft.newRenderer.ModelMatrix.Rotate(f6, 1.0F, 0.0F, 0.0F);
 			}
 		}
 
@@ -280,11 +282,11 @@ namespace net.minecraft.src
 			double d4 = entityLiving2.prevPosX + (entityLiving2.posX - entityLiving2.prevPosX) * (double)f1;
 			double d6 = entityLiving2.prevPosY + (entityLiving2.posY - entityLiving2.prevPosY) * (double)f1 - (double)f3;
 			double d8 = entityLiving2.prevPosZ + (entityLiving2.posZ - entityLiving2.prevPosZ) * (double)f1;
-			GL.Rotate(this.prevCamRoll + (this.camRoll - this.prevCamRoll) * f1, 0.0F, 0.0F, 1.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(this.prevCamRoll + (this.camRoll - this.prevCamRoll) * f1, 0.0F, 0.0F, 1.0F);
 			if (entityLiving2.PlayerSleeping)
 			{
 				f3 = (float)((double)f3 + 1.0D);
-				GL.Translate(0.0F, 0.3F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.3F, 0.0F);
 				if (!this.mc.gameSettings.debugCamEnable)
 				{
 					int i10 = this.mc.theWorld.getBlockId(MathHelper.floor_double(entityLiving2.posX), MathHelper.floor_double(entityLiving2.posY), MathHelper.floor_double(entityLiving2.posZ));
@@ -292,11 +294,11 @@ namespace net.minecraft.src
 					{
 						int i11 = this.mc.theWorld.getBlockMetadata(MathHelper.floor_double(entityLiving2.posX), MathHelper.floor_double(entityLiving2.posY), MathHelper.floor_double(entityLiving2.posZ));
 						int i12 = i11 & 3;
-						GL.Rotate((float)(i12 * 90), 0.0F, 1.0F, 0.0F);
+                        Minecraft.newRenderer.ModelMatrix.Rotate((float)(i12 * 90), 0.0F, 1.0F, 0.0F);
 					}
 
-					GL.Rotate(entityLiving2.prevRotationYaw + (entityLiving2.rotationYaw - entityLiving2.prevRotationYaw) * f1 + 180.0F, 0.0F, -1.0F, 0.0F);
-					GL.Rotate(entityLiving2.prevRotationPitch + (entityLiving2.rotationPitch - entityLiving2.prevRotationPitch) * f1, -1.0F, 0.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(entityLiving2.prevRotationYaw + (entityLiving2.rotationYaw - entityLiving2.prevRotationYaw) * f1 + 180.0F, 0.0F, -1.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(entityLiving2.prevRotationPitch + (entityLiving2.rotationPitch - entityLiving2.prevRotationPitch) * f1, -1.0F, 0.0F, 0.0F);
 				}
 			}
 			else if (this.mc.gameSettings.thirdPersonView > 0)
@@ -308,9 +310,9 @@ namespace net.minecraft.src
 				{
 					f28 = this.prevDebugCamYaw + (this.debugCamYaw - this.prevDebugCamYaw) * f1;
 					f13 = this.prevDebugCamPitch + (this.debugCamPitch - this.prevDebugCamPitch) * f1;
-					GL.Translate(0.0F, 0.0F, (float)(-d27));
-					GL.Rotate(f13, 1.0F, 0.0F, 0.0F);
-					GL.Rotate(f28, 0.0F, 1.0F, 0.0F);
+					Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, (float)(-d27));
+					Minecraft.newRenderer.ModelMatrix.Rotate(f13, 1.0F, 0.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(f28, 0.0F, 1.0F, 0.0F);
 				}
 				else
 				{
@@ -346,28 +348,28 @@ namespace net.minecraft.src
 
 					if (this.mc.gameSettings.thirdPersonView == 2)
 					{
-						GL.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                        Minecraft.newRenderer.ModelMatrix.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
 					}
 
-					GL.Rotate(entityLiving2.rotationPitch - f13, 1.0F, 0.0F, 0.0F);
-					GL.Rotate(entityLiving2.rotationYaw - f28, 0.0F, 1.0F, 0.0F);
-					GL.Translate(0.0F, 0.0F, (float)(-d27));
-					GL.Rotate(f28 - entityLiving2.rotationYaw, 0.0F, 1.0F, 0.0F);
-					GL.Rotate(f13 - entityLiving2.rotationPitch, 1.0F, 0.0F, 0.0F);
+					Minecraft.newRenderer.ModelMatrix.Rotate(entityLiving2.rotationPitch - f13, 1.0F, 0.0F, 0.0F);
+					Minecraft.newRenderer.ModelMatrix.Rotate(entityLiving2.rotationYaw - f28, 0.0F, 1.0F, 0.0F);
+					Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, (float)(-d27));
+					Minecraft.newRenderer.ModelMatrix.Rotate(f28 - entityLiving2.rotationYaw, 0.0F, 1.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(f13 - entityLiving2.rotationPitch, 1.0F, 0.0F, 0.0F);
 				}
 			}
 			else
 			{
-				GL.Translate(0.0F, 0.0F, -0.1F);
+                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -0.1F);
 			}
 
 			if (!this.mc.gameSettings.debugCamEnable)
 			{
-				GL.Rotate(entityLiving2.prevRotationPitch + (entityLiving2.rotationPitch - entityLiving2.prevRotationPitch) * f1, 1.0F, 0.0F, 0.0F);
-				GL.Rotate(entityLiving2.prevRotationYaw + (entityLiving2.rotationYaw - entityLiving2.prevRotationYaw) * f1 + 180.0F, 0.0F, 1.0F, 0.0F);
+				Minecraft.newRenderer.ModelMatrix.Rotate(entityLiving2.prevRotationPitch + (entityLiving2.rotationPitch - entityLiving2.prevRotationPitch) * f1, 1.0F, 0.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(entityLiving2.prevRotationYaw + (entityLiving2.rotationYaw - entityLiving2.prevRotationYaw) * f1 + 180.0F, 0.0F, 1.0F, 0.0F);
 			}
 
-			GL.Translate(0.0F, f3, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, f3, 0.0F);
 			d4 = entityLiving2.prevPosX + (entityLiving2.posX - entityLiving2.prevPosX) * (double)f1;
 			d6 = entityLiving2.prevPosY + (entityLiving2.posY - entityLiving2.prevPosY) * (double)f1 - (double)f3;
 			d8 = entityLiving2.prevPosZ + (entityLiving2.posZ - entityLiving2.prevPosZ) * (double)f1;
@@ -378,32 +380,37 @@ namespace net.minecraft.src
 		{
 			this.farPlaneDistance = (float)(256 >> this.mc.gameSettings.renderDistance);
 			GL.MatrixMode(MatrixMode.Projection);
-			GL.LoadIdentity();
+
+			Minecraft.newRenderer.CameraMatrix.LoadIdentity();
+
 			float f3 = 0.07F;
 			if (this.mc.gameSettings.anaglyph)
 			{
-				GL.Translate((float)(-(i2 * 2 - 1)) * f3, 0.0F, 0.0F);
+				Minecraft.newRenderer.CameraMatrix.Translate((float)(-(i2 * 2 - 1)) * f3, 0.0F, 0.0F);
 			}
 
 			if (this.cameraZoom != 1.0D)
 			{
-				GL.Translate((float)this.cameraYaw, (float)(-this.cameraPitch), 0.0F);
-				GL.Scale(this.cameraZoom, this.cameraZoom, 1.0D);
-			}
+                Minecraft.newRenderer.CameraMatrix.Translate((float)this.cameraYaw, (float)(-this.cameraPitch), 0.0F);
+                Minecraft.newRenderer.CameraMatrix.Scale((float)this.cameraZoom, (float)this.cameraZoom, 1.0F);
+            }
             
-			Glu.Perspective(getFOVModifier(f1, true), (float)mc.displayWidth / (float)mc.displayHeight, 0.05F, farPlaneDistance * 2.0F);
-			float f4;
-			if (this.mc.playerController.func_35643_e())
+			Matrix4 cameraMatrix = Glu.Perspective(getFOVModifier(f1, true), (float)mc.displayWidth / (float)mc.displayHeight, 0.05F, farPlaneDistance * 2.0F);
+			Minecraft.newRenderer.CameraMatrix.MultMatrix(cameraMatrix); 
+
+            float f4;
+			if (mc.playerController.IsPanoramaCamera())
 			{
 				f4 = 0.6666667F;
-				GL.Scale(1.0F, f4, 1.0F);
+				Minecraft.newRenderer.CameraMatrix.Scale(1.0F, f4, 1.0F);
 			}
 
 			GL.MatrixMode(MatrixMode.Modelview);
-			GL.LoadIdentity();
+			Minecraft.newRenderer.ModelMatrix.LoadIdentity();
+
 			if (this.mc.gameSettings.anaglyph)
 			{
-				GL.Translate((float)(i2 * 2 - 1) * 0.1F, 0.0F, 0.0F);
+				Minecraft.newRenderer.ModelMatrix.Translate((float)(i2 * 2 - 1) * 0.1F, 0.0F, 0.0F);
 			}
 
 			this.hurtCameraEffect(f1);
@@ -423,9 +430,10 @@ namespace net.minecraft.src
 
 				float f6 = 5.0F / (f4 * f4 + 5.0F) - f4 * 0.04F;
 				f6 *= f6;
-				GL.Rotate(((float)this.rendererUpdateCount + f1) * (float)b5, 0.0F, 1.0F, 1.0F);
-				GL.Scale(1.0F / f6, 1.0F, 1.0F);
-				GL.Rotate(-((float)this.rendererUpdateCount + f1) * (float)b5, 0.0F, 1.0F, 1.0F);
+
+				Minecraft.newRenderer.ModelMatrix.Rotate(((float)this.rendererUpdateCount + f1) * (float)b5, 0.0F, 1.0F, 1.0F);
+				Minecraft.newRenderer.ModelMatrix.Scale(1.0F / f6, 1.0F, 1.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(-((float)this.rendererUpdateCount + f1) * (float)b5, 0.0F, 1.0F, 1.0F);
 			}
 
 			this.orientCamera(f1);
@@ -434,27 +442,27 @@ namespace net.minecraft.src
 				int i7 = this.debugViewDirection - 1;
 				if (i7 == 1)
 				{
-					GL.Rotate(90.0F, 0.0F, 1.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(90.0F, 0.0F, 1.0F, 0.0F);
 				}
 
 				if (i7 == 2)
 				{
-					GL.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
 				}
 
 				if (i7 == 3)
 				{
-					GL.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
 				}
 
 				if (i7 == 4)
 				{
-					GL.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
 				}
 
 				if (i7 == 5)
 				{
-					GL.Rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 				}
 			}
 
@@ -464,50 +472,53 @@ namespace net.minecraft.src
 		{
 			if (this.debugViewDirection <= 0)
 			{
-				GL.MatrixMode(MatrixMode.Projection);
-				GL.LoadIdentity();
+				Minecraft.newRenderer.CameraMatrix.LoadIdentity();
+
 				float f3 = 0.07F;
 				if (this.mc.gameSettings.anaglyph)
 				{
-					GL.Translate((float)(-(i2 * 2 - 1)) * f3, 0.0F, 0.0F);
+                    Minecraft.newRenderer.CameraMatrix.Translate((float)(-(i2 * 2 - 1)) * f3, 0.0F, 0.0F);
 				}
 
 				if (this.cameraZoom != 1.0D)
 				{
-					GL.Translate((float)this.cameraYaw, (float)(-this.cameraPitch), 0.0F);
-					GL.Scale(this.cameraZoom, this.cameraZoom, 1.0D);
+                    Minecraft.newRenderer.CameraMatrix.Translate((float)this.cameraYaw, (float)(-this.cameraPitch), 0.0F);
+                    Minecraft.newRenderer.CameraMatrix.Scale((float)this.cameraZoom, (float)this.cameraZoom, 1.0F);
 				}
+                
+                Matrix4 cameraMatrix = Glu.Perspective(getFOVModifier(f1, false), (float)mc.displayWidth / (float)mc.displayHeight, 0.05F, farPlaneDistance * 2.0F);
+				Minecraft.newRenderer.CameraMatrix.MultMatrix(cameraMatrix);
 
-				Glu.Perspective(this.getFOVModifier(f1, false), (float)this.mc.displayWidth / (float)this.mc.displayHeight, 0.05F, this.farPlaneDistance * 2.0F);
-				if (this.mc.playerController.func_35643_e())
+                if (this.mc.playerController.IsPanoramaCamera())
 				{
 					float f4 = 0.6666667F;
-					GL.Scale(1.0F, f4, 1.0F);
+                    Minecraft.newRenderer.CameraMatrix.Scale(1.0F, f4, 1.0F);
 				}
+                
+                Minecraft.newRenderer.ModelMatrix.LoadIdentity();
 
-				GL.MatrixMode(MatrixMode.Modelview);
-				GL.LoadIdentity();
-				if (this.mc.gameSettings.anaglyph)
+                if (this.mc.gameSettings.anaglyph)
 				{
-					GL.Translate((float)(i2 * 2 - 1) * 0.1F, 0.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Translate((float)(i2 * 2 - 1) * 0.1F, 0.0F, 0.0F);
 				}
 
-				GL.PushMatrix();
-				this.hurtCameraEffect(f1);
+				Minecraft.newRenderer.ModelMatrix.PushMatrix();
+
+                this.hurtCameraEffect(f1);
 				if (this.mc.gameSettings.viewBobbing)
 				{
 					this.setupViewBobbing(f1);
 				}
 
-				if (this.mc.gameSettings.thirdPersonView == 0 && !this.mc.renderViewEntity.PlayerSleeping && !this.mc.gameSettings.hideGUI && !this.mc.playerController.func_35643_e())
+				if (this.mc.gameSettings.thirdPersonView == 0 && !this.mc.renderViewEntity.PlayerSleeping && !this.mc.gameSettings.hideGUI && !this.mc.playerController.IsPanoramaCamera())
 				{
 					this.enableLightmap((double)f1);
 					this.itemRenderer.renderItemInFirstPerson(f1);
 					this.disableLightmap((double)f1);
 				}
-
-				GL.PopMatrix();
-				if (this.mc.gameSettings.thirdPersonView == 0 && !this.mc.renderViewEntity.PlayerSleeping)
+                
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
+                if (this.mc.gameSettings.thirdPersonView == 0 && !this.mc.renderViewEntity.PlayerSleeping)
 				{
 					this.itemRenderer.renderOverlays(f1);
 					this.hurtCameraEffect(f1);
@@ -532,19 +543,19 @@ namespace net.minecraft.src
 		{
 			OpenGlHelper.ActiveTexture = OpenGlHelper.lightmapTexUnit;
 			GL.MatrixMode(MatrixMode.Texture);
-			GL.LoadIdentity();
+			Minecraft.newRenderer.TextureMatrix.LoadIdentity();
 			float f3 = 0.00390625F;
-			GL.Scale(f3, f3, f3);
-			GL.Translate(8.0F, 8.0F, 8.0F);
+            Minecraft.newRenderer.TextureMatrix.Scale(f3, f3, f3);
+            Minecraft.newRenderer.TextureMatrix.Translate(8.0F, 8.0F, 8.0F);
 			GL.MatrixMode(MatrixMode.Modelview);
 			this.mc.renderEngine.bindTexture(this.lightmapTexture);
 
-            GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, RenderEngine.TextureFilterLinear);
-			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, RenderEngine.TextureFilterLinear);
-			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, RenderEngine.TextureFilterLinear);
-			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, RenderEngine.TextureFilterLinear);
-			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, RenderEngine.TextureWrapClamp);
-			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, RenderEngine.TextureWrapClamp);
+            GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, TextureManager.TextureFilterLinear);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, TextureManager.TextureFilterLinear);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, TextureManager.TextureFilterLinear);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, TextureManager.TextureFilterLinear);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, TextureManager.TextureWrapClamp);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, TextureManager.TextureWrapClamp);
 			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			GL.Enable(EnableCap.Texture2D);
 			OpenGlHelper.ActiveTexture = OpenGlHelper.defaultTexUnit;
@@ -774,11 +785,13 @@ namespace net.minecraft.src
 				else
 				{
                     GL.Viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
+
 					GL.MatrixMode(MatrixMode.Projection);
-					GL.LoadIdentity();
+					Minecraft.newRenderer.CameraMatrix.LoadIdentity();
 					GL.MatrixMode(MatrixMode.Modelview);
-					GL.LoadIdentity();
-					this.setupOverlayRendering();
+                    Minecraft.newRenderer.ModelMatrix.LoadIdentity();
+
+                    this.setupOverlayRendering();
 					sleepMs = (this.renderEndNanoTime + (long)(1000000000 / s18) - JTime.NanoTime()) / 1000000L;
 					if (sleepMs < 0L)
 					{
@@ -863,7 +876,7 @@ namespace net.minecraft.src
 				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 				GL.Enable(EnableCap.CullFace);
 				Profiler.endStartSection("camera");
-				this.setupCameraTransform(f1, i18);
+				setupCameraTransform(f1, i18);
 				ActiveRenderInfo.updateRenderInfo(this.mc.thePlayer, this.mc.gameSettings.thirdPersonView == 2);
 				Profiler.endStartSection("frustrum");
 				ClippingHelperImpl.getInstance();
@@ -1002,13 +1015,13 @@ namespace net.minecraft.src
 				if (this.mc.gameSettings.shouldRenderClouds())
 				{
 					Profiler.endStartSection("clouds");
-					GL.PushMatrix();
-					this.setupFog(0, f1);
+                    Minecraft.newRenderer.ModelMatrix.PushMatrix();
+                    this.setupFog(0, f1);
 					GL.Enable(EnableCap.Fog);
 					renderGlobal5.renderClouds(f1);
 					GL.Disable(EnableCap.Fog);
 					this.setupFog(1, f1);
-					GL.PopMatrix();
+                    Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				}
 
 				Profiler.endStartSection("hand");
@@ -1282,11 +1295,12 @@ namespace net.minecraft.src
 			ScaledResolution scaledResolution1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
 			GL.Clear(ClearBufferMask.DepthBufferBit);
 			GL.MatrixMode(MatrixMode.Projection);
-			GL.LoadIdentity();
-			GL.Ortho(0.0D, scaledResolution1.scaledWidthD, scaledResolution1.scaledHeightD, 0.0D, 1000.0D, 3000.0D);
+			Minecraft.newRenderer.CameraMatrix.LoadIdentity();
+            Minecraft.newRenderer.CameraMatrix.Ortho(0.0D, scaledResolution1.scaledWidthD, scaledResolution1.scaledHeightD, 0.0D, 1000.0D, 3000.0D);
 			GL.MatrixMode(MatrixMode.Modelview);
-			GL.LoadIdentity();
-			GL.Translate(0.0F, 0.0F, -2000.0F);
+			Minecraft.newRenderer.ModelMatrix.LoadIdentity();
+
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -2000.0F);
 		}
 
 		private void updateFogColor(float f1)

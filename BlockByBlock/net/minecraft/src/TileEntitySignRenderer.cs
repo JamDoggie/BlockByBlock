@@ -1,5 +1,6 @@
 ﻿namespace net.minecraft.src
 {
+	using net.minecraft.client;
 	using OpenTK.Graphics.OpenGL;
 	
 	public class TileEntitySignRenderer : TileEntitySpecialRenderer
@@ -9,14 +10,14 @@
 		public virtual void renderTileEntitySignAt(TileEntitySign tileEntitySign1, double d2, double d4, double d6, float f8)
 		{
 			Block block9 = tileEntitySign1.BlockType;
-			GL.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
 			float f10 = 0.6666667F;
 			float f12;
 			if (block9 == Block.signPost)
 			{
-				GL.Translate((float)d2 + 0.5F, (float)d4 + 0.75F * f10, (float)d6 + 0.5F);
+                Minecraft.newRenderer.ModelMatrix.Translate((float)d2 + 0.5F, (float)d4 + 0.75F * f10, (float)d6 + 0.5F);
 				float f11 = (float)(tileEntitySign1.BlockMetadata * 360) / 16.0F;
-				GL.Rotate(-f11, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(-f11, 0.0F, 1.0F, 0.0F);
 				this.modelSign.signStick.showModel = true;
 			}
 			else
@@ -38,21 +39,21 @@
 					f12 = -90.0F;
 				}
 
-				GL.Translate((float)d2 + 0.5F, (float)d4 + 0.75F * f10, (float)d6 + 0.5F);
-				GL.Rotate(-f12, 0.0F, 1.0F, 0.0F);
-				GL.Translate(0.0F, -0.3125F, -0.4375F);
+                Minecraft.newRenderer.ModelMatrix.Translate((float)d2 + 0.5F, (float)d4 + 0.75F * f10, (float)d6 + 0.5F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(-f12, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, -0.3125F, -0.4375F);
 				this.modelSign.signStick.showModel = false;
 			}
 
 			this.bindTextureByName("/item/sign.png");
-			GL.PushMatrix();
-			GL.Scale(f10, -f10, -f10);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Scale(f10, -f10, -f10);
 			this.modelSign.renderSign();
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			FontRenderer fontRenderer17 = this.FontRenderer;
 			f12 = 0.016666668F * f10;
-			GL.Translate(0.0F, 0.5F * f10, 0.07F * f10);
-			GL.Scale(f12, -f12, f12);
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.5F * f10, 0.07F * f10);
+            Minecraft.newRenderer.ModelMatrix.Scale(f12, -f12, f12);
 			GL.Normal3(0.0F, 0.0F, -1.0F * f12);
 			GL.DepthMask(false);
 			sbyte b13 = 0;
@@ -73,7 +74,7 @@
 
 			GL.DepthMask(true);
 			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 		}
 
 		public override void renderTileEntityAt(TileEntity tileEntity1, double d2, double d4, double d6, float f8)

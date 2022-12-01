@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -21,22 +22,22 @@ namespace net.minecraft.src
 			{
 				this.loadTexture("/terrain.png");
 				GL.Enable(EnableCap.CullFace);
-				GL.PushMatrix();
-				GL.Scale(1.0F, -1.0F, 1.0F);
-				GL.Translate(0.2F, 0.4F, 0.5F);
-				GL.Rotate(42.0F, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.Scale(1.0F, -1.0F, 1.0F);
+                Minecraft.newRenderer.ModelMatrix.Translate(0.2F, 0.4F, 0.5F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(42.0F, 0.0F, 1.0F, 0.0F);
 				this.renderBlocks.renderBlockAsItem(Block.mushroomRed, 0, 1.0F);
-				GL.Translate(0.1F, 0.0F, -0.6F);
-				GL.Rotate(42.0F, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Translate(0.1F, 0.0F, -0.6F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(42.0F, 0.0F, 1.0F, 0.0F);
 				this.renderBlocks.renderBlockAsItem(Block.mushroomRed, 0, 1.0F);
-				GL.PopMatrix();
-				GL.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
 				((ModelQuadruped)this.mainModel).head.postRender(0.0625F);
-				GL.Scale(1.0F, -1.0F, 1.0F);
-				GL.Translate(0.0F, 0.75F, -0.2F);
-				GL.Rotate(12.0F, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Scale(1.0F, -1.0F, 1.0F);
+                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.75F, -0.2F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(12.0F, 0.0F, 1.0F, 0.0F);
 				this.renderBlocks.renderBlockAsItem(Block.mushroomRed, 0, 1.0F);
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				GL.Disable(EnableCap.CullFace);
 			}
 		}

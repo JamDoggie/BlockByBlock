@@ -13,7 +13,7 @@ namespace net.minecraft.src
 		public static double renderPosX;
 		public static double renderPosY;
 		public static double renderPosZ;
-		public RenderEngine renderEngine;
+		public TextureManager renderEngine;
 		public ItemRenderer itemRenderer;
 		public World worldObj;
 		public EntityLiving livingPlayer;
@@ -99,7 +99,7 @@ namespace net.minecraft.src
 			return this.getEntityClassRenderObject(entity1.GetType());
 		}
 
-		public virtual void cacheActiveRenderInfo(World world1, RenderEngine renderEngine2, FontRenderer fontRenderer3, EntityLiving entityLiving4, GameSettings gameSettings5, float f6)
+		public virtual void cacheActiveRenderInfo(World world1, TextureManager renderEngine2, FontRenderer fontRenderer3, EntityLiving entityLiving4, GameSettings gameSettings5, float f6)
 		{
 			this.worldObj = world1;
 			this.renderEngine = renderEngine2;

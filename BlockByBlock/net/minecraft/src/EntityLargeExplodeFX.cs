@@ -6,10 +6,10 @@ namespace net.minecraft.src
 	{
 		private int field_35130_a = 0;
 		private int field_35129_ay = 0;
-		private RenderEngine field_35128_az;
+		private TextureManager field_35128_az;
 		private float field_35131_aA;
 
-		public EntityLargeExplodeFX(RenderEngine renderEngine1, World world2, double d3, double d5, double d7, double d9, double d11, double d13) : base(world2, d3, d5, d7, 0.0D, 0.0D, 0.0D)
+		public EntityLargeExplodeFX(TextureManager renderEngine1, World world2, double d3, double d5, double d7, double d9, double d11, double d13) : base(world2, d3, d5, d7, 0.0D, 0.0D, 0.0D)
 		{
 			this.field_35128_az = renderEngine1;
 			this.field_35129_ay = 6 + this.rand.Next(4);

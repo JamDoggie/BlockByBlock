@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -53,19 +54,19 @@ namespace net.minecraft.src
 			if (this.isChild)
 			{
 				float f8 = 2.0F;
-				GL.PushMatrix();
-				GL.Translate(0.0F, this.field_40331_g * f7, this.field_40332_n * f7);
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, this.field_40331_g * f7, this.field_40332_n * f7);
 				this.head.render(f7);
-				GL.PopMatrix();
-				GL.PushMatrix();
-				GL.Scale(1.0F / f8, 1.0F / f8, 1.0F / f8);
-				GL.Translate(0.0F, 24.0F * f7, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.Scale(1.0F / f8, 1.0F / f8, 1.0F / f8);
+                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 24.0F * f7, 0.0F);
 				this.body.render(f7);
 				this.leg1.render(f7);
 				this.leg2.render(f7);
 				this.leg3.render(f7);
 				this.leg4.render(f7);
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			}
 			else
 			{

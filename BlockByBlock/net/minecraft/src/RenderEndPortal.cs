@@ -1,5 +1,6 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
@@ -19,7 +20,7 @@ namespace net.minecraft.src
 
 			for (int i14 = 0; i14 < 16; ++i14)
 			{
-				GL.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
 				float f15 = (float)(16 - i14);
 				float f16 = 0.0625F;
 				float f17 = 1.0F / (f15 + 1.0F);
@@ -46,7 +47,7 @@ namespace net.minecraft.src
 				float f20 = f18 + f15 + ActiveRenderInfo.objectY;
 				float f21 = f19 / f20;
 				f21 += (float)(d4 + (double)f13);
-				GL.Translate(f9, f21, f11);
+                Minecraft.newRenderer.ModelMatrix.Translate(f9, f21, f11);
                 GL.TexGen(TextureCoordName.S, TextureGenParameter.TextureGenMode, (int)All.ObjectLinear);
 				GL.TexGen(TextureCoordName.T, TextureGenParameter.TextureGenMode, (int)All.ObjectLinear);
 				GL.TexGen(TextureCoordName.R, TextureGenParameter.TextureGenMode, (int)All.ObjectLinear);
@@ -60,18 +61,18 @@ namespace net.minecraft.src
 				GL.Enable(EnableCap.TextureGenT);
 				GL.Enable(EnableCap.TextureGenR);
 				GL.Enable(EnableCap.TextureGenQ);
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				GL.MatrixMode(MatrixMode.Texture);
-				GL.PushMatrix();
-				GL.LoadIdentity();
-				GL.Translate(0.0F, (float)(DateTimeHelper.CurrentUnixTimeMillis() % 700000L) / 700000.0F, 0.0F);
-				GL.Scale(f16, f16, f16);
-				GL.Translate(0.5F, 0.5F, 0.0F);
-				GL.Rotate((float)(i14 * i14 * 4321 + i14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
-				GL.Translate(-0.5F, -0.5F, 0.0F);
-				GL.Translate(-f9, -f11, -f10);
+                Minecraft.newRenderer.TextureMatrix.PushMatrix();
+                Minecraft.newRenderer.TextureMatrix.LoadIdentity();
+				Minecraft.newRenderer.TextureMatrix.Translate(0.0F, (float)(DateTimeHelper.CurrentUnixTimeMillis() % 700000L) / 700000.0F, 0.0F);
+				Minecraft.newRenderer.TextureMatrix.Scale(f16, f16, f16);
+				Minecraft.newRenderer.TextureMatrix.Translate(0.5F, 0.5F, 0.0F);
+				Minecraft.newRenderer.TextureMatrix.Rotate((float)(i14 * i14 * 4321 + i14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
+				Minecraft.newRenderer.TextureMatrix.Translate(-0.5F, -0.5F, 0.0F);
+                Minecraft.newRenderer.TextureMatrix.Translate(-f9, -f11, -f10);
 				f19 = f18 + ActiveRenderInfo.objectY;
-				GL.Translate(ActiveRenderInfo.objectX * f15 / f19, ActiveRenderInfo.objectZ * f15 / f19, -f10);
+                Minecraft.newRenderer.TextureMatrix.Translate(ActiveRenderInfo.objectX * f15 / f19, ActiveRenderInfo.objectZ * f15 / f19, -f10);
 				Tessellator tessellator24 = Tessellator.instance;
 				tessellator24.startDrawingQuads();
 				f21 = random12.NextSingle() * 0.5F + 0.1F;
@@ -90,9 +91,9 @@ namespace net.minecraft.src
 				tessellator24.addVertex(d2 + 1.0D, d4 + (double)f13, d6 + 1.0D);
 				tessellator24.addVertex(d2 + 1.0D, d4 + (double)f13, d6);
 				tessellator24.draw();
-				GL.PopMatrix();
-				GL.MatrixMode(MatrixMode.Modelview);
-			}
+                Minecraft.newRenderer.TextureMatrix.PopMatrix();
+				GL.MatrixMode(MatrixMode.Modelview); 
+            }
 
 			GL.Disable(EnableCap.Blend);
 			GL.Disable(EnableCap.TextureGenS);

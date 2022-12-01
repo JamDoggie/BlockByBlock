@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -19,7 +20,7 @@ namespace net.minecraft.src
 			base.preRenderCallback(entityOcelot1, f2);
 			if (entityOcelot1.Tamed)
 			{
-				GL.Scale(0.8F, 0.8F, 0.8F);
+                Minecraft.newRenderer.ModelMatrix.Scale(0.8F, 0.8F, 0.8F);
 			}
 
 		}

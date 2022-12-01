@@ -1,4 +1,5 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
 using System;
 
@@ -32,9 +33,9 @@ namespace net.minecraft.src
 		{
 			float f5 = (float)entityDragon1.func_40160_a(7, f4)[0];
 			float f6 = (float)(entityDragon1.func_40160_a(5, f4)[1] - entityDragon1.func_40160_a(10, f4)[1]);
-			GL.Rotate(-f5, 0.0F, 1.0F, 0.0F);
-			GL.Rotate(f6 * 10.0F, 1.0F, 0.0F, 0.0F);
-			GL.Translate(0.0F, 0.0F, 1.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(-f5, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(f6 * 10.0F, 1.0F, 0.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, 1.0F);
 			if (entityDragon1.deathTime > 0)
 			{
 				float f7 = ((float)entityDragon1.deathTime + f4 - 1.0F) / 20.0F * 1.6F;
@@ -44,7 +45,7 @@ namespace net.minecraft.src
 					f7 = 1.0F;
 				}
 
-				GL.Rotate(f7 * this.getDeathMaxRotation(entityDragon1), 0.0F, 0.0F, 1.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(f7 * this.getDeathMaxRotation(entityDragon1), 0.0F, 0.0F, 1.0F);
 			}
 
 		}
@@ -100,10 +101,10 @@ namespace net.minecraft.src
 				float f14 = (float)(entityDragon1.healingEnderCrystal.posZ - entityDragon1.posZ - (entityDragon1.prevPosZ - entityDragon1.posZ) * (double)(1.0F - f9));
 				float f15 = MathHelper.sqrt_float(f12 * f12 + f14 * f14);
 				float f16 = MathHelper.sqrt_float(f12 * f12 + f13 * f13 + f14 * f14);
-				GL.PushMatrix();
-				GL.Translate((float)d2, (float)d4 + 2.0F, (float)d6);
-				GL.Rotate((float)(-Math.Atan2((double)f14, (double)f12)) * 180.0F / (float)Math.PI - 90.0F, 0.0F, 1.0F, 0.0F);
-				GL.Rotate((float)(-Math.Atan2((double)f15, (double)f13)) * 180.0F / (float)Math.PI - 90.0F, 1.0F, 0.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.Translate((float)d2, (float)d4 + 2.0F, (float)d6);
+                Minecraft.newRenderer.ModelMatrix.Rotate((float)(-Math.Atan2((double)f14, (double)f12)) * 180.0F / (float)Math.PI - 90.0F, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate((float)(-Math.Atan2((double)f15, (double)f13)) * 180.0F / (float)Math.PI - 90.0F, 1.0F, 0.0F, 0.0F);
 				Tessellator tessellator17 = Tessellator.instance;
 				RenderHelper.disableStandardItemLighting();
 				GL.Disable(EnableCap.CullFace);
@@ -129,7 +130,7 @@ namespace net.minecraft.src
 				GL.Enable(EnableCap.CullFace);
 				GL.ShadeModel(ShadingModel.Flat); ;
 				RenderHelper.enableStandardItemLighting();
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			}
 
 		}
@@ -156,17 +157,17 @@ namespace net.minecraft.src
 				GL.Disable(EnableCap.AlphaTest);
 				GL.Enable(EnableCap.CullFace);
 				GL.DepthMask(false);
-				GL.PushMatrix();
-				GL.Translate(0.0F, -1.0F, -2.0F);
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, -1.0F, -2.0F);
 
 				for (int i7 = 0; (float)i7 < (f4 + f4 * f4) / 2.0F * 60.0F; ++i7)
 				{
-					GL.Rotate(random6.NextSingle() * 360.0F, 1.0F, 0.0F, 0.0F);
-					GL.Rotate(random6.NextSingle() * 360.0F, 0.0F, 1.0F, 0.0F);
-					GL.Rotate(random6.NextSingle() * 360.0F, 0.0F, 0.0F, 1.0F);
-					GL.Rotate(random6.NextSingle() * 360.0F, 1.0F, 0.0F, 0.0F);
-					GL.Rotate(random6.NextSingle() * 360.0F, 0.0F, 1.0F, 0.0F);
-					GL.Rotate(random6.NextSingle() * 360.0F + f4 * 90.0F, 0.0F, 0.0F, 1.0F);
+					Minecraft.newRenderer.ModelMatrix.Rotate(random6.NextSingle() * 360.0F, 1.0F, 0.0F, 0.0F);
+					Minecraft.newRenderer.ModelMatrix.Rotate(random6.NextSingle() * 360.0F, 0.0F, 1.0F, 0.0F);
+					Minecraft.newRenderer.ModelMatrix.Rotate(random6.NextSingle() * 360.0F, 0.0F, 0.0F, 1.0F);
+					Minecraft.newRenderer.ModelMatrix.Rotate(random6.NextSingle() * 360.0F, 1.0F, 0.0F, 0.0F);
+					Minecraft.newRenderer.ModelMatrix.Rotate(random6.NextSingle() * 360.0F, 0.0F, 1.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(random6.NextSingle() * 360.0F + f4 * 90.0F, 0.0F, 0.0F, 1.0F);
 					tessellator3.startDrawing(6);
 					float f8 = random6.NextSingle() * 20.0F + 5.0F + f5 * 10.0F;
 					float f9 = random6.NextSingle() * 2.0F + 1.0F + f5 * 2.0F;
@@ -180,7 +181,7 @@ namespace net.minecraft.src
 					tessellator3.draw();
 				}
 
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				GL.DepthMask(true);
 				GL.Disable(EnableCap.CullFace);
 				GL.Disable(EnableCap.Blend);

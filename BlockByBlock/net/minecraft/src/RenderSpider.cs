@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -40,7 +41,7 @@ namespace net.minecraft.src
 		protected internal virtual void scaleSpider(EntitySpider entitySpider1, float f2)
 		{
 			float f3 = entitySpider1.spiderScaleAmount();
-			GL.Scale(f3, f3, f3);
+            Minecraft.newRenderer.ModelMatrix.Scale(f3, f3, f3);
 		}
 
 		protected internal override void preRenderCallback(EntityLiving entityLiving1, float f2)

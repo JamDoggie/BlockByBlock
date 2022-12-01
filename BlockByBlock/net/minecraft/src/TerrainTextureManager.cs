@@ -22,7 +22,7 @@ namespace net.minecraft.src
 			{
 				Image<Bgra32> bufferedImage1 = Image.Load<Bgra32>(GameEnv.GetResourceAsStream("/terrain.png"));
 				int[] i2 = new int[65536];
-				RenderEngine.FillIntBufferWithImage(bufferedImage1, i2);
+				TextureManager.FillIntBufferWithImage(bufferedImage1, i2);
 
 				for (int i3 = 0; i3 < 256; ++i3)
 				{

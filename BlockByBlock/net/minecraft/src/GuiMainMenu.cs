@@ -1,7 +1,9 @@
 ﻿using BlockByBlock;
 using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
+using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
@@ -160,14 +162,17 @@ namespace net.minecraft.src
 		{
 			Tessellator tessellator4 = Tessellator.instance;
 			GL.MatrixMode(MatrixMode.Projection);
-			GL.PushMatrix();
-			GL.LoadIdentity();
-			Glu.Perspective(120.0F, 1.0F, 0.05F, 10.0F);
-			GL.MatrixMode(MatrixMode.Modelview);
-			GL.PushMatrix();
-			GL.LoadIdentity();
+            Minecraft.newRenderer.CameraMatrix.PushMatrix();
+            Minecraft.newRenderer.CameraMatrix.LoadIdentity();
+            
+			Matrix4 projMatrix = Glu.Perspective(120.0F, 1.0F, 0.05F, 10.0F);
+			Minecraft.newRenderer.CameraMatrix.MultMatrix(projMatrix);
+
+            GL.MatrixMode(MatrixMode.Modelview);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.LoadIdentity();
 			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
-			GL.Rotate(180.0F, 1.0F, 0.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F, 1.0F, 0.0F, 0.0F);
 			GL.Enable(EnableCap.Blend);
 			GL.Disable(EnableCap.AlphaTest);
 			GL.Disable(EnableCap.CullFace);
@@ -177,40 +182,40 @@ namespace net.minecraft.src
 
 			for (int i6 = 0; i6 < b5 * b5; ++i6)
 			{
-				GL.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
 				float f7 = ((float)(i6 % b5) / (float)b5 - 0.5F) / 64.0F;
 				float f8 = ((float)(i6 / b5) / (float)b5 - 0.5F) / 64.0F;
 				float f9 = 0.0F;
-				GL.Translate(f7, f8, f9);
-				GL.Rotate(MathHelper.sin(((float)this.panoramaTimer + f3) / 400.0F) * 25.0F + 20.0F, 1.0F, 0.0F, 0.0F);
-				GL.Rotate(-((float)this.panoramaTimer + f3) * 0.1F, 0.0F, 1.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Translate(f7, f8, f9);
+                Minecraft.newRenderer.ModelMatrix.Rotate(MathHelper.sin(((float)this.panoramaTimer + f3) / 400.0F) * 25.0F + 20.0F, 1.0F, 0.0F, 0.0F);
+                Minecraft.newRenderer.ModelMatrix.Rotate(-((float)this.panoramaTimer + f3) * 0.1F, 0.0F, 1.0F, 0.0F);
 
 				for (int i10 = 0; i10 < 6; ++i10)
 				{
-					GL.PushMatrix();
+                    Minecraft.newRenderer.ModelMatrix.PushMatrix();
 					if (i10 == 1)
 					{
-						GL.Rotate(90.0F, 0.0F, 1.0F, 0.0F);
+                        Minecraft.newRenderer.ModelMatrix.Rotate(90.0F, 0.0F, 1.0F, 0.0F);
 					}
 
 					if (i10 == 2)
 					{
-						GL.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                        Minecraft.newRenderer.ModelMatrix.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
 					}
 
 					if (i10 == 3)
 					{
-						GL.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+                        Minecraft.newRenderer.ModelMatrix.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
 					}
 
 					if (i10 == 4)
 					{
-						GL.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
+                        Minecraft.newRenderer.ModelMatrix.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
 					}
 
 					if (i10 == 5)
 					{
-						GL.Rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+                        Minecraft.newRenderer.ModelMatrix.Rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 					}
 
 					GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/title/bg/panorama" + i10 + ".png"));
@@ -222,19 +227,19 @@ namespace net.minecraft.src
 					tessellator4.addVertexWithUV(1.0D, 1.0D, 1.0D, (double)(1.0F - f11), (double)(1.0F - f11));
 					tessellator4.addVertexWithUV(-1.0D, 1.0D, 1.0D, (double)(0.0F + f11), (double)(1.0F - f11));
 					tessellator4.draw();
-					GL.PopMatrix();
+                    Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				}
 
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 				GL.ColorMask(true, true, true, false);
 			}
 
 			tessellator4.setTranslation(0.0D, 0.0D, 0.0D);
 			GL.ColorMask(true, true, true, true);
 			GL.MatrixMode(MatrixMode.Projection);
-			GL.PopMatrix();
+            Minecraft.newRenderer.CameraMatrix.PopMatrix();
 			GL.MatrixMode(MatrixMode.Modelview);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			GL.DepthMask(true);
 			GL.Enable(EnableCap.CullFace);
 			GL.Enable(EnableCap.AlphaTest);
@@ -288,8 +293,8 @@ namespace net.minecraft.src
 			float f5 = this.width > this.height ? 120.0F / (float)this.width : 120.0F / (float)this.height;
 			float f6 = (float)this.height * f5 / 256.0F;
 			float f7 = (float)this.width * f5 / 256.0F;
-            GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, RenderEngine.TextureFilterLinear);
-			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, RenderEngine.TextureFilterLinear);
+            GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, TextureManager.TextureFilterLinear);
+			GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, TextureManager.TextureFilterLinear);
 			tessellator4.setColorRGBA_F(1.0F, 1.0F, 1.0F, 1.0F);
 			int i8 = this.width;
 			int i9 = this.height;
@@ -326,14 +331,14 @@ namespace net.minecraft.src
 			}
 
 			tessellator4.ColorOpaque_I = 0xFFFFFF;
-			GL.PushMatrix();
-			GL.Translate((float)(this.width / 2 + 90), 70.0F, 0.0F);
-			GL.Rotate(-20.0F, 0.0F, 0.0F, 1.0F);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate((float)(this.width / 2 + 90), 70.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(-20.0F, 0.0F, 0.0F, 1.0F);
 			float f8 = 1.8F - MathHelper.abs(MathHelper.sin((float)(DateTimeHelper.CurrentUnixTimeMillis() % 1000L) / 1000.0F * (float)Math.PI * 2.0F) * 0.1F);
 			f8 = f8 * 100.0F / (float)(this.fontRenderer.getStringWidth(this.splashText) + 32);
-			GL.Scale(f8, f8, f8);
+            Minecraft.newRenderer.ModelMatrix.Scale(f8, f8, f8);
 			this.drawCenteredString(this.fontRenderer, this.splashText, 0, -8, 16776960);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			this.drawString(this.fontRenderer, "Minecraft 1.2.5", 2, this.height - 10, 0xFFFFFF);
 			string string9 = "Copyright Mojang AB. Do not distribute!";
 			this.drawString(this.fontRenderer, string9, this.width - this.fontRenderer.getStringWidth(string9) - 2, this.height - 10, 0xFFFFFF);

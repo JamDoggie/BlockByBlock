@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -16,8 +17,8 @@ namespace net.minecraft.src
 
 		public virtual void func_35438_a(EntityXPOrb entityXPOrb1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL.PushMatrix();
-			GL.Translate((float)d2, (float)d4, (float)d6);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
 			int i10 = entityXPOrb1.TextureByXP;
 			this.loadTexture("/item/xporb.png");
 			Tessellator tessellator11 = Tessellator.instance;
@@ -39,10 +40,10 @@ namespace net.minecraft.src
 			int i22 = (int)f26;
 			int i23 = (int)((MathHelper.sin(f27 + 4.1887903F) + 1.0F) * 0.1F * f26);
 			int i24 = i21 << 16 | i22 << 8 | i23;
-			GL.Rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-			GL.Rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 			float f25 = 0.3F;
-			GL.Scale(f25, f25, f25);
+            Minecraft.newRenderer.ModelMatrix.Scale(f25, f25, f25);
 			tessellator11.startDrawingQuads();
 			tessellator11.setColorRGBA_I(i24, 128);
 			tessellator11.setNormal(0.0F, 1.0F, 0.0F);
@@ -53,7 +54,7 @@ namespace net.minecraft.src
 			tessellator11.draw();
 			GL.Disable(EnableCap.Blend);
 			GL.Disable(EnableCap.RescaleNormal);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 		}
 
 		public override void doRender(Entity entity1, double d2, double d4, double d6, float f8, float f9)

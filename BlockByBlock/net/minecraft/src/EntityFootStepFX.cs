@@ -6,9 +6,9 @@ namespace net.minecraft.src
 	{
 		private int field_27018_a = 0;
 		private int field_27020_o = 0;
-		private RenderEngine currentFootSteps;
+		private TextureManager currentFootSteps;
 
-		public EntityFootStepFX(RenderEngine renderEngine1, World world2, double d3, double d5, double d7) : base(world2, d3, d5, d7, 0.0D, 0.0D, 0.0D)
+		public EntityFootStepFX(TextureManager renderEngine1, World world2, double d3, double d5, double d7) : base(world2, d3, d5, d7, 0.0D, 0.0D, 0.0D)
 		{
 			this.currentFootSteps = renderEngine1;
 			this.motionX = this.motionY = this.motionZ = 0.0D;

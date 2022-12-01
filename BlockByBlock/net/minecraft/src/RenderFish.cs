@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -7,10 +8,10 @@ namespace net.minecraft.src
 	{
 		public virtual void doRenderFishHook(EntityFishHook entityFishHook1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL.PushMatrix();
-			GL.Translate((float)d2, (float)d4, (float)d6);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
 			GL.Enable(EnableCap.RescaleNormal);
-			GL.Scale(0.5F, 0.5F, 0.5F);
+            Minecraft.newRenderer.ModelMatrix.Scale(0.5F, 0.5F, 0.5F);
 			sbyte b10 = 1;
 			sbyte b11 = 2;
 			this.loadTexture("/particles.png");
@@ -22,8 +23,8 @@ namespace net.minecraft.src
 			float f17 = 1.0F;
 			float f18 = 0.5F;
 			float f19 = 0.5F;
-			GL.Rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-			GL.Rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 			tessellator12.startDrawingQuads();
 			tessellator12.setNormal(0.0F, 1.0F, 0.0F);
 			tessellator12.addVertexWithUV((double)(0.0F - f18), (double)(0.0F - f19), 0.0D, (double)f13, (double)f16);
@@ -32,7 +33,7 @@ namespace net.minecraft.src
 			tessellator12.addVertexWithUV((double)(0.0F - f18), (double)(1.0F - f19), 0.0D, (double)f13, (double)f15);
 			tessellator12.draw();
 			GL.Disable(EnableCap.RescaleNormal);
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			if (entityFishHook1.angler != null)
 			{
 				float f20 = (entityFishHook1.angler.prevRotationYaw + (entityFishHook1.angler.rotationYaw - entityFishHook1.angler.prevRotationYaw) * f9) * (float)Math.PI / 180.0F;

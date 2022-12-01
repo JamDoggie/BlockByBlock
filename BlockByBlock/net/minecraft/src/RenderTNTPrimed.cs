@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -14,8 +15,8 @@ namespace net.minecraft.src
 
 		public virtual void func_153_a(EntityTNTPrimed entityTNTPrimed1, double d2, double d4, double d6, float f8, float f9)
 		{
-			GL.PushMatrix();
-			GL.Translate((float)d2, (float)d4, (float)d6);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
 			float f10;
 			if ((float)entityTNTPrimed1.fuse - f9 + 1.0F < 10.0F)
 			{
@@ -33,7 +34,7 @@ namespace net.minecraft.src
 				f10 *= f10;
 				f10 *= f10;
 				float f11 = 1.0F + f10 * 0.3F;
-				GL.Scale(f11, f11, f11);
+                Minecraft.newRenderer.ModelMatrix.Scale(f11, f11, f11);
 			}
 
 			f10 = (1.0F - ((float)entityTNTPrimed1.fuse - f9 + 1.0F) / 100.0F) * 0.8F;
@@ -53,7 +54,7 @@ namespace net.minecraft.src
 				GL.Enable(EnableCap.Texture2D);
 			}
 
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 		}
 
 		public override void doRender(Entity entity1, double d2, double d4, double d6, float f8, float f9)

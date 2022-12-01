@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -30,18 +31,18 @@ namespace net.minecraft.src
 			ItemStack itemStack3 = new ItemStack(Block.pumpkin, 1);
 			if (itemStack3 != null && itemStack3.Item.shiftedIndex < 256)
 			{
-				GL.PushMatrix();
+                Minecraft.newRenderer.ModelMatrix.PushMatrix();
 				this.snowmanModel.field_40305_c.postRender(0.0625F);
 				if (RenderBlocks.renderItemIn3d(Block.blocksList[itemStack3.itemID].RenderType))
 				{
 					float f4 = 0.625F;
-					GL.Translate(0.0F, -0.34375F, 0.0F);
-					GL.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
-					GL.Scale(f4, -f4, f4);
+                    Minecraft.newRenderer.ModelMatrix.Translate(0.0F, -0.34375F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                    Minecraft.newRenderer.ModelMatrix.Scale(f4, -f4, f4);
 				}
 
 				this.renderManager.itemRenderer.renderItem(entitySnowman1, itemStack3, 0);
-				GL.PopMatrix();
+                Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			}
 
 		}

@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -15,13 +16,13 @@ namespace net.minecraft.src
 
 		protected internal virtual void loadTexture(string string1)
 		{
-			RenderEngine renderEngine2 = this.renderManager.renderEngine;
+			TextureManager renderEngine2 = this.renderManager.renderEngine;
 			renderEngine2.bindTexture(renderEngine2.getTexture(string1));
 		}
 
 		protected internal virtual bool loadDownloadableImageTexture(string string1, string string2)
 		{
-			RenderEngine renderEngine3 = this.renderManager.renderEngine;
+			TextureManager renderEngine3 = this.renderManager.renderEngine;
 			int i4 = renderEngine3.getTextureForDownloadableImage(string1, string2);
 			if (i4 >= 0)
 			{
@@ -44,18 +45,18 @@ namespace net.minecraft.src
 			float f13 = ((float)i10 + 15.99F) / 256.0F;
 			float f14 = (float)i11 / 256.0F;
 			float f15 = ((float)i11 + 15.99F) / 256.0F;
-			GL.PushMatrix();
-			GL.Translate((float)d2, (float)d4, (float)d6);
+            Minecraft.newRenderer.ModelMatrix.PushMatrix();
+            Minecraft.newRenderer.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
 			float f16 = entity1.width * 1.4F;
-			GL.Scale(f16, f16, f16);
+            Minecraft.newRenderer.ModelMatrix.Scale(f16, f16, f16);
 			this.loadTexture("/terrain.png");
 			Tessellator tessellator17 = Tessellator.instance;
 			float f18 = 0.5F;
 			float f19 = 0.0F;
 			float f20 = entity1.height / f16;
 			float f21 = (float)(entity1.posY - entity1.boundingBox.minY);
-			GL.Rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-			GL.Translate(0.0F, 0.0F, -0.3F + (float)((int)f20) * 0.02F);
+            Minecraft.newRenderer.ModelMatrix.Rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -0.3F + (float)((int)f20) * 0.02F);
 			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			float f22 = 0.0F;
 			int i23 = 0;
@@ -97,7 +98,7 @@ namespace net.minecraft.src
 			}
 
 			tessellator17.draw();
-			GL.PopMatrix();
+            Minecraft.newRenderer.ModelMatrix.PopMatrix();
 			GL.Enable(EnableCap.Lighting);
 		}
 
@@ -105,7 +106,7 @@ namespace net.minecraft.src
 		{
 			GL.Enable(EnableCap.Blend);
 			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-			RenderEngine renderEngine10 = this.renderManager.renderEngine;
+			TextureManager renderEngine10 = this.renderManager.renderEngine;
 			renderEngine10.bindTexture(renderEngine10.getTexture("%clamp%/misc/shadow.png"));
 			World world11 = this.WorldFromRenderManager;
 			GL.DepthMask(false);
