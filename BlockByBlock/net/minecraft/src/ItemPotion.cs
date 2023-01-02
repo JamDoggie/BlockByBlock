@@ -1,9 +1,10 @@
 ﻿using System.Collections;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class ItemPotion : Item
+    public class ItemPotion : Item
 	{
 		private Hashtable effectCache = new Hashtable();
 

@@ -7,7 +7,6 @@ namespace net.minecraft.src
 	{
 		public byte[] imageData { get; set; } = new byte[1024];
 		public int iconIndex;
-		public bool anaglyphEnabled = false;
 		public int textureId = 0;
 		public int tileSize = 1;
 		public int tileImage = 0;

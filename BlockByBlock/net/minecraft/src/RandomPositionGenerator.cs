@@ -1,10 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-	public class RandomPositionGenerator
+    public class RandomPositionGenerator
 	{
 		private static Vec3D field_48624_a = Vec3D.createVectorHelper(0.0D, 0.0D, 0.0D);
 

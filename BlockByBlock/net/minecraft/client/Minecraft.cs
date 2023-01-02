@@ -1,5 +1,4 @@
 ﻿using BlockByBlock.helpers;
-using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
@@ -14,14 +13,15 @@ using MathHelper = net.minecraft.src.MathHelper;
 
 namespace net.minecraft.client
 {
-	using OpenTK.Graphics.OpenGL;
+    using OpenTK.Graphics.OpenGL;
     using OpenTK.Windowing.GraphicsLibraryFramework;
-    using OpenTK.Graphics.Wgl;
-	using com.sun.tools.corba.se.logutil;
-	using net.minecraft.input;
-	using net.minecraft.render;
+    using net.minecraft.input;
+    using net.minecraft.render;
+    using BlockByBlock.net.minecraft.render;
+    using net.minecraft.client.entity;
+    using net.minecraft.client.entity.render.model;
 
-	public abstract class Minecraft
+    public abstract class Minecraft
 	{
 		private bool InstanceFieldsInitialized = false;
 		
@@ -54,7 +54,7 @@ namespace net.minecraft.client
 		public GuiScreen currentScreen = null;
 		public LoadingScreenRenderer loadingScreen;
 		public GameRenderer gameRenderer;
-		public static RenderPipeline newRenderer;
+		public static RenderPipeline renderPipeline;
 		private ThreadDownloadResources downloadResourcesThread;
 		private int ticksRan = 0;
 		private int leftClickCounter = 0;
@@ -142,8 +142,8 @@ namespace net.minecraft.client
         
 		public virtual void startGame()
 		{
-			newRenderer = new RenderPipeline();
-			newRenderer.InitRenderer();
+			renderPipeline = new RenderPipeline();
+			renderPipeline.InitRenderer();
 
 			if (this.mcApplet != null)
 			{
@@ -166,7 +166,7 @@ namespace net.minecraft.client
             
 			mcApplet.Title = "Minecraft";
 
-			OpenGlHelper.initializeTextures();
+			LightmapManager.initializeTextures();
 			this.mcDataDir = MinecraftDir;
 			this.saveLoader = new AnvilSaveConverter(new DirectoryInfo(mcDataDir + "/saves"));
 			this.gameSettings = new GameSettings(this, this.mcDataDir);
@@ -194,18 +194,16 @@ namespace net.minecraft.client
 
 			startSnooper();
 			this.checkGLError("Pre startup");
-			GL.Enable(EnableCap.Texture2D);
-			GL.ShadeModel(ShadingModel.Smooth);
-			GL.ClearDepth(1.0D);
+			renderPipeline.SetState(RenderState.TextureState, true);
+            renderPipeline.SetState(RenderState.SmoothShadingState, true);
+            GL.ClearDepth(1.0D);
 			GL.Enable(EnableCap.DepthTest);
 			GL.DepthFunc(DepthFunction.Lequal);
-			GL.Enable(EnableCap.AlphaTest);
-            GL.AlphaFunc(AlphaFunction.Greater, 0.1F);
-			GL.CullFace(CullFaceMode.Back);
-			GL.MatrixMode(MatrixMode.Projection);
+			renderPipeline.SetState(RenderState.AlphaTestState, true);
+            Minecraft.renderPipeline.AlphaTestThreshold(0.1f);
+            GL.CullFace(CullFaceMode.Back);
 
-            newRenderer.CameraMatrix.LoadIdentity();
-			GL.MatrixMode(MatrixMode.Modelview);
+            renderPipeline.ProjectionMatrix.LoadIdentity();
 			checkGLError("Startup");
 			glCapabilities = new OpenGlCapsChecker();
 			sndManager.loadSoundSettings(this.gameSettings);
@@ -249,38 +247,35 @@ namespace net.minecraft.client
 		{
 			ScaledResolution scaledResolution1 = new ScaledResolution(this.gameSettings, this.displayWidth, this.displayHeight);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			GL.MatrixMode(MatrixMode.Projection);
-            newRenderer.CameraMatrix.LoadIdentity();
+            renderPipeline.ProjectionMatrix.LoadIdentity();
             
-			newRenderer.CameraMatrix.Ortho(0.0D, scaledResolution1.scaledWidthD, scaledResolution1.scaledHeightD, 0.0D, 1000.0D, 3000.0D);
-			GL.MatrixMode(MatrixMode.Modelview);
-			newRenderer.ModelMatrix.LoadIdentity();
-
-            newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -2000.0F);
+			renderPipeline.ProjectionMatrix.Ortho(0.0D, scaledResolution1.scaledWidthD, scaledResolution1.scaledHeightD, 0.0D, 1000.0D, 3000.0D);
+			renderPipeline.ModelMatrix.LoadIdentity();
+            renderPipeline.ModelMatrix.Translate(0.0F, 0.0F, -2000.0F);
 			GL.Viewport(0, 0, this.displayWidth, this.displayHeight);
 			GL.ClearColor(0.0F, 0.0F, 0.0F, 0.0F);
 			Tessellator tessellator2 = Tessellator.instance;
-			GL.Disable(EnableCap.Lighting);
-			GL.Enable(EnableCap.Texture2D);
-			GL.Disable(EnableCap.Fog);
-			GL.BindTexture(TextureTarget.Texture2D, renderEngine.getTexture("/title/mojang.png"));
+			renderPipeline.SetState(RenderState.LightingState, false);
+            renderPipeline.SetState(RenderState.TextureState, true);
+            Minecraft.renderPipeline.SetState(RenderState.FogState, false);
+            GL.BindTexture(TextureTarget.Texture2D, renderEngine.getTexture("/title/mojang.png"));
 			tessellator2.startDrawingQuads();
 			tessellator2.ColorOpaque_I = 0xFFFFFF;
-			tessellator2.addVertexWithUV(0.0D, (double)this.displayHeight, 0.0D, 0.0D, 0.0D);
-			tessellator2.addVertexWithUV((double)this.displayWidth, (double)this.displayHeight, 0.0D, 0.0D, 0.0D);
-			tessellator2.addVertexWithUV((double)this.displayWidth, 0.0D, 0.0D, 0.0D, 0.0D);
-			tessellator2.addVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-			tessellator2.draw();
+			tessellator2.AddVertexWithUV(0.0D, (double)this.displayHeight, 0.0D, 0.0D, 0.0D);
+			tessellator2.AddVertexWithUV((double)this.displayWidth, (double)this.displayHeight, 0.0D, 0.0D, 0.0D);
+			tessellator2.AddVertexWithUV((double)this.displayWidth, 0.0D, 0.0D, 0.0D, 0.0D);
+			tessellator2.AddVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+			tessellator2.DrawImmediate();
 			short s3 = 256;
 			short s4 = 256;
-			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			renderPipeline.SetColor(1.0F);
 			tessellator2.ColorOpaque_I = 0xFFFFFF;
 			this.scaledTessellator((scaledResolution1.ScaledWidth - s3) / 2, (scaledResolution1.ScaledHeight - s4) / 2, 0, 0, s3, s4);
-			GL.Disable(EnableCap.Lighting);
-			GL.Disable(EnableCap.Fog);
-			GL.Enable(EnableCap.AlphaTest);
-            GL.AlphaFunc(AlphaFunction.Greater, 0.1F);
-			mcApplet.Context.SwapBuffers(); // PORTING TODO: pretty sure this is correct, but might be wrong.
+            renderPipeline.SetState(RenderState.LightingState, false);
+            Minecraft.renderPipeline.SetState(RenderState.FogState, false);
+            renderPipeline.SetState(RenderState.AlphaTestState, true);
+            Minecraft.renderPipeline.AlphaTestThreshold(0.1f);
+            mcApplet.Context.SwapBuffers();
 		}
 		
 		public virtual void scaledTessellator(int i1, int i2, int i3, int i4, int i5, int i6)
@@ -289,11 +284,11 @@ namespace net.minecraft.client
 			float f8 = 0.00390625F;
 			Tessellator tessellator9 = Tessellator.instance;
 			tessellator9.startDrawingQuads();
-			tessellator9.addVertexWithUV((double)(i1 + 0), (double)(i2 + i6), 0.0D, (double)((float)(i3 + 0) * f7), (double)((float)(i4 + i6) * f8));
-			tessellator9.addVertexWithUV((double)(i1 + i5), (double)(i2 + i6), 0.0D, (double)((float)(i3 + i5) * f7), (double)((float)(i4 + i6) * f8));
-			tessellator9.addVertexWithUV((double)(i1 + i5), (double)(i2 + 0), 0.0D, (double)((float)(i3 + i5) * f7), (double)((float)(i4 + 0) * f8));
-			tessellator9.addVertexWithUV((double)(i1 + 0), (double)(i2 + 0), 0.0D, (double)((float)(i3 + 0) * f7), (double)((float)(i4 + 0) * f8));
-			tessellator9.draw();
+			tessellator9.AddVertexWithUV((double)(i1 + 0), (double)(i2 + i6), 0.0D, (double)((float)(i3 + 0) * f7), (double)((float)(i4 + i6) * f8));
+			tessellator9.AddVertexWithUV((double)(i1 + i5), (double)(i2 + i6), 0.0D, (double)((float)(i3 + i5) * f7), (double)((float)(i4 + i6) * f8));
+			tessellator9.AddVertexWithUV((double)(i1 + i5), (double)(i2 + 0), 0.0D, (double)((float)(i3 + i5) * f7), (double)((float)(i4 + 0) * f8));
+			tessellator9.AddVertexWithUV((double)(i1 + 0), (double)(i2 + 0), 0.0D, (double)((float)(i3 + 0) * f7), (double)((float)(i4 + 0) * f8));
+			tessellator9.DrawImmediate();
 		}
 
 		public static DirectoryInfo MinecraftDir
@@ -537,11 +532,11 @@ namespace net.minecraft.client
 						this.changeWorld1((World)null);
 						this.displayGuiScreen(new GuiConflictWarning());
 					}
-					catch (System.OutOfMemoryException)
+					catch (OutOfMemoryException)
 					{
 						this.freeMemory();
 						this.displayGuiScreen(new GuiMemoryErrorScreen());
-						System.GC.Collect(); //
+						GC.Collect(); //
 											 // : Come back to this, I'm pretty sure there's a better way to do GC collections.
 					}
 				}
@@ -575,7 +570,9 @@ namespace net.minecraft.client
 			}
 			else
 			{
-				AxisAlignedBB.clearBoundingBoxPool();
+				
+
+                AxisAlignedBB.clearBoundingBoxPool();
 				Vec3D.initialize();
 				Profiler.startSection("root");
 				if (mcApplet.IsExiting)
@@ -631,9 +628,9 @@ namespace net.minecraft.client
 				Profiler.endSection();
 				Profiler.startSection("render");
 				Profiler.startSection("display");
-				GL.Enable(EnableCap.Texture2D);
+                renderPipeline.SetState(RenderState.TextureState, true);
 
-				mcApplet.SwapBuffers();
+                mcApplet.SwapBuffers();
 
 				mcApplet.IsVisible = true;
 
@@ -829,30 +826,28 @@ namespace net.minecraft.client
 			frameTimes[numRecordedFrameTimes++ & frameTimes.Length - 1] = j7 - this.prevFrameTime;
 			this.prevFrameTime = j7;
 			GL.Clear(ClearBufferMask.DepthBufferBit);
-			GL.MatrixMode(MatrixMode.Projection);
 			GL.Enable(EnableCap.ColorMaterial);
-			newRenderer.CameraMatrix.LoadIdentity();
+			renderPipeline.ProjectionMatrix.LoadIdentity();
 
-            newRenderer.CameraMatrix.Ortho(0.0D, displayWidth, displayHeight, 0.0D, 1000.0D, 3000.0D);
-			GL.MatrixMode(MatrixMode.Modelview);
-            newRenderer.ModelMatrix.LoadIdentity();
-            newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -2000.0F);
-			GL.LineWidth(1.0F); // OPENGL TODO: WTF?
-			GL.Disable(EnableCap.Texture2D);
-			Tessellator tessellator9 = Tessellator.instance;
-			tessellator9.startDrawing(7);
+            renderPipeline.ProjectionMatrix.Ortho(0.0D, displayWidth, displayHeight, 0.0D, 1000.0D, 3000.0D);
+            renderPipeline.ModelMatrix.LoadIdentity();
+            renderPipeline.ModelMatrix.Translate(0.0F, 0.0F, -2000.0F);
+			GL.LineWidth(1.0F); // OpenGL TODO: WTF?
+            renderPipeline.SetState(RenderState.TextureState, false);
+            Tessellator tessellator = Tessellator.instance;
+			tessellator.startDrawing(7);
 			int i10 = (int)(j5 / 200000L);
-			tessellator9.ColorOpaque_I = 536870912;
-			tessellator9.addVertex(0.0D, (double)(this.displayHeight - i10), 0.0D);
-			tessellator9.addVertex(0.0D, (double)this.displayHeight, 0.0D);
-			tessellator9.addVertex((double)frameTimes.Length, (double)this.displayHeight, 0.0D);
-			tessellator9.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i10), 0.0D);
-			tessellator9.ColorOpaque_I = 0x20200000;
-			tessellator9.addVertex(0.0D, (double)(this.displayHeight - i10 * 2), 0.0D);
-			tessellator9.addVertex(0.0D, (double)(this.displayHeight - i10), 0.0D);
-			tessellator9.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i10), 0.0D);
-			tessellator9.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i10 * 2), 0.0D);
-			tessellator9.draw();
+			tessellator.ColorOpaque_I = 536870912;
+			tessellator.addVertex(0.0D, (double)(this.displayHeight - i10), 0.0D);
+			tessellator.addVertex(0.0D, (double)this.displayHeight, 0.0D);
+			tessellator.addVertex((double)frameTimes.Length, (double)this.displayHeight, 0.0D);
+			tessellator.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i10), 0.0D);
+			tessellator.ColorOpaque_I = 0x20200000;
+			tessellator.addVertex(0.0D, (double)(this.displayHeight - i10 * 2), 0.0D);
+			tessellator.addVertex(0.0D, (double)(this.displayHeight - i10), 0.0D);
+			tessellator.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i10), 0.0D);
+			tessellator.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i10 * 2), 0.0D);
+			tessellator.DrawImmediate();
 			long j11 = 0L;
 
 			int i13;
@@ -862,14 +857,14 @@ namespace net.minecraft.client
 			}
 
 			i13 = (int)(j11 / 200000L / (long)frameTimes.Length);
-			tessellator9.startDrawing(7);
-			tessellator9.ColorOpaque_I = 0x20400000;
-			tessellator9.addVertex(0.0D, (double)(this.displayHeight - i13), 0.0D);
-			tessellator9.addVertex(0.0D, (double)this.displayHeight, 0.0D);
-			tessellator9.addVertex((double)frameTimes.Length, (double)this.displayHeight, 0.0D);
-			tessellator9.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i13), 0.0D);
-			tessellator9.draw();
-			tessellator9.startDrawing(1);
+			tessellator.startDrawing(7);
+			tessellator.ColorOpaque_I = 0x20400000;
+			tessellator.addVertex(0.0D, (double)(this.displayHeight - i13), 0.0D);
+			tessellator.addVertex(0.0D, (double)this.displayHeight, 0.0D);
+			tessellator.addVertex((double)frameTimes.Length, (double)this.displayHeight, 0.0D);
+			tessellator.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i13), 0.0D);
+			tessellator.DrawImmediate();
+			tessellator.startDrawing(1);
 
 			int i15;
 			int i16;
@@ -882,34 +877,34 @@ namespace net.minecraft.client
 				i17 = i17 * i17 / 255;
 				if (frameTimes[i14] > j5)
 				{
-					tessellator9.ColorOpaque_I = (int)unchecked((int)0xFF000000) + i16 * 65536;
+					tessellator.ColorOpaque_I = (int)unchecked((int)0xFF000000) + i16 * 65536;
 				}
 				else
 				{
-					tessellator9.ColorOpaque_I = (int)unchecked((int)0xFF000000) + i16 * 256;
+					tessellator.ColorOpaque_I = (int)unchecked((int)0xFF000000) + i16 * 256;
 				}
 
 				long j18 = frameTimes[i14] / 200000L;
 				long j20 = tickTimes[i14] / 200000L;
-				tessellator9.addVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - j18) + 0.5F), 0.0D);
-				tessellator9.addVertex((double)((float)i14 + 0.5F), (double)((float)this.displayHeight + 0.5F), 0.0D);
-				tessellator9.ColorOpaque_I = (int)unchecked((int)0xFF000000) + i16 * 65536 + i16 * 256 + i16 * 1;
-				tessellator9.addVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - j18) + 0.5F), 0.0D);
-				tessellator9.addVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - (j18 - j20)) + 0.5F), 0.0D);
+				tessellator.addVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - j18) + 0.5F), 0.0D);
+				tessellator.addVertex((double)((float)i14 + 0.5F), (double)((float)this.displayHeight + 0.5F), 0.0D);
+				tessellator.ColorOpaque_I = (int)unchecked((int)0xFF000000) + i16 * 65536 + i16 * 256 + i16 * 1;
+				tessellator.addVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - j18) + 0.5F), 0.0D);
+				tessellator.addVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - (j18 - j20)) + 0.5F), 0.0D);
 			}
 
-			tessellator9.draw();
+			tessellator.DrawImmediate();
 			short s26 = 160;
 			i15 = this.displayWidth - s26 - 10;
 			i16 = this.displayHeight - s26 * 2;
 			GL.Enable(EnableCap.Blend);
-			tessellator9.startDrawingQuads();
-			tessellator9.setColorRGBA_I(0, 200);
-			tessellator9.addVertex((double)((float)i15 - (float)s26 * 1.1F), (double)((float)i16 - (float)s26 * 0.6F - 16.0F), 0.0D);
-			tessellator9.addVertex((double)((float)i15 - (float)s26 * 1.1F), (double)(i16 + s26 * 2), 0.0D);
-			tessellator9.addVertex((double)((float)i15 + (float)s26 * 1.1F), (double)(i16 + s26 * 2), 0.0D);
-			tessellator9.addVertex((double)((float)i15 + (float)s26 * 1.1F), (double)((float)i16 - (float)s26 * 0.6F - 16.0F), 0.0D);
-			tessellator9.draw();
+			tessellator.startDrawingQuads();
+			tessellator.setColorRGBA_I(0, 200);
+			tessellator.addVertex((double)((float)i15 - (float)s26 * 1.1F), (double)((float)i16 - (float)s26 * 0.6F - 16.0F), 0.0D);
+			tessellator.addVertex((double)((float)i15 - (float)s26 * 1.1F), (double)(i16 + s26 * 2), 0.0D);
+			tessellator.addVertex((double)((float)i15 + (float)s26 * 1.1F), (double)(i16 + s26 * 2), 0.0D);
+			tessellator.addVertex((double)((float)i15 + (float)s26 * 1.1F), (double)((float)i16 - (float)s26 * 0.6F - 16.0F), 0.0D);
+			tessellator.DrawImmediate();
 			GL.Disable(EnableCap.Blend);
 			double d27 = 0.0D;
 
@@ -918,9 +913,9 @@ namespace net.minecraft.client
 			{
 				ProfilerResult profilerResult29 = (ProfilerResult)list3[i19];
 				i21 = MathHelper.floor_double(profilerResult29.sectionPercentage / 4.0D) + 1;
-				tessellator9.startDrawing(6);
-				tessellator9.ColorOpaque_I = profilerResult29.DisplayColor;
-				tessellator9.addVertex((double)i15, (double)i16, 0.0D);
+				tessellator.startDrawing(6);
+				tessellator.ColorOpaque_I = profilerResult29.DisplayColor;
+				tessellator.addVertex((double)i15, (double)i16, 0.0D);
 
 				int i22;
 				float f23;
@@ -931,29 +926,29 @@ namespace net.minecraft.client
 					f23 = (float)((d27 + profilerResult29.sectionPercentage * (double)i22 / (double)i21) * (double)(float)Math.PI * 2.0D / 100.0D);
 					f24 = MathHelper.sin(f23) * (float)s26;
 					f25 = MathHelper.cos(f23) * (float)s26 * 0.5F;
-					tessellator9.addVertex((double)((float)i15 + f24), (double)((float)i16 - f25), 0.0D);
+					tessellator.addVertex((double)((float)i15 + f24), (double)((float)i16 - f25), 0.0D);
 				}
 
-				tessellator9.draw();
-				tessellator9.startDrawing(5);
-				tessellator9.ColorOpaque_I = (profilerResult29.DisplayColor & 16711422) >> 1;
+				tessellator.DrawImmediate();
+				tessellator.startDrawing(5);
+				tessellator.ColorOpaque_I = (profilerResult29.DisplayColor & 16711422) >> 1;
 
 				for (i22 = i21; i22 >= 0; --i22)
 				{
 					f23 = (float)((d27 + profilerResult29.sectionPercentage * (double)i22 / (double)i21) * (double)(float)Math.PI * 2.0D / 100.0D);
 					f24 = MathHelper.sin(f23) * (float)s26;
 					f25 = MathHelper.cos(f23) * (float)s26 * 0.5F;
-					tessellator9.addVertex((double)((float)i15 + f24), (double)((float)i16 - f25), 0.0D);
-					tessellator9.addVertex((double)((float)i15 + f24), (double)((float)i16 - f25 + 10.0F), 0.0D);
+					tessellator.addVertex((double)((float)i15 + f24), (double)((float)i16 - f25), 0.0D);
+					tessellator.addVertex((double)((float)i15 + f24), (double)((float)i16 - f25 + 10.0F), 0.0D);
 				}
 
-				tessellator9.draw();
+				tessellator.DrawImmediate();
 				d27 += profilerResult29.sectionPercentage;
 			}
 
 			string decimalFormat28 = "##0.00";
-			GL.Enable(EnableCap.Texture2D);
-			string string30 = "";
+            renderPipeline.SetState(RenderState.TextureState, true);
+            string string30 = "";
 			if (!profilerResult4.name.Equals("unspecified"))
 			{
 				string30 = string30 + "[0] ";
@@ -2089,14 +2084,13 @@ namespace net.minecraft.client
 			NativeWindowSettings windowSettings = new()
 			{
 				Size = new Vector2i(854, 480),
-				Profile = ContextProfile.Compatability
+				Profile = ContextProfile.Core
 			};
 
 			MinecraftApplet applet = new(windowSettings);
 
 			MinecraftImpl minecraftImpl7 = new MinecraftImpl(applet, 854, 480, fullscreen);
-			//Thread thread8 = new Thread(() => minecraftImpl7.run());
-			//thread8.Priority = ThreadPriority.Highest;
+
 			minecraftImpl7.minecraftUri = "www.minecraft.net";
 			if (!string.ReferenceEquals(string0, null) && !string.ReferenceEquals(string1, null))
 			{
@@ -2104,8 +2098,7 @@ namespace net.minecraft.client
 			}
 			else
 			{
-				//minecraftImpl7.session = new Session("Player" + DateTimeHelper.CurrentUnixTimeMillis() % 1000L, "");
-				minecraftImpl7.session = new Session("Player735", "");
+				minecraftImpl7.session = new Session("Player" + DateTimeHelper.CurrentUnixTimeMillis() % 1000L, "");
 			}
 
 			if (!string.ReferenceEquals(string2, null))
@@ -2113,10 +2106,6 @@ namespace net.minecraft.client
 				string[] string9 = string2.Split(":", true);
 				minecraftImpl7.setServer(string9[0], int.Parse(string9[1]));
 			}
-
-			//applet.mcThread = thread8;
-
-			//thread8.Start();
 
 			minecraftImpl7.run();
 		}

@@ -1,9 +1,11 @@
 ﻿namespace net.minecraft.src
 {
+    using BlockByBlock.net.minecraft.render;
+    using net.minecraft.client.entity.render;
     using OpenTK.Graphics.OpenGL;
     using Minecraft = net.minecraft.client.Minecraft;
-    
-	public class GuiAchievement : Gui
+
+    public class GuiAchievement : Gui
 	{
 		private Minecraft theGame;
 		private int achievementWindowWidth;
@@ -42,22 +44,18 @@
 		private void updateAchievementWindowScale()
 		{
 			GL.Viewport(0, 0, this.theGame.displayWidth, this.theGame.displayHeight);
-			GL.MatrixMode(MatrixMode.Projection);
-			Minecraft.newRenderer.CameraMatrix.LoadIdentity();
-            GL.MatrixMode(MatrixMode.Modelview);
-            Minecraft.newRenderer.ModelMatrix.LoadIdentity();
+			Minecraft.renderPipeline.ProjectionMatrix.LoadIdentity();
+            Minecraft.renderPipeline.ModelMatrix.LoadIdentity();
 			this.achievementWindowWidth = this.theGame.displayWidth;
 			this.achievementWindowHeight = this.theGame.displayHeight;
 			ScaledResolution scaledResolution1 = new ScaledResolution(this.theGame.gameSettings, this.theGame.displayWidth, this.theGame.displayHeight);
 			this.achievementWindowWidth = scaledResolution1.ScaledWidth;
 			this.achievementWindowHeight = scaledResolution1.ScaledHeight;
 			GL.Clear(ClearBufferMask.DepthBufferBit);
-			GL.MatrixMode(MatrixMode.Projection);
-            Minecraft.newRenderer.CameraMatrix.LoadIdentity();
-            Minecraft.newRenderer.CameraMatrix.Ortho(0.0D, (double)this.achievementWindowWidth, (double)this.achievementWindowHeight, 0.0D, 1000.0D, 3000.0D);
-			GL.MatrixMode(MatrixMode.Modelview);
-            Minecraft.newRenderer.ModelMatrix.LoadIdentity();
-            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -2000.0F);
+            Minecraft.renderPipeline.ProjectionMatrix.LoadIdentity();
+            Minecraft.renderPipeline.ProjectionMatrix.Ortho(0.0D, (double)this.achievementWindowWidth, (double)this.achievementWindowHeight, 0.0D, 1000.0D, 3000.0D);
+            Minecraft.renderPipeline.ModelMatrix.LoadIdentity();
+            Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 0.0F, -2000.0F);
 		}
 
 		public virtual void updateAchievementWindow()
@@ -88,10 +86,10 @@
 					int i5 = this.achievementWindowWidth - 160;
 					int i6 = 0 - (int)(d3 * 36.0D);
 					int i7 = this.theGame.renderEngine.getTexture("/achievement/bg.png");
-					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
-					GL.Enable(EnableCap.Texture2D);
-					GL.BindTexture(TextureTarget.Texture2D, i7);
-					GL.Disable(EnableCap.Lighting);
+                    Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+                    Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
+                    GL.BindTexture(TextureTarget.Texture2D, i7);
+					Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
 					this.drawTexturedModalRect(i5, i6, 96, 202, 160, 32);
 					if (this.haveAchiement)
 					{
@@ -104,12 +102,12 @@
 					}
                     
 					RenderHelper.enableGUIStandardItemLighting();
-					GL.Disable(EnableCap.Lighting);
+					Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
 					GL.Enable(EnableCap.RescaleNormal);
 					GL.Enable(EnableCap.ColorMaterial);
-					GL.Enable(EnableCap.Lighting);
+					Minecraft.renderPipeline.SetState(RenderState.LightingState, true);
 					this.itemRender.renderItemIntoGUI(this.theGame.fontRenderer, this.theGame.renderEngine, this.theAchievement.theItemStack, i5 + 8, i6 + 8);
-					GL.Disable(EnableCap.Lighting);
+					Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
 					GL.DepthMask(true);
 					GL.Enable(EnableCap.DepthTest);
 				}

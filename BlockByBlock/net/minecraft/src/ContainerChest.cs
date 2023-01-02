@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ContainerChest : Container
+    public class ContainerChest : Container
 	{
 		private IInventory lowerChestInventory;
 		private int numRows;

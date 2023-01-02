@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ContainerFurnace : Container
+    public class ContainerFurnace : Container
 	{
 		private TileEntityFurnace furnace;
 		private int lastCookTime = 0;

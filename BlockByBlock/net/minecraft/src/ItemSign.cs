@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ItemSign : Item
+    public class ItemSign : Item
 	{
 		public ItemSign(int i1) : base(i1)
 		{

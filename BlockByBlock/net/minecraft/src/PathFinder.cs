@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class PathFinder
+    public class PathFinder
 	{
 		private IBlockAccess worldMap;
 		private Path path = new Path();

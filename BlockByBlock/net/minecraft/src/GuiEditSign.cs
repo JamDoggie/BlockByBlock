@@ -82,17 +82,17 @@ namespace net.minecraft.src
 		{
 			this.drawDefaultBackground();
 			this.drawCenteredString(this.fontRenderer, this.screenTitle, this.width / 2, 40, 0xFFFFFF);
-            Minecraft.newRenderer.ModelMatrix.PushMatrix();
-            Minecraft.newRenderer.ModelMatrix.Translate((float)(this.width / 2), 0.0F, 50.0F);
+            Minecraft.renderPipeline.ModelMatrix.PushMatrix();
+            Minecraft.renderPipeline.ModelMatrix.Translate((float)(this.width / 2), 0.0F, 50.0F);
 			float f4 = 93.75F;
-            Minecraft.newRenderer.ModelMatrix.Scale(-f4, -f4, -f4);
-            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
+            Minecraft.renderPipeline.ModelMatrix.Scale(-f4, -f4, -f4);
+            Minecraft.renderPipeline.ModelMatrix.Rotate(180.0F, 0.0F, 1.0F, 0.0F);
 			Block block5 = this.entitySign.BlockType;
 			if (block5 == Block.signPost)
 			{
 				float f6 = (float)(this.entitySign.BlockMetadata * 360) / 16.0F;
-                Minecraft.newRenderer.ModelMatrix.Rotate(f6, 0.0F, 1.0F, 0.0F);
-                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, -1.0625F, 0.0F);
+                Minecraft.renderPipeline.ModelMatrix.Rotate(f6, 0.0F, 1.0F, 0.0F);
+                Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, -1.0625F, 0.0F);
 			}
 			else
 			{
@@ -113,8 +113,8 @@ namespace net.minecraft.src
 					f7 = -90.0F;
 				}
 
-                Minecraft.newRenderer.ModelMatrix.Rotate(f7, 0.0F, 1.0F, 0.0F);
-                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, -1.0625F, 0.0F);
+                Minecraft.renderPipeline.ModelMatrix.Rotate(f7, 0.0F, 1.0F, 0.0F);
+                Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, -1.0625F, 0.0F);
 			}
 
 			if (this.updateCounter / 6 % 2 == 0)
@@ -124,7 +124,7 @@ namespace net.minecraft.src
 
 			TileEntityRenderer.instance.renderTileEntityAt(this.entitySign, -0.5D, -0.75D, -0.5D, 0.0F);
 			this.entitySign.lineBeingEdited = -1;
-            Minecraft.newRenderer.ModelMatrix.PopMatrix();
+            Minecraft.renderPipeline.ModelMatrix.PopMatrix();
 			base.drawScreen(i1, i2, f3);
 		}
 	}

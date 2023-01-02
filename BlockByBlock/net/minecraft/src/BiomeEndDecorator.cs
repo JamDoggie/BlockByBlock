@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class BiomeEndDecorator : BiomeDecorator
+    public class BiomeEndDecorator : BiomeDecorator
 	{
 		protected internal WorldGenerator spikeGen = new WorldGenSpikes(Block.whiteStone.blockID);
 

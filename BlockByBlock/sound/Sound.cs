@@ -9,9 +9,10 @@ namespace BlockByBlock.sound
 {
     /// <summary>
     /// <para>
-    /// Represents a (logically) stateless file representing a sound file located on the end user's storage.
+    /// Represents a (logically) stateless object representing a sound file located on the end user's storage.
     /// This object is similar to a sort of random access stream, where no state regarding position in the underlying stream is stored.
-    /// Storing states that, for example, help optimize sequencial reads from the underlying stream are permitted; but this should be clearly outlined if this is the case.
+    /// Storing states that, for example, help optimize sequencial reads from the underlying stream are permitted; but this should be clearly outlined
+    /// & documented if this is the case.
     /// </para>
     /// 
     /// <para>

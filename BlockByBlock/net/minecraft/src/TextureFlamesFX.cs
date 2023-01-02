@@ -69,15 +69,6 @@
 				}
 
 				float f14 = (f4 - 0.5F) * 2.0F;
-				if (this.anaglyphEnabled)
-				{
-					int i10 = (i6 * 30 + i7 * 59 + i8 * 11) / 100;
-					int i11 = (i6 * 30 + i7 * 70) / 100;
-					int i12 = (i6 * 30 + i8 * 70) / 100;
-					i6 = i10;
-					i7 = i11;
-					i8 = i12;
-				}
 
 				this.imageData[i3 * 4 + 0] = (byte)(i6 & 255);
 				this.imageData[i3 * 4 + 1] = (byte)(i7 & 255);

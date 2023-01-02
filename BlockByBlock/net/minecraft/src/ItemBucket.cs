@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ItemBucket : Item
+    public class ItemBucket : Item
 	{
 		private int isFull;
 

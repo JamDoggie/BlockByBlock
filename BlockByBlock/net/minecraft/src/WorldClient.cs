@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class WorldClient : World
+    public class WorldClient : World
 	{
 		private IList blocksToReceive = new ArrayList();
 		private NetClientHandler sendQueue;

@@ -1,8 +1,9 @@
 ﻿namespace net.minecraft.src
 {
-	using Minecraft = net.minecraft.client.Minecraft;
+    using net.minecraft.client.entity;
+    using Minecraft = net.minecraft.client.Minecraft;
 
-	public abstract class PlayerController
+    public abstract class PlayerController
 	{
 		protected internal readonly Minecraft mc;
 		public bool isInTestMode = false;

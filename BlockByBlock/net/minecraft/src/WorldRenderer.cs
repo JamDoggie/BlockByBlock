@@ -1,6 +1,9 @@
 ﻿using BlockByBlock.helpers;
+using BlockByBlock.net.minecraft.client.entity.render;
 using BlockByBlock.net.minecraft.render;
 using net.minecraft.client;
+using net.minecraft.client.entity;
+using net.minecraft.client.entity.render;
 using OpenTK.Graphics.OpenGL;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +11,7 @@ using System.Collections.Generic;
 namespace net.minecraft.src
 {
 
-	public class WorldRenderer
+    public class WorldRenderer
 	{
 		public World worldObj;
 		private int glRenderList = -1;
@@ -48,6 +51,8 @@ namespace net.minecraft.src
 		private System.Collections.IList tileEntities;
 		private int bytesDrawn;
 
+		private VertexBuffer? AABBVBO = null;
+
 		public VertexBuffer?[] VBOsToRender { get; set; } = new VertexBuffer?[2];
 
 		public WorldRenderer(World world1, System.Collections.IList list2, int i3, int i4, int i5, int i6)
@@ -79,8 +84,10 @@ namespace net.minecraft.src
 				this.posZMinus = i3 - this.posZClip;
 				float f4 = 6.0F;
 				this.rendererBoundingBox = AxisAlignedBB.getBoundingBox((double)((float)i1 - f4), (double)((float)i2 - f4), (double)((float)i3 - f4), (double)((float)(i1 + 16) + f4), (double)((float)(i2 + 16) + f4), (double)((float)(i3 + 16) + f4));
-				
-				this.markDirty();
+
+				AABBVBO = Renderer.BuildAABBVBO(AxisAlignedBB.getBoundingBoxFromPool((double)((float)this.posXClip - f4), (double)((float)this.posYClip - f4), (double)((float)this.posZClip - f4), (double)((float)(this.posXClip + 16) + f4), (double)((float)(this.posYClip + 16) + f4), (double)((float)(this.posZClip + 16) + f4)));
+                
+                this.markDirty();
 			}
 		}
 
@@ -125,8 +132,7 @@ namespace net.minecraft.src
 				if (!chunkCache9.getChunksEmpty_IDK())
 				{
 					++chunksUpdated;
-					RenderBlocks renderBlocks10 = new RenderBlocks(chunkCache9);
-					//bytesDrawn = 0;
+					RenderBlocks renderBlocks10 = new(chunkCache9);
 
 					for (int currentPass = 0; currentPass < 2; ++currentPass)
 					{
@@ -147,14 +153,14 @@ namespace net.minecraft.src
 										{
 											blockFound = true;
 
-											tessellator.StartBuildingVBO();
+											tessellator.StartBuildingVBO(7);
 
-                                            Minecraft.newRenderer.ModelMatrix.PushMatrix();
-											this.setupGLTranslation(Minecraft.newRenderer.ModelMatrix);
+                                            Minecraft.renderPipeline.ModelMatrix.PushMatrix();
+											this.setupGLTranslation(Minecraft.renderPipeline.ModelMatrix);
 											float f19 = 1F;
-											Minecraft.newRenderer.ModelMatrix.Translate(-8.0F, -8.0F, -8.0F);
-											Minecraft.newRenderer.ModelMatrix.Scale(f19, f19, f19);
-                                            Minecraft.newRenderer.ModelMatrix.Translate(8.0F, 8.0F, 8.0F);
+											Minecraft.renderPipeline.ModelMatrix.Translate(-8.0F, -8.0F, -8.0F);
+											Minecraft.renderPipeline.ModelMatrix.Scale(f19, f19, f19);
+                                            Minecraft.renderPipeline.ModelMatrix.Translate(8.0F, 8.0F, 8.0F);
                                             
 											tessellator.setTranslation((double)(-this.posX), (double)(-this.posY), (double)(-this.posZ));
 										}
@@ -185,8 +191,7 @@ namespace net.minecraft.src
 
 						if (blockFound)
 						{
-							//this.bytesDrawn += tessellator.draw();
-                            Minecraft.newRenderer.ModelMatrix.PopMatrix();
+                            Minecraft.renderPipeline.ModelMatrix.PopMatrix();
 
 							VBOsToRender[currentPass] = tessellator.BuildCurrentVBO();
 
@@ -201,7 +206,7 @@ namespace net.minecraft.src
 						{
 							this.skipRenderPass[currentPass] = false;
 						}
-
+                        
 						if (!z12)
 						{
 							break;
@@ -255,10 +260,10 @@ namespace net.minecraft.src
 			this.isInFrustum = iCamera1.isBoundingBoxInFrustum(this.rendererBoundingBox);
 		}
 
-		public virtual void callOcclusionQueryList()
+		public virtual void TessellateOcclusionQueryAABB()
 		{
-			float f4 = 6.0F;
-            Render.renderAABB(AxisAlignedBB.getBoundingBoxFromPool((double)((float)this.posXClip - f4), (double)((float)this.posYClip - f4), (double)((float)this.posZClip - f4), (double)((float)(this.posXClip + 16) + f4), (double)((float)(this.posYClip + 16) + f4), (double)((float)(this.posZClip + 16) + f4)));
+			if (AABBVBO != null)
+				Tessellator.instance.Draw(AABBVBO.Value);
         }
 
 		public virtual bool skipAllRenderPasses()

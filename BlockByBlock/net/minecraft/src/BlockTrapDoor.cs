@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class BlockTrapDoor : Block
+    public class BlockTrapDoor : Block
 	{
 		protected internal BlockTrapDoor(int i1, Material material2) : base(i1, material2)
 		{

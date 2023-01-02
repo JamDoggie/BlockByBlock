@@ -1,9 +1,10 @@
 ﻿using System.Collections;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	internal class ContainerCreative : Container
+    internal class ContainerCreative : Container
 	{
 		public System.Collections.IList itemList = new ArrayList();
 

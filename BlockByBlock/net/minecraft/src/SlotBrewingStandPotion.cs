@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	internal class SlotBrewingStandPotion : Slot
+    internal class SlotBrewingStandPotion : Slot
 	{
 		private EntityPlayer player;
 		internal readonly ContainerBrewingStand container;

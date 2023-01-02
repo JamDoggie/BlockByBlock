@@ -1,10 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-	public class BlockBed : BlockDirectional
+    public class BlockBed : BlockDirectional
 	{
 		public static readonly int[][] headBlockToFootBlockMap = new int[][]
 		{

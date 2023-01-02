@@ -1,5 +1,6 @@
 ﻿using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System;
 using System.Collections;
 using System.Drawing;
@@ -7,7 +8,7 @@ using System.Drawing;
 namespace net.minecraft.src
 {
 
-	public abstract class BiomeGenBase
+    public abstract class BiomeGenBase
 	{
 		public static readonly BiomeGenBase[] biomeList = new BiomeGenBase[256];
 		public static readonly BiomeGenBase ocean = (new BiomeGenOcean(0)).setColor(112).setBiomeName("Ocean").setMinMaxHeight(-1.0F, 0.4F);

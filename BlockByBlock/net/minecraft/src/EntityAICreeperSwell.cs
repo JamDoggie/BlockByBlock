@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class EntityAICreeperSwell : EntityAIBase
+    public class EntityAICreeperSwell : EntityAIBase
 	{
 		internal EntityCreeper swellingCreeper;
 		internal EntityLiving creeperAttackTarget;

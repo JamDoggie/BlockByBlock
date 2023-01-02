@@ -9,6 +9,12 @@ namespace BlockByBlock.net.minecraft.render
     public enum RenderState
     {
         TextureState,
-        ColorState
+        LightmapState,
+        ColorState,
+        AlphaTestState,
+        SmoothShadingState,
+        LightingState,
+        OverrideBrightnessState,
+        FogState
     }
 }

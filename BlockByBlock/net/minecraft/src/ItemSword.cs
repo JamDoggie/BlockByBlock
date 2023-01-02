@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ItemSword : Item
+    public class ItemSword : Item
 	{
 		private int weaponDamage;
 		private readonly EnumToolMaterial toolMaterial;

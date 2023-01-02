@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public abstract class Enchantment
+    public abstract class Enchantment
 	{
 		public static readonly Enchantment[] enchantmentsList = new Enchantment[256];
 		public static readonly Enchantment protection = new EnchantmentProtection(0, 10, 0);

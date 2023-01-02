@@ -1,11 +1,14 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using net.minecraft.client.entity;
+using net.minecraft.client.entity.render;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-	public class TileEntityRenderer
+    public class TileEntityRenderer
 	{
 		private System.Collections.IDictionary specialRendererMap = new Hashtable();
 		public static TileEntityRenderer instance = new TileEntityRenderer();
@@ -90,8 +93,8 @@ namespace net.minecraft.src
 				int i3 = this.worldObj.getLightBrightnessForSkyBlocks(tileEntity1.xCoord, tileEntity1.yCoord, tileEntity1.zCoord, 0);
 				int i4 = i3 % 65536;
 				int i5 = i3 / 65536;
-				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i4 / 1.0F, (float)i5 / 1.0F);
-				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				LightmapManager.setLightmapTextureCoords(LightmapManager.lightmapTexUnit, (float)i4 / 1.0F, (float)i5 / 1.0F);
+                Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 				this.renderTileEntityAt(tileEntity1, (double)tileEntity1.xCoord - staticPlayerX, (double)tileEntity1.yCoord - staticPlayerY, (double)tileEntity1.zCoord - staticPlayerZ, f2);
 			}
 

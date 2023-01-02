@@ -96,7 +96,9 @@
 				i6 = i4;
 			}
 
-			return i5 << 20 | i6 << 4;
+			int lightValue = i5 << 20 | i6 << 4;
+            
+            return lightValue;
 		}
 
 		public virtual float getLightBrightness(int i1, int i2, int i3)

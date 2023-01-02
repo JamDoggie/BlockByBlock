@@ -1,7 +1,9 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
 
-	public class EntityAINearestAttackableTargetSorter : IComparer<Entity>
+    public class EntityAINearestAttackableTargetSorter : IComparer<Entity>
 	{
 		private Entity theEntity;
 		internal readonly EntityAINearestAttackableTarget parent;

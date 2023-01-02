@@ -1,10 +1,11 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class EmptyChunk : Chunk
+    public class EmptyChunk : Chunk
 	{
 		public EmptyChunk(World world1, int i2, int i3) : base(world1, i2, i3)
 		{

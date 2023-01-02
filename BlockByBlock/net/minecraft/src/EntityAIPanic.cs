@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class EntityAIPanic : EntityAIBase
+    public class EntityAIPanic : EntityAIBase
 	{
 		private EntityCreature theAnimal;
 		private float field_48314_b;

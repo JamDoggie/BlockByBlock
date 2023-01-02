@@ -1,13 +1,15 @@
 ﻿using System;
 using BlockByBlock.helpers;
 using net.minecraft.client;
+using net.minecraft.client.entity;
+using net.minecraft.client.entity.render.model;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
 namespace net.minecraft.src
 {
 
-	public class GuiEnchantment : GuiContainer
+    public class GuiEnchantment : GuiContainer
 	{
 		private bool InstanceFieldsInitialized = false;
 
@@ -75,37 +77,35 @@ namespace net.minecraft.src
 		protected internal override void drawGuiContainerBackgroundLayer(float f1, int i2, int i3)
 		{
 			int i4 = this.mc.renderEngine.getTexture("/gui/enchant.png");
-			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i4);
 			int i5 = (this.width - this.xSize) / 2;
 			int i6 = (this.height - this.ySize) / 2;
 			this.drawTexturedModalRect(i5, i6, 0, 0, this.xSize, this.ySize);
-            Minecraft.newRenderer.ModelMatrix.PushMatrix();
-			GL.MatrixMode(MatrixMode.Projection);
-            Minecraft.newRenderer.CameraMatrix.PushMatrix();
-            Minecraft.newRenderer.CameraMatrix.LoadIdentity();
+            Minecraft.renderPipeline.ModelMatrix.PushMatrix();
+            Minecraft.renderPipeline.ProjectionMatrix.PushMatrix();
+            Minecraft.renderPipeline.ProjectionMatrix.LoadIdentity();
 			ScaledResolution scaledResolution7 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
 			GL.Viewport((scaledResolution7.ScaledWidth - 320) / 2 * scaledResolution7.scaleFactor, (scaledResolution7.ScaledHeight - 240) / 2 * scaledResolution7.scaleFactor, 320 * scaledResolution7.scaleFactor, 240 * scaledResolution7.scaleFactor);
-            Minecraft.newRenderer.CameraMatrix.Translate(-0.34F, 0.23F, 0.0F);
+            Minecraft.renderPipeline.ProjectionMatrix.Translate(-0.34F, 0.23F, 0.0F);
             
 			Matrix4 perspectiveMatrix = Glu.Perspective(90.0F, 1.3333334F, 9.0F, 80.0F);
-			Minecraft.newRenderer.CameraMatrix.MultMatrix(perspectiveMatrix);
+			Minecraft.renderPipeline.ProjectionMatrix.MultMatrix(perspectiveMatrix);
 
             float f8 = 1.0F;
-			GL.MatrixMode(MatrixMode.Modelview);
-            Minecraft.newRenderer.ModelMatrix.LoadIdentity();
+            Minecraft.renderPipeline.ModelMatrix.LoadIdentity();
 			RenderHelper.enableStandardItemLighting();
-            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 3.3F, -16.0F);
-            Minecraft.newRenderer.ModelMatrix.Scale(f8, f8, f8);
+            Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 3.3F, -16.0F);
+            Minecraft.renderPipeline.ModelMatrix.Scale(f8, f8, f8);
 			float f9 = 5.0F;
-            Minecraft.newRenderer.ModelMatrix.Scale(f9, f9, f9);
-            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F, 0.0F, 0.0F, 1.0F);
+            Minecraft.renderPipeline.ModelMatrix.Scale(f9, f9, f9);
+            Minecraft.renderPipeline.ModelMatrix.Rotate(180.0F, 0.0F, 0.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(this.mc.renderEngine.getTexture("/item/book.png"));
-            Minecraft.newRenderer.ModelMatrix.Rotate(20.0F, 1.0F, 0.0F, 0.0F);
+            Minecraft.renderPipeline.ModelMatrix.Rotate(20.0F, 1.0F, 0.0F, 0.0F);
 			float f10 = this.field_40221_n + (this.field_40224_m - this.field_40221_n) * f1;
-            Minecraft.newRenderer.ModelMatrix.Translate((1.0F - f10) * 0.2F, (1.0F - f10) * 0.1F, (1.0F - f10) * 0.25F);
-            Minecraft.newRenderer.ModelMatrix.Rotate(-(1.0F - f10) * 90.0F - 90.0F, 0.0F, 1.0F, 0.0F);
-            Minecraft.newRenderer.ModelMatrix.Rotate(180.0F, 1.0F, 0.0F, 0.0F);
+            Minecraft.renderPipeline.ModelMatrix.Translate((1.0F - f10) * 0.2F, (1.0F - f10) * 0.1F, (1.0F - f10) * 0.25F);
+            Minecraft.renderPipeline.ModelMatrix.Rotate(-(1.0F - f10) * 90.0F - 90.0F, 0.0F, 1.0F, 0.0F);
+            Minecraft.renderPipeline.ModelMatrix.Rotate(180.0F, 1.0F, 0.0F, 0.0F);
 			float f11 = this.field_40225_j + (this.field_40229_i - this.field_40225_j) * f1 + 0.25F;
 			float f12 = this.field_40225_j + (this.field_40229_i - this.field_40225_j) * f1 + 0.75F;
 			f11 = (f11 - (float)MathHelper.func_40346_b((double)f11)) * 1.6F - 0.3F;
@@ -134,13 +134,11 @@ namespace net.minecraft.src
 			bookModel.render((Entity)null, 0.0F, f11, f12, f10, 0.0F, 0.0625F);
 			GL.Disable(EnableCap.RescaleNormal);
 			RenderHelper.disableStandardItemLighting();
-			GL.MatrixMode(MatrixMode.Projection);
 			GL.Viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
-            Minecraft.newRenderer.CameraMatrix.PopMatrix();
-			GL.MatrixMode(MatrixMode.Modelview);
-            Minecraft.newRenderer.ModelMatrix.PopMatrix();
+            Minecraft.renderPipeline.ProjectionMatrix.PopMatrix();
+            Minecraft.renderPipeline.ModelMatrix.PopMatrix();
 			RenderHelper.disableStandardItemLighting();
-			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i4);
 			EnchantmentNameParts.instance.RandSeed = this.containerEnchantment.nameSeed;
 
@@ -150,7 +148,7 @@ namespace net.minecraft.src
 				this.zLevel = 0.0F;
 				this.mc.renderEngine.bindTexture(i4);
 				int i15 = this.containerEnchantment.enchantLevels[i13];
-				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+                Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 				if (i15 == 0)
 				{
 					this.drawTexturedModalRect(i5 + 60, i6 + 14 + 19 * i13, 0, 185, 108, 19);

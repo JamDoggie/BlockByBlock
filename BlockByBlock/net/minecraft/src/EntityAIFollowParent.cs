@@ -1,7 +1,9 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
 
-	public class EntityAIFollowParent : EntityAIBase
+    public class EntityAIFollowParent : EntityAIBase
 	{
 		internal EntityAnimal childAnimal;
 		internal EntityAnimal parentAnimal;

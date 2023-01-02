@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class Explosion
+    public class Explosion
 	{
 		public bool isFlaming = false;
 		private RandomExtended explosionRNG = new RandomExtended();

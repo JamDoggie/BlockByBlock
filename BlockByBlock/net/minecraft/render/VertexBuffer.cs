@@ -11,13 +11,14 @@ namespace BlockByBlock.net.minecraft.render
         public int Length;
         public int VertexCount;
         public int GLHandle;
+        public int DrawMode;
 
         public bool HasColor;
         public bool HasBrightness;
         public bool HasTexture;
         public bool HasNormal;
 
-        public VertexBuffer(int length, int elements, int glHandle, bool hasBrightness, bool hasColor, bool hasTexture, bool hasNormal)
+        public VertexBuffer(int length, int elements, int glHandle, int drawMode, bool hasBrightness, bool hasColor, bool hasTexture, bool hasNormal)
         {
             Length = length;
             GLHandle = glHandle;
@@ -26,6 +27,7 @@ namespace BlockByBlock.net.minecraft.render
             HasColor = hasColor;
             HasTexture = hasTexture;
             HasNormal = hasNormal;
+            DrawMode = drawMode;
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	internal class VillageAgressor
+    internal class VillageAgressor
 	{
 		public EntityLiving agressor;
 		public int agressionTime;

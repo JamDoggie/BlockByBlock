@@ -1,10 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-	public class BlockFurnace : BlockContainer
+    public class BlockFurnace : BlockContainer
 	{
 		private RandomExtended furnaceRand = new RandomExtended();
 		private readonly bool isActive;

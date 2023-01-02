@@ -1,5 +1,7 @@
 ﻿using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
+using BlockByBlock.net.minecraft.client.entity.particle;
+using net.minecraft.client.entity;
 using System;
 using System.Collections;
 using System.IO;
@@ -9,9 +11,9 @@ using System.Net.Sockets;
 namespace net.minecraft.src
 {
 
-	using Minecraft = net.minecraft.client.Minecraft;
+    using Minecraft = net.minecraft.client.Minecraft;
 
-	public class NetClientHandler : NetHandler
+    public class NetClientHandler : NetHandler
 	{
 		private bool disconnected = false;
 		private NetworkManager netManager;

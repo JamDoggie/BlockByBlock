@@ -1,10 +1,11 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class BlockPistonMoving : BlockContainer
+    public class BlockPistonMoving : BlockContainer
 	{
 		public BlockPistonMoving(int i1) : base(i1, Material.piston)
 		{

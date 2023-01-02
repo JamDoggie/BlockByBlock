@@ -1,9 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class Packet18Animation : Packet
+    public class Packet18Animation : Packet
 	{
 		public int entityId;
 		public int animate;

@@ -1,10 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-	public class MapGenNetherBridge : MapGenStructure
+    public class MapGenNetherBridge : MapGenStructure
 	{
 		private System.Collections.IList spawnList = new ArrayList();
 

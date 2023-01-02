@@ -196,10 +196,10 @@ namespace net.minecraft.src
 			double d42 = (double)i3 + block1.minY + 0.1875D;
 			double d44 = (double)i4 + block1.minZ;
 			double d46 = (double)i4 + block1.maxZ;
-			tessellator5.addVertexWithUV(d38, d42, d46, d30, d36);
-			tessellator5.addVertexWithUV(d38, d42, d44, d30, d34);
-			tessellator5.addVertexWithUV(d40, d42, d44, d32, d34);
-			tessellator5.addVertexWithUV(d40, d42, d46, d32, d36);
+			tessellator5.AddVertexWithUV(d38, d42, d46, d30, d36);
+			tessellator5.AddVertexWithUV(d38, d42, d44, d30, d34);
+			tessellator5.AddVertexWithUV(d40, d42, d44, d32, d34);
+			tessellator5.AddVertexWithUV(d40, d42, d46, d32, d36);
 			tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
 			tessellator5.setColorOpaque_F(f10, f10, f10);
 			i27 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 1);
@@ -248,10 +248,10 @@ namespace net.minecraft.src
 			double d58 = (double)i3 + block1.maxY;
 			double d60 = (double)i4 + block1.minZ;
 			double d62 = (double)i4 + block1.maxZ;
-			tessellator5.addVertexWithUV(d56, d58, d62, d46, d50);
-			tessellator5.addVertexWithUV(d56, d58, d60, d38, d42);
-			tessellator5.addVertexWithUV(d54, d58, d60, d40, d44);
-			tessellator5.addVertexWithUV(d54, d58, d62, d48, d52);
+			tessellator5.AddVertexWithUV(d56, d58, d62, d46, d50);
+			tessellator5.AddVertexWithUV(d56, d58, d60, d38, d42);
+			tessellator5.AddVertexWithUV(d54, d58, d60, d40, d44);
+			tessellator5.AddVertexWithUV(d54, d58, d62, d48, d52);
 			i27 = Direction.headInvisibleFace[i7];
 			if (z8)
 			{
@@ -330,16 +330,7 @@ namespace net.minecraft.src
 			float f8 = (float)(i7 >> 16 & 255) / 255.0F;
 			float f9 = (float)(i7 >> 8 & 255) / 255.0F;
 			float f10 = (float)(i7 & 255) / 255.0F;
-			if (GameRenderer.anaglyphEnable)
-			{
-				float f11 = (f8 * 30.0F + f9 * 59.0F + f10 * 11.0F) / 100.0F;
-				float f12 = (f8 * 30.0F + f9 * 70.0F) / 100.0F;
-				float f13 = (f8 * 30.0F + f10 * 70.0F) / 100.0F;
-				f8 = f11;
-				f9 = f12;
-				f10 = f13;
-			}
-
+            
 			tessellator5.setColorOpaque_F(f6 * f8, f6 * f9, f6 * f10);
 			int i34 = blockBrewingStand1.getBlockTextureFromSideAndMetadata(0, 0);
 			if (this.overrideBlockTexture >= 0)
@@ -368,14 +359,14 @@ namespace net.minecraft.src
 				double d28 = (double)i2 + 0.5D + Math.Sin(d20) * 8.0D / 16.0D;
 				double d30 = (double)i4 + 0.5D;
 				double d32 = (double)i4 + 0.5D + Math.Cos(d20) * 8.0D / 16.0D;
-				tessellator5.addVertexWithUV(d26, (double)(i3 + 1), d30, d22, d14);
-				tessellator5.addVertexWithUV(d26, (double)(i3 + 0), d30, d22, d16);
-				tessellator5.addVertexWithUV(d28, (double)(i3 + 0), d32, d24, d16);
-				tessellator5.addVertexWithUV(d28, (double)(i3 + 1), d32, d24, d14);
-				tessellator5.addVertexWithUV(d28, (double)(i3 + 1), d32, d24, d14);
-				tessellator5.addVertexWithUV(d28, (double)(i3 + 0), d32, d24, d16);
-				tessellator5.addVertexWithUV(d26, (double)(i3 + 0), d30, d22, d16);
-				tessellator5.addVertexWithUV(d26, (double)(i3 + 1), d30, d22, d14);
+				tessellator5.AddVertexWithUV(d26, (double)(i3 + 1), d30, d22, d14);
+				tessellator5.AddVertexWithUV(d26, (double)(i3 + 0), d30, d22, d16);
+				tessellator5.AddVertexWithUV(d28, (double)(i3 + 0), d32, d24, d16);
+				tessellator5.AddVertexWithUV(d28, (double)(i3 + 1), d32, d24, d14);
+				tessellator5.AddVertexWithUV(d28, (double)(i3 + 1), d32, d24, d14);
+				tessellator5.AddVertexWithUV(d28, (double)(i3 + 0), d32, d24, d16);
+				tessellator5.AddVertexWithUV(d26, (double)(i3 + 0), d30, d22, d16);
+				tessellator5.AddVertexWithUV(d26, (double)(i3 + 1), d30, d22, d14);
 			}
 
 			blockBrewingStand1.setBlockBoundsForItemRender();
@@ -393,15 +384,6 @@ namespace net.minecraft.src
 			float f9 = (float)(i7 >> 8 & 255) / 255.0F;
 			float f10 = (float)(i7 & 255) / 255.0F;
 			float f12;
-			if (GameRenderer.anaglyphEnable)
-			{
-				float f11 = (f8 * 30.0F + f9 * 59.0F + f10 * 11.0F) / 100.0F;
-				f12 = (f8 * 30.0F + f9 * 70.0F) / 100.0F;
-				float f13 = (f8 * 30.0F + f10 * 70.0F) / 100.0F;
-				f8 = f11;
-				f9 = f12;
-				f10 = f13;
-			}
 
 			tessellator5.setColorOpaque_F(f6 * f8, f6 * f9, f6 * f10);
 			short s16 = 154;
@@ -536,10 +518,10 @@ namespace net.minecraft.src
 				d44 = d46 = (double)(i4 + 0);
 			}
 
-			tessellator8.addVertexWithUV(d38, d48, d46, d22, d26);
-			tessellator8.addVertexWithUV(d36, d48, d44, d22, d28);
-			tessellator8.addVertexWithUV(d34, d48, d42, d24, d28);
-			tessellator8.addVertexWithUV(d32, d48, d40, d24, d26);
+			tessellator8.AddVertexWithUV(d38, d48, d46, d22, d26);
+			tessellator8.AddVertexWithUV(d36, d48, d44, d22, d28);
+			tessellator8.AddVertexWithUV(d34, d48, d42, d24, d28);
+			tessellator8.AddVertexWithUV(d32, d48, d40, d24, d26);
 			return true;
 		}
 
@@ -671,10 +653,10 @@ namespace net.minecraft.src
 			double d24 = ((double)i17 + d14 - 0.01D) / 256.0D;
 			double d26 = ((double)((float)i18 + 4.0F) - 0.01D) / 256.0D;
 			tessellator19.setColorOpaque_F(f13, f13, f13);
-			tessellator19.addVertexWithUV(d1, d7, d9, d24, d22);
-			tessellator19.addVertexWithUV(d1, d5, d9, d20, d22);
-			tessellator19.addVertexWithUV(d3, d5, d11, d20, d26);
-			tessellator19.addVertexWithUV(d3, d7, d11, d24, d26);
+			tessellator19.AddVertexWithUV(d1, d7, d9, d24, d22);
+			tessellator19.AddVertexWithUV(d1, d5, d9, d20, d22);
+			tessellator19.AddVertexWithUV(d3, d5, d11, d20, d26);
+			tessellator19.AddVertexWithUV(d3, d7, d11, d24, d26);
 		}
 
 		private void renderPistonRodSN(double d1, double d3, double d5, double d7, double d9, double d11, float f13, double d14)
@@ -693,10 +675,10 @@ namespace net.minecraft.src
 			double d24 = ((double)i17 + d14 - 0.01D) / 256.0D;
 			double d26 = ((double)((float)i18 + 4.0F) - 0.01D) / 256.0D;
 			tessellator19.setColorOpaque_F(f13, f13, f13);
-			tessellator19.addVertexWithUV(d1, d5, d11, d24, d22);
-			tessellator19.addVertexWithUV(d1, d5, d9, d20, d22);
-			tessellator19.addVertexWithUV(d3, d7, d9, d20, d26);
-			tessellator19.addVertexWithUV(d3, d7, d11, d24, d26);
+			tessellator19.AddVertexWithUV(d1, d5, d11, d24, d22);
+			tessellator19.AddVertexWithUV(d1, d5, d9, d20, d22);
+			tessellator19.AddVertexWithUV(d3, d7, d9, d20, d26);
+			tessellator19.AddVertexWithUV(d3, d7, d11, d24, d26);
 		}
 
 		private void renderPistonRodEW(double d1, double d3, double d5, double d7, double d9, double d11, float f13, double d14)
@@ -715,10 +697,10 @@ namespace net.minecraft.src
 			double d24 = ((double)i17 + d14 - 0.01D) / 256.0D;
 			double d26 = ((double)((float)i18 + 4.0F) - 0.01D) / 256.0D;
 			tessellator19.setColorOpaque_F(f13, f13, f13);
-			tessellator19.addVertexWithUV(d3, d5, d9, d24, d22);
-			tessellator19.addVertexWithUV(d1, d5, d9, d20, d22);
-			tessellator19.addVertexWithUV(d1, d7, d11, d20, d26);
-			tessellator19.addVertexWithUV(d3, d7, d11, d24, d26);
+			tessellator19.AddVertexWithUV(d3, d5, d9, d24, d22);
+			tessellator19.AddVertexWithUV(d1, d5, d9, d20, d22);
+			tessellator19.AddVertexWithUV(d1, d7, d11, d20, d26);
+			tessellator19.AddVertexWithUV(d3, d7, d11, d24, d26);
 		}
 
 		public virtual void renderPistonExtensionAllFaces(Block block1, int i2, int i3, int i4, bool z5)
@@ -1013,10 +995,10 @@ namespace net.minecraft.src
 					vec3D28 = vec3D21[4];
 				}
 
-				tessellator8.addVertexWithUV(vec3D30.xCoord, vec3D30.yCoord, vec3D30.zCoord, (double)f17, (double)f20);
-				tessellator8.addVertexWithUV(vec3D26.xCoord, vec3D26.yCoord, vec3D26.zCoord, (double)f18, (double)f20);
-				tessellator8.addVertexWithUV(vec3D27.xCoord, vec3D27.yCoord, vec3D27.zCoord, (double)f18, (double)f19);
-				tessellator8.addVertexWithUV(vec3D28.xCoord, vec3D28.yCoord, vec3D28.zCoord, (double)f17, (double)f19);
+				tessellator8.AddVertexWithUV(vec3D30.xCoord, vec3D30.yCoord, vec3D30.zCoord, (double)f17, (double)f20);
+				tessellator8.AddVertexWithUV(vec3D26.xCoord, vec3D26.yCoord, vec3D26.zCoord, (double)f18, (double)f20);
+				tessellator8.AddVertexWithUV(vec3D27.xCoord, vec3D27.yCoord, vec3D27.zCoord, (double)f18, (double)f19);
+				tessellator8.AddVertexWithUV(vec3D28.xCoord, vec3D28.yCoord, vec3D28.zCoord, (double)f17, (double)f19);
 			}
 
 			return true;
@@ -1068,50 +1050,50 @@ namespace net.minecraft.src
 
 				if (Block.fire.canBlockCatchFire(this.blockAccess, i2 - 1, i3, i4))
 				{
-					tessellator5.addVertexWithUV((double)((float)i2 + f36), (double)((float)i3 + f17 + f19), (double)(i4 + 1), d11, d13);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1), d11, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
-					tessellator5.addVertexWithUV((double)((float)i2 + f36), (double)((float)i3 + f17 + f19), (double)(i4 + 0), d9, d13);
-					tessellator5.addVertexWithUV((double)((float)i2 + f36), (double)((float)i3 + f17 + f19), (double)(i4 + 0), d9, d13);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1), d11, d15);
-					tessellator5.addVertexWithUV((double)((float)i2 + f36), (double)((float)i3 + f17 + f19), (double)(i4 + 1), d11, d13);
+					tessellator5.AddVertexWithUV((double)((float)i2 + f36), (double)((float)i3 + f17 + f19), (double)(i4 + 1), d11, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1), d11, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
+					tessellator5.AddVertexWithUV((double)((float)i2 + f36), (double)((float)i3 + f17 + f19), (double)(i4 + 0), d9, d13);
+					tessellator5.AddVertexWithUV((double)((float)i2 + f36), (double)((float)i3 + f17 + f19), (double)(i4 + 0), d9, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1), d11, d15);
+					tessellator5.AddVertexWithUV((double)((float)i2 + f36), (double)((float)i3 + f17 + f19), (double)(i4 + 1), d11, d13);
 				}
 
 				if (Block.fire.canBlockCatchFire(this.blockAccess, i2 + 1, i3, i4))
 				{
-					tessellator5.addVertexWithUV((double)((float)(i2 + 1) - f36), (double)((float)i3 + f17 + f19), (double)(i4 + 0), d9, d13);
-					tessellator5.addVertexWithUV((double)(i2 + 1 - 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 1 - 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1), d11, d15);
-					tessellator5.addVertexWithUV((double)((float)(i2 + 1) - f36), (double)((float)i3 + f17 + f19), (double)(i4 + 1), d11, d13);
-					tessellator5.addVertexWithUV((double)((float)(i2 + 1) - f36), (double)((float)i3 + f17 + f19), (double)(i4 + 1), d11, d13);
-					tessellator5.addVertexWithUV((double)(i2 + 1 - 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1), d11, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 1 - 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
-					tessellator5.addVertexWithUV((double)((float)(i2 + 1) - f36), (double)((float)i3 + f17 + f19), (double)(i4 + 0), d9, d13);
+					tessellator5.AddVertexWithUV((double)((float)(i2 + 1) - f36), (double)((float)i3 + f17 + f19), (double)(i4 + 0), d9, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 1 - 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 1 - 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1), d11, d15);
+					tessellator5.AddVertexWithUV((double)((float)(i2 + 1) - f36), (double)((float)i3 + f17 + f19), (double)(i4 + 1), d11, d13);
+					tessellator5.AddVertexWithUV((double)((float)(i2 + 1) - f36), (double)((float)i3 + f17 + f19), (double)(i4 + 1), d11, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 1 - 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1), d11, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 1 - 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
+					tessellator5.AddVertexWithUV((double)((float)(i2 + 1) - f36), (double)((float)i3 + f17 + f19), (double)(i4 + 0), d9, d13);
 				}
 
 				if (Block.fire.canBlockCatchFire(this.blockAccess, i2, i3, i4 - 1))
 				{
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17 + f19), (double)((float)i4 + f36), d11, d13);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d11, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17 + f19), (double)((float)i4 + f36), d9, d13);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17 + f19), (double)((float)i4 + f36), d9, d13);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d11, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17 + f19), (double)((float)i4 + f36), d11, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17 + f19), (double)((float)i4 + f36), d11, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d11, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17 + f19), (double)((float)i4 + f36), d9, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17 + f19), (double)((float)i4 + f36), d9, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d9, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 0), d11, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17 + f19), (double)((float)i4 + f36), d11, d13);
 				}
 
 				if (Block.fire.canBlockCatchFire(this.blockAccess, i2, i3, i4 + 1))
 				{
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17 + f19), (double)((float)(i4 + 1) - f36), d9, d13);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 0) + f19), (double)(i4 + 1 - 0), d9, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1 - 0), d11, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17 + f19), (double)((float)(i4 + 1) - f36), d11, d13);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17 + f19), (double)((float)(i4 + 1) - f36), d11, d13);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1 - 0), d11, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 0) + f19), (double)(i4 + 1 - 0), d9, d15);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17 + f19), (double)((float)(i4 + 1) - f36), d9, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17 + f19), (double)((float)(i4 + 1) - f36), d9, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 0) + f19), (double)(i4 + 1 - 0), d9, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1 - 0), d11, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17 + f19), (double)((float)(i4 + 1) - f36), d11, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17 + f19), (double)((float)(i4 + 1) - f36), d11, d13);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 0) + f19), (double)(i4 + 1 - 0), d11, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 0) + f19), (double)(i4 + 1 - 0), d9, d15);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17 + f19), (double)((float)(i4 + 1) - f36), d9, d13);
 				}
 
 				if (Block.fire.canBlockCatchFire(this.blockAccess, i2, i3 + 1, i4))
@@ -1132,33 +1114,33 @@ namespace net.minecraft.src
 					f17 = -0.2F;
 					if ((i2 + i3 + i4 & 1) == 0)
 					{
-						tessellator5.addVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 0), d11, d13);
-						tessellator5.addVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 0), d11, d15);
-						tessellator5.addVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 1), d9, d15);
-						tessellator5.addVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 1), d9, d13);
+						tessellator5.AddVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 0), d11, d13);
+						tessellator5.AddVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 0), d11, d15);
+						tessellator5.AddVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 1), d9, d15);
+						tessellator5.AddVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 1), d9, d13);
 						d9 = (double)((float)i7 / 256.0F);
 						d11 = (double)(((float)i7 + 15.99F) / 256.0F);
 						d13 = (double)((float)(i8 + 16) / 256.0F);
 						d15 = (double)(((float)i8 + 15.99F + 16.0F) / 256.0F);
-						tessellator5.addVertexWithUV(d30, (double)((float)i3 + f17), (double)(i4 + 1), d11, d13);
-						tessellator5.addVertexWithUV(d22, (double)(i3 + 0), (double)(i4 + 1), d11, d15);
-						tessellator5.addVertexWithUV(d22, (double)(i3 + 0), (double)(i4 + 0), d9, d15);
-						tessellator5.addVertexWithUV(d30, (double)((float)i3 + f17), (double)(i4 + 0), d9, d13);
+						tessellator5.AddVertexWithUV(d30, (double)((float)i3 + f17), (double)(i4 + 1), d11, d13);
+						tessellator5.AddVertexWithUV(d22, (double)(i3 + 0), (double)(i4 + 1), d11, d15);
+						tessellator5.AddVertexWithUV(d22, (double)(i3 + 0), (double)(i4 + 0), d9, d15);
+						tessellator5.AddVertexWithUV(d30, (double)((float)i3 + f17), (double)(i4 + 0), d9, d13);
 					}
 					else
 					{
-						tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d34, d11, d13);
-						tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d26, d11, d15);
-						tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d26, d9, d15);
-						tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d34, d9, d13);
+						tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d34, d11, d13);
+						tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d26, d11, d15);
+						tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d26, d9, d15);
+						tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d34, d9, d13);
 						d9 = (double)((float)i7 / 256.0F);
 						d11 = (double)(((float)i7 + 15.99F) / 256.0F);
 						d13 = (double)((float)(i8 + 16) / 256.0F);
 						d15 = (double)(((float)i8 + 15.99F + 16.0F) / 256.0F);
-						tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d32, d11, d13);
-						tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d24, d11, d15);
-						tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d24, d9, d15);
-						tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d32, d9, d13);
+						tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d32, d11, d13);
+						tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d24, d11, d15);
+						tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d24, d9, d15);
+						tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d32, d9, d13);
 					}
 				}
 			}
@@ -1172,26 +1154,26 @@ namespace net.minecraft.src
 				d28 = (double)i2 + 0.5D + 0.3D;
 				d30 = (double)i4 + 0.5D - 0.3D;
 				d32 = (double)i4 + 0.5D + 0.3D;
-				tessellator5.addVertexWithUV(d26, (double)((float)i3 + f17), (double)(i4 + 1), d11, d13);
-				tessellator5.addVertexWithUV(d18, (double)(i3 + 0), (double)(i4 + 1), d11, d15);
-				tessellator5.addVertexWithUV(d18, (double)(i3 + 0), (double)(i4 + 0), d9, d15);
-				tessellator5.addVertexWithUV(d26, (double)((float)i3 + f17), (double)(i4 + 0), d9, d13);
-				tessellator5.addVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 0), d11, d13);
-				tessellator5.addVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 0), d11, d15);
-				tessellator5.addVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 1), d9, d15);
-				tessellator5.addVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 1), d9, d13);
+				tessellator5.AddVertexWithUV(d26, (double)((float)i3 + f17), (double)(i4 + 1), d11, d13);
+				tessellator5.AddVertexWithUV(d18, (double)(i3 + 0), (double)(i4 + 1), d11, d15);
+				tessellator5.AddVertexWithUV(d18, (double)(i3 + 0), (double)(i4 + 0), d9, d15);
+				tessellator5.AddVertexWithUV(d26, (double)((float)i3 + f17), (double)(i4 + 0), d9, d13);
+				tessellator5.AddVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 0), d11, d13);
+				tessellator5.AddVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 0), d11, d15);
+				tessellator5.AddVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 1), d9, d15);
+				tessellator5.AddVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 1), d9, d13);
 				d9 = (double)((float)i7 / 256.0F);
 				d11 = (double)(((float)i7 + 15.99F) / 256.0F);
 				d13 = (double)((float)(i8 + 16) / 256.0F);
 				d15 = (double)(((float)i8 + 15.99F + 16.0F) / 256.0F);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d32, d11, d13);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d24, d11, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d24, d9, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d32, d9, d13);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d30, d11, d13);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d22, d11, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d22, d9, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d30, d9, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d32, d11, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d24, d11, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d24, d9, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d32, d9, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d30, d11, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d22, d11, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d22, d9, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d30, d9, d13);
 				d18 = (double)i2 + 0.5D - 0.5D;
 				d20 = (double)i2 + 0.5D + 0.5D;
 				d22 = (double)i4 + 0.5D - 0.5D;
@@ -1200,26 +1182,26 @@ namespace net.minecraft.src
 				d28 = (double)i2 + 0.5D + 0.4D;
 				d30 = (double)i4 + 0.5D - 0.4D;
 				d32 = (double)i4 + 0.5D + 0.4D;
-				tessellator5.addVertexWithUV(d26, (double)((float)i3 + f17), (double)(i4 + 0), d9, d13);
-				tessellator5.addVertexWithUV(d18, (double)(i3 + 0), (double)(i4 + 0), d9, d15);
-				tessellator5.addVertexWithUV(d18, (double)(i3 + 0), (double)(i4 + 1), d11, d15);
-				tessellator5.addVertexWithUV(d26, (double)((float)i3 + f17), (double)(i4 + 1), d11, d13);
-				tessellator5.addVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 1), d9, d13);
-				tessellator5.addVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 1), d9, d15);
-				tessellator5.addVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 0), d11, d15);
-				tessellator5.addVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 0), d11, d13);
+				tessellator5.AddVertexWithUV(d26, (double)((float)i3 + f17), (double)(i4 + 0), d9, d13);
+				tessellator5.AddVertexWithUV(d18, (double)(i3 + 0), (double)(i4 + 0), d9, d15);
+				tessellator5.AddVertexWithUV(d18, (double)(i3 + 0), (double)(i4 + 1), d11, d15);
+				tessellator5.AddVertexWithUV(d26, (double)((float)i3 + f17), (double)(i4 + 1), d11, d13);
+				tessellator5.AddVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 1), d9, d13);
+				tessellator5.AddVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 1), d9, d15);
+				tessellator5.AddVertexWithUV(d20, (double)(i3 + 0), (double)(i4 + 0), d11, d15);
+				tessellator5.AddVertexWithUV(d28, (double)((float)i3 + f17), (double)(i4 + 0), d11, d13);
 				d9 = (double)((float)i7 / 256.0F);
 				d11 = (double)(((float)i7 + 15.99F) / 256.0F);
 				d13 = (double)((float)i8 / 256.0F);
 				d15 = (double)(((float)i8 + 15.99F) / 256.0F);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d32, d9, d13);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d24, d9, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d24, d11, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d32, d11, d13);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d30, d9, d13);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d22, d9, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d22, d11, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d30, d11, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d32, d9, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d24, d9, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d24, d11, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d32, d11, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)i3 + f17), d30, d9, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), d22, d9, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), d22, d11, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)i3 + f17), d30, d11, d13);
 			}
 
 			return true;
@@ -1355,39 +1337,39 @@ namespace net.minecraft.src
 					d21 -= 0.01953125D;
 				}
 
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21);
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d17, d19);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d15, d21);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d17, d19);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d15, d21);
 				tessellator5.setColorOpaque_F(f8, f8, f8);
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21 + 0.0625D);
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d17, d19 + 0.0625D);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19 + 0.0625D);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d15, d21 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d17, d19 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d15, d21 + 0.0625D);
 			}
 			else if (b38 == 1)
 			{
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21);
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d17, d19);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d15, d21);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d17, d19);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d15, d21);
 				tessellator5.setColorOpaque_F(f8, f8, f8);
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21 + 0.0625D);
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d17, d19 + 0.0625D);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19 + 0.0625D);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d15, d21 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d17, d19 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d15, d21 + 0.0625D);
 			}
 			else if (b38 == 2)
 			{
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21);
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d15, d21);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d17, d19);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d15, d21);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d17, d19);
 				tessellator5.setColorOpaque_F(f8, f8, f8);
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21 + 0.0625D);
-				tessellator5.addVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d15, d21 + 0.0625D);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19 + 0.0625D);
-				tessellator5.addVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d17, d19 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f37, d17, d21 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f35, (double)i3 + 0.015625D, (double)f36, d15, d21 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f36, d15, d19 + 0.0625D);
+				tessellator5.AddVertexWithUV((double)f34, (double)i3 + 0.015625D, (double)f37, d17, d19 + 0.0625D);
 			}
 
 			if (!this.blockAccess.isBlockNormalCube(i2, i3 + 1, i4))
@@ -1399,57 +1381,57 @@ namespace net.minecraft.src
 				if (this.blockAccess.isBlockNormalCube(i2 - 1, i3, i4) && this.blockAccess.getBlockId(i2 - 1, i3 + 1, i4) == Block.redstoneWire.blockID)
 				{
 					tessellator5.setColorOpaque_F(f8 * f10, f8 * f11, f8 * f12);
-					tessellator5.addVertexWithUV((double)i2 + 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1), d17, d19);
-					tessellator5.addVertexWithUV((double)i2 + 0.015625D, (double)(i3 + 0), (double)(i4 + 1), d15, d19);
-					tessellator5.addVertexWithUV((double)i2 + 0.015625D, (double)(i3 + 0), (double)(i4 + 0), d15, d21);
-					tessellator5.addVertexWithUV((double)i2 + 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 0), d17, d21);
+					tessellator5.AddVertexWithUV((double)i2 + 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1), d17, d19);
+					tessellator5.AddVertexWithUV((double)i2 + 0.015625D, (double)(i3 + 0), (double)(i4 + 1), d15, d19);
+					tessellator5.AddVertexWithUV((double)i2 + 0.015625D, (double)(i3 + 0), (double)(i4 + 0), d15, d21);
+					tessellator5.AddVertexWithUV((double)i2 + 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 0), d17, d21);
 					tessellator5.setColorOpaque_F(f8, f8, f8);
-					tessellator5.addVertexWithUV((double)i2 + 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1), d17, d19 + 0.0625D);
-					tessellator5.addVertexWithUV((double)i2 + 0.015625D, (double)(i3 + 0), (double)(i4 + 1), d15, d19 + 0.0625D);
-					tessellator5.addVertexWithUV((double)i2 + 0.015625D, (double)(i3 + 0), (double)(i4 + 0), d15, d21 + 0.0625D);
-					tessellator5.addVertexWithUV((double)i2 + 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 0), d17, d21 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)i2 + 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1), d17, d19 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)i2 + 0.015625D, (double)(i3 + 0), (double)(i4 + 1), d15, d19 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)i2 + 0.015625D, (double)(i3 + 0), (double)(i4 + 0), d15, d21 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)i2 + 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 0), d17, d21 + 0.0625D);
 				}
 
 				if (this.blockAccess.isBlockNormalCube(i2 + 1, i3, i4) && this.blockAccess.getBlockId(i2 + 1, i3 + 1, i4) == Block.redstoneWire.blockID)
 				{
 					tessellator5.setColorOpaque_F(f8 * f10, f8 * f11, f8 * f12);
-					tessellator5.addVertexWithUV((double)(i2 + 1) - 0.015625D, (double)(i3 + 0), (double)(i4 + 1), d15, d21);
-					tessellator5.addVertexWithUV((double)(i2 + 1) - 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1), d17, d21);
-					tessellator5.addVertexWithUV((double)(i2 + 1) - 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 0), d17, d19);
-					tessellator5.addVertexWithUV((double)(i2 + 1) - 0.015625D, (double)(i3 + 0), (double)(i4 + 0), d15, d19);
+					tessellator5.AddVertexWithUV((double)(i2 + 1) - 0.015625D, (double)(i3 + 0), (double)(i4 + 1), d15, d21);
+					tessellator5.AddVertexWithUV((double)(i2 + 1) - 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1), d17, d21);
+					tessellator5.AddVertexWithUV((double)(i2 + 1) - 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 0), d17, d19);
+					tessellator5.AddVertexWithUV((double)(i2 + 1) - 0.015625D, (double)(i3 + 0), (double)(i4 + 0), d15, d19);
 					tessellator5.setColorOpaque_F(f8, f8, f8);
-					tessellator5.addVertexWithUV((double)(i2 + 1) - 0.015625D, (double)(i3 + 0), (double)(i4 + 1), d15, d21 + 0.0625D);
-					tessellator5.addVertexWithUV((double)(i2 + 1) - 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1), d17, d21 + 0.0625D);
-					tessellator5.addVertexWithUV((double)(i2 + 1) - 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 0), d17, d19 + 0.0625D);
-					tessellator5.addVertexWithUV((double)(i2 + 1) - 0.015625D, (double)(i3 + 0), (double)(i4 + 0), d15, d19 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 1) - 0.015625D, (double)(i3 + 0), (double)(i4 + 1), d15, d21 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 1) - 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1), d17, d21 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 1) - 0.015625D, (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 0), d17, d19 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 1) - 0.015625D, (double)(i3 + 0), (double)(i4 + 0), d15, d19 + 0.0625D);
 				}
 
 				if (this.blockAccess.isBlockNormalCube(i2, i3, i4 - 1) && this.blockAccess.getBlockId(i2, i3 + 1, i4 - 1) == Block.redstoneWire.blockID)
 				{
 					tessellator5.setColorOpaque_F(f8 * f10, f8 * f11, f8 * f12);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)i4 + 0.015625D, d15, d21);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 1) + 0.021875F), (double)i4 + 0.015625D, d17, d21);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 1) + 0.021875F), (double)i4 + 0.015625D, d17, d19);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)i4 + 0.015625D, d15, d19);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)i4 + 0.015625D, d15, d21);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 1) + 0.021875F), (double)i4 + 0.015625D, d17, d21);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 1) + 0.021875F), (double)i4 + 0.015625D, d17, d19);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)i4 + 0.015625D, d15, d19);
 					tessellator5.setColorOpaque_F(f8, f8, f8);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)i4 + 0.015625D, d15, d21 + 0.0625D);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 1) + 0.021875F), (double)i4 + 0.015625D, d17, d21 + 0.0625D);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 1) + 0.021875F), (double)i4 + 0.015625D, d17, d19 + 0.0625D);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)i4 + 0.015625D, d15, d19 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)i4 + 0.015625D, d15, d21 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 1) + 0.021875F), (double)i4 + 0.015625D, d17, d21 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 1) + 0.021875F), (double)i4 + 0.015625D, d17, d19 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)i4 + 0.015625D, d15, d19 + 0.0625D);
 				}
 
 				if (this.blockAccess.isBlockNormalCube(i2, i3, i4 + 1) && this.blockAccess.getBlockId(i2, i3 + 1, i4 + 1) == Block.redstoneWire.blockID)
 				{
 					tessellator5.setColorOpaque_F(f8 * f10, f8 * f11, f8 * f12);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1) - 0.015625D, d17, d19);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)(i4 + 1) - 0.015625D, d15, d19);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)(i4 + 1) - 0.015625D, d15, d21);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1) - 0.015625D, d17, d21);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1) - 0.015625D, d17, d19);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)(i4 + 1) - 0.015625D, d15, d19);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)(i4 + 1) - 0.015625D, d15, d21);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1) - 0.015625D, d17, d21);
 					tessellator5.setColorOpaque_F(f8, f8, f8);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1) - 0.015625D, d17, d19 + 0.0625D);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)(i4 + 1) - 0.015625D, d15, d19 + 0.0625D);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)(i4 + 1) - 0.015625D, d15, d21 + 0.0625D);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1) - 0.015625D, d17, d21 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1) - 0.015625D, d17, d19 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)(i4 + 1) - 0.015625D, d15, d19 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)(i4 + 1) - 0.015625D, d15, d21 + 0.0625D);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)((float)(i3 + 1) + 0.021875F), (double)(i4 + 1) - 0.015625D, d17, d21 + 0.0625D);
 				}
 			}
 
@@ -1531,14 +1513,14 @@ namespace net.minecraft.src
 				++d42;
 			}
 
-			tessellator5.addVertexWithUV(d20, d36, d28, d12, d14);
-			tessellator5.addVertexWithUV(d22, d38, d30, d12, d16);
-			tessellator5.addVertexWithUV(d24, d40, d32, d10, d16);
-			tessellator5.addVertexWithUV(d26, d42, d34, d10, d14);
-			tessellator5.addVertexWithUV(d26, d42, d34, d10, d14);
-			tessellator5.addVertexWithUV(d24, d40, d32, d10, d16);
-			tessellator5.addVertexWithUV(d22, d38, d30, d12, d16);
-			tessellator5.addVertexWithUV(d20, d36, d28, d12, d14);
+			tessellator5.AddVertexWithUV(d20, d36, d28, d12, d14);
+			tessellator5.AddVertexWithUV(d22, d38, d30, d12, d16);
+			tessellator5.AddVertexWithUV(d24, d40, d32, d10, d16);
+			tessellator5.AddVertexWithUV(d26, d42, d34, d10, d14);
+			tessellator5.AddVertexWithUV(d26, d42, d34, d10, d14);
+			tessellator5.AddVertexWithUV(d24, d40, d32, d10, d16);
+			tessellator5.AddVertexWithUV(d22, d38, d30, d12, d16);
+			tessellator5.AddVertexWithUV(d20, d36, d28, d12, d14);
 			return true;
 		}
 
@@ -1565,34 +1547,34 @@ namespace net.minecraft.src
 			double d20 = (double)0.05F;
 			if (i17 == 5)
 			{
-				tessellator5.addVertexWithUV((double)i2 + d20, (double)(i3 + 1) + d18, (double)(i4 + 1) + d18, d9, d13);
-				tessellator5.addVertexWithUV((double)i2 + d20, (double)(i3 + 0) - d18, (double)(i4 + 1) + d18, d9, d15);
-				tessellator5.addVertexWithUV((double)i2 + d20, (double)(i3 + 0) - d18, (double)(i4 + 0) - d18, d11, d15);
-				tessellator5.addVertexWithUV((double)i2 + d20, (double)(i3 + 1) + d18, (double)(i4 + 0) - d18, d11, d13);
+				tessellator5.AddVertexWithUV((double)i2 + d20, (double)(i3 + 1) + d18, (double)(i4 + 1) + d18, d9, d13);
+				tessellator5.AddVertexWithUV((double)i2 + d20, (double)(i3 + 0) - d18, (double)(i4 + 1) + d18, d9, d15);
+				tessellator5.AddVertexWithUV((double)i2 + d20, (double)(i3 + 0) - d18, (double)(i4 + 0) - d18, d11, d15);
+				tessellator5.AddVertexWithUV((double)i2 + d20, (double)(i3 + 1) + d18, (double)(i4 + 0) - d18, d11, d13);
 			}
 
 			if (i17 == 4)
 			{
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d20, (double)(i3 + 0) - d18, (double)(i4 + 1) + d18, d11, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d20, (double)(i3 + 1) + d18, (double)(i4 + 1) + d18, d11, d13);
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d20, (double)(i3 + 1) + d18, (double)(i4 + 0) - d18, d9, d13);
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d20, (double)(i3 + 0) - d18, (double)(i4 + 0) - d18, d9, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d20, (double)(i3 + 0) - d18, (double)(i4 + 1) + d18, d11, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d20, (double)(i3 + 1) + d18, (double)(i4 + 1) + d18, d11, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d20, (double)(i3 + 1) + d18, (double)(i4 + 0) - d18, d9, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d20, (double)(i3 + 0) - d18, (double)(i4 + 0) - d18, d9, d15);
 			}
 
 			if (i17 == 3)
 			{
-				tessellator5.addVertexWithUV((double)(i2 + 1) + d18, (double)(i3 + 0) - d18, (double)i4 + d20, d11, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 1) + d18, (double)(i3 + 1) + d18, (double)i4 + d20, d11, d13);
-				tessellator5.addVertexWithUV((double)(i2 + 0) - d18, (double)(i3 + 1) + d18, (double)i4 + d20, d9, d13);
-				tessellator5.addVertexWithUV((double)(i2 + 0) - d18, (double)(i3 + 0) - d18, (double)i4 + d20, d9, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) + d18, (double)(i3 + 0) - d18, (double)i4 + d20, d11, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) + d18, (double)(i3 + 1) + d18, (double)i4 + d20, d11, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 0) - d18, (double)(i3 + 1) + d18, (double)i4 + d20, d9, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 0) - d18, (double)(i3 + 0) - d18, (double)i4 + d20, d9, d15);
 			}
 
 			if (i17 == 2)
 			{
-				tessellator5.addVertexWithUV((double)(i2 + 1) + d18, (double)(i3 + 1) + d18, (double)(i4 + 1) - d20, d9, d13);
-				tessellator5.addVertexWithUV((double)(i2 + 1) + d18, (double)(i3 + 0) - d18, (double)(i4 + 1) - d20, d9, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 0) - d18, (double)(i3 + 0) - d18, (double)(i4 + 1) - d20, d11, d15);
-				tessellator5.addVertexWithUV((double)(i2 + 0) - d18, (double)(i3 + 1) + d18, (double)(i4 + 1) - d20, d11, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) + d18, (double)(i3 + 1) + d18, (double)(i4 + 1) - d20, d9, d13);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) + d18, (double)(i3 + 0) - d18, (double)(i4 + 1) - d20, d9, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 0) - d18, (double)(i3 + 0) - d18, (double)(i4 + 1) - d20, d11, d15);
+				tessellator5.AddVertexWithUV((double)(i2 + 0) - d18, (double)(i3 + 1) + d18, (double)(i4 + 1) - d20, d11, d13);
 			}
 
 			return true;
@@ -1624,58 +1606,58 @@ namespace net.minecraft.src
 			int i20 = this.blockAccess.getBlockMetadata(i2, i3, i4);
 			if ((i20 & 2) != 0)
 			{
-				tessellator5.addVertexWithUV((double)i2 + d18, (double)(i3 + 1), (double)(i4 + 1), d22, d14);
-				tessellator5.addVertexWithUV((double)i2 + d18, (double)(i3 + 0), (double)(i4 + 1), d22, d16);
-				tessellator5.addVertexWithUV((double)i2 + d18, (double)(i3 + 0), (double)(i4 + 0), d12, d16);
-				tessellator5.addVertexWithUV((double)i2 + d18, (double)(i3 + 1), (double)(i4 + 0), d12, d14);
-				tessellator5.addVertexWithUV((double)i2 + d18, (double)(i3 + 1), (double)(i4 + 0), d12, d14);
-				tessellator5.addVertexWithUV((double)i2 + d18, (double)(i3 + 0), (double)(i4 + 0), d12, d16);
-				tessellator5.addVertexWithUV((double)i2 + d18, (double)(i3 + 0), (double)(i4 + 1), d22, d16);
-				tessellator5.addVertexWithUV((double)i2 + d18, (double)(i3 + 1), (double)(i4 + 1), d22, d14);
+				tessellator5.AddVertexWithUV((double)i2 + d18, (double)(i3 + 1), (double)(i4 + 1), d22, d14);
+				tessellator5.AddVertexWithUV((double)i2 + d18, (double)(i3 + 0), (double)(i4 + 1), d22, d16);
+				tessellator5.AddVertexWithUV((double)i2 + d18, (double)(i3 + 0), (double)(i4 + 0), d12, d16);
+				tessellator5.AddVertexWithUV((double)i2 + d18, (double)(i3 + 1), (double)(i4 + 0), d12, d14);
+				tessellator5.AddVertexWithUV((double)i2 + d18, (double)(i3 + 1), (double)(i4 + 0), d12, d14);
+				tessellator5.AddVertexWithUV((double)i2 + d18, (double)(i3 + 0), (double)(i4 + 0), d12, d16);
+				tessellator5.AddVertexWithUV((double)i2 + d18, (double)(i3 + 0), (double)(i4 + 1), d22, d16);
+				tessellator5.AddVertexWithUV((double)i2 + d18, (double)(i3 + 1), (double)(i4 + 1), d22, d14);
 			}
 
 			if ((i20 & 8) != 0)
 			{
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 0), (double)(i4 + 1), d12, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 1), (double)(i4 + 1), d12, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 1), (double)(i4 + 0), d22, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 0), (double)(i4 + 0), d22, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 0), (double)(i4 + 0), d22, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 1), (double)(i4 + 0), d22, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 1), (double)(i4 + 1), d12, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 0), (double)(i4 + 1), d12, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 0), (double)(i4 + 1), d12, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 1), (double)(i4 + 1), d12, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 1), (double)(i4 + 0), d22, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 0), (double)(i4 + 0), d22, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 0), (double)(i4 + 0), d22, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 1), (double)(i4 + 0), d22, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 1), (double)(i4 + 1), d12, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 1) - d18, (double)(i3 + 0), (double)(i4 + 1), d12, d16);
 			}
 
 			if ((i20 & 4) != 0)
 			{
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)i4 + d18, d12, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 1), (double)i4 + d18, d12, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 1), (double)i4 + d18, d22, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)i4 + d18, d22, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)i4 + d18, d22, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 1), (double)i4 + d18, d22, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 1), (double)i4 + d18, d12, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)i4 + d18, d12, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)i4 + d18, d12, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 1), (double)i4 + d18, d12, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 1), (double)i4 + d18, d22, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)i4 + d18, d22, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)i4 + d18, d22, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 1), (double)i4 + d18, d22, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 1), (double)i4 + d18, d12, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)i4 + d18, d12, d16);
 			}
 
 			if ((i20 & 1) != 0)
 			{
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 1), (double)(i4 + 1) - d18, d22, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)(i4 + 1) - d18, d22, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)(i4 + 1) - d18, d12, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 1), (double)(i4 + 1) - d18, d12, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 1), (double)(i4 + 1) - d18, d12, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)(i4 + 1) - d18, d12, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)(i4 + 1) - d18, d22, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 1), (double)(i4 + 1) - d18, d22, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 1), (double)(i4 + 1) - d18, d22, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)(i4 + 1) - d18, d22, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)(i4 + 1) - d18, d12, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 1), (double)(i4 + 1) - d18, d12, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 1), (double)(i4 + 1) - d18, d12, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 0), (double)(i4 + 1) - d18, d12, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 0), (double)(i4 + 1) - d18, d22, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 1), (double)(i4 + 1) - d18, d22, d14);
 			}
 
 			if (this.blockAccess.isBlockNormalCube(i2, i3 + 1, i4))
 			{
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 1) - d18, (double)(i4 + 0), d22, d14);
-				tessellator5.addVertexWithUV((double)(i2 + 1), (double)(i3 + 1) - d18, (double)(i4 + 1), d22, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 1) - d18, (double)(i4 + 1), d12, d16);
-				tessellator5.addVertexWithUV((double)(i2 + 0), (double)(i3 + 1) - d18, (double)(i4 + 0), d12, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 1) - d18, (double)(i4 + 0), d22, d14);
+				tessellator5.AddVertexWithUV((double)(i2 + 1), (double)(i3 + 1) - d18, (double)(i4 + 1), d22, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 1) - d18, (double)(i4 + 1), d12, d16);
+				tessellator5.AddVertexWithUV((double)(i2 + 0), (double)(i3 + 1) - d18, (double)(i4 + 0), d12, d14);
 			}
 
 			return true;
@@ -1691,15 +1673,6 @@ namespace net.minecraft.src
 			float f9 = (float)(i8 >> 16 & 255) / 255.0F;
 			float f10 = (float)(i8 >> 8 & 255) / 255.0F;
 			float f11 = (float)(i8 & 255) / 255.0F;
-			if (GameRenderer.anaglyphEnable)
-			{
-				float f12 = (f9 * 30.0F + f10 * 59.0F + f11 * 11.0F) / 100.0F;
-				float f13 = (f9 * 30.0F + f10 * 70.0F) / 100.0F;
-				float f14 = (f9 * 30.0F + f11 * 70.0F) / 100.0F;
-				f9 = f12;
-				f10 = f13;
-				f11 = f14;
-			}
 
 			tessellator6.setColorOpaque_F(f7 * f9, f7 * f10, f7 * f11);
 			bool z64 = false;
@@ -1753,180 +1726,180 @@ namespace net.minecraft.src
 			{
 				if (z60 && !z61)
 				{
-					tessellator6.addVertexWithUV(d38, (double)(i3 + 1), d46, d16, d22);
-					tessellator6.addVertexWithUV(d38, (double)(i3 + 0), d46, d16, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d46, d18, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d46, d18, d22);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d46, d16, d22);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d46, d16, d24);
-					tessellator6.addVertexWithUV(d38, (double)(i3 + 0), d46, d18, d24);
-					tessellator6.addVertexWithUV(d38, (double)(i3 + 1), d46, d18, d22);
+					tessellator6.AddVertexWithUV(d38, (double)(i3 + 1), d46, d16, d22);
+					tessellator6.AddVertexWithUV(d38, (double)(i3 + 0), d46, d16, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d46, d18, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d46, d18, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d46, d16, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d46, d16, d24);
+					tessellator6.AddVertexWithUV(d38, (double)(i3 + 0), d46, d18, d24);
+					tessellator6.AddVertexWithUV(d38, (double)(i3 + 1), d46, d18, d22);
 					if (!z59 && !z58)
 					{
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d56, d28, d32);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d56, d28, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d54, d30, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d54, d30, d32);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d54, d28, d32);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d54, d28, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d56, d30, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d56, d30, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d56, d28, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d56, d28, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d54, d30, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d54, d30, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d54, d28, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d54, d28, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d56, d30, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d56, d30, d32);
 					}
 
 					if (z62 || i3 < i5 - 1 && this.blockAccess.isAirBlock(i2 - 1, i3 + 1, i4))
 					{
-						tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d36);
-						tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d36);
-						tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d36);
+						tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d36);
+						tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d34);
 					}
 
 					if (z63 || i3 > 1 && this.blockAccess.isAirBlock(i2 - 1, i3 - 1, i4))
 					{
-						tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d36);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d36);
-						tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d36);
-						tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d36);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d36);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d36);
+						tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d36);
+						tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d36);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d34);
 					}
 				}
 				else if (!z60 && z61)
 				{
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d46, d18, d22);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d46, d18, d24);
-					tessellator6.addVertexWithUV(d42, (double)(i3 + 0), d46, d20, d24);
-					tessellator6.addVertexWithUV(d42, (double)(i3 + 1), d46, d20, d22);
-					tessellator6.addVertexWithUV(d42, (double)(i3 + 1), d46, d18, d22);
-					tessellator6.addVertexWithUV(d42, (double)(i3 + 0), d46, d18, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d46, d20, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d46, d20, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d46, d18, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d46, d18, d24);
+					tessellator6.AddVertexWithUV(d42, (double)(i3 + 0), d46, d20, d24);
+					tessellator6.AddVertexWithUV(d42, (double)(i3 + 1), d46, d20, d22);
+					tessellator6.AddVertexWithUV(d42, (double)(i3 + 1), d46, d18, d22);
+					tessellator6.AddVertexWithUV(d42, (double)(i3 + 0), d46, d18, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d46, d20, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d46, d20, d22);
 					if (!z59 && !z58)
 					{
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d54, d28, d32);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d54, d28, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d56, d30, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d56, d30, d32);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d56, d28, d32);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d56, d28, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d54, d30, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d54, d30, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d54, d28, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d54, d28, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d56, d30, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d56, d30, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d56, d28, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d56, d28, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d54, d30, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d54, d30, d32);
 					}
 
 					if (z62 || i3 < i5 - 1 && this.blockAccess.isAirBlock(i2 + 1, i3 + 1, i4))
 					{
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d32);
-						tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d32);
-						tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d32);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d32);
+						tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d32);
+						tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d32);
 					}
 
 					if (z63 || i3 > 1 && this.blockAccess.isAirBlock(i2 + 1, i3 - 1, i4))
 					{
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d32);
-						tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d32);
-						tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d32);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d32);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d32);
+						tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d32);
+						tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d32);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d32);
 					}
 				}
 			}
 			else
 			{
-				tessellator6.addVertexWithUV(d38, (double)(i3 + 1), d46, d16, d22);
-				tessellator6.addVertexWithUV(d38, (double)(i3 + 0), d46, d16, d24);
-				tessellator6.addVertexWithUV(d42, (double)(i3 + 0), d46, d20, d24);
-				tessellator6.addVertexWithUV(d42, (double)(i3 + 1), d46, d20, d22);
-				tessellator6.addVertexWithUV(d42, (double)(i3 + 1), d46, d16, d22);
-				tessellator6.addVertexWithUV(d42, (double)(i3 + 0), d46, d16, d24);
-				tessellator6.addVertexWithUV(d38, (double)(i3 + 0), d46, d20, d24);
-				tessellator6.addVertexWithUV(d38, (double)(i3 + 1), d46, d20, d22);
+				tessellator6.AddVertexWithUV(d38, (double)(i3 + 1), d46, d16, d22);
+				tessellator6.AddVertexWithUV(d38, (double)(i3 + 0), d46, d16, d24);
+				tessellator6.AddVertexWithUV(d42, (double)(i3 + 0), d46, d20, d24);
+				tessellator6.AddVertexWithUV(d42, (double)(i3 + 1), d46, d20, d22);
+				tessellator6.AddVertexWithUV(d42, (double)(i3 + 1), d46, d16, d22);
+				tessellator6.AddVertexWithUV(d42, (double)(i3 + 0), d46, d16, d24);
+				tessellator6.AddVertexWithUV(d38, (double)(i3 + 0), d46, d20, d24);
+				tessellator6.AddVertexWithUV(d38, (double)(i3 + 1), d46, d20, d22);
 				if (z62)
 				{
-					tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d36);
-					tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d32);
-					tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d32);
-					tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d36);
-					tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d36);
-					tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d32);
-					tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d32);
-					tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d36);
+					tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d36);
+					tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d32);
+					tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d32);
+					tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d36);
+					tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d36);
+					tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d32);
+					tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d32);
+					tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d36);
 				}
 				else
 				{
 					if (i3 < i5 - 1 && this.blockAccess.isAirBlock(i2 - 1, i3 + 1, i4))
 					{
-						tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d36);
-						tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d36);
-						tessellator6.addVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d36);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d36);
+						tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d56, d30, d36);
+						tessellator6.AddVertexWithUV(d38, (double)(i3 + 1) + 0.01D, d54, d28, d36);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d34);
 					}
 
 					if (i3 < i5 - 1 && this.blockAccess.isAirBlock(i2 + 1, i3 + 1, i4))
 					{
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d32);
-						tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d32);
-						tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d32);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d32);
+						tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d32);
+						tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d56, d30, d32);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d40, (double)(i3 + 1) + 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d42, (double)(i3 + 1) + 0.01D, d54, d28, d32);
 					}
 				}
 
 				if (z63)
 				{
-					tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d36);
-					tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d32);
-					tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d32);
-					tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d36);
-					tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d36);
-					tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d32);
-					tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d32);
-					tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d36);
+					tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d36);
+					tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d32);
+					tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d32);
+					tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d36);
+					tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d36);
+					tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d32);
+					tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d32);
+					tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d36);
 				}
 				else
 				{
 					if (i3 > 1 && this.blockAccess.isAirBlock(i2 - 1, i3 - 1, i4))
 					{
-						tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d36);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d36);
-						tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d36);
-						tessellator6.addVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d36);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d36);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d36);
+						tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d56, d30, d36);
+						tessellator6.AddVertexWithUV(d38, (double)i3 - 0.01D, d54, d28, d36);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d34);
 					}
 
 					if (i3 > 1 && this.blockAccess.isAirBlock(i2 + 1, i3 - 1, i4))
 					{
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d32);
-						tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d32);
-						tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d32);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d34);
-						tessellator6.addVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d34);
-						tessellator6.addVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d32);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d32);
+						tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d32);
+						tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d56, d30, d32);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d56, d30, d34);
+						tessellator6.AddVertexWithUV(d40, (double)i3 - 0.01D, d54, d28, d34);
+						tessellator6.AddVertexWithUV(d42, (double)i3 - 0.01D, d54, d28, d32);
 					}
 				}
 			}
@@ -1935,180 +1908,180 @@ namespace net.minecraft.src
 			{
 				if (z58 && !z59)
 				{
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d44, d16, d22);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d44, d16, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d46, d18, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d46, d18, d22);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d46, d16, d22);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d46, d16, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d44, d18, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d44, d18, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d44, d16, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d44, d16, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d46, d18, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d46, d18, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d46, d16, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d46, d16, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d44, d18, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d44, d18, d22);
 					if (!z61 && !z60)
 					{
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d28, d32);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 0), d46, d28, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 0), d46, d30, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d30, d32);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d28, d32);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 0), d46, d28, d36);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 0), d46, d30, d36);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d30, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d28, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 0), d46, d28, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 0), d46, d30, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d30, d32);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d28, d32);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 0), d46, d28, d36);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 0), d46, d30, d36);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d30, d32);
 					}
 
 					if (z62 || i3 < i5 - 1 && this.blockAccess.isAirBlock(i2, i3 + 1, i4 - 1))
 					{
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d44, d30, d32);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d30, d34);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d28, d34);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d44, d28, d32);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d30, d32);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d44, d30, d34);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d44, d28, d34);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d28, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d44, d30, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d30, d34);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d28, d34);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d44, d28, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d30, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d44, d30, d34);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d44, d28, d34);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d28, d32);
 					}
 
 					if (z63 || i3 > 1 && this.blockAccess.isAirBlock(i2, i3 - 1, i4 - 1))
 					{
-						tessellator6.addVertexWithUV(d50, (double)i3, d44, d30, d32);
-						tessellator6.addVertexWithUV(d50, (double)i3, d46, d30, d34);
-						tessellator6.addVertexWithUV(d52, (double)i3, d46, d28, d34);
-						tessellator6.addVertexWithUV(d52, (double)i3, d44, d28, d32);
-						tessellator6.addVertexWithUV(d50, (double)i3, d46, d30, d32);
-						tessellator6.addVertexWithUV(d50, (double)i3, d44, d30, d34);
-						tessellator6.addVertexWithUV(d52, (double)i3, d44, d28, d34);
-						tessellator6.addVertexWithUV(d52, (double)i3, d46, d28, d32);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d44, d30, d32);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d46, d30, d34);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d46, d28, d34);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d44, d28, d32);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d46, d30, d32);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d44, d30, d34);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d44, d28, d34);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d46, d28, d32);
 					}
 				}
 				else if (!z58 && z59)
 				{
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d46, d18, d22);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d46, d18, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d48, d20, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d48, d20, d22);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d48, d18, d22);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d48, d18, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d46, d20, d24);
-					tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d46, d20, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d46, d18, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d46, d18, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d48, d20, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d48, d20, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d48, d18, d22);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d48, d18, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d46, d20, d24);
+					tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d46, d20, d22);
 					if (!z61 && !z60)
 					{
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d28, d32);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 0), d46, d28, d36);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 0), d46, d30, d36);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d30, d32);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d28, d32);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 0), d46, d28, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 0), d46, d30, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d30, d32);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d28, d32);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 0), d46, d28, d36);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 0), d46, d30, d36);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d30, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d28, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 0), d46, d28, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 0), d46, d30, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d30, d32);
 					}
 
 					if (z62 || i3 < i5 - 1 && this.blockAccess.isAirBlock(i2, i3 + 1, i4 + 1))
 					{
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d28, d34);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d48, d28, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d48, d30, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d30, d34);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d48, d28, d34);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d28, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d30, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d48, d30, d34);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d28, d34);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d48, d28, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d48, d30, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d30, d34);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d48, d28, d34);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d28, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d30, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d48, d30, d34);
 					}
 
 					if (z63 || i3 > 1 && this.blockAccess.isAirBlock(i2, i3 - 1, i4 + 1))
 					{
-						tessellator6.addVertexWithUV(d50, (double)i3, d46, d28, d34);
-						tessellator6.addVertexWithUV(d50, (double)i3, d48, d28, d36);
-						tessellator6.addVertexWithUV(d52, (double)i3, d48, d30, d36);
-						tessellator6.addVertexWithUV(d52, (double)i3, d46, d30, d34);
-						tessellator6.addVertexWithUV(d50, (double)i3, d48, d28, d34);
-						tessellator6.addVertexWithUV(d50, (double)i3, d46, d28, d36);
-						tessellator6.addVertexWithUV(d52, (double)i3, d46, d30, d36);
-						tessellator6.addVertexWithUV(d52, (double)i3, d48, d30, d34);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d46, d28, d34);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d48, d28, d36);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d48, d30, d36);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d46, d30, d34);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d48, d28, d34);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d46, d28, d36);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d46, d30, d36);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d48, d30, d34);
 					}
 				}
 			}
 			else
 			{
-				tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d48, d16, d22);
-				tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d48, d16, d24);
-				tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d44, d20, d24);
-				tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d44, d20, d22);
-				tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d44, d16, d22);
-				tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d44, d16, d24);
-				tessellator6.addVertexWithUV(d40, (double)(i3 + 0), d48, d20, d24);
-				tessellator6.addVertexWithUV(d40, (double)(i3 + 1), d48, d20, d22);
+				tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d48, d16, d22);
+				tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d48, d16, d24);
+				tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d44, d20, d24);
+				tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d44, d20, d22);
+				tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d44, d16, d22);
+				tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d44, d16, d24);
+				tessellator6.AddVertexWithUV(d40, (double)(i3 + 0), d48, d20, d24);
+				tessellator6.AddVertexWithUV(d40, (double)(i3 + 1), d48, d20, d22);
 				if (z62)
 				{
-					tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d48, d30, d36);
-					tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d44, d30, d32);
-					tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d44, d28, d32);
-					tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d48, d28, d36);
-					tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d44, d30, d36);
-					tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d48, d30, d32);
-					tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d48, d28, d32);
-					tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d44, d28, d36);
+					tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d48, d30, d36);
+					tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d44, d30, d32);
+					tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d44, d28, d32);
+					tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d48, d28, d36);
+					tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d44, d30, d36);
+					tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d48, d30, d32);
+					tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d48, d28, d32);
+					tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d44, d28, d36);
 				}
 				else
 				{
 					if (i3 < i5 - 1 && this.blockAccess.isAirBlock(i2, i3 + 1, i4 - 1))
 					{
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d44, d30, d32);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d30, d34);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d28, d34);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d44, d28, d32);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d30, d32);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d44, d30, d34);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d44, d28, d34);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d28, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d44, d30, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d30, d34);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d28, d34);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d44, d28, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d30, d32);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d44, d30, d34);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d44, d28, d34);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d28, d32);
 					}
 
 					if (i3 < i5 - 1 && this.blockAccess.isAirBlock(i2, i3 + 1, i4 + 1))
 					{
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d28, d34);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d48, d28, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d48, d30, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d30, d34);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d48, d28, d34);
-						tessellator6.addVertexWithUV(d50, (double)(i3 + 1), d46, d28, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d46, d30, d36);
-						tessellator6.addVertexWithUV(d52, (double)(i3 + 1), d48, d30, d34);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d28, d34);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d48, d28, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d48, d30, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d30, d34);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d48, d28, d34);
+						tessellator6.AddVertexWithUV(d50, (double)(i3 + 1), d46, d28, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d46, d30, d36);
+						tessellator6.AddVertexWithUV(d52, (double)(i3 + 1), d48, d30, d34);
 					}
 				}
 
 				if (z63)
 				{
-					tessellator6.addVertexWithUV(d52, (double)i3, d48, d30, d36);
-					tessellator6.addVertexWithUV(d52, (double)i3, d44, d30, d32);
-					tessellator6.addVertexWithUV(d50, (double)i3, d44, d28, d32);
-					tessellator6.addVertexWithUV(d50, (double)i3, d48, d28, d36);
-					tessellator6.addVertexWithUV(d52, (double)i3, d44, d30, d36);
-					tessellator6.addVertexWithUV(d52, (double)i3, d48, d30, d32);
-					tessellator6.addVertexWithUV(d50, (double)i3, d48, d28, d32);
-					tessellator6.addVertexWithUV(d50, (double)i3, d44, d28, d36);
+					tessellator6.AddVertexWithUV(d52, (double)i3, d48, d30, d36);
+					tessellator6.AddVertexWithUV(d52, (double)i3, d44, d30, d32);
+					tessellator6.AddVertexWithUV(d50, (double)i3, d44, d28, d32);
+					tessellator6.AddVertexWithUV(d50, (double)i3, d48, d28, d36);
+					tessellator6.AddVertexWithUV(d52, (double)i3, d44, d30, d36);
+					tessellator6.AddVertexWithUV(d52, (double)i3, d48, d30, d32);
+					tessellator6.AddVertexWithUV(d50, (double)i3, d48, d28, d32);
+					tessellator6.AddVertexWithUV(d50, (double)i3, d44, d28, d36);
 				}
 				else
 				{
 					if (i3 > 1 && this.blockAccess.isAirBlock(i2, i3 - 1, i4 - 1))
 					{
-						tessellator6.addVertexWithUV(d50, (double)i3, d44, d30, d32);
-						tessellator6.addVertexWithUV(d50, (double)i3, d46, d30, d34);
-						tessellator6.addVertexWithUV(d52, (double)i3, d46, d28, d34);
-						tessellator6.addVertexWithUV(d52, (double)i3, d44, d28, d32);
-						tessellator6.addVertexWithUV(d50, (double)i3, d46, d30, d32);
-						tessellator6.addVertexWithUV(d50, (double)i3, d44, d30, d34);
-						tessellator6.addVertexWithUV(d52, (double)i3, d44, d28, d34);
-						tessellator6.addVertexWithUV(d52, (double)i3, d46, d28, d32);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d44, d30, d32);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d46, d30, d34);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d46, d28, d34);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d44, d28, d32);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d46, d30, d32);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d44, d30, d34);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d44, d28, d34);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d46, d28, d32);
 					}
 
 					if (i3 > 1 && this.blockAccess.isAirBlock(i2, i3 - 1, i4 + 1))
 					{
-						tessellator6.addVertexWithUV(d50, (double)i3, d46, d28, d34);
-						tessellator6.addVertexWithUV(d50, (double)i3, d48, d28, d36);
-						tessellator6.addVertexWithUV(d52, (double)i3, d48, d30, d36);
-						tessellator6.addVertexWithUV(d52, (double)i3, d46, d30, d34);
-						tessellator6.addVertexWithUV(d50, (double)i3, d48, d28, d34);
-						tessellator6.addVertexWithUV(d50, (double)i3, d46, d28, d36);
-						tessellator6.addVertexWithUV(d52, (double)i3, d46, d30, d36);
-						tessellator6.addVertexWithUV(d52, (double)i3, d48, d30, d34);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d46, d28, d34);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d48, d28, d36);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d48, d30, d36);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d46, d30, d34);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d48, d28, d34);
+						tessellator6.AddVertexWithUV(d50, (double)i3, d46, d28, d36);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d46, d30, d36);
+						tessellator6.AddVertexWithUV(d52, (double)i3, d48, d30, d34);
 					}
 				}
 			}
@@ -2125,15 +2098,6 @@ namespace net.minecraft.src
 			float f8 = (float)(i7 >> 16 & 255) / 255.0F;
 			float f9 = (float)(i7 >> 8 & 255) / 255.0F;
 			float f10 = (float)(i7 & 255) / 255.0F;
-			if (GameRenderer.anaglyphEnable)
-			{
-				float f11 = (f8 * 30.0F + f9 * 59.0F + f10 * 11.0F) / 100.0F;
-				float f12 = (f8 * 30.0F + f9 * 70.0F) / 100.0F;
-				float f13 = (f8 * 30.0F + f10 * 70.0F) / 100.0F;
-				f8 = f11;
-				f9 = f12;
-				f10 = f13;
-			}
 
 			tessellator5.setColorOpaque_F(f6 * f8, f6 * f9, f6 * f10);
 			double d19 = (double)i2;
@@ -2162,16 +2126,7 @@ namespace net.minecraft.src
 			float f9 = (float)(i8 >> 16 & 255) / 255.0F;
 			float f10 = (float)(i8 >> 8 & 255) / 255.0F;
 			float f11 = (float)(i8 & 255) / 255.0F;
-			if (GameRenderer.anaglyphEnable)
-			{
-				float f12 = (f9 * 30.0F + f10 * 59.0F + f11 * 11.0F) / 100.0F;
-				float f13 = (f9 * 30.0F + f10 * 70.0F) / 100.0F;
-				float f14 = (f9 * 30.0F + f11 * 70.0F) / 100.0F;
-				f9 = f12;
-				f10 = f13;
-				f11 = f14;
-			}
-
+            
 			tessellator6.setColorOpaque_F(f7 * f9, f7 * f10, f7 * f11);
 			blockStem5.setBlockBoundsBasedOnState(this.blockAccess, i2, i3, i4);
 			int i15 = blockStem5.func_35296_f(this.blockAccess, i2, i3, i4);
@@ -2224,26 +2179,26 @@ namespace net.minecraft.src
 			double d34 = d6 + 0.5D;
 			double d36 = 0.0625D;
 			double d38 = 0.625D;
-			tessellator12.addVertexWithUV(d2 + d8 * (1.0D - d38) - d36, d4 + d38, d6 + d10 * (1.0D - d38) - d36, d20, d22);
-			tessellator12.addVertexWithUV(d2 + d8 * (1.0D - d38) - d36, d4 + d38, d6 + d10 * (1.0D - d38) + d36, d20, d26);
-			tessellator12.addVertexWithUV(d2 + d8 * (1.0D - d38) + d36, d4 + d38, d6 + d10 * (1.0D - d38) + d36, d24, d26);
-			tessellator12.addVertexWithUV(d2 + d8 * (1.0D - d38) + d36, d4 + d38, d6 + d10 * (1.0D - d38) - d36, d24, d22);
-			tessellator12.addVertexWithUV(d2 - d36, d4 + 1.0D, d32, (double)f16, (double)f18);
-			tessellator12.addVertexWithUV(d2 - d36 + d8, d4 + 0.0D, d32 + d10, (double)f16, (double)f19);
-			tessellator12.addVertexWithUV(d2 - d36 + d8, d4 + 0.0D, d34 + d10, (double)f17, (double)f19);
-			tessellator12.addVertexWithUV(d2 - d36, d4 + 1.0D, d34, (double)f17, (double)f18);
-			tessellator12.addVertexWithUV(d2 + d36, d4 + 1.0D, d34, (double)f16, (double)f18);
-			tessellator12.addVertexWithUV(d2 + d8 + d36, d4 + 0.0D, d34 + d10, (double)f16, (double)f19);
-			tessellator12.addVertexWithUV(d2 + d8 + d36, d4 + 0.0D, d32 + d10, (double)f17, (double)f19);
-			tessellator12.addVertexWithUV(d2 + d36, d4 + 1.0D, d32, (double)f17, (double)f18);
-			tessellator12.addVertexWithUV(d28, d4 + 1.0D, d6 + d36, (double)f16, (double)f18);
-			tessellator12.addVertexWithUV(d28 + d8, d4 + 0.0D, d6 + d36 + d10, (double)f16, (double)f19);
-			tessellator12.addVertexWithUV(d30 + d8, d4 + 0.0D, d6 + d36 + d10, (double)f17, (double)f19);
-			tessellator12.addVertexWithUV(d30, d4 + 1.0D, d6 + d36, (double)f17, (double)f18);
-			tessellator12.addVertexWithUV(d30, d4 + 1.0D, d6 - d36, (double)f16, (double)f18);
-			tessellator12.addVertexWithUV(d30 + d8, d4 + 0.0D, d6 - d36 + d10, (double)f16, (double)f19);
-			tessellator12.addVertexWithUV(d28 + d8, d4 + 0.0D, d6 - d36 + d10, (double)f17, (double)f19);
-			tessellator12.addVertexWithUV(d28, d4 + 1.0D, d6 - d36, (double)f17, (double)f18);
+			tessellator12.AddVertexWithUV(d2 + d8 * (1.0D - d38) - d36, d4 + d38, d6 + d10 * (1.0D - d38) - d36, d20, d22);
+			tessellator12.AddVertexWithUV(d2 + d8 * (1.0D - d38) - d36, d4 + d38, d6 + d10 * (1.0D - d38) + d36, d20, d26);
+			tessellator12.AddVertexWithUV(d2 + d8 * (1.0D - d38) + d36, d4 + d38, d6 + d10 * (1.0D - d38) + d36, d24, d26);
+			tessellator12.AddVertexWithUV(d2 + d8 * (1.0D - d38) + d36, d4 + d38, d6 + d10 * (1.0D - d38) - d36, d24, d22);
+			tessellator12.AddVertexWithUV(d2 - d36, d4 + 1.0D, d32, (double)f16, (double)f18);
+			tessellator12.AddVertexWithUV(d2 - d36 + d8, d4 + 0.0D, d32 + d10, (double)f16, (double)f19);
+			tessellator12.AddVertexWithUV(d2 - d36 + d8, d4 + 0.0D, d34 + d10, (double)f17, (double)f19);
+			tessellator12.AddVertexWithUV(d2 - d36, d4 + 1.0D, d34, (double)f17, (double)f18);
+			tessellator12.AddVertexWithUV(d2 + d36, d4 + 1.0D, d34, (double)f16, (double)f18);
+			tessellator12.AddVertexWithUV(d2 + d8 + d36, d4 + 0.0D, d34 + d10, (double)f16, (double)f19);
+			tessellator12.AddVertexWithUV(d2 + d8 + d36, d4 + 0.0D, d32 + d10, (double)f17, (double)f19);
+			tessellator12.AddVertexWithUV(d2 + d36, d4 + 1.0D, d32, (double)f17, (double)f18);
+			tessellator12.AddVertexWithUV(d28, d4 + 1.0D, d6 + d36, (double)f16, (double)f18);
+			tessellator12.AddVertexWithUV(d28 + d8, d4 + 0.0D, d6 + d36 + d10, (double)f16, (double)f19);
+			tessellator12.AddVertexWithUV(d30 + d8, d4 + 0.0D, d6 + d36 + d10, (double)f17, (double)f19);
+			tessellator12.AddVertexWithUV(d30, d4 + 1.0D, d6 + d36, (double)f17, (double)f18);
+			tessellator12.AddVertexWithUV(d30, d4 + 1.0D, d6 - d36, (double)f16, (double)f18);
+			tessellator12.AddVertexWithUV(d30 + d8, d4 + 0.0D, d6 - d36 + d10, (double)f16, (double)f19);
+			tessellator12.AddVertexWithUV(d28 + d8, d4 + 0.0D, d6 - d36 + d10, (double)f17, (double)f19);
+			tessellator12.AddVertexWithUV(d28, d4 + 1.0D, d6 - d36, (double)f17, (double)f18);
 		}
 
 		public virtual void drawCrossedSquares(Block block1, int i2, double d3, double d5, double d7)
@@ -2265,22 +2220,22 @@ namespace net.minecraft.src
 			double d23 = d3 + 0.5D + 0.45D;
 			double d25 = d7 + 0.5D - 0.45D;
 			double d27 = d7 + 0.5D + 0.45D;
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d25, d13, d17);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d25, d13, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d27, d15, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d27, d15, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d27, d13, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d27, d13, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d25, d15, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d25, d15, d17);
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d27, d13, d17);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d27, d13, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d25, d15, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d25, d15, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d25, d13, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d25, d13, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d27, d15, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d27, d15, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d25, d13, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d25, d13, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d27, d15, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d27, d15, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d27, d13, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d27, d13, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d25, d15, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d25, d15, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d27, d13, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d27, d13, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d25, d15, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d25, d15, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d25, d13, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d25, d13, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d27, d15, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d27, d15, d17);
 		}
 
 		public virtual void renderBlockStemSmall(Block block1, int i2, double d3, double d5, double d7, double d9)
@@ -2302,22 +2257,22 @@ namespace net.minecraft.src
 			double d25 = d5 + 0.5D + (double)0.45F;
 			double d27 = d9 + 0.5D - (double)0.45F;
 			double d29 = d9 + 0.5D + (double)0.45F;
-			tessellator11.addVertexWithUV(d23, d7 + d3, d27, d15, d19);
-			tessellator11.addVertexWithUV(d23, d7 + 0.0D, d27, d15, d21);
-			tessellator11.addVertexWithUV(d25, d7 + 0.0D, d29, d17, d21);
-			tessellator11.addVertexWithUV(d25, d7 + d3, d29, d17, d19);
-			tessellator11.addVertexWithUV(d25, d7 + d3, d29, d15, d19);
-			tessellator11.addVertexWithUV(d25, d7 + 0.0D, d29, d15, d21);
-			tessellator11.addVertexWithUV(d23, d7 + 0.0D, d27, d17, d21);
-			tessellator11.addVertexWithUV(d23, d7 + d3, d27, d17, d19);
-			tessellator11.addVertexWithUV(d23, d7 + d3, d29, d15, d19);
-			tessellator11.addVertexWithUV(d23, d7 + 0.0D, d29, d15, d21);
-			tessellator11.addVertexWithUV(d25, d7 + 0.0D, d27, d17, d21);
-			tessellator11.addVertexWithUV(d25, d7 + d3, d27, d17, d19);
-			tessellator11.addVertexWithUV(d25, d7 + d3, d27, d15, d19);
-			tessellator11.addVertexWithUV(d25, d7 + 0.0D, d27, d15, d21);
-			tessellator11.addVertexWithUV(d23, d7 + 0.0D, d29, d17, d21);
-			tessellator11.addVertexWithUV(d23, d7 + d3, d29, d17, d19);
+			tessellator11.AddVertexWithUV(d23, d7 + d3, d27, d15, d19);
+			tessellator11.AddVertexWithUV(d23, d7 + 0.0D, d27, d15, d21);
+			tessellator11.AddVertexWithUV(d25, d7 + 0.0D, d29, d17, d21);
+			tessellator11.AddVertexWithUV(d25, d7 + d3, d29, d17, d19);
+			tessellator11.AddVertexWithUV(d25, d7 + d3, d29, d15, d19);
+			tessellator11.AddVertexWithUV(d25, d7 + 0.0D, d29, d15, d21);
+			tessellator11.AddVertexWithUV(d23, d7 + 0.0D, d27, d17, d21);
+			tessellator11.AddVertexWithUV(d23, d7 + d3, d27, d17, d19);
+			tessellator11.AddVertexWithUV(d23, d7 + d3, d29, d15, d19);
+			tessellator11.AddVertexWithUV(d23, d7 + 0.0D, d29, d15, d21);
+			tessellator11.AddVertexWithUV(d25, d7 + 0.0D, d27, d17, d21);
+			tessellator11.AddVertexWithUV(d25, d7 + d3, d27, d17, d19);
+			tessellator11.AddVertexWithUV(d25, d7 + d3, d27, d15, d19);
+			tessellator11.AddVertexWithUV(d25, d7 + 0.0D, d27, d15, d21);
+			tessellator11.AddVertexWithUV(d23, d7 + 0.0D, d29, d17, d21);
+			tessellator11.AddVertexWithUV(d23, d7 + d3, d29, d17, d19);
 		}
 
 		public virtual bool renderBlockLilyPad(Block block1, int i2, int i3, int i4)
@@ -2345,15 +2300,15 @@ namespace net.minecraft.src
 			float f23 = (float)(i20 & 1) * 0.5F * (float)(1 - i20 / 2 % 2 * 2);
 			float f24 = (float)(i20 + 1 & 1) * 0.5F * (float)(1 - (i20 + 1) / 2 % 2 * 2);
 			tessellator5.ColorOpaque_I = block1.BlockColor;
-			tessellator5.addVertexWithUV((double)(f21 + f23 - f24), (double)((float)i3 + f9), (double)(f22 + f23 + f24), d10, d14);
-			tessellator5.addVertexWithUV((double)(f21 + f23 + f24), (double)((float)i3 + f9), (double)(f22 - f23 + f24), d12, d14);
-			tessellator5.addVertexWithUV((double)(f21 - f23 + f24), (double)((float)i3 + f9), (double)(f22 - f23 - f24), d12, d16);
-			tessellator5.addVertexWithUV((double)(f21 - f23 - f24), (double)((float)i3 + f9), (double)(f22 + f23 - f24), d10, d16);
+			tessellator5.AddVertexWithUV((double)(f21 + f23 - f24), (double)((float)i3 + f9), (double)(f22 + f23 + f24), d10, d14);
+			tessellator5.AddVertexWithUV((double)(f21 + f23 + f24), (double)((float)i3 + f9), (double)(f22 - f23 + f24), d12, d14);
+			tessellator5.AddVertexWithUV((double)(f21 - f23 + f24), (double)((float)i3 + f9), (double)(f22 - f23 - f24), d12, d16);
+			tessellator5.AddVertexWithUV((double)(f21 - f23 - f24), (double)((float)i3 + f9), (double)(f22 + f23 - f24), d10, d16);
 			tessellator5.ColorOpaque_I = (block1.BlockColor & 16711422) >> 1;
-			tessellator5.addVertexWithUV((double)(f21 - f23 - f24), (double)((float)i3 + f9), (double)(f22 + f23 - f24), d10, d16);
-			tessellator5.addVertexWithUV((double)(f21 - f23 + f24), (double)((float)i3 + f9), (double)(f22 - f23 - f24), d12, d16);
-			tessellator5.addVertexWithUV((double)(f21 + f23 + f24), (double)((float)i3 + f9), (double)(f22 - f23 + f24), d12, d14);
-			tessellator5.addVertexWithUV((double)(f21 + f23 - f24), (double)((float)i3 + f9), (double)(f22 + f23 + f24), d10, d14);
+			tessellator5.AddVertexWithUV((double)(f21 - f23 - f24), (double)((float)i3 + f9), (double)(f22 + f23 - f24), d10, d16);
+			tessellator5.AddVertexWithUV((double)(f21 - f23 + f24), (double)((float)i3 + f9), (double)(f22 - f23 - f24), d12, d16);
+			tessellator5.AddVertexWithUV((double)(f21 + f23 + f24), (double)((float)i3 + f9), (double)(f22 - f23 + f24), d12, d14);
+			tessellator5.AddVertexWithUV((double)(f21 + f23 - f24), (double)((float)i3 + f9), (double)(f22 + f23 + f24), d10, d14);
 			return true;
 		}
 
@@ -2387,25 +2342,25 @@ namespace net.minecraft.src
 
 			if (i3 < 2)
 			{
-				tessellator12.addVertexWithUV(d24, d8 + d4, d34, d16, d20);
-				tessellator12.addVertexWithUV(d24, d8 + 0.0D, d34, d16, d22);
-				tessellator12.addVertexWithUV(d26, d8 + 0.0D, d34, d18, d22);
-				tessellator12.addVertexWithUV(d26, d8 + d4, d34, d18, d20);
-				tessellator12.addVertexWithUV(d26, d8 + d4, d34, d18, d20);
-				tessellator12.addVertexWithUV(d26, d8 + 0.0D, d34, d18, d22);
-				tessellator12.addVertexWithUV(d24, d8 + 0.0D, d34, d16, d22);
-				tessellator12.addVertexWithUV(d24, d8 + d4, d34, d16, d20);
+				tessellator12.AddVertexWithUV(d24, d8 + d4, d34, d16, d20);
+				tessellator12.AddVertexWithUV(d24, d8 + 0.0D, d34, d16, d22);
+				tessellator12.AddVertexWithUV(d26, d8 + 0.0D, d34, d18, d22);
+				tessellator12.AddVertexWithUV(d26, d8 + d4, d34, d18, d20);
+				tessellator12.AddVertexWithUV(d26, d8 + d4, d34, d18, d20);
+				tessellator12.AddVertexWithUV(d26, d8 + 0.0D, d34, d18, d22);
+				tessellator12.AddVertexWithUV(d24, d8 + 0.0D, d34, d16, d22);
+				tessellator12.AddVertexWithUV(d24, d8 + d4, d34, d16, d20);
 			}
 			else
 			{
-				tessellator12.addVertexWithUV(d32, d8 + d4, d30, d16, d20);
-				tessellator12.addVertexWithUV(d32, d8 + 0.0D, d30, d16, d22);
-				tessellator12.addVertexWithUV(d32, d8 + 0.0D, d28, d18, d22);
-				tessellator12.addVertexWithUV(d32, d8 + d4, d28, d18, d20);
-				tessellator12.addVertexWithUV(d32, d8 + d4, d28, d18, d20);
-				tessellator12.addVertexWithUV(d32, d8 + 0.0D, d28, d18, d22);
-				tessellator12.addVertexWithUV(d32, d8 + 0.0D, d30, d16, d22);
-				tessellator12.addVertexWithUV(d32, d8 + d4, d30, d16, d20);
+				tessellator12.AddVertexWithUV(d32, d8 + d4, d30, d16, d20);
+				tessellator12.AddVertexWithUV(d32, d8 + 0.0D, d30, d16, d22);
+				tessellator12.AddVertexWithUV(d32, d8 + 0.0D, d28, d18, d22);
+				tessellator12.AddVertexWithUV(d32, d8 + d4, d28, d18, d20);
+				tessellator12.AddVertexWithUV(d32, d8 + d4, d28, d18, d20);
+				tessellator12.AddVertexWithUV(d32, d8 + 0.0D, d28, d18, d22);
+				tessellator12.AddVertexWithUV(d32, d8 + 0.0D, d30, d16, d22);
+				tessellator12.AddVertexWithUV(d32, d8 + d4, d30, d16, d20);
 			}
 
 		}
@@ -2429,42 +2384,42 @@ namespace net.minecraft.src
 			double d23 = d3 + 0.5D + 0.25D;
 			double d25 = d7 + 0.5D - 0.5D;
 			double d27 = d7 + 0.5D + 0.5D;
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d25, d13, d17);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d25, d13, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d27, d15, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d27, d15, d17);
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d27, d13, d17);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d27, d13, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d25, d15, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d25, d15, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d27, d13, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d27, d13, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d25, d15, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d25, d15, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d25, d13, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d25, d13, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d27, d15, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d27, d15, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d25, d13, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d25, d13, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d27, d15, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d27, d15, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d27, d13, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d27, d13, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d25, d15, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d25, d15, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d27, d13, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d27, d13, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d25, d15, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d25, d15, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d25, d13, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d25, d13, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d27, d15, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d27, d15, d17);
 			d21 = d3 + 0.5D - 0.5D;
 			d23 = d3 + 0.5D + 0.5D;
 			d25 = d7 + 0.5D - 0.25D;
 			d27 = d7 + 0.5D + 0.25D;
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d25, d13, d17);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d25, d13, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d25, d15, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d25, d15, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d25, d13, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d25, d13, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d25, d15, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d25, d15, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d27, d13, d17);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d27, d13, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d27, d15, d19);
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d27, d15, d17);
-			tessellator9.addVertexWithUV(d21, d5 + 1.0D, d27, d13, d17);
-			tessellator9.addVertexWithUV(d21, d5 + 0.0D, d27, d13, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 0.0D, d27, d15, d19);
-			tessellator9.addVertexWithUV(d23, d5 + 1.0D, d27, d15, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d25, d13, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d25, d13, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d25, d15, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d25, d15, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d25, d13, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d25, d13, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d25, d15, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d25, d15, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d27, d13, d17);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d27, d13, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d27, d15, d19);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d27, d15, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 1.0D, d27, d13, d17);
+			tessellator9.AddVertexWithUV(d21, d5 + 0.0D, d27, d13, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 0.0D, d27, d15, d19);
+			tessellator9.AddVertexWithUV(d23, d5 + 1.0D, d27, d15, d17);
 		}
 
 		public virtual bool renderBlockFluids(Block block1, int i2, int i3, int i4)
@@ -2532,10 +2487,10 @@ namespace net.minecraft.src
 					tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 					float f46 = 1.0F;
 					tessellator5.setColorOpaque_F(f15 * f46 * f7, f15 * f46 * f8, f15 * f46 * f9);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)i3 + d24, (double)(i4 + 0), d38 - d44 - d42, d40 - d44 + d42);
-					tessellator5.addVertexWithUV((double)(i2 + 0), (double)i3 + d26, (double)(i4 + 1), d38 - d44 + d42, d40 + d44 + d42);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)i3 + d28, (double)(i4 + 1), d38 + d44 + d42, d40 + d44 - d42);
-					tessellator5.addVertexWithUV((double)(i2 + 1), (double)i3 + d30, (double)(i4 + 0), d38 + d44 - d42, d40 - d44 - d42);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)i3 + d24, (double)(i4 + 0), d38 - d44 - d42, d40 - d44 + d42);
+					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)i3 + d26, (double)(i4 + 1), d38 - d44 + d42, d40 + d44 + d42);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)i3 + d28, (double)(i4 + 1), d38 + d44 + d42, d40 + d44 - d42);
+					tessellator5.AddVertexWithUV((double)(i2 + 1), (double)i3 + d30, (double)(i4 + 0), d38 + d44 - d42, d40 - d44 - d42);
 				}
 
 				if (this.renderAllFaces || z11)
@@ -2637,10 +2592,10 @@ namespace net.minecraft.src
 						}
 
 						tessellator5.setColorOpaque_F(f15 * f63 * f7, f15 * f63 * f8, f15 * f63 * f9);
-						tessellator5.addVertexWithUV(d45, (double)i3 + d41, d47, d53, d57);
-						tessellator5.addVertexWithUV(d49, (double)i3 + d43, d51, d55, d59);
-						tessellator5.addVertexWithUV(d49, (double)(i3 + 0), d51, d55, d61);
-						tessellator5.addVertexWithUV(d45, (double)(i3 + 0), d47, d53, d61);
+						tessellator5.AddVertexWithUV(d45, (double)i3 + d41, d47, d53, d57);
+						tessellator5.AddVertexWithUV(d49, (double)i3 + d43, d51, d55, d59);
+						tessellator5.AddVertexWithUV(d49, (double)(i3 + 0), d51, d55, d61);
+						tessellator5.AddVertexWithUV(d45, (double)(i3 + 0), d47, d53, d61);
 					}
 				}
 
@@ -2748,29 +2703,29 @@ namespace net.minecraft.src
 
 			tessellator10.setColorOpaque_F(f9 * f12, f9 * f12, f9 * f12);
 			this.renderSouthFace(block1, -0.5D, -0.5D, -0.5D, block1.getBlockTextureFromSide(5));
-			tessellator10.draw();
+			tessellator10.DrawImmediate();
 		}
 
 		public virtual bool renderStandardBlock(Block block1, int i2, int i3, int i4)
 		{
-			int i5 = block1.colorMultiplier(this.blockAccess, i2, i3, i4);
-			float f6 = (float)(i5 >> 16 & 255) / 255.0F;
-			float f7 = (float)(i5 >> 8 & 255) / 255.0F;
-			float f8 = (float)(i5 & 255) / 255.0F;
-			if (GameRenderer.anaglyphEnable)
-			{
-				float f9 = (f6 * 30.0F + f7 * 59.0F + f8 * 11.0F) / 100.0F;
-				float f10 = (f6 * 30.0F + f7 * 70.0F) / 100.0F;
-				float f11 = (f6 * 30.0F + f8 * 70.0F) / 100.0F;
-				f6 = f9;
-				f7 = f10;
-				f8 = f11;
-			}
+			int blockColor = block1.colorMultiplier(this.blockAccess, i2, i3, i4);
+			float f6 = (float)(blockColor >> 16 & 255) / 255.0F;
+			float f7 = (float)(blockColor >> 8 & 255) / 255.0F;
+			float f8 = (float)(blockColor & 255) / 255.0F;
 
 			return Minecraft.AmbientOcclusionEnabled && Block.lightValue[block1.blockID] == 0 ? this.renderStandardBlockWithAmbientOcclusion(block1, i2, i3, i4, f6, f7, f8) : this.renderStandardBlockWithColorMultiplier(block1, i2, i3, i4, f6, f7, f8);
 		}
 
-		public virtual bool renderStandardBlockWithAmbientOcclusion(Block block1, int i2, int i3, int i4, float f5, float f6, float f7)
+		private static string section1 = "section1";
+        private static string section2 = "section2";
+        private static string section3 = "section3";
+        private static string section4 = "section4";
+        private static string section5 = "section5";
+        private static string section6 = "section6";
+        private static string section7 = "section7";
+        
+
+        public virtual bool renderStandardBlockWithAmbientOcclusion(Block block1, int i2, int i3, int i4, float f5, float f6, float f7)
 		{
 			this.enableAO = true;
 			bool z8 = false;
@@ -2827,8 +2782,10 @@ namespace net.minecraft.src
 			{
 				i25 = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
 			}
+            
+			// Debug mark
 
-			Tessellator tessellator26 = Tessellator.instance;
+            Tessellator tessellator26 = Tessellator.instance;
 			tessellator26.Brightness = 983055;
 			this.aoGrassXYZPPC = Block.canBlockGrass[this.blockAccess.getBlockId(i2 + 1, i3 + 1, i4)];
 			this.aoGrassXYZPNC = Block.canBlockGrass[this.blockAccess.getBlockId(i2 + 1, i3 - 1, i4)];
@@ -2859,8 +2816,8 @@ namespace net.minecraft.src
 				z15 = false;
 				z13 = false;
 			}
-
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 - 1, i4, 0))
+            
+            if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 - 1, i4, 0))
 			{
 				if (this.aoType > 0)
 				{
@@ -2962,8 +2919,8 @@ namespace net.minecraft.src
 				this.renderBottomFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 0));
 				z8 = true;
 			}
-
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 + 1, i4, 1))
+            
+            if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 + 1, i4, 1))
 			{
 				if (this.aoType > 0)
 				{
@@ -3065,8 +3022,8 @@ namespace net.minecraft.src
 				this.renderTopFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 1));
 				z8 = true;
 			}
-
-			int i27;
+            
+            int i27;
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 - 1, 2))
 			{
 				if (this.aoType > 0)
@@ -3187,8 +3144,8 @@ namespace net.minecraft.src
 
 				z8 = true;
 			}
-
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 + 1, 3))
+            
+            if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 + 1, 3))
 			{
 				if (this.aoType > 0)
 				{
@@ -3308,8 +3265,8 @@ namespace net.minecraft.src
 
 				z8 = true;
 			}
-
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 - 1, i3, i4, 4))
+            
+            if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 - 1, i3, i4, 4))
 			{
 				if (this.aoType > 0)
 				{
@@ -3429,8 +3386,8 @@ namespace net.minecraft.src
 
 				z8 = true;
 			}
-
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 + 1, i3, i4, 5))
+            
+            if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 + 1, i3, i4, 5))
 			{
 				if (this.aoType > 0)
 				{
@@ -3550,7 +3507,7 @@ namespace net.minecraft.src
 
 				z8 = true;
 			}
-
+            
 			this.enableAO = false;
 			return z8;
 		}
@@ -3578,7 +3535,7 @@ namespace net.minecraft.src
 		public virtual bool renderStandardBlockWithColorMultiplier(Block block1, int i2, int i3, int i4, float f5, float f6, float f7)
 		{
 			this.enableAO = false;
-			Tessellator tessellator8 = Tessellator.instance;
+			Tessellator tessellator = Tessellator.instance;
 			bool z9 = false;
 			float f10 = 0.5F;
 			float f11 = 1.0F;
@@ -3612,16 +3569,16 @@ namespace net.minecraft.src
 			int i26 = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 - 1, i4, 0))
 			{
-				tessellator8.Brightness = block1.minY > 0.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
-				tessellator8.setColorOpaque_F(f17, f20, f23);
+				tessellator.Brightness = block1.minY > 0.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
+				tessellator.setColorOpaque_F(f17, f20, f23);
 				this.renderBottomFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 0));
 				z9 = true;
 			}
 
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 + 1, i4, 1))
 			{
-				tessellator8.Brightness = block1.maxY < 1.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
-				tessellator8.setColorOpaque_F(f14, f15, f16);
+				tessellator.Brightness = block1.maxY < 1.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
+				tessellator.setColorOpaque_F(f14, f15, f16);
 				this.renderTopFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 1));
 				z9 = true;
 			}
@@ -3629,13 +3586,13 @@ namespace net.minecraft.src
 			int i28;
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 - 1, 2))
 			{
-				tessellator8.Brightness = block1.minZ > 0.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
-				tessellator8.setColorOpaque_F(f18, f21, f24);
+				tessellator.Brightness = block1.minZ > 0.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
+				tessellator.setColorOpaque_F(f18, f21, f24);
 				i28 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 2);
 				this.renderEastFace(block1, (double)i2, (double)i3, (double)i4, i28);
 				if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
 				{
-					tessellator8.setColorOpaque_F(f18 * f5, f21 * f6, f24 * f7);
+					tessellator.setColorOpaque_F(f18 * f5, f21 * f6, f24 * f7);
 					this.renderEastFace(block1, (double)i2, (double)i3, (double)i4, 38);
 				}
 
@@ -3644,13 +3601,13 @@ namespace net.minecraft.src
 
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 + 1, 3))
 			{
-				tessellator8.Brightness = block1.maxZ < 1.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
-				tessellator8.setColorOpaque_F(f18, f21, f24);
+				tessellator.Brightness = block1.maxZ < 1.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
+				tessellator.setColorOpaque_F(f18, f21, f24);
 				i28 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 3);
 				this.renderWestFace(block1, (double)i2, (double)i3, (double)i4, i28);
 				if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
 				{
-					tessellator8.setColorOpaque_F(f18 * f5, f21 * f6, f24 * f7);
+					tessellator.setColorOpaque_F(f18 * f5, f21 * f6, f24 * f7);
 					this.renderWestFace(block1, (double)i2, (double)i3, (double)i4, 38);
 				}
 
@@ -3659,13 +3616,13 @@ namespace net.minecraft.src
 
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 - 1, i3, i4, 4))
 			{
-				tessellator8.Brightness = block1.minX > 0.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
-				tessellator8.setColorOpaque_F(f19, f22, f25);
+				tessellator.Brightness = block1.minX > 0.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
+				tessellator.setColorOpaque_F(f19, f22, f25);
 				i28 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 4);
 				this.renderNorthFace(block1, (double)i2, (double)i3, (double)i4, i28);
 				if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
 				{
-					tessellator8.setColorOpaque_F(f19 * f5, f22 * f6, f25 * f7);
+					tessellator.setColorOpaque_F(f19 * f5, f22 * f6, f25 * f7);
 					this.renderNorthFace(block1, (double)i2, (double)i3, (double)i4, 38);
 				}
 
@@ -3674,13 +3631,13 @@ namespace net.minecraft.src
 
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 + 1, i3, i4, 5))
 			{
-				tessellator8.Brightness = block1.maxX < 1.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
-				tessellator8.setColorOpaque_F(f19, f22, f25);
+				tessellator.Brightness = block1.maxX < 1.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
+				tessellator.setColorOpaque_F(f19, f22, f25);
 				i28 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 5);
 				this.renderSouthFace(block1, (double)i2, (double)i3, (double)i4, i28);
 				if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
 				{
-					tessellator8.setColorOpaque_F(f19 * f5, f22 * f6, f25 * f7);
+					tessellator.setColorOpaque_F(f19 * f5, f22 * f6, f25 * f7);
 					this.renderSouthFace(block1, (double)i2, (double)i3, (double)i4, 38);
 				}
 
@@ -3696,15 +3653,6 @@ namespace net.minecraft.src
 			float f6 = (float)(i5 >> 16 & 255) / 255.0F;
 			float f7 = (float)(i5 >> 8 & 255) / 255.0F;
 			float f8 = (float)(i5 & 255) / 255.0F;
-			if (GameRenderer.anaglyphEnable)
-			{
-				float f9 = (f6 * 30.0F + f7 * 59.0F + f8 * 11.0F) / 100.0F;
-				float f10 = (f6 * 30.0F + f7 * 70.0F) / 100.0F;
-				float f11 = (f6 * 30.0F + f8 * 70.0F) / 100.0F;
-				f6 = f9;
-				f7 = f10;
-				f8 = f11;
-			}
 
 			return this.renderBlockCactusImpl(block1, i2, i3, i4, f6, f7, f8);
 		}
@@ -4271,23 +4219,23 @@ namespace net.minecraft.src
 			{
 				tessellator9.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator9.Brightness = this.brightnessTopLeft;
-				tessellator9.addVertexWithUV(d28, d32, d36, d22, d26);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d22, d26);
 				tessellator9.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
 				tessellator9.Brightness = this.brightnessBottomLeft;
-				tessellator9.addVertexWithUV(d28, d32, d34, d12, d16);
+				tessellator9.AddVertexWithUV(d28, d32, d34, d12, d16);
 				tessellator9.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
 				tessellator9.Brightness = this.brightnessBottomRight;
-				tessellator9.addVertexWithUV(d30, d32, d34, d20, d24);
+				tessellator9.AddVertexWithUV(d30, d32, d34, d20, d24);
 				tessellator9.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
 				tessellator9.Brightness = this.brightnessTopRight;
-				tessellator9.addVertexWithUV(d30, d32, d36, d14, d18);
+				tessellator9.AddVertexWithUV(d30, d32, d36, d14, d18);
 			}
 			else
 			{
-				tessellator9.addVertexWithUV(d28, d32, d36, d22, d26);
-				tessellator9.addVertexWithUV(d28, d32, d34, d12, d16);
-				tessellator9.addVertexWithUV(d30, d32, d34, d20, d24);
-				tessellator9.addVertexWithUV(d30, d32, d36, d14, d18);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d22, d26);
+				tessellator9.AddVertexWithUV(d28, d32, d34, d12, d16);
+				tessellator9.AddVertexWithUV(d30, d32, d34, d20, d24);
+				tessellator9.AddVertexWithUV(d30, d32, d36, d14, d18);
 			}
 
 		}
@@ -4369,23 +4317,23 @@ namespace net.minecraft.src
 			{
 				tessellator9.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator9.Brightness = this.brightnessTopLeft;
-				tessellator9.addVertexWithUV(d30, d32, d36, d14, d18);
+				tessellator9.AddVertexWithUV(d30, d32, d36, d14, d18);
 				tessellator9.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
 				tessellator9.Brightness = this.brightnessBottomLeft;
-				tessellator9.addVertexWithUV(d30, d32, d34, d20, d24);
+				tessellator9.AddVertexWithUV(d30, d32, d34, d20, d24);
 				tessellator9.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
 				tessellator9.Brightness = this.brightnessBottomRight;
-				tessellator9.addVertexWithUV(d28, d32, d34, d12, d16);
+				tessellator9.AddVertexWithUV(d28, d32, d34, d12, d16);
 				tessellator9.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
 				tessellator9.Brightness = this.brightnessTopRight;
-				tessellator9.addVertexWithUV(d28, d32, d36, d22, d26);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d22, d26);
 			}
 			else
 			{
-				tessellator9.addVertexWithUV(d30, d32, d36, d14, d18);
-				tessellator9.addVertexWithUV(d30, d32, d34, d20, d24);
-				tessellator9.addVertexWithUV(d28, d32, d34, d12, d16);
-				tessellator9.addVertexWithUV(d28, d32, d36, d22, d26);
+				tessellator9.AddVertexWithUV(d30, d32, d36, d14, d18);
+				tessellator9.AddVertexWithUV(d30, d32, d34, d20, d24);
+				tessellator9.AddVertexWithUV(d28, d32, d34, d12, d16);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d22, d26);
 			}
 
 		}
@@ -4475,23 +4423,23 @@ namespace net.minecraft.src
 			{
 				tessellator9.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator9.Brightness = this.brightnessTopLeft;
-				tessellator9.addVertexWithUV(d28, d34, d36, d20, d24);
+				tessellator9.AddVertexWithUV(d28, d34, d36, d20, d24);
 				tessellator9.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
 				tessellator9.Brightness = this.brightnessBottomLeft;
-				tessellator9.addVertexWithUV(d30, d34, d36, d12, d16);
+				tessellator9.AddVertexWithUV(d30, d34, d36, d12, d16);
 				tessellator9.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
 				tessellator9.Brightness = this.brightnessBottomRight;
-				tessellator9.addVertexWithUV(d30, d32, d36, d22, d26);
+				tessellator9.AddVertexWithUV(d30, d32, d36, d22, d26);
 				tessellator9.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
 				tessellator9.Brightness = this.brightnessTopRight;
-				tessellator9.addVertexWithUV(d28, d32, d36, d14, d18);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d14, d18);
 			}
 			else
 			{
-				tessellator9.addVertexWithUV(d28, d34, d36, d20, d24);
-				tessellator9.addVertexWithUV(d30, d34, d36, d12, d16);
-				tessellator9.addVertexWithUV(d30, d32, d36, d22, d26);
-				tessellator9.addVertexWithUV(d28, d32, d36, d14, d18);
+				tessellator9.AddVertexWithUV(d28, d34, d36, d20, d24);
+				tessellator9.AddVertexWithUV(d30, d34, d36, d12, d16);
+				tessellator9.AddVertexWithUV(d30, d32, d36, d22, d26);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d14, d18);
 			}
 
 		}
@@ -4581,23 +4529,23 @@ namespace net.minecraft.src
 			{
 				tessellator9.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator9.Brightness = this.brightnessTopLeft;
-				tessellator9.addVertexWithUV(d28, d34, d36, d12, d16);
+				tessellator9.AddVertexWithUV(d28, d34, d36, d12, d16);
 				tessellator9.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
 				tessellator9.Brightness = this.brightnessBottomLeft;
-				tessellator9.addVertexWithUV(d28, d32, d36, d22, d26);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d22, d26);
 				tessellator9.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
 				tessellator9.Brightness = this.brightnessBottomRight;
-				tessellator9.addVertexWithUV(d30, d32, d36, d14, d18);
+				tessellator9.AddVertexWithUV(d30, d32, d36, d14, d18);
 				tessellator9.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
 				tessellator9.Brightness = this.brightnessTopRight;
-				tessellator9.addVertexWithUV(d30, d34, d36, d20, d24);
+				tessellator9.AddVertexWithUV(d30, d34, d36, d20, d24);
 			}
 			else
 			{
-				tessellator9.addVertexWithUV(d28, d34, d36, d12, d16);
-				tessellator9.addVertexWithUV(d28, d32, d36, d22, d26);
-				tessellator9.addVertexWithUV(d30, d32, d36, d14, d18);
-				tessellator9.addVertexWithUV(d30, d34, d36, d20, d24);
+				tessellator9.AddVertexWithUV(d28, d34, d36, d12, d16);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d22, d26);
+				tessellator9.AddVertexWithUV(d30, d32, d36, d14, d18);
+				tessellator9.AddVertexWithUV(d30, d34, d36, d20, d24);
 			}
 
 		}
@@ -4687,23 +4635,23 @@ namespace net.minecraft.src
 			{
 				tessellator9.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator9.Brightness = this.brightnessTopLeft;
-				tessellator9.addVertexWithUV(d28, d32, d36, d20, d24);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d20, d24);
 				tessellator9.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
 				tessellator9.Brightness = this.brightnessBottomLeft;
-				tessellator9.addVertexWithUV(d28, d32, d34, d12, d16);
+				tessellator9.AddVertexWithUV(d28, d32, d34, d12, d16);
 				tessellator9.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
 				tessellator9.Brightness = this.brightnessBottomRight;
-				tessellator9.addVertexWithUV(d28, d30, d34, d22, d26);
+				tessellator9.AddVertexWithUV(d28, d30, d34, d22, d26);
 				tessellator9.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
 				tessellator9.Brightness = this.brightnessTopRight;
-				tessellator9.addVertexWithUV(d28, d30, d36, d14, d18);
+				tessellator9.AddVertexWithUV(d28, d30, d36, d14, d18);
 			}
 			else
 			{
-				tessellator9.addVertexWithUV(d28, d32, d36, d20, d24);
-				tessellator9.addVertexWithUV(d28, d32, d34, d12, d16);
-				tessellator9.addVertexWithUV(d28, d30, d34, d22, d26);
-				tessellator9.addVertexWithUV(d28, d30, d36, d14, d18);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d20, d24);
+				tessellator9.AddVertexWithUV(d28, d32, d34, d12, d16);
+				tessellator9.AddVertexWithUV(d28, d30, d34, d22, d26);
+				tessellator9.AddVertexWithUV(d28, d30, d36, d14, d18);
 			}
 
 		}
@@ -4793,23 +4741,23 @@ namespace net.minecraft.src
 			{
 				tessellator9.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator9.Brightness = this.brightnessTopLeft;
-				tessellator9.addVertexWithUV(d28, d30, d36, d22, d26);
+				tessellator9.AddVertexWithUV(d28, d30, d36, d22, d26);
 				tessellator9.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
 				tessellator9.Brightness = this.brightnessBottomLeft;
-				tessellator9.addVertexWithUV(d28, d30, d34, d14, d18);
+				tessellator9.AddVertexWithUV(d28, d30, d34, d14, d18);
 				tessellator9.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
 				tessellator9.Brightness = this.brightnessBottomRight;
-				tessellator9.addVertexWithUV(d28, d32, d34, d20, d24);
+				tessellator9.AddVertexWithUV(d28, d32, d34, d20, d24);
 				tessellator9.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
 				tessellator9.Brightness = this.brightnessTopRight;
-				tessellator9.addVertexWithUV(d28, d32, d36, d12, d16);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d12, d16);
 			}
 			else
 			{
-				tessellator9.addVertexWithUV(d28, d30, d36, d22, d26);
-				tessellator9.addVertexWithUV(d28, d30, d34, d14, d18);
-				tessellator9.addVertexWithUV(d28, d32, d34, d20, d24);
-				tessellator9.addVertexWithUV(d28, d32, d36, d12, d16);
+				tessellator9.AddVertexWithUV(d28, d30, d36, d22, d26);
+				tessellator9.AddVertexWithUV(d28, d30, d34, d14, d18);
+				tessellator9.AddVertexWithUV(d28, d32, d34, d20, d24);
+				tessellator9.AddVertexWithUV(d28, d32, d36, d12, d16);
 			}
 
 		}
@@ -4833,7 +4781,7 @@ namespace net.minecraft.src
 				f7 = (float)(i6 >> 16 & 255) / 255.0F;
 				f8 = (float)(i6 >> 8 & 255) / 255.0F;
 				f9 = (float)(i6 & 255) / 255.0F;
-				GL.Color4(f7 * f3, f8 * f3, f9 * f3, 1.0F);
+                Minecraft.renderPipeline.SetColor(f7 * f3, f8 * f3, f9 * f3, 1.0F);
 			}
 
 			i6 = block1.RenderType;
@@ -4843,63 +4791,63 @@ namespace net.minecraft.src
 				if (i6 == 1)
 				{
 					tessellator4.startDrawingQuads();
-					tessellator4.setNormal(0.0F, -1.0F, 0.0F);
+					tessellator4.SetNormal(0.0F, -1.0F, 0.0F);
 					this.drawCrossedSquares(block1, i2, -0.5D, -0.5D, -0.5D);
-					tessellator4.draw();
+					tessellator4.DrawImmediate();
 				}
 				else if (i6 == 19)
 				{
 					tessellator4.startDrawingQuads();
-					tessellator4.setNormal(0.0F, -1.0F, 0.0F);
+					tessellator4.SetNormal(0.0F, -1.0F, 0.0F);
 					block1.setBlockBoundsForItemRender();
 					this.renderBlockStemSmall(block1, i2, block1.maxY, -0.5D, -0.5D, -0.5D);
-					tessellator4.draw();
+					tessellator4.DrawImmediate();
 				}
 				else if (i6 == 23)
 				{
 					tessellator4.startDrawingQuads();
-					tessellator4.setNormal(0.0F, -1.0F, 0.0F);
+					tessellator4.SetNormal(0.0F, -1.0F, 0.0F);
 					block1.setBlockBoundsForItemRender();
-					tessellator4.draw();
+					tessellator4.DrawImmediate();
 				}
 				else if (i6 == 13)
 				{
 					block1.setBlockBoundsForItemRender();
-                    Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
+                    Minecraft.renderPipeline.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 					f7 = 0.0625F;
 					tessellator4.startDrawingQuads();
-					tessellator4.setNormal(0.0F, -1.0F, 0.0F);
+					tessellator4.SetNormal(0.0F, -1.0F, 0.0F);
 					this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(0));
-					tessellator4.draw();
+					tessellator4.DrawImmediate();
 					tessellator4.startDrawingQuads();
-					tessellator4.setNormal(0.0F, 1.0F, 0.0F);
+					tessellator4.SetNormal(0.0F, 1.0F, 0.0F);
 					this.renderTopFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(1));
-					tessellator4.draw();
+					tessellator4.DrawImmediate();
 					tessellator4.startDrawingQuads();
-					tessellator4.setNormal(0.0F, 0.0F, -1.0F);
+					tessellator4.SetNormal(0.0F, 0.0F, -1.0F);
 					tessellator4.addTranslation(0.0F, 0.0F, f7);
 					this.renderEastFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(2));
 					tessellator4.addTranslation(0.0F, 0.0F, -f7);
-					tessellator4.draw();
+					tessellator4.DrawImmediate();
 					tessellator4.startDrawingQuads();
-					tessellator4.setNormal(0.0F, 0.0F, 1.0F);
+					tessellator4.SetNormal(0.0F, 0.0F, 1.0F);
 					tessellator4.addTranslation(0.0F, 0.0F, -f7);
 					this.renderWestFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(3));
 					tessellator4.addTranslation(0.0F, 0.0F, f7);
-					tessellator4.draw();
+					tessellator4.DrawImmediate();
 					tessellator4.startDrawingQuads();
-					tessellator4.setNormal(-1.0F, 0.0F, 0.0F);
+					tessellator4.SetNormal(-1.0F, 0.0F, 0.0F);
 					tessellator4.addTranslation(f7, 0.0F, 0.0F);
 					this.renderNorthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(4));
 					tessellator4.addTranslation(-f7, 0.0F, 0.0F);
-					tessellator4.draw();
+					tessellator4.DrawImmediate();
 					tessellator4.startDrawingQuads();
-					tessellator4.setNormal(1.0F, 0.0F, 0.0F);
+					tessellator4.SetNormal(1.0F, 0.0F, 0.0F);
 					tessellator4.addTranslation(-f7, 0.0F, 0.0F);
 					this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
 					tessellator4.addTranslation(f7, 0.0F, 0.0F);
-					tessellator4.draw();
-                    Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
+					tessellator4.DrawImmediate();
+                    Minecraft.renderPipeline.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 				}
 				else if (i6 == 22)
 				{
@@ -4909,16 +4857,16 @@ namespace net.minecraft.src
 				else if (i6 == 6)
 				{
 					tessellator4.startDrawingQuads();
-					tessellator4.setNormal(0.0F, -1.0F, 0.0F);
+					tessellator4.SetNormal(0.0F, -1.0F, 0.0F);
 					this.renderBlockCropsImpl(block1, i2, -0.5D, -0.5D, -0.5D);
-					tessellator4.draw();
+					tessellator4.DrawImmediate();
 				}
 				else if (i6 == 2)
 				{
 					tessellator4.startDrawingQuads();
-					tessellator4.setNormal(0.0F, -1.0F, 0.0F);
+					tessellator4.SetNormal(0.0F, -1.0F, 0.0F);
 					this.renderTorchAtAngle(block1, -0.5D, -0.5D, -0.5D, 0.0D, 0.0D);
-					tessellator4.draw();
+					tessellator4.DrawImmediate();
 				}
 				else if (i6 == 10)
 				{
@@ -4934,38 +4882,38 @@ namespace net.minecraft.src
 							block1.setBlockBounds(0.0F, 0.0F, 0.5F, 1.0F, 0.5F, 1.0F);
 						}
 
-                        Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
+                        Minecraft.renderPipeline.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, -1.0F, 0.0F);
+						tessellator4.SetNormal(0.0F, -1.0F, 0.0F);
 						this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(0));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, 1.0F, 0.0F);
+						tessellator4.SetNormal(0.0F, 1.0F, 0.0F);
 						this.renderTopFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(1));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, 0.0F, -1.0F);
+						tessellator4.SetNormal(0.0F, 0.0F, -1.0F);
 						this.renderEastFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(2));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, 0.0F, 1.0F);
+						tessellator4.SetNormal(0.0F, 0.0F, 1.0F);
 						this.renderWestFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(3));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(-1.0F, 0.0F, 0.0F);
+						tessellator4.SetNormal(-1.0F, 0.0F, 0.0F);
 						this.renderNorthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(4));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(1.0F, 0.0F, 0.0F);
+						tessellator4.SetNormal(1.0F, 0.0F, 0.0F);
 						this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
-						tessellator4.draw();
-                        Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
+						tessellator4.DrawImmediate();
+                        Minecraft.renderPipeline.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 					}
 				}
 				else if (i6 == 27)
 				{
 					i14 = 0;
-                    Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
+                    Minecraft.renderPipeline.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 					tessellator4.startDrawingQuads();
 
 					for (int i15 = 0; i15 < 8; ++i15)
@@ -5021,22 +4969,22 @@ namespace net.minecraft.src
 						float f13 = 1.0F - (float)(i14 + b17) / 16.0F;
 						i14 += b17;
 						block1.setBlockBounds(0.5F - f11, f13, 0.5F - f11, 0.5F + f11, f12, 0.5F + f11);
-						tessellator4.setNormal(0.0F, -1.0F, 0.0F);
+						tessellator4.SetNormal(0.0F, -1.0F, 0.0F);
 						this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(0));
-						tessellator4.setNormal(0.0F, 1.0F, 0.0F);
+						tessellator4.SetNormal(0.0F, 1.0F, 0.0F);
 						this.renderTopFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(1));
-						tessellator4.setNormal(0.0F, 0.0F, -1.0F);
+						tessellator4.SetNormal(0.0F, 0.0F, -1.0F);
 						this.renderEastFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(2));
-						tessellator4.setNormal(0.0F, 0.0F, 1.0F);
+						tessellator4.SetNormal(0.0F, 0.0F, 1.0F);
 						this.renderWestFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(3));
-						tessellator4.setNormal(-1.0F, 0.0F, 0.0F);
+						tessellator4.SetNormal(-1.0F, 0.0F, 0.0F);
 						this.renderNorthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(4));
-						tessellator4.setNormal(1.0F, 0.0F, 0.0F);
+						tessellator4.SetNormal(1.0F, 0.0F, 0.0F);
 						this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
 					}
 
-					tessellator4.draw();
-                    Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
+					tessellator4.DrawImmediate();
+                    Minecraft.renderPipeline.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 					block1.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 				}
 				else if (i6 == 11)
@@ -5065,32 +5013,32 @@ namespace net.minecraft.src
 							block1.setBlockBounds(0.5F - f8, 0.5F - f8 * 3.0F, -f8 * 2.0F, 0.5F + f8, 0.5F - f8, 1.0F + f8 * 2.0F);
 						}
 
-                        Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
+                        Minecraft.renderPipeline.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, -1.0F, 0.0F);
+						tessellator4.SetNormal(0.0F, -1.0F, 0.0F);
 						this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(0));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, 1.0F, 0.0F);
+						tessellator4.SetNormal(0.0F, 1.0F, 0.0F);
 						this.renderTopFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(1));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, 0.0F, -1.0F);
+						tessellator4.SetNormal(0.0F, 0.0F, -1.0F);
 						this.renderEastFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(2));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, 0.0F, 1.0F);
+						tessellator4.SetNormal(0.0F, 0.0F, 1.0F);
 						this.renderWestFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(3));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(-1.0F, 0.0F, 0.0F);
+						tessellator4.SetNormal(-1.0F, 0.0F, 0.0F);
 						this.renderNorthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(4));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(1.0F, 0.0F, 0.0F);
+						tessellator4.SetNormal(1.0F, 0.0F, 0.0F);
 						this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
-						tessellator4.draw();
-                        Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
+						tessellator4.DrawImmediate();
+                        Minecraft.renderPipeline.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 					}
 
 					block1.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -5116,32 +5064,32 @@ namespace net.minecraft.src
 							block1.setBlockBounds(0.5F - f8, 0.5F, 0.0F, 0.5F + f8, 1.0F - f8, 1.0F);
 						}
 
-                        Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
+                        Minecraft.renderPipeline.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, -1.0F, 0.0F);
+						tessellator4.SetNormal(0.0F, -1.0F, 0.0F);
 						this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(0));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, 1.0F, 0.0F);
+						tessellator4.SetNormal(0.0F, 1.0F, 0.0F);
 						this.renderTopFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(1));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, 0.0F, -1.0F);
+						tessellator4.SetNormal(0.0F, 0.0F, -1.0F);
 						this.renderEastFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(2));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(0.0F, 0.0F, 1.0F);
+						tessellator4.SetNormal(0.0F, 0.0F, 1.0F);
 						this.renderWestFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(3));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(-1.0F, 0.0F, 0.0F);
+						tessellator4.SetNormal(-1.0F, 0.0F, 0.0F);
 						this.renderNorthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(4));
-						tessellator4.draw();
+						tessellator4.DrawImmediate();
 						tessellator4.startDrawingQuads();
-						tessellator4.setNormal(1.0F, 0.0F, 0.0F);
+						tessellator4.SetNormal(1.0F, 0.0F, 0.0F);
 						this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSide(5));
-						tessellator4.draw();
-                        Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
+						tessellator4.DrawImmediate();
+                        Minecraft.renderPipeline.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 					}
 
 					block1.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -5155,46 +5103,46 @@ namespace net.minecraft.src
 				}
 
 				block1.setBlockBoundsForItemRender();
-                Minecraft.newRenderer.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
+                Minecraft.renderPipeline.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
 				tessellator4.startDrawingQuads();
-				tessellator4.setNormal(0.0F, -1.0F, 0.0F);
+				tessellator4.SetNormal(0.0F, -1.0F, 0.0F);
 				this.renderBottomFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSideAndMetadata(0, i2));
-				tessellator4.draw();
+				tessellator4.DrawImmediate();
 				if (z5 && this.useInventoryTint)
 				{
 					i14 = block1.getRenderColor(i2);
 					f8 = (float)(i14 >> 16 & 255) / 255.0F;
 					f9 = (float)(i14 >> 8 & 255) / 255.0F;
 					float f10 = (float)(i14 & 255) / 255.0F;
-					GL.Color4(f8 * f3, f9 * f3, f10 * f3, 1.0F);
+                    Minecraft.renderPipeline.SetColor(f8 * f3, f9 * f3, f10 * f3, 1.0F);
 				}
 
 				tessellator4.startDrawingQuads();
-				tessellator4.setNormal(0.0F, 1.0F, 0.0F);
+				tessellator4.SetNormal(0.0F, 1.0F, 0.0F);
 				this.renderTopFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSideAndMetadata(1, i2));
-				tessellator4.draw();
+				tessellator4.DrawImmediate();
 				if (z5 && this.useInventoryTint)
 				{
-					GL.Color4(f3, f3, f3, 1.0F);
+                    Minecraft.renderPipeline.SetColor(f3, f3, f3, 1.0F);
 				}
 
 				tessellator4.startDrawingQuads();
-				tessellator4.setNormal(0.0F, 0.0F, -1.0F);
+				tessellator4.SetNormal(0.0F, 0.0F, -1.0F);
 				this.renderEastFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSideAndMetadata(2, i2));
-				tessellator4.draw();
+				tessellator4.DrawImmediate();
 				tessellator4.startDrawingQuads();
-				tessellator4.setNormal(0.0F, 0.0F, 1.0F);
+				tessellator4.SetNormal(0.0F, 0.0F, 1.0F);
 				this.renderWestFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSideAndMetadata(3, i2));
-				tessellator4.draw();
+				tessellator4.DrawImmediate();
 				tessellator4.startDrawingQuads();
-				tessellator4.setNormal(-1.0F, 0.0F, 0.0F);
+				tessellator4.SetNormal(-1.0F, 0.0F, 0.0F);
 				this.renderNorthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSideAndMetadata(4, i2));
-				tessellator4.draw();
+				tessellator4.DrawImmediate();
 				tessellator4.startDrawingQuads();
-				tessellator4.setNormal(1.0F, 0.0F, 0.0F);
+				tessellator4.SetNormal(1.0F, 0.0F, 0.0F);
 				this.renderSouthFace(block1, 0.0D, 0.0D, 0.0D, block1.getBlockTextureFromSideAndMetadata(5, i2));
-				tessellator4.draw();
-                Minecraft.newRenderer.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
+				tessellator4.DrawImmediate();
+                Minecraft.renderPipeline.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
 			}
 
 		}

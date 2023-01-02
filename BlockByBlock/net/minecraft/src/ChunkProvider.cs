@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class ChunkProvider : IChunkProvider
+    public class ChunkProvider : IChunkProvider
 	{
 		private ISet<object> droppedChunksSet = new HashSet<object>();
 		private Chunk emptyChunk;
@@ -275,7 +276,7 @@ namespace net.minecraft.src
 			return this.chunkProvider.getPossibleCreatures(enumCreatureType1, i2, i3, i4);
 		}
 
-		public virtual ChunkPosition findClosestStructure(World world1, string string2, int i3, int i4, int i5)
+		public virtual ChunkPosition? findClosestStructure(World world1, string string2, int i3, int i4, int i5)
 		{
 			return this.chunkProvider.findClosestStructure(world1, string2, i3, i4, i5);
 		}

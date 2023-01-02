@@ -1,10 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-	public class BlockCactus : Block
+    public class BlockCactus : Block
 	{
 		protected internal BlockCactus(int i1, int i2) : base(i1, i2, Material.cactus)
 		{

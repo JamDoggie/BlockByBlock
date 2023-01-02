@@ -11,8 +11,6 @@
 			
 			enumOptionsMappingHelperArray[EnumOptions.VIEW_BOBBING.ordinal()] = 2;
 			
-			enumOptionsMappingHelperArray[EnumOptions.ANAGLYPH.ordinal()] = 3;
-			
 			enumOptionsMappingHelperArray[EnumOptions.ADVANCED_OPENGL.ordinal()] = 4;
 			
 			enumOptionsMappingHelperArray[EnumOptions.AMBIENT_OCCLUSION.ordinal()] = 5;

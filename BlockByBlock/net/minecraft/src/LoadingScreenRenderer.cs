@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using BlockByBlock.net.minecraft.render;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using System;
 using System.Drawing;
@@ -46,12 +47,10 @@ namespace net.minecraft.src
 				this.currentlyDisplayedText = string1;
 				ScaledResolution scaledResolution2 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
 				GL.Clear(ClearBufferMask.DepthBufferBit);
-				GL.MatrixMode(MatrixMode.Projection);
-                Minecraft.newRenderer.CameraMatrix.LoadIdentity();
-                Minecraft.newRenderer.CameraMatrix.Ortho(0.0D, scaledResolution2.scaledWidthD, scaledResolution2.scaledHeightD, 0.0D, 100.0D, 300.0D);
-				GL.MatrixMode(MatrixMode.Modelview);
-                Minecraft.newRenderer.ModelMatrix.LoadIdentity();
-                Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -200.0F);
+                Minecraft.renderPipeline.ProjectionMatrix.LoadIdentity();
+                Minecraft.renderPipeline.ProjectionMatrix.Ortho(0.0D, scaledResolution2.scaledWidthD, scaledResolution2.scaledHeightD, 0.0D, 100.0D, 300.0D);
+                Minecraft.renderPipeline.ModelMatrix.LoadIdentity();
+                Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 0.0F, -200.0F);
 			}
 		}
 
@@ -94,12 +93,10 @@ namespace net.minecraft.src
 						int i5 = scaledResolution4.ScaledWidth;
 						int i6 = scaledResolution4.ScaledHeight;
 						GL.Clear(ClearBufferMask.DepthBufferBit);
-						GL.MatrixMode(MatrixMode.Projection);
-                        Minecraft.newRenderer.CameraMatrix.LoadIdentity();
-                        Minecraft.newRenderer.CameraMatrix.Ortho(0.0D, scaledResolution4.scaledWidthD, scaledResolution4.scaledHeightD, 0.0D, 100.0D, 300.0D);
-						GL.MatrixMode(MatrixMode.Modelview);
-                        Minecraft.newRenderer.ModelMatrix.LoadIdentity();
-                        Minecraft.newRenderer.ModelMatrix.Translate(0.0F, 0.0F, -200.0F);
+                        Minecraft.renderPipeline.ProjectionMatrix.LoadIdentity();
+                        Minecraft.renderPipeline.ProjectionMatrix.Ortho(0.0D, scaledResolution4.scaledWidthD, scaledResolution4.scaledHeightD, 0.0D, 100.0D, 300.0D);
+                        Minecraft.renderPipeline.ModelMatrix.LoadIdentity();
+                        Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 0.0F, -200.0F);
 						GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 						Tessellator tessellator7 = Tessellator.instance;
 						int i8 = this.mc.renderEngine.getTexture("/gui/background.png");
@@ -107,19 +104,19 @@ namespace net.minecraft.src
 						float f9 = 32.0F;
 						tessellator7.startDrawingQuads();
 						tessellator7.ColorOpaque_I = 4210752;
-						tessellator7.addVertexWithUV(0.0D, (double)i6, 0.0D, 0.0D, (double)((float)i6 / f9));
-						tessellator7.addVertexWithUV((double)i5, (double)i6, 0.0D, (double)((float)i5 / f9), (double)((float)i6 / f9));
-						tessellator7.addVertexWithUV((double)i5, 0.0D, 0.0D, (double)((float)i5 / f9), 0.0D);
-						tessellator7.addVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-						tessellator7.draw();
+						tessellator7.AddVertexWithUV(0.0D, (double)i6, 0.0D, 0.0D, (double)((float)i6 / f9));
+						tessellator7.AddVertexWithUV((double)i5, (double)i6, 0.0D, (double)((float)i5 / f9), (double)((float)i6 / f9));
+						tessellator7.AddVertexWithUV((double)i5, 0.0D, 0.0D, (double)((float)i5 / f9), 0.0D);
+						tessellator7.AddVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+						tessellator7.DrawImmediate();
 						if (value >= 0)
 						{
 							sbyte b10 = 100;
 							sbyte b11 = 2;
 							int i12 = i5 / 2 - b10 / 2;
 							int i13 = i6 / 2 + 16;
-							GL.Disable(EnableCap.Texture2D);
-							tessellator7.startDrawingQuads();
+                            Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
+                            tessellator7.startDrawingQuads();
 							tessellator7.ColorOpaque_I = 8421504;
 							tessellator7.addVertex((double)i12, (double)i13, 0.0D);
 							tessellator7.addVertex((double)i12, (double)(i13 + b11), 0.0D);
@@ -130,9 +127,9 @@ namespace net.minecraft.src
 							tessellator7.addVertex((double)i12, (double)(i13 + b11), 0.0D);
 							tessellator7.addVertex((double)(i12 + value), (double)(i13 + b11), 0.0D);
 							tessellator7.addVertex((double)(i12 + value), (double)i13, 0.0D);
-							tessellator7.draw();
-							GL.Enable(EnableCap.Texture2D);
-						}
+							tessellator7.DrawImmediate();
+                            Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
+                        }
 						
 
 						this.mc.fontRenderer.drawStringWithShadow(this.currentlyDisplayedText, (i5 - this.mc.fontRenderer.getStringWidth(this.currentlyDisplayedText)) / 2, i6 / 2 - 4 - 16, 0xFFFFFF);

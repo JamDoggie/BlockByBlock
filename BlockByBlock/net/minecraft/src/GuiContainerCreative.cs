@@ -1,10 +1,13 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using BlockByBlock.net.minecraft.render;
+using net.minecraft.client;
+using net.minecraft.client.entity;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace net.minecraft.src
 {
 
-	public class GuiContainerCreative : GuiContainer
+    public class GuiContainerCreative : GuiContainer
 	{
 		private static InventoryBasic inventory = new InventoryBasic("tmp", 72);
 		private float currentScroll = 0.0F;
@@ -204,13 +207,13 @@ namespace net.minecraft.src
 			}
 
 			base.drawScreen(i1, i2, f3);
-			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
-			GL.Disable(EnableCap.Lighting);
-		}
+			Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+            Minecraft.renderPipeline.SetState(RenderState.LightingState, true);
+        }
 
 		protected internal override void drawGuiContainerBackgroundLayer(float f1, int i2, int i3)
 		{
-			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 			int i4 = this.mc.renderEngine.getTexture("/gui/allitems.png");
 			this.mc.renderEngine.bindTexture(i4);
 			int i5 = this.guiLeft;

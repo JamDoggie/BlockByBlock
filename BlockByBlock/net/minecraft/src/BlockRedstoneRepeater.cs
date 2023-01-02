@@ -1,10 +1,11 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class BlockRedstoneRepeater : BlockDirectional
+    public class BlockRedstoneRepeater : BlockDirectional
 	{
 		public static readonly double[] repeaterTorchOffset = new double[]{-0.0625D, 0.0625D, 0.1875D, 0.3125D};
 		private static readonly int[] repeaterState = new int[]{1, 2, 3, 4};

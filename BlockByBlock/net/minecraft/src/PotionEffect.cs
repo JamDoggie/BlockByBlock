@@ -1,8 +1,9 @@
 ﻿using System;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-	public class PotionEffect
+    public class PotionEffect
 	{
 		private int potionID;
 		private int duration;

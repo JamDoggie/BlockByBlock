@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ItemEgg : Item
+    public class ItemEgg : Item
 	{
 		public ItemEgg(int i1) : base(i1)
 		{

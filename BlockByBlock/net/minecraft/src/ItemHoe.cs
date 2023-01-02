@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ItemHoe : Item
+    public class ItemHoe : Item
 	{
 		public ItemHoe(int i1, EnumToolMaterial enumToolMaterial2) : base(i1)
 		{

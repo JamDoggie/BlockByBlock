@@ -1,9 +1,10 @@
 ﻿using System;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class EntityAINearestAttackableTarget : EntityAITarget
+    public class EntityAINearestAttackableTarget : EntityAITarget
 	{
 		internal EntityLiving targetEntity;
 		internal Type targetClass;

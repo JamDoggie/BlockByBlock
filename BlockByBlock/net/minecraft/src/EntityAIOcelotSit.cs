@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class EntityAIOcelotSit : EntityAIBase
+    public class EntityAIOcelotSit : EntityAIBase
 	{
 		private readonly EntityOcelot field_50085_a;
 		private readonly float field_50083_b;

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class BlockBrewingStand : BlockContainer
+    public class BlockBrewingStand : BlockContainer
 	{
 		private RandomExtended rand = new RandomExtended();
 

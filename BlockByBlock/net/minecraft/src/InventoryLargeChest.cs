@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class InventoryLargeChest : IInventory
+    public class InventoryLargeChest : IInventory
 	{
 		private string name;
 		private IInventory upperChest;

@@ -1,10 +1,11 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class EntityAIVillagerMate : EntityAIBase
+    public class EntityAIVillagerMate : EntityAIBase
 	{
 		private EntityVillager villagerObj;
 		private EntityVillager mate;

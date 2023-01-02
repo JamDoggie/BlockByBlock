@@ -1,9 +1,10 @@
 ﻿using System.Collections;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public sealed class ItemStack
+    public sealed class ItemStack
 	{
 		public int stackSize;
 		public int animationsToGo;

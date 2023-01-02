@@ -1,6 +1,7 @@
 ﻿using BlockByBlock;
 using BlockByBlock.java_extensions;
 using net.minecraft.client;
+using net.minecraft.client.entity;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections;
@@ -8,7 +9,7 @@ using System.IO;
 
 namespace net.minecraft.src
 {
-	public class GuiWinGame : GuiScreen
+    public class GuiWinGame : GuiScreen
 	{
 		private int updateCounter = 0;
 		private System.Collections.ArrayList lines;
@@ -141,11 +142,11 @@ namespace net.minecraft.src
 			f9 *= f9;
 			f9 = f9 * 96.0F / 255.0F;
 			tessellator4.setColorOpaque_F(f9, f9, f9);
-			tessellator4.addVertexWithUV(0.0D, (double)this.height, (double)this.zLevel, 0.0D, (double)(f6 * f8));
-			tessellator4.addVertexWithUV((double)i5, (double)this.height, (double)this.zLevel, (double)((float)i5 * f8), (double)(f6 * f8));
-			tessellator4.addVertexWithUV((double)i5, 0.0D, (double)this.zLevel, (double)((float)i5 * f8), (double)(f7 * f8));
-			tessellator4.addVertexWithUV(0.0D, 0.0D, (double)this.zLevel, 0.0D, (double)(f7 * f8));
-			tessellator4.draw();
+			tessellator4.AddVertexWithUV(0.0D, (double)this.height, (double)this.zLevel, 0.0D, (double)(f6 * f8));
+			tessellator4.AddVertexWithUV((double)i5, (double)this.height, (double)this.zLevel, (double)((float)i5 * f8), (double)(f6 * f8));
+			tessellator4.AddVertexWithUV((double)i5, 0.0D, (double)this.zLevel, (double)((float)i5 * f8), (double)(f7 * f8));
+			tessellator4.AddVertexWithUV(0.0D, 0.0D, (double)this.zLevel, 0.0D, (double)(f7 * f8));
+			tessellator4.DrawImmediate();
 		}
 
 		public override void drawScreen(int i1, int i2, float f3)
@@ -156,10 +157,10 @@ namespace net.minecraft.src
 			int i6 = this.width / 2 - s5 / 2;
 			int i7 = this.height + 50;
 			float f8 = -((float)this.updateCounter + f3) * this.field_41043_e;
-            Minecraft.newRenderer.ModelMatrix.PushMatrix();
-            Minecraft.newRenderer.ModelMatrix.Translate(0.0F, f8, 0.0F);
+            Minecraft.renderPipeline.ModelMatrix.PushMatrix();
+            Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, f8, 0.0F);
 			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/title/mclogo.png"));
-			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 			this.drawTexturedModalRect(i6, i7, 0, 0, 155, 44);
 			this.drawTexturedModalRect(i6 + 155, i7, 0, 45, 155, 44);
 			tessellator4.ColorOpaque_I = 0xFFFFFF;
@@ -173,7 +174,7 @@ namespace net.minecraft.src
 					float f11 = (float)i9 + f8 - (float)(this.height / 2 - 6);
 					if (f11 < 0.0F)
 					{
-                        Minecraft.newRenderer.ModelMatrix.Translate(0.0F, -f11, 0.0F);
+                        Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, -f11, 0.0F);
 					}
 				}
 
@@ -197,7 +198,7 @@ namespace net.minecraft.src
 				i9 += 12;
 			}
 
-            Minecraft.newRenderer.ModelMatrix.PopMatrix();
+            Minecraft.renderPipeline.ModelMatrix.PopMatrix();
 			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("%blur%/misc/vignette.png"));
 			GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.Zero, BlendingFactor.OneMinusSrcColor);
@@ -205,11 +206,11 @@ namespace net.minecraft.src
 			tessellator4.setColorRGBA_F(1.0F, 1.0F, 1.0F, 1.0F);
 			i10 = width;
 			int i13 = height;
-			tessellator4.addVertexWithUV(0.0D, (double)i13, (double)this.zLevel, 0.0D, 1.0D);
-			tessellator4.addVertexWithUV((double)i10, (double)i13, (double)this.zLevel, 1.0D, 1.0D);
-			tessellator4.addVertexWithUV((double)i10, 0.0D, (double)this.zLevel, 1.0D, 0.0D);
-			tessellator4.addVertexWithUV(0.0D, 0.0D, (double)this.zLevel, 0.0D, 0.0D);
-			tessellator4.draw();
+			tessellator4.AddVertexWithUV(0.0D, (double)i13, (double)this.zLevel, 0.0D, 1.0D);
+			tessellator4.AddVertexWithUV((double)i10, (double)i13, (double)this.zLevel, 1.0D, 1.0D);
+			tessellator4.AddVertexWithUV((double)i10, 0.0D, (double)this.zLevel, 1.0D, 0.0D);
+			tessellator4.AddVertexWithUV(0.0D, 0.0D, (double)this.zLevel, 0.0D, 0.0D);
+			tessellator4.DrawImmediate();
 			GL.Disable(EnableCap.Blend);
 			base.drawScreen(i1, i2, f3);
 		}

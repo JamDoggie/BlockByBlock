@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class InventoryCraftResult : IInventory
+    public class InventoryCraftResult : IInventory
 	{
 		private ItemStack[] stackResult = new ItemStack[1];
 

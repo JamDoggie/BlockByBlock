@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public interface IWorldAccess
+    public interface IWorldAccess
 	{
 		void markBlockNeedsUpdate(int i1, int i2, int i3);
 

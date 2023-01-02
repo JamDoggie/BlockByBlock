@@ -1,11 +1,12 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-	public class Block
+    public class Block
 	{
 		public static readonly StepSound soundPowderFootstep = new StepSound("stone", 1.0F, 1.0F);
 		public static readonly StepSound soundWoodFootstep = new StepSound("wood", 1.0F, 1.0F);

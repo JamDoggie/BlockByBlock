@@ -1,10 +1,11 @@
 ﻿using BlockByBlock.helpers;
+using net.minecraft.client.entity;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-	public class MapData : WorldSavedData
+    public class MapData : WorldSavedData
 	{
 		public int xCenter;
 		public int zCenter;

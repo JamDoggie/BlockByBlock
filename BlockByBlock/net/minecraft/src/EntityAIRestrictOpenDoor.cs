@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class EntityAIRestrictOpenDoor : EntityAIBase
+    public class EntityAIRestrictOpenDoor : EntityAIBase
 	{
 		private EntityCreature entityObj;
 		private VillageDoorInfo frontDoor;

@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public abstract class EntityAITarget : EntityAIBase
+    public abstract class EntityAITarget : EntityAIBase
 	{
 		protected internal EntityLiving taskOwner;
 		protected internal float field_48379_d;

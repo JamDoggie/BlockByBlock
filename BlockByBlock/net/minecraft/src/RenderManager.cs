@@ -1,11 +1,16 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using net.minecraft.client;
+using net.minecraft.client.entity;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections;
+using net.minecraft.client.entity.render;
+using net.minecraft.client.entity.render.model;
+using BlockByBlock.net.minecraft.client.entity.render;
 
 namespace net.minecraft.src
 {
 
-	public class RenderManager
+    public class RenderManager
 	{
 		private System.Collections.IDictionary entityRenderMap = new Hashtable();
 		public static RenderManager instance = new RenderManager();
@@ -76,15 +81,15 @@ namespace net.minecraft.src
 
 			while (iterator1.MoveNext())
 			{
-				Render render2 = (Render)iterator1.Current;
+				Renderer render2 = (Renderer)iterator1.Current;
 				render2.RenderManager = this;
 			}
 
 		}
 
-		public virtual Render getEntityClassRenderObject(Type class1)
+		public virtual Renderer getEntityClassRenderObject(Type class1)
 		{
-			Render render2 = (Render)this.entityRenderMap[class1];
+			Renderer render2 = (Renderer)this.entityRenderMap[class1];
 			if (render2 == null && class1 != typeof(Entity))
 			{
 				render2 = this.getEntityClassRenderObject(class1.BaseType);
@@ -94,7 +99,7 @@ namespace net.minecraft.src
 			return render2;
 		}
 
-		public virtual Render getEntityRenderObject(Entity entity1)
+		public virtual Renderer getEntityRenderObject(Entity entity1)
 		{
 			return this.getEntityClassRenderObject(entity1.GetType());
 		}
@@ -147,14 +152,14 @@ namespace net.minecraft.src
 
 			int i11 = i10 % 65536;
 			int i12 = i10 / 65536;
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i11 / 1.0F, (float)i12 / 1.0F);
-			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			LightmapManager.setLightmapTextureCoords(LightmapManager.lightmapTexUnit, (float)i11 / 1.0F, (float)i12 / 1.0F);
+            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 			this.renderEntityWithPosYaw(entity1, d3 - renderPosX, d5 - renderPosY, d7 - renderPosZ, f9, f2);
 		}
 
 		public virtual void renderEntityWithPosYaw(Entity entity1, double d2, double d4, double d6, float f8, float f9)
 		{
-			Render render10 = this.getEntityRenderObject(entity1);
+			Renderer render10 = this.getEntityRenderObject(entity1);
 			if (render10 != null)
 			{
 				render10.doRender(entity1, d2, d4, d6, f8, f9);

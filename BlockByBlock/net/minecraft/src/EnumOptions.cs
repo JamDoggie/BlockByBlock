@@ -12,7 +12,6 @@ namespace net.minecraft.src
 		public static readonly EnumOptions GAMMA = new EnumOptions("GAMMA", InnerEnum.GAMMA, "options.gamma", true, false);
 		public static readonly EnumOptions RENDER_DISTANCE = new EnumOptions("RENDER_DISTANCE", InnerEnum.RENDER_DISTANCE, "options.renderDistance", false, false);
 		public static readonly EnumOptions VIEW_BOBBING = new EnumOptions("VIEW_BOBBING", InnerEnum.VIEW_BOBBING, "options.viewBobbing", false, true);
-		public static readonly EnumOptions ANAGLYPH = new EnumOptions("ANAGLYPH", InnerEnum.ANAGLYPH, "options.anaglyph", false, true);
 		public static readonly EnumOptions ADVANCED_OPENGL = new EnumOptions("ADVANCED_OPENGL", InnerEnum.ADVANCED_OPENGL, "options.advancedOpengl", false, true);
 		public static readonly EnumOptions FRAMERATE_LIMIT = new EnumOptions("FRAMERATE_LIMIT", InnerEnum.FRAMERATE_LIMIT, "options.framerateLimit", false, false);
 		public static readonly EnumOptions DIFFICULTY = new EnumOptions("DIFFICULTY", InnerEnum.DIFFICULTY, "options.difficulty", false, false);
@@ -33,8 +32,7 @@ namespace net.minecraft.src
 			valueList.Add(FOV);
 			valueList.Add(GAMMA);
 			valueList.Add(RENDER_DISTANCE);
-			valueList.Add(VIEW_BOBBING);
-			valueList.Add(ANAGLYPH);
+			valueList.Add(VIEW_BOBBING);;
 			valueList.Add(ADVANCED_OPENGL);
 			valueList.Add(FRAMERATE_LIMIT);
 			valueList.Add(DIFFICULTY);
@@ -55,7 +53,6 @@ namespace net.minecraft.src
 			GAMMA,
 			RENDER_DISTANCE,
 			VIEW_BOBBING,
-			ANAGLYPH,
 			ADVANCED_OPENGL,
 			FRAMERATE_LIMIT,
 			DIFFICULTY,

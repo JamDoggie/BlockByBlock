@@ -95,10 +95,12 @@ namespace BlockByBlock.sound
 
         ~SoundCached()
         {
-            Marshal.FreeHGlobal(_bufferPtr); // Make sure to free our pointer when we're done with it!! This may still be C#, but we have to stay responsible...
+            Marshal.FreeHGlobal(_bufferPtr); // Make sure to free our pointer when we're done with it!
         }
     }
 
+    // NOTE: if you're wondering why I use unions instead of bit shifting, it's because I personally think bit shifting is ugly and hard to read. 
+    // The performance difference is, realistically, negligable.
     [StructLayout(LayoutKind.Explicit)]
     struct ByteFloatUnion
     {

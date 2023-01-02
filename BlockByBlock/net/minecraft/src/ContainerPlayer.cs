@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ContainerPlayer : Container
+    public class ContainerPlayer : Container
 	{
 		public InventoryCrafting craftMatrix;
 		public IInventory craftResult;

@@ -1,10 +1,11 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class ContainerEnchantment : Container
+    public class ContainerEnchantment : Container
 	{
 		private bool InstanceFieldsInitialized = false;
 

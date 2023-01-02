@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public interface IInventory
+    public interface IInventory
 	{
 		int SizeInventory {get;}
 

@@ -1,8 +1,9 @@
 ﻿using System;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-	public class EntityLookHelper
+    public class EntityLookHelper
 	{
 		private EntityLiving entity;
 		private float field_46149_b;

@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ContainerWorkbench : Container
+    public class ContainerWorkbench : Container
 	{
 		private bool InstanceFieldsInitialized = false;
 

@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ItemSaddle : Item
+    public class ItemSaddle : Item
 	{
 		public ItemSaddle(int i1) : base(i1)
 		{

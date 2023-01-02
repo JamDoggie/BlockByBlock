@@ -1,17 +1,17 @@
 ﻿using BlockByBlock.helpers;
+using net.minecraft.client;
+using net.minecraft.client.entity;
 using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
 
-	public class ActiveRenderInfo
+    public class ActiveRenderInfo
 	{
 		public static float objectX = 0.0F;
 		public static float objectY = 0.0F;
 		public static float objectZ = 0.0F;
 		private static int[] viewport = new int[16];
-		private static float[] modelview = new float[16];
-		private static float[] projection = new float[16];
 		private static float[] objectCoords = new float[3];
 		public static float rotationX;
 		public static float rotationXZ;
@@ -21,12 +21,10 @@ namespace net.minecraft.src
 
 		public static void updateRenderInfo(EntityPlayer entityPlayer0, bool z1)
 		{
-			GL.GetFloat(GetPName.ModelviewMatrix, modelview);
-			GL.GetFloat(GetPName.ProjectionMatrix, projection);
 			GL.GetInteger(GetPName.Viewport, viewport);
 			float f2 = (float)((viewport[0] + viewport[2]) / 2);
 			float f3 = (float)((viewport[1] + viewport[3]) / 2);
-			Glu.UnProject(f2, f3, 0.0F, modelview, projection, viewport, objectCoords);
+			Glu.UnProject(f2, f3, 0.0F, Minecraft.renderPipeline.ModelMatrix.GetMatrix(), Minecraft.renderPipeline.ProjectionMatrix.GetMatrix(), viewport, objectCoords);
 			objectX = objectCoords[0];
 			objectY = objectCoords[1];
 			objectZ = objectCoords[2];
@@ -54,7 +52,7 @@ namespace net.minecraft.src
 		public static int getBlockIdAtEntityViewpoint(World world0, EntityLiving entityLiving1, float f2)
 		{
 			Vec3D vec3D3 = projectViewFromEntity(entityLiving1, (double)f2);
-			ChunkPosition chunkPosition4 = new ChunkPosition(vec3D3);
+			ChunkPosition chunkPosition4 = new(vec3D3);
 			int i5 = world0.getBlockId(chunkPosition4.x, chunkPosition4.y, chunkPosition4.z);
 			if (i5 != 0 && Block.blocksList[i5].blockMaterial.Liquid)
 			{

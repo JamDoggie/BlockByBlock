@@ -1,11 +1,12 @@
 ﻿using System;
 using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class TileEntityEnchantmentTable : TileEntity
+    public class TileEntityEnchantmentTable : TileEntity
 	{
 		public int tickCount;
 		public float pageFlip;

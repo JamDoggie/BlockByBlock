@@ -60,12 +60,12 @@ namespace net.minecraft.src
 
 				if (this.displayLists.remaining() > 0)
 				{
-                    Minecraft.newRenderer.ModelMatrix.PushMatrix();
-                    Minecraft.newRenderer.ModelMatrix.Translate((float)((double)this.X2 - this.X1), (float)((double)this.Y2 - this.Y1), (float)((double)this.Z2 - this.Z1));
+                    Minecraft.renderPipeline.ModelMatrix.PushMatrix();
+                    Minecraft.renderPipeline.ModelMatrix.Translate((float)((double)this.X2 - this.X1), (float)((double)this.Y2 - this.Y1), (float)((double)this.Z2 - this.Z1));
 					Array.Copy(displayLists.GetUnderlyingBuffer(), intBufCache, displayLists.remaining());
 					GL.CallLists((int)displayLists.remaining() / 4, ListNameType.UnsignedInt, intBufCache); // PORTING TODO: this is sus because I ported this while tired.
 
-                    Minecraft.newRenderer.ModelMatrix.PopMatrix();
+                    Minecraft.renderPipeline.ModelMatrix.PopMatrix();
 				}
 
 			}

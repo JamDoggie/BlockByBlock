@@ -2,14 +2,17 @@
 {
     using BlockByBlock.helpers;
 	using BlockByBlock.net.minecraft.render;
+	using com.sun.org.apache.xerces.@internal.impl.dv.xs;
+	using java.lang;
+	using javax.swing;
 	using net.minecraft.client;
-    using OpenTK.Graphics.OpenGL;
+	using net.minecraft.client.entity.render;
+	using OpenTK.Graphics.OpenGL;
 	using OpenTK.Mathematics;
 	using System.Runtime.InteropServices;
 
     public class Tessellator
 	{
-		private static bool convertQuadsToTriangles { get; set; } = false;
 		private ByteBuffer byteBuffer;
 		private int[] rawBuffer;
 		private int vertexCount = 0;
@@ -36,7 +39,8 @@
 		private int vboCount = 10;
 		private int bufferSize;
 		private IntPtr bufferPointer;
-		private int VAO;
+		public int VAO;
+		private int stride = 64;
 
 		public bool CurrentlyBuildingVBO { get; set; } = false;
         
@@ -54,7 +58,7 @@
 			GL.GenBuffers(vertexBuffers.Length, vertexBuffers);
 
             VAO = GL.GenVertexArray();
-			GL.BindVertexArray(VAO);
+            GL.BindVertexArray(VAO);
         }
 
         ~Tessellator()
@@ -66,35 +70,37 @@
 		private Random testRand = new();
 
 		private bool test = false;
-
-		public unsafe virtual int draw()
+        
+		public unsafe virtual int DrawImmediate()
 		{
 			if (CurrentlyBuildingVBO)
 			{
-				throw new InvalidOperationException("Cannot draw while builing a VBO!");
+				throw new InvalidOperationException("Cannot draw while building a VBO!");
 			}
 
 			if (!isDrawing)
 			{
-				throw new System.InvalidOperationException("Not tesselating!");
+				throw new InvalidOperationException("Not tesselating!");
 			}
 			else
 			{
 				isDrawing = false;
 				if (vertexCount > 0)
 				{
+                    uploadMatrixStacks();
+
                     byteBuffer.clear();
                     byteBuffer.Put(rawBuffer, rawBufferIndex);
                     byteBuffer.position(0);
                     byteBuffer.limit(rawBufferIndex * 4);
-
+                    
                     vboIndex = (vboIndex + 1) % vboCount;
                     GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffers[vboIndex]);
                     GL.BufferData(BufferTarget.ArrayBuffer, (int)byteBuffer.getLimit(), byteBuffer.GetUnderlyingBuffer(), BufferUsageHint.StreamDraw);
 
-					setupVertexArrays(hasColor, hasTexture, hasBrightness, hasNormals);
+					SetupVertexArrays();
 
-                    if (drawMode == 7 && convertQuadsToTriangles)
+                    if (drawMode == 7) // We convert quads to tris
                     {
                         GL.DrawArrays(PrimitiveType.Triangles, 0, vertexCount);
                     }
@@ -110,43 +116,71 @@
 			}
 		}
 
-		public virtual void drawVBO(VertexBuffer vbo)
+		public virtual void Draw(VertexBuffer vbo)
 		{
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo.GLHandle);
+            uploadMatrixStacks();
+            
+            GL.VertexArrayVertexBuffer(VAO, 0, vbo.GLHandle, 0, stride);
+            GL.VertexArrayVertexBuffer(VAO, 1, vbo.GLHandle, 12, stride);
+            GL.VertexArrayVertexBuffer(VAO, 2, vbo.GLHandle, 20, stride);
+            GL.VertexArrayVertexBuffer(VAO, 3, vbo.GLHandle, 36, stride);
+            GL.VertexArrayVertexBuffer(VAO, 4, vbo.GLHandle, 48, stride);
 
-			setupVertexArrays(vbo.HasColor, vbo.HasTexture, vbo.HasBrightness, vbo.HasNormal);
-
-            if (drawMode == 7 && convertQuadsToTriangles)
+			if (!vbo.HasBrightness)
+			{
+                Minecraft.renderPipeline.SetState(RenderState.OverrideBrightnessState, true);
+				Minecraft.renderPipeline.SetBrightnessOverrideCoords(Minecraft.renderPipeline.LightmapCoords.X, Minecraft.renderPipeline.LightmapCoords.Y);
+            }
+				
+            if (vbo.DrawMode == 7) // Any vertices that are given as quads are automatically converted to tris
+								   // beforehand because GL_QUADS (draw mode 7) has been obsolete for quite some time.
             {
                 GL.DrawArrays(PrimitiveType.Triangles, 0, vbo.VertexCount);
             }
             else
             {
-                GL.DrawArrays((PrimitiveType)drawMode, 0, vbo.VertexCount);
+                GL.DrawArrays((PrimitiveType)vbo.DrawMode, 0, vbo.VertexCount);
             }
+
+            if (!vbo.HasBrightness)
+                Minecraft.renderPipeline.SetState(RenderState.OverrideBrightnessState, false);
         }
 
-        private void setupVertexArrays(bool hasColor, bool hasTexture, bool hasBrightness, bool hasNormals)
+        private void uploadMatrixStacks()
+		{
+			Minecraft.renderPipeline.TextureMatrix.UpdateUniform();
+            Minecraft.renderPipeline.ModelMatrix.UpdateUniform();
+            Minecraft.renderPipeline.ProjectionMatrix.UpdateUniform();
+
+			int normalMatrix = Minecraft.renderPipeline.GetUniform("normalMatrix");
+			Matrix4 normalMat = Minecraft.renderPipeline.ModelMatrix.GetMatrix();
+            Matrix3 normalMat3 = new(normalMat);
+			normalMat3.Invert();
+			normalMat3.Transpose();
+            GL.ProgramUniformMatrix3(Minecraft.renderPipeline.GLProgram, normalMatrix, false, ref normalMat3);
+        }
+
+        public void SetupVertexArrays()
         {
             // Vertex
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 32, 0);
             GL.EnableVertexAttribArray(0);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, stride, 0);
 
             // Texture Coords
-            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 32, 12);
             GL.EnableVertexAttribArray(1);
+            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, stride, 12);
 
             // Color
-            GL.VertexAttribPointer(2, 1, VertexAttribPointerType.Float, false, 32, 20);
             GL.EnableVertexAttribArray(2);
+            GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, stride, 20);
 
             // Normal
-            GL.VertexAttribPointer(3, 1, VertexAttribPointerType.Float, false, 32, 24);
             GL.EnableVertexAttribArray(3);
-
+            GL.VertexAttribPointer(3, 3, VertexAttribPointerType.Float, false, stride, 36);
+            
             // Brightness
-            GL.VertexAttribPointer(4, 1, VertexAttribPointerType.Float, false, 32, 28);
             GL.EnableVertexAttribArray(4);
+            GL.VertexAttribPointer(4, 2, VertexAttribPointerType.Float, false, stride, 48);
         }
 
 
@@ -167,7 +201,7 @@
 		{
             if (isDrawing)
 			{
-				throw new System.InvalidOperationException("Already tesselating!");
+				throw new InvalidOperationException("Already tesselating!");
 			}
 			else
 			{
@@ -187,21 +221,33 @@
 			CurrentlyBuildingVBO = true;
 		}
 
+        /// <summary>
+        /// Start building a VBO with a specified draw mode instead of using the current draw mode.
+        /// mode 7 = Quads
+        /// mode 4 = Triangles
+        /// </summary>
+        /// <param name="mode"></param>
+        public virtual void StartBuildingVBO(int mode)
+		{
+            CurrentlyBuildingVBO = true;
+            drawMode = mode;
+        }
+
         public virtual VertexBuffer BuildCurrentVBO()
 		{
             byteBuffer.clear();
             byteBuffer.Put(rawBuffer, rawBufferIndex);
             byteBuffer.position(0);
             byteBuffer.limit(rawBufferIndex * 4);
-
+            
             int bufferHandle = GL.GenBuffer();
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, bufferHandle);
             GL.BufferData(BufferTarget.ArrayBuffer, rawBufferIndex * 4, byteBuffer.GetUnderlyingBuffer(), BufferUsageHint.DynamicDraw);
-
-			CurrentlyBuildingVBO = false;
             
-			VertexBuffer vbo = new(rawBufferIndex * 4, vertexCount, bufferHandle, hasBrightness, hasColor, hasTexture, hasNormals);
+            CurrentlyBuildingVBO = false;
+            
+			VertexBuffer vbo = new(rawBufferIndex * 4, vertexCount, bufferHandle, drawMode, hasBrightness, hasColor, hasTexture, hasNormals);
 
 			reset();
 
@@ -296,49 +342,60 @@
 			}
 		}
 
-		public virtual void addVertexWithUV(double d1, double d3, double d5, double d7, double d9)
+		public virtual void AddVertexWithUV(double x, double y, double z, double uvX, double uvY)
 		{
-			setTextureUV(d7, d9);
-			addVertex(d1, d3, d5);
+			setTextureUV(uvX, uvY);
+			addVertex(x, y, z);
 		}
-
+        
 		public virtual void addVertex(double d1, double d3, double d5)
 		{
 			++addedVertices;
-			if (drawMode == 7 && convertQuadsToTriangles && addedVertices % 4 == 0)
+            
+            // Convert quads to triangles
+            if (drawMode == 7 && addedVertices % 4 == 0) 
 			{
-				for (int i7 = 0; i7 < 2; ++i7)
+				for (int faceIter = 0; faceIter < 2; ++faceIter)
 				{
-					int i8 = 8 * (3 - i7);
+					int i8 = 16 * (3 - faceIter);
 					if (hasTexture)
 					{
 						rawBuffer[rawBufferIndex + 3] = rawBuffer[rawBufferIndex - i8 + 3];
 						rawBuffer[rawBufferIndex + 4] = rawBuffer[rawBufferIndex - i8 + 4];
 					}
-
-					if (hasBrightness)
-					{
-						rawBuffer[rawBufferIndex + 7] = rawBuffer[rawBufferIndex - i8 + 7];
-					}
-					else
-                    {
-                        rawBuffer[rawBufferIndex + 7] = 0x20;
-                    }
-
+                    
                     if (hasColor)
 					{
-						rawBuffer[rawBufferIndex + 5] = rawBuffer[rawBufferIndex - i8 + 5];
-					}
+						for (int i = 0; i < 4; i++)
+						{
+                            rawBuffer[rawBufferIndex + 5 + i] = rawBuffer[rawBufferIndex - i8 + 5 + i];
+                        }
+                    }
 					else
 					{
-                        rawBuffer[rawBufferIndex + 5] = 0xFFFFFF;
+                        for (int i = 0; i < 4; i++)
+						{
+                            rawBuffer[rawBufferIndex + 5 + i] = JTypes.FloatToRawIntBits(1.0f);
+                        }
+                    }
+                    
+					if (hasNormals)
+					{
+                        rawBuffer[rawBufferIndex + 9] = rawBuffer[rawBufferIndex - i8 + 9];
+                        rawBuffer[rawBufferIndex + 10] = rawBuffer[rawBufferIndex - i8 + 10];
+                        rawBuffer[rawBufferIndex + 11] = rawBuffer[rawBufferIndex - i8 + 11];
                     }
 
-					rawBuffer[rawBufferIndex + 0] = rawBuffer[rawBufferIndex - i8 + 0];
+					// Brightness
+                    rawBuffer[rawBufferIndex + 12] = rawBuffer[rawBufferIndex - i8 + 12];
+                    rawBuffer[rawBufferIndex + 13] = rawBuffer[rawBufferIndex - i8 + 13];
+
+					// Vertex
+                    rawBuffer[rawBufferIndex + 0] = rawBuffer[rawBufferIndex - i8 + 0];
 					rawBuffer[rawBufferIndex + 1] = rawBuffer[rawBufferIndex - i8 + 1];
 					rawBuffer[rawBufferIndex + 2] = rawBuffer[rawBufferIndex - i8 + 2];
 					++vertexCount;
-					rawBufferIndex += 8;
+					rawBufferIndex += stride / sizeof(int);
 				}
 			}
 
@@ -348,40 +405,85 @@
 				rawBuffer[rawBufferIndex + 4] = JTypes.FloatToRawIntBits((float)textureV);
 			}
 
-			if (hasBrightness)
-			{
-				rawBuffer[rawBufferIndex + 7] = brightness;
-			}
-            else
-            {
-                rawBuffer[rawBufferIndex + 7] = 0x20;
-            }
-
             if (hasColor)
-			{
-				rawBuffer[rawBufferIndex + 5] = color;
-			}
+            {
+                IntByteUnion intByteUnion = new() { integer = color };
+                rawBuffer[rawBufferIndex + 5] = JTypes.FloatToRawIntBits(intByteUnion.byte0 / 255f);
+                rawBuffer[rawBufferIndex + 6] = JTypes.FloatToRawIntBits(intByteUnion.byte1 / 255f);
+                rawBuffer[rawBufferIndex + 7] = JTypes.FloatToRawIntBits(intByteUnion.byte2 / 255f);
+                rawBuffer[rawBufferIndex + 8] = JTypes.FloatToRawIntBits(intByteUnion.byte3 / 255f);
+            }
             else
             {
-                rawBuffer[rawBufferIndex + 5] = 0xFFFFFF;
+                for (int i = 0; i < 4; i++)
+                {
+                    rawBuffer[rawBufferIndex + 5 + i] = JTypes.FloatToRawIntBits(1.0f);
+                }
             }
 
             if (hasNormals)
+            {
+                IntSByteUnion intByteUnion = new() { integer = normal };
+                Vector3 currentNormal = new Vector3(intByteUnion.byte0 / 127f, intByteUnion.byte1 / 127f, intByteUnion.byte2 / 127f);
+                
+				rawBuffer[rawBufferIndex + 9] = JTypes.FloatToRawIntBits(currentNormal.X);
+                rawBuffer[rawBufferIndex + 10] = JTypes.FloatToRawIntBits(currentNormal.Y);
+                rawBuffer[rawBufferIndex + 11] = JTypes.FloatToRawIntBits(currentNormal.Z);
+            }
+			else
 			{
-				rawBuffer[rawBufferIndex + 6] = normal;
-			}
+				if (Minecraft.renderPipeline != null)
+				{
+                    Vector3 currentNormal = Minecraft.renderPipeline.CurrentNormal;
 
-			rawBuffer[rawBufferIndex + 0] = JTypes.FloatToRawIntBits((float)(d1 + xOffset));
+                    rawBuffer[rawBufferIndex + 9] = JTypes.FloatToRawIntBits(currentNormal.X);
+                    rawBuffer[rawBufferIndex + 10] = JTypes.FloatToRawIntBits(currentNormal.Y);
+                    rawBuffer[rawBufferIndex + 11] = JTypes.FloatToRawIntBits(currentNormal.Z);
+                }
+            }
+
+            if (hasBrightness)
+			{   
+                float x = brightness % 65536f;
+                float y = brightness / 65536f;
+
+				x /= 16f;
+				y /= 16f;
+
+                rawBuffer[rawBufferIndex + 12] = JTypes.FloatToRawIntBits((x / (17F)) + 0.0625f);
+                rawBuffer[rawBufferIndex + 13] = JTypes.FloatToRawIntBits((y / (17F)) + 0.0625f);
+			}
+            else
+            {
+				if (Minecraft.renderPipeline != null)
+				{
+                    rawBuffer[rawBufferIndex + 12] = JTypes.FloatToRawIntBits(Minecraft.renderPipeline.LightmapCoords.X);
+                    rawBuffer[rawBufferIndex + 13] = JTypes.FloatToRawIntBits(Minecraft.renderPipeline.LightmapCoords.Y);
+                }
+                else
+				{
+                    rawBuffer[rawBufferIndex + 12] = JTypes.FloatToRawIntBits(1.0f - 0.0625f);
+                    rawBuffer[rawBufferIndex + 13] = JTypes.FloatToRawIntBits(1.0f - 0.0625f);
+                }
+            }
+
+
+
+            rawBuffer[rawBufferIndex + 0] = JTypes.FloatToRawIntBits((float)(d1 + xOffset));
 			rawBuffer[rawBufferIndex + 1] = JTypes.FloatToRawIntBits((float)(d3 + yOffset));
 			rawBuffer[rawBufferIndex + 2] = JTypes.FloatToRawIntBits((float)(d5 + zOffset));
-			rawBufferIndex += 8;
+			rawBufferIndex += stride / sizeof(int);
 			++vertexCount;
-			if (vertexCount % 4 == 0 && rawBufferIndex >= bufferSize - 32)
+
+			// This should never happen, and is not a good way to deal with this case anyway because now the tessellator
+			// can be set to start building a VBO instead of starting to draw.
+            /*
+			if (vertexCount % 4 == 0 && rawBufferIndex >= bufferSize - stride)
 			{
-				draw();
+				DrawImmediate();
 				isDrawing = true;
 			}
-
+			*/
 		}
 
 		public virtual int ColorOpaque_I
@@ -408,13 +510,19 @@
 			isColorDisabled = true;
 		}
 
-		public virtual void setNormal(float f1, float f2, float f3)
+		public virtual void SetNormal(float f1, float f2, float f3)
 		{
-			hasNormals = true;
-			sbyte b4 = (sbyte)((int)(f1 * 127.0F));
-			sbyte b5 = (sbyte)((int)(f2 * 127.0F));
-			sbyte b6 = (sbyte)((int)(f3 * 127.0F));
-			normal = b4 & 255 | (b5 & 255) << 8 | (b6 & 255) << 16;
+			Vector3 vec3 = new(f1, f2, f3);
+			vec3.Normalize();
+
+            hasNormals = true;
+			sbyte b4 = (sbyte)((vec3.X * 127.0F));
+			sbyte b5 = (sbyte)((vec3.Y * 127.0F));
+			sbyte b6 = (sbyte)((vec3.Z * 127.0F));
+
+            IntSByteUnion intByteUnion = new() { byte0 = b4, byte1 = b5, byte2 = b6, byte3 = 0 };
+
+            normal = intByteUnion.integer;
 		}
 
 		public virtual void setTranslation(double d1, double d3, double d5)
@@ -432,4 +540,31 @@
 		}
 	}
 
+    [StructLayout(LayoutKind.Explicit)]
+    struct IntFloatShortUnion
+	{
+		[FieldOffset(0)]
+		public int integer;
+
+        [FieldOffset(0)]
+        public float single;
+
+        [FieldOffset(0)]
+        public byte byte0;
+
+        [FieldOffset(1)]
+        public byte byte1;
+
+        [FieldOffset(2)]
+        public byte byte2;
+
+        [FieldOffset(3)]
+        public byte byte3;
+
+        [FieldOffset(0)]
+        public short short0;
+
+        [FieldOffset(2)]
+        public short short1;
+    }
 }

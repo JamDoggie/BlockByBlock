@@ -1,9 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class Packet21PickupSpawn : Packet
+    public class Packet21PickupSpawn : Packet
 	{
 		public int entityId;
 		public int xPosition;

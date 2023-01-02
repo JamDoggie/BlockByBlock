@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class BlockSoulSand : Block
+    public class BlockSoulSand : Block
 	{
 		public BlockSoulSand(int i1, int i2) : base(i1, i2, Material.sand)
 		{

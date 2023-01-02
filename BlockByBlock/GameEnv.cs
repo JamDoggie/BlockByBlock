@@ -16,9 +16,11 @@ namespace BlockByBlock
             Assembly assembly = Assembly.GetExecutingAssembly();
             List<string> resourceNames = new List<string>(assembly.GetManifestResourceNames());
 
-            string newPath;
+            string newPath = path.Replace(@"/", ".");
 
-            newPath = path.Replace(@"/", ".");
+            if (newPath.StartsWith("."))
+                newPath = newPath.Substring(1);
+
             newPath = resourceNames.FirstOrDefault(r => r.Contains(newPath));
 
             if (newPath == null)

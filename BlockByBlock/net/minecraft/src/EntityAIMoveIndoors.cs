@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class EntityAIMoveIndoors : EntityAIBase
+    public class EntityAIMoveIndoors : EntityAIBase
 	{
 		private EntityCreature entityObj;
 		private VillageDoorInfo? doorInfo;

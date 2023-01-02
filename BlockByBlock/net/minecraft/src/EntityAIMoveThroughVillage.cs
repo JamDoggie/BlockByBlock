@@ -1,9 +1,10 @@
 ﻿using System.Collections;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class EntityAIMoveThroughVillage : EntityAIBase
+    public class EntityAIMoveThroughVillage : EntityAIBase
 	{
 		private EntityCreature theEntity;
 		private float field_48290_b;

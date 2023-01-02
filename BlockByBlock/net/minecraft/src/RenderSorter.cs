@@ -1,7 +1,9 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
 
-	public class RenderSorter : IComparer<WorldRenderer>
+    public class RenderSorter : IComparer<WorldRenderer>
 	{
 		private EntityLiving baseEntity;
 

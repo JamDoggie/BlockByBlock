@@ -1,8 +1,9 @@
 ﻿namespace net.minecraft.src
 {
+    using net.minecraft.client.entity.render;
     using OpenTK.Graphics.OpenGL;
     using Minecraft = net.minecraft.client.Minecraft;
-	public class GuiStats : GuiScreen
+    public class GuiStats : GuiScreen
 	{
 		private static RenderItem renderItem = new RenderItem();
 		protected internal GuiScreen parentGui;
@@ -106,15 +107,15 @@
 		private void drawSprite(int i1, int i2, int i3, int i4)
 		{
 			int i5 = this.mc.renderEngine.getTexture("/gui/slot.png");
-			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i5);
 			Tessellator tessellator10 = Tessellator.instance;
 			tessellator10.startDrawingQuads();
-			tessellator10.addVertexWithUV((double)(i1 + 0), (double)(i2 + 18), (double)this.zLevel, (double)((float)(i3 + 0) * 0.0078125F), (double)((float)(i4 + 18) * 0.0078125F));
-			tessellator10.addVertexWithUV((double)(i1 + 18), (double)(i2 + 18), (double)this.zLevel, (double)((float)(i3 + 18) * 0.0078125F), (double)((float)(i4 + 18) * 0.0078125F));
-			tessellator10.addVertexWithUV((double)(i1 + 18), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + 18) * 0.0078125F), (double)((float)(i4 + 0) * 0.0078125F));
-			tessellator10.addVertexWithUV((double)(i1 + 0), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + 0) * 0.0078125F), (double)((float)(i4 + 0) * 0.0078125F));
-			tessellator10.draw();
+			tessellator10.AddVertexWithUV((double)(i1 + 0), (double)(i2 + 18), (double)this.zLevel, (double)((float)(i3 + 0) * 0.0078125F), (double)((float)(i4 + 18) * 0.0078125F));
+			tessellator10.AddVertexWithUV((double)(i1 + 18), (double)(i2 + 18), (double)this.zLevel, (double)((float)(i3 + 18) * 0.0078125F), (double)((float)(i4 + 18) * 0.0078125F));
+			tessellator10.AddVertexWithUV((double)(i1 + 18), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + 18) * 0.0078125F), (double)((float)(i4 + 0) * 0.0078125F));
+			tessellator10.AddVertexWithUV((double)(i1 + 0), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + 0) * 0.0078125F), (double)((float)(i4 + 0) * 0.0078125F));
+			tessellator10.DrawImmediate();
 		}
 
 		internal static Minecraft getMinecraft(GuiStats guiStats0)

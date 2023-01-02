@@ -1,9 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class Packet20NamedEntitySpawn : Packet
+    public class Packet20NamedEntitySpawn : Packet
 	{
 		public int entityId;
 		public string name;

@@ -1,4 +1,6 @@
-﻿namespace net.minecraft.src
+﻿using BlockByBlock.net.minecraft.render;
+
+namespace net.minecraft.src
 {
 	public class TexturedQuad
 	{
@@ -24,7 +26,7 @@
 			positionTextureVertex1[3] = positionTextureVertex1[3].setTexturePosition((float)i4 / f6 - f8, (float)i5 / f7 - f9);
 		}
 
-		public virtual void flipFace()
+		public virtual void FlipFace()
 		{
 			PositionTextureVertex[] positionTextureVertex1 = new PositionTextureVertex[this.vertexPositions.Length];
 
@@ -36,28 +38,26 @@
 			this.vertexPositions = positionTextureVertex1;
 		}
 
-		public virtual void draw(Tessellator tessellator1, float f2)
+		public virtual void AddToCurrentBuildingVBO(Tessellator tessellator1)
 		{
 			Vec3D vec3D3 = this.vertexPositions[1].vector3D.subtract(this.vertexPositions[0].vector3D);
 			Vec3D vec3D4 = this.vertexPositions[1].vector3D.subtract(this.vertexPositions[2].vector3D);
 			Vec3D vec3D5 = vec3D4.crossProduct(vec3D3).normalize();
-			tessellator1.startDrawingQuads();
+            
 			if (this.invertNormal)
 			{
-				tessellator1.setNormal(-((float)vec3D5.xCoord), -((float)vec3D5.yCoord), -((float)vec3D5.zCoord));
+				tessellator1.SetNormal(-((float)vec3D5.xCoord), -((float)vec3D5.yCoord), -((float)vec3D5.zCoord));
 			}
 			else
 			{
-				tessellator1.setNormal((float)vec3D5.xCoord, (float)vec3D5.yCoord, (float)vec3D5.zCoord);
+				tessellator1.SetNormal((float)vec3D5.xCoord, (float)vec3D5.yCoord, (float)vec3D5.zCoord);
 			}
 
 			for (int i6 = 0; i6 < 4; ++i6)
 			{
 				PositionTextureVertex positionTextureVertex7 = this.vertexPositions[i6];
-				tessellator1.addVertexWithUV((double)((float)positionTextureVertex7.vector3D.xCoord * f2), (double)((float)positionTextureVertex7.vector3D.yCoord * f2), (double)((float)positionTextureVertex7.vector3D.zCoord * f2), (double)positionTextureVertex7.texturePositionX, (double)positionTextureVertex7.texturePositionY);
+				tessellator1.AddVertexWithUV((double)((float)positionTextureVertex7.vector3D.xCoord), (double)((float)positionTextureVertex7.vector3D.yCoord), (double)((float)positionTextureVertex7.vector3D.zCoord), (double)positionTextureVertex7.texturePositionX, (double)positionTextureVertex7.texturePositionY);
 			}
-
-			tessellator1.draw();
 		}
 	}
 

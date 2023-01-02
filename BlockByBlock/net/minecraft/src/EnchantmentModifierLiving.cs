@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	internal sealed class EnchantmentModifierLiving : IEnchantmentModifier
+    internal sealed class EnchantmentModifierLiving : IEnchantmentModifier
 	{
 		public int livingModifier;
 		public EntityLiving entityLiving;

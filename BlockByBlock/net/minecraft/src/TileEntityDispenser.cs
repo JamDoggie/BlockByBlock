@@ -1,9 +1,10 @@
 ﻿using System;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class TileEntityDispenser : TileEntity, IInventory
+    public class TileEntityDispenser : TileEntity, IInventory
 	{
 		private ItemStack[] dispenserContents = new ItemStack[9];
 		private Random dispenserRandom = new Random();

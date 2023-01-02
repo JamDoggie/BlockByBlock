@@ -1,7 +1,9 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
 
-	public class EntityAIPlay : EntityAIBase
+    public class EntityAIPlay : EntityAIBase
 	{
 		private EntityVillager villagerObj;
 		private EntityLiving targetVillager;

@@ -3,6 +3,7 @@ using net.minecraft.client;
 using net.minecraft.render;
 using net.minecraft.src;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,30 +17,42 @@ namespace net.minecraft.render
     {
         public int GLProgram { get; set; }
 
-        public MatrixStack CameraMatrix { get; set; }
+        public MatrixStack ProjectionMatrix { get; set; }
         public MatrixStack ModelMatrix { get; set; }
         public MatrixStack TextureMatrix { get; set; }
+
+        public LightRenderer LightRenderer { get; set; }
+        public FogRenderer FogRenderer { get; set; }
+
+        public Vector2 LightmapCoords { get; set; } = new Vector2(0, 0);
+
+        public Vector3 CurrentNormal { get; set; } = new(0); // Default normal of 0,0,0
 
         #region DEBUG STUFF
         private static DebugProc _debugProcCallback = DebugCallback;
         private static GCHandle _debugProcCallbackHandle;
         #endregion
 
+        private Dictionary<string, int> _uniformLocations = new Dictionary<string, int>();
+
         public RenderPipeline()
         {
-            CameraMatrix = new(this, "projectionMatrix");
-            ModelMatrix = new(this, "modelMatrix");
+            ProjectionMatrix = new(this, "projectionMatrix");
+            ModelMatrix = new(this, "modelViewMatrix");
             TextureMatrix = new(this, "textureMatrix");
+
+            LightRenderer = new(this);
+            FogRenderer = new(this);
         }
 
         public void InitRenderer()
         {
             #region DEBUG PRINTING
-            _debugProcCallbackHandle = GCHandle.Alloc(_debugProcCallback);
+            /*_debugProcCallbackHandle = GCHandle.Alloc(_debugProcCallback);
 
             GL.DebugMessageCallback(_debugProcCallback, IntPtr.Zero);
             GL.Enable(EnableCap.DebugOutput);
-            GL.Enable(EnableCap.DebugOutputSynchronous);
+            GL.Enable(EnableCap.DebugOutputSynchronous);*/
             #endregion
 
             GLProgram = GL.CreateProgram();
@@ -57,27 +70,83 @@ namespace net.minecraft.render
                 Console.WriteLine(infoLog);
             }
 
-            CameraMatrix.InitStack();
+            ProjectionMatrix.InitStack();
             ModelMatrix.InitStack();
             TextureMatrix.InitStack();
-            
-            
 
             SetState(RenderState.TextureState, true);
-            SetState(RenderState.ColorState, false);
-
-            
+            SetState(RenderState.ColorState, true);
         }
 
         public int GetUniform(string uniform)
         {
-            return GL.GetUniformLocation(GLProgram, uniform);
+            if (_uniformLocations.ContainsKey(uniform))
+            {
+                return _uniformLocations[uniform];
+            }
+
+            int location = GL.GetUniformLocation(GLProgram, uniform);
+            _uniformLocations.Add(uniform, location);
+
+            return location;
         }
         
         public void SetState(RenderState state, bool active)
         {
             int uniform = GetUniform(state.ToString());
             GL.ProgramUniform1(GLProgram, uniform, active ? 1 : 0);
+        }
+
+        public void SetColor(float r, float g, float b, float a)
+        {
+            int uniform = GetUniform("GlobalColor");
+            GL.ProgramUniform4(GLProgram, uniform, r, g, b, a);
+        }
+
+
+        public void SetColor(float f)
+        {
+            SetColor(f, f, f, f);
+        }
+
+        public void SetColor(float r, float g, float b)
+        {
+            SetColor(r, g, b, 1.0f);
+        }
+
+        public void SetNormal(float x, float y, float z, bool normalize = false)
+        {
+            Vector4 normalVec = new(x, y, z, 1.0f);
+            CurrentNormal = normalVec.Xyz;
+
+            if (normalize)
+                CurrentNormal.Normalize();
+        }
+
+        public void SetLightmapCoords(float x, float y)
+        {
+            LightmapCoords = new(x, y);
+        }
+
+        private string brightnessOverride = "BrightnessOverride";
+
+        internal void SetBrightnessOverrideCoords(float x, float y)
+        {
+            int uniform = GetUniform(brightnessOverride);
+
+            GL.ProgramUniform2(GLProgram, uniform, x, y);
+        }
+
+        public void AlphaTestThreshold(float threshold)
+        {
+            int uniform = GetUniform("AlphaTestThreshold");
+            GL.ProgramUniform1(GLProgram, uniform, threshold);
+        }
+
+        public void SetActiveTexture(int texture)
+        {
+            int uniform = GetUniform("activeTexture");
+            GL.ProgramUniform1(GLProgram, uniform, texture);
         }
 
         public void LoadAndCompileShaders()
@@ -96,7 +165,7 @@ namespace net.minecraft.render
 
                 vertexShaderFiles = vertexDir.GetFiles();
                 fragmentShaderFiles = fragmentDir.GetFiles();
-
+                
                 // Vertex shaders
                 foreach (FileInfo vertexShaderFile in vertexShaderFiles)
                 {
@@ -183,5 +252,11 @@ namespace net.minecraft.render
         {
 
         }
+    }
+
+    public struct ShaderInclude
+    {
+        public string Name;
+        public string Source;
     }
 }

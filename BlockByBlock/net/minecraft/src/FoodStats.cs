@@ -1,8 +1,9 @@
 ﻿using System;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-	public class FoodStats
+    public class FoodStats
 	{
 		private int foodLevel = 20;
 		private float foodSaturationLevel = 5.0F;

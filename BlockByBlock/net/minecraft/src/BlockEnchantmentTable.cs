@@ -1,10 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-	public class BlockEnchantmentTable : BlockContainer
+    public class BlockEnchantmentTable : BlockContainer
 	{
 		protected internal BlockEnchantmentTable(int i1) : base(i1, 166, Material.rock)
 		{

@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ItemShears : Item
+    public class ItemShears : Item
 	{
 		public ItemShears(int i1) : base(i1)
 		{

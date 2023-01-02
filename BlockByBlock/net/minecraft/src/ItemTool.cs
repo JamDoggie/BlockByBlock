@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ItemTool : Item
+    public class ItemTool : Item
 	{
 		private Block[] blocksEffectiveAgainst;
 		protected internal float efficiencyOnProperMaterial = 4.0F;

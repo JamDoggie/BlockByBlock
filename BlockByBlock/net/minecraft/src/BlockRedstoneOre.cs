@@ -1,10 +1,11 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class BlockRedstoneOre : Block
+    public class BlockRedstoneOre : Block
 	{
 		private bool glowing;
 

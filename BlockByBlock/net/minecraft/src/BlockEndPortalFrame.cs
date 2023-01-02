@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class BlockEndPortalFrame : Block
+    public class BlockEndPortalFrame : Block
 	{
 		public BlockEndPortalFrame(int i1) : base(i1, 159, Material.glass)
 		{

@@ -1,8 +1,9 @@
 ﻿using System;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-	public class EntityAITempt : EntityAIBase
+    public class EntityAITempt : EntityAIBase
 	{
 		private EntityCreature temptedEntity;
 		private float field_48275_b;

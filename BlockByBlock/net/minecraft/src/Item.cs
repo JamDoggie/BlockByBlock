@@ -1,10 +1,11 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class Item
+    public class Item
 	{
 		protected internal static RandomExtended itemRand = new RandomExtended();
 		public static Item[] itemsList = new Item[32000];

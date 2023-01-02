@@ -1,7 +1,8 @@
 ﻿namespace net.minecraft.src
 {
-    using net.minecraft.client;
-    using OpenTK.Graphics.OpenGL;
+	using BlockByBlock.net.minecraft.render;
+	using net.minecraft.client;
+	using OpenTK.Graphics.OpenGL;
     using OpenTK.Windowing.GraphicsLibraryFramework;
     using Minecraft = net.minecraft.client.Minecraft;
 
@@ -255,19 +256,19 @@
 			}
 
 			this.bindAmountScrolled();
-			GL.Disable(EnableCap.Lighting);
-			GL.Disable(EnableCap.Fog);
-			Tessellator tessellator18 = Tessellator.instance;
+			Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
+            Minecraft.renderPipeline.SetState(RenderState.FogState, false);
+            Tessellator tessellator18 = Tessellator.instance;
 			GL.BindTexture(TextureTarget.Texture2D, mc.renderEngine.getTexture("/gui/background.png"));
-			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 			float f17 = 32.0F;
 			tessellator18.startDrawingQuads();
 			tessellator18.ColorOpaque_I = 2105376;
-			tessellator18.addVertexWithUV((double)this.left, (double)this.bottom, 0.0D, (double)((float)this.left / f17), (double)((float)(this.bottom + (int)this.amountScrolled) / f17));
-			tessellator18.addVertexWithUV((double)this.right, (double)this.bottom, 0.0D, (double)((float)this.right / f17), (double)((float)(this.bottom + (int)this.amountScrolled) / f17));
-			tessellator18.addVertexWithUV((double)this.right, (double)this.top, 0.0D, (double)((float)this.right / f17), (double)((float)(this.top + (int)this.amountScrolled) / f17));
-			tessellator18.addVertexWithUV((double)this.left, (double)this.top, 0.0D, (double)((float)this.left / f17), (double)((float)(this.top + (int)this.amountScrolled) / f17));
-			tessellator18.draw();
+			tessellator18.AddVertexWithUV((double)this.left, (double)this.bottom, 0.0D, (double)((float)this.left / f17), (double)((float)(this.bottom + (int)this.amountScrolled) / f17));
+			tessellator18.AddVertexWithUV((double)this.right, (double)this.bottom, 0.0D, (double)((float)this.right / f17), (double)((float)(this.bottom + (int)this.amountScrolled) / f17));
+			tessellator18.AddVertexWithUV((double)this.right, (double)this.top, 0.0D, (double)((float)this.right / f17), (double)((float)(this.top + (int)this.amountScrolled) / f17));
+			tessellator18.AddVertexWithUV((double)this.left, (double)this.top, 0.0D, (double)((float)this.left / f17), (double)((float)(this.top + (int)this.amountScrolled) / f17));
+			tessellator18.DrawImmediate();
 			i9 = this.width / 2 - 92 - 16;
 			i10 = this.top + 4 - (int)this.amountScrolled;
 			if (this.field_27262_q)
@@ -286,22 +287,22 @@
 					{
 						i14 = this.width / 2 - 110;
 						int i15 = this.width / 2 + 110;
-						GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
-						GL.Disable(EnableCap.Texture2D);
-						tessellator18.startDrawingQuads();
+						Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+                        Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
+                        tessellator18.startDrawingQuads();
 						tessellator18.ColorOpaque_I = 8421504;
-						tessellator18.addVertexWithUV((double)i14, (double)(i20 + i13 + 2), 0.0D, 0.0D, 1.0D);
-						tessellator18.addVertexWithUV((double)i15, (double)(i20 + i13 + 2), 0.0D, 1.0D, 1.0D);
-						tessellator18.addVertexWithUV((double)i15, (double)(i20 - 2), 0.0D, 1.0D, 0.0D);
-						tessellator18.addVertexWithUV((double)i14, (double)(i20 - 2), 0.0D, 0.0D, 0.0D);
+						tessellator18.AddVertexWithUV((double)i14, (double)(i20 + i13 + 2), 0.0D, 0.0D, 1.0D);
+						tessellator18.AddVertexWithUV((double)i15, (double)(i20 + i13 + 2), 0.0D, 1.0D, 1.0D);
+						tessellator18.AddVertexWithUV((double)i15, (double)(i20 - 2), 0.0D, 1.0D, 0.0D);
+						tessellator18.AddVertexWithUV((double)i14, (double)(i20 - 2), 0.0D, 0.0D, 0.0D);
 						tessellator18.ColorOpaque_I = 0;
-						tessellator18.addVertexWithUV((double)(i14 + 1), (double)(i20 + i13 + 1), 0.0D, 0.0D, 1.0D);
-						tessellator18.addVertexWithUV((double)(i15 - 1), (double)(i20 + i13 + 1), 0.0D, 1.0D, 1.0D);
-						tessellator18.addVertexWithUV((double)(i15 - 1), (double)(i20 - 1), 0.0D, 1.0D, 0.0D);
-						tessellator18.addVertexWithUV((double)(i14 + 1), (double)(i20 - 1), 0.0D, 0.0D, 0.0D);
-						tessellator18.draw();
-						GL.Enable(EnableCap.Texture2D);
-					}
+						tessellator18.AddVertexWithUV((double)(i14 + 1), (double)(i20 + i13 + 1), 0.0D, 0.0D, 1.0D);
+						tessellator18.AddVertexWithUV((double)(i15 - 1), (double)(i20 + i13 + 1), 0.0D, 1.0D, 1.0D);
+						tessellator18.AddVertexWithUV((double)(i15 - 1), (double)(i20 - 1), 0.0D, 1.0D, 0.0D);
+						tessellator18.AddVertexWithUV((double)(i14 + 1), (double)(i20 - 1), 0.0D, 0.0D, 0.0D);
+						tessellator18.DrawImmediate();
+                        Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
+                    }
 
 					this.drawSlot(i11, i9, i20, i13, tessellator18);
 				}
@@ -313,25 +314,25 @@
 			this.overlayBackground(this.bottom, this.height, 255, 255);
 			GL.Enable(EnableCap.Blend);
 			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-			GL.Disable(EnableCap.AlphaTest);
-			GL.ShadeModel(ShadingModel.Smooth);
-			GL.Disable(EnableCap.Texture2D);
-			tessellator18.startDrawingQuads();
+            Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
+            Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, true);
+            Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
+            tessellator18.startDrawingQuads();
 			tessellator18.setColorRGBA_I(0, 0);
-			tessellator18.addVertexWithUV((double)this.left, (double)(this.top + b19), 0.0D, 0.0D, 1.0D);
-			tessellator18.addVertexWithUV((double)this.right, (double)(this.top + b19), 0.0D, 1.0D, 1.0D);
+			tessellator18.AddVertexWithUV((double)this.left, (double)(this.top + b19), 0.0D, 0.0D, 1.0D);
+			tessellator18.AddVertexWithUV((double)this.right, (double)(this.top + b19), 0.0D, 1.0D, 1.0D);
 			tessellator18.setColorRGBA_I(0, 255);
-			tessellator18.addVertexWithUV((double)this.right, (double)this.top, 0.0D, 1.0D, 0.0D);
-			tessellator18.addVertexWithUV((double)this.left, (double)this.top, 0.0D, 0.0D, 0.0D);
-			tessellator18.draw();
+			tessellator18.AddVertexWithUV((double)this.right, (double)this.top, 0.0D, 1.0D, 0.0D);
+			tessellator18.AddVertexWithUV((double)this.left, (double)this.top, 0.0D, 0.0D, 0.0D);
+			tessellator18.DrawImmediate();
 			tessellator18.startDrawingQuads();
 			tessellator18.setColorRGBA_I(0, 255);
-			tessellator18.addVertexWithUV((double)this.left, (double)this.bottom, 0.0D, 0.0D, 1.0D);
-			tessellator18.addVertexWithUV((double)this.right, (double)this.bottom, 0.0D, 1.0D, 1.0D);
+			tessellator18.AddVertexWithUV((double)this.left, (double)this.bottom, 0.0D, 0.0D, 1.0D);
+			tessellator18.AddVertexWithUV((double)this.right, (double)this.bottom, 0.0D, 1.0D, 1.0D);
 			tessellator18.setColorRGBA_I(0, 0);
-			tessellator18.addVertexWithUV((double)this.right, (double)(this.bottom - b19), 0.0D, 1.0D, 0.0D);
-			tessellator18.addVertexWithUV((double)this.left, (double)(this.bottom - b19), 0.0D, 0.0D, 0.0D);
-			tessellator18.draw();
+			tessellator18.AddVertexWithUV((double)this.right, (double)(this.bottom - b19), 0.0D, 1.0D, 0.0D);
+			tessellator18.AddVertexWithUV((double)this.left, (double)(this.bottom - b19), 0.0D, 0.0D, 0.0D);
+			tessellator18.DrawImmediate();
 			i20 = this.ContentHeight - (this.bottom - this.top - 4);
 			if (i20 > 0 && this.ContentHeight > 0)
 			{
@@ -354,48 +355,48 @@
 
 				tessellator18.startDrawingQuads();
 				tessellator18.setColorRGBA_I(0, 255);
-				tessellator18.addVertexWithUV((double)i5, (double)this.bottom, 0.0D, 0.0D, 1.0D);
-				tessellator18.addVertexWithUV((double)i6, (double)this.bottom, 0.0D, 1.0D, 1.0D);
-				tessellator18.addVertexWithUV((double)i6, (double)this.top, 0.0D, 1.0D, 0.0D);
-				tessellator18.addVertexWithUV((double)i5, (double)this.top, 0.0D, 0.0D, 0.0D);
-				tessellator18.draw();
+				tessellator18.AddVertexWithUV((double)i5, (double)this.bottom, 0.0D, 0.0D, 1.0D);
+				tessellator18.AddVertexWithUV((double)i6, (double)this.bottom, 0.0D, 1.0D, 1.0D);
+				tessellator18.AddVertexWithUV((double)i6, (double)this.top, 0.0D, 1.0D, 0.0D);
+				tessellator18.AddVertexWithUV((double)i5, (double)this.top, 0.0D, 0.0D, 0.0D);
+				tessellator18.DrawImmediate();
 				tessellator18.startDrawingQuads();
 				tessellator18.setColorRGBA_I(8421504, 255);
-				tessellator18.addVertexWithUV((double)i5, (double)(i14 + i13), 0.0D, 0.0D, 1.0D);
-				tessellator18.addVertexWithUV((double)i6, (double)(i14 + i13), 0.0D, 1.0D, 1.0D);
-				tessellator18.addVertexWithUV((double)i6, (double)i14, 0.0D, 1.0D, 0.0D);
-				tessellator18.addVertexWithUV((double)i5, (double)i14, 0.0D, 0.0D, 0.0D);
-				tessellator18.draw();
+				tessellator18.AddVertexWithUV((double)i5, (double)(i14 + i13), 0.0D, 0.0D, 1.0D);
+				tessellator18.AddVertexWithUV((double)i6, (double)(i14 + i13), 0.0D, 1.0D, 1.0D);
+				tessellator18.AddVertexWithUV((double)i6, (double)i14, 0.0D, 1.0D, 0.0D);
+				tessellator18.AddVertexWithUV((double)i5, (double)i14, 0.0D, 0.0D, 0.0D);
+				tessellator18.DrawImmediate();
 				tessellator18.startDrawingQuads();
 				tessellator18.setColorRGBA_I(12632256, 255);
-				tessellator18.addVertexWithUV((double)i5, (double)(i14 + i13 - 1), 0.0D, 0.0D, 1.0D);
-				tessellator18.addVertexWithUV((double)(i6 - 1), (double)(i14 + i13 - 1), 0.0D, 1.0D, 1.0D);
-				tessellator18.addVertexWithUV((double)(i6 - 1), (double)i14, 0.0D, 1.0D, 0.0D);
-				tessellator18.addVertexWithUV((double)i5, (double)i14, 0.0D, 0.0D, 0.0D);
-				tessellator18.draw();
+				tessellator18.AddVertexWithUV((double)i5, (double)(i14 + i13 - 1), 0.0D, 0.0D, 1.0D);
+				tessellator18.AddVertexWithUV((double)(i6 - 1), (double)(i14 + i13 - 1), 0.0D, 1.0D, 1.0D);
+				tessellator18.AddVertexWithUV((double)(i6 - 1), (double)i14, 0.0D, 1.0D, 0.0D);
+				tessellator18.AddVertexWithUV((double)i5, (double)i14, 0.0D, 0.0D, 0.0D);
+				tessellator18.DrawImmediate();
 			}
 
 			this.func_27257_b(i1, i2);
-			GL.Enable(EnableCap.Texture2D);
-			GL.ShadeModel(ShadingModel.Flat);
-			GL.Enable(EnableCap.AlphaTest);
-			GL.Disable(EnableCap.Blend);
+            Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
+            Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, false);
+            Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
+            GL.Disable(EnableCap.Blend);
 		}
 
 		private void overlayBackground(int i1, int i2, int i3, int i4)
 		{
 			Tessellator tessellator5 = Tessellator.instance;
 			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/gui/background.png"));
-			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 			float f6 = 32.0F;
 			tessellator5.startDrawingQuads();
 			tessellator5.setColorRGBA_I(4210752, i4);
-			tessellator5.addVertexWithUV(0.0D, (double)i2, 0.0D, 0.0D, (double)((float)i2 / f6));
-			tessellator5.addVertexWithUV((double)this.width, (double)i2, 0.0D, (double)((float)this.width / f6), (double)((float)i2 / f6));
+			tessellator5.AddVertexWithUV(0.0D, (double)i2, 0.0D, 0.0D, (double)((float)i2 / f6));
+			tessellator5.AddVertexWithUV((double)this.width, (double)i2, 0.0D, (double)((float)this.width / f6), (double)((float)i2 / f6));
 			tessellator5.setColorRGBA_I(4210752, i3);
-			tessellator5.addVertexWithUV((double)this.width, (double)i1, 0.0D, (double)((float)this.width / f6), (double)((float)i1 / f6));
-			tessellator5.addVertexWithUV(0.0D, (double)i1, 0.0D, 0.0D, (double)((float)i1 / f6));
-			tessellator5.draw();
+			tessellator5.AddVertexWithUV((double)this.width, (double)i1, 0.0D, (double)((float)this.width / f6), (double)((float)i1 / f6));
+			tessellator5.AddVertexWithUV(0.0D, (double)i1, 0.0D, 0.0D, (double)((float)i1 / f6));
+			tessellator5.DrawImmediate();
 		}
 	}
 

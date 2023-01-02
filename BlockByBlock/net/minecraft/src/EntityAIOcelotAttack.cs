@@ -1,8 +1,9 @@
 ﻿using System;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-	public class EntityAIOcelotAttack : EntityAIBase
+    public class EntityAIOcelotAttack : EntityAIBase
 	{
 		internal World theWorld;
 		internal EntityLiving theEntity;

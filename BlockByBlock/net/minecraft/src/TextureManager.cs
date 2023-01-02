@@ -287,15 +287,6 @@ namespace net.minecraft.src
 				i9 = imageDataInts[i] >> 16 & 255;
 				i10 = imageDataInts[i] >> 8 & 255;
 				x = imageDataInts[i] & 255;
-				if (this.options != null && this.options.anaglyph)
-				{
-					y = (i9 * 30 + i10 * 59 + x * 11) / 100;
-					i13 = (i9 * 30 + i10 * 70) / 100;
-					i14 = (i9 * 30 + x * 70) / 100;
-					i9 = y;
-					i10 = i13;
-					x = i14;
-				}
 
 				byte colorR = (byte)(i9 & 255);
                 byte colorG = (byte)(i10 & 255);
@@ -570,15 +561,6 @@ namespace net.minecraft.src
 				int i8 = i1[i6] >> 16 & 255;
 				int i9 = i1[i6] >> 8 & 255;
 				int i10 = i1[i6] & 255;
-				if (this.options != null && this.options.anaglyph)
-				{
-					int i11 = (i8 * 30 + i9 * 59 + i10 * 11) / 100;
-					int i12 = (i8 * 30 + i9 * 70) / 100;
-					int i13 = (i8 * 30 + i10 * 70) / 100;
-					i8 = i11;
-					i9 = i12;
-					i10 = i13;
-				}
 
 				rawByteImageData[i6 * 4 + 0] = (byte)(i8 & 255);
 				rawByteImageData[i6 * 4 + 1] = (byte)(i9 & 255);
@@ -674,7 +656,6 @@ namespace net.minecraft.src
 			for (int i2 = 0; i2 < this.textureList.Count; ++i2)
 			{
 				TextureFX textureFX3 = (TextureFX)this.textureList[i2];
-				textureFX3.anaglyphEnabled = this.options.anaglyph;
 				textureFX3.onTick();
 				if (textureFX3.iconIndex != i1)
 				{
@@ -888,4 +869,20 @@ namespace net.minecraft.src
 		[FieldOffset(0)]
 		public int integer;
 	}
+
+    [StructLayout(LayoutKind.Explicit)]
+    public struct IntSByteUnion
+    {
+        [FieldOffset(0)]
+        public sbyte byte0;
+        [FieldOffset(1)]
+        public sbyte byte1;
+        [FieldOffset(2)]
+        public sbyte byte2;
+        [FieldOffset(3)]
+        public sbyte byte3;
+
+        [FieldOffset(0)]
+        public int integer;
+    }
 }

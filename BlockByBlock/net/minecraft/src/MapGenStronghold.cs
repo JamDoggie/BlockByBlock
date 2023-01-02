@@ -35,11 +35,11 @@ namespace net.minecraft.src
 						arrayList11.Add(biomeGenBase15);
 					}
 
-					ChunkPosition chunkPosition19 = this.worldObj.WorldChunkManager.findBiomePosition((i9 << 4) + 8, (i10 << 4) + 8, 112, arrayList11, random3);
+					ChunkPosition? chunkPosition19 = this.worldObj.WorldChunkManager.findBiomePosition((i9 << 4) + 8, (i10 << 4) + 8, 112, arrayList11, random3);
 					if (chunkPosition19 != null)
 					{
-						i9 = chunkPosition19.x >> 4;
-						i10 = chunkPosition19.z >> 4;
+						i9 = chunkPosition19.Value.x >> 4;
+						i10 = chunkPosition19.Value.z >> 4;
 					}
 					else
 					{

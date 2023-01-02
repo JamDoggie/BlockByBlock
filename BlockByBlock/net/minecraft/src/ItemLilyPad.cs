@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ItemLilyPad : ItemColored
+    public class ItemLilyPad : ItemColored
 	{
 		public ItemLilyPad(int i1) : base(i1, false)
 		{

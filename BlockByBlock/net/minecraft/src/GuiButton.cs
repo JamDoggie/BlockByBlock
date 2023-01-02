@@ -54,7 +54,7 @@ namespace net.minecraft.src
 			{
 				FontRenderer fontRenderer4 = minecraft1.fontRenderer;
 				GL.BindTexture(TextureTarget.Texture2D, minecraft1.renderEngine.getTexture("/gui/gui.png"));
-				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 				bool z5 = i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.width && i3 < this.yPosition + this.height;
 				int i6 = this.getHoverState(z5);
 				this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 46 + i6 * 20, this.width / 2, this.height);

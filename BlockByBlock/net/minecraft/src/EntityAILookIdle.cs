@@ -1,8 +1,9 @@
 ﻿using System;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-	public class EntityAILookIdle : EntityAIBase
+    public class EntityAILookIdle : EntityAIBase
 	{
 		private EntityLiving idleEntity;
 		private double lookX;

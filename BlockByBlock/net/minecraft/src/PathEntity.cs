@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class PathEntity
+    public class PathEntity
 	{
 		private readonly PathPoint[] points;
 		private int currentPathIndex;

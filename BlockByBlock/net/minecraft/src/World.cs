@@ -1,5 +1,6 @@
 ﻿using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 namespace net.minecraft.src
 {
 
-	public class World : IBlockAccess
+    public class World : IBlockAccess
 	{
 		public bool scheduledUpdatesAreImmediate;
 		public System.Collections.IList loadedEntityList;
@@ -261,14 +262,14 @@ namespace net.minecraft.src
 				WorldChunkManager worldChunkManager1 = this.worldProvider.worldChunkMgr;
 				System.Collections.IList list2 = worldChunkManager1.BiomesToSpawnIn;
 				RandomExtended random3 = new RandomExtended(this.Seed);
-				ChunkPosition chunkPosition4 = worldChunkManager1.findBiomePosition(0, 0, 256, list2, random3);
+				ChunkPosition? chunkPosition4 = worldChunkManager1.findBiomePosition(0, 0, 256, list2, random3);
 				int i5 = 0;
 				int i6 = this.worldProvider.AverageGroundLevel;
 				int i7 = 0;
 				if (chunkPosition4 != null)
 				{
-					i5 = chunkPosition4.x;
-					i7 = chunkPosition4.z;
+					i5 = chunkPosition4.Value.x;
+					i7 = chunkPosition4.Value.z;
 				}
 				else
 				{
@@ -3830,7 +3831,7 @@ namespace net.minecraft.src
 			return list5 != null && list5.Count > 0 ? (SpawnListEntry)WeightedRandom.getRandomItem(this.rand, (System.Collections.ICollection)list5) : null;
 		}
 
-		public virtual ChunkPosition findClosestStructure(string string1, int i2, int i3, int i4)
+		public virtual ChunkPosition? findClosestStructure(string string1, int i2, int i3, int i4)
 		{
 			return this.ChunkProvider.findClosestStructure(this, string1, i2, i3, i4);
 		}

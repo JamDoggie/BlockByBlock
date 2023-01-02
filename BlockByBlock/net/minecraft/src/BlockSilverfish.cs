@@ -1,10 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-	public class BlockSilverfish : Block
+    public class BlockSilverfish : Block
 	{
 		public BlockSilverfish(int i1) : base(i1, 1, Material.clay)
 		{

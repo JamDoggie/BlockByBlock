@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class ItemSoup : ItemFood
+    public class ItemSoup : ItemFood
 	{
 		public ItemSoup(int i1, int i2) : base(i1, i2, false)
 		{

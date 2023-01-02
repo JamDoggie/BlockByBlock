@@ -1,11 +1,14 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using BlockByBlock.net.minecraft.client.entity.particle;
+using net.minecraft.client;
+using net.minecraft.client.entity;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-	public class EffectRenderer
+    public class EffectRenderer
 	{
 		protected internal World worldObj;
 		private System.Collections.IList[] fxLayers = new System.Collections.IList[4];
@@ -28,7 +31,7 @@ namespace net.minecraft.src
 
 		}
 
-		public virtual void addEffect(EntityFX entityFX1)
+		public virtual void addEffect(ParticleEffect entityFX1)
 		{
 			int i2 = entityFX1.FXLayer;
 			if (this.fxLayers[i2].Count >= 4000)
@@ -45,7 +48,7 @@ namespace net.minecraft.src
 			{
 				for (int i2 = 0; i2 < this.fxLayers[i1].Count; ++i2)
 				{
-					EntityFX entityFX3 = (EntityFX)this.fxLayers[i1][i2];
+					ParticleEffect entityFX3 = (ParticleEffect)this.fxLayers[i1][i2];
 					entityFX3.onUpdate();
 					if (entityFX3.isDead)
 					{
@@ -63,9 +66,9 @@ namespace net.minecraft.src
 			float f5 = ActiveRenderInfo.rotationYZ;
 			float f6 = ActiveRenderInfo.rotationXY;
 			float f7 = ActiveRenderInfo.rotationXZ;
-			EntityFX.interpPosX = entity1.lastTickPosX + (entity1.posX - entity1.lastTickPosX) * (double)f2;
-			EntityFX.interpPosY = entity1.lastTickPosY + (entity1.posY - entity1.lastTickPosY) * (double)f2;
-			EntityFX.interpPosZ = entity1.lastTickPosZ + (entity1.posZ - entity1.lastTickPosZ) * (double)f2;
+			ParticleEffect.interpPosX = entity1.lastTickPosX + (entity1.posX - entity1.lastTickPosX) * (double)f2;
+			ParticleEffect.interpPosY = entity1.lastTickPosY + (entity1.posY - entity1.lastTickPosY) * (double)f2;
+			ParticleEffect.interpPosZ = entity1.lastTickPosZ + (entity1.posZ - entity1.lastTickPosZ) * (double)f2;
 
 			for (int i8 = 0; i8 < 3; ++i8)
 			{
@@ -89,17 +92,17 @@ namespace net.minecraft.src
 
 					GL.BindTexture(TextureTarget.Texture2D, i9);
 					Tessellator tessellator10 = Tessellator.instance;
-					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+                    Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 					tessellator10.startDrawingQuads();
 
 					for (int i11 = 0; i11 < this.fxLayers[i8].Count; ++i11)
 					{
-						EntityFX entityFX12 = (EntityFX)this.fxLayers[i8][i11];
+						ParticleEffect entityFX12 = (ParticleEffect)this.fxLayers[i8][i11];
 						tessellator10.Brightness = entityFX12.getBrightnessForRender(f2);
 						entityFX12.renderParticle(tessellator10, f2, f3, f7, f4, f5, f6);
 					}
 
-					tessellator10.draw();
+					tessellator10.DrawImmediate();
 				}
 			}
 
@@ -119,7 +122,7 @@ namespace net.minecraft.src
 
 				for (int i11 = 0; i11 < this.fxLayers[b9].Count; ++i11)
 				{
-					EntityFX entityFX12 = (EntityFX)this.fxLayers[b9][i11];
+					ParticleEffect entityFX12 = (ParticleEffect)this.fxLayers[b9][i11];
 					tessellator10.Brightness = entityFX12.getBrightnessForRender(f2);
 					entityFX12.renderParticle(tessellator10, f2, f4, f8, f5, f6, f7);
 				}
@@ -203,7 +206,7 @@ namespace net.minecraft.src
 					d8 = (double)i1 + block6.maxX + (double)f7;
 				}
 
-				this.addEffect((new EntityDiggingFX(this.worldObj, d8, d10, d12, 0.0D, 0.0D, 0.0D, block6, i4, this.worldObj.getBlockMetadata(i1, i2, i3))).func_4041_a(i1, i2, i3).multiplyVelocity(0.2F).func_405_d(0.6F));
+				this.addEffect((new EntityDiggingFX(this.worldObj, d8, d10, d12, 0.0D, 0.0D, 0.0D, block6, i4, this.worldObj.getBlockMetadata(i1, i2, i3))).func_4041_a(i1, i2, i3).MultiplyVelocity(0.2F).Scale(0.6F));
 			}
 		}
 

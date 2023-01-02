@@ -82,7 +82,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual ChunkPosition getNearestInstance(World world1, int i2, int i3, int i4)
+		public virtual ChunkPosition? getNearestInstance(World world1, int i2, int i3, int i4)
 		{
 			this.worldObj = world1;
 			rand.SetSeed(world1.Seed);
@@ -93,7 +93,7 @@ namespace net.minecraft.src
             rand.SetSeed(j9 ^ j11 ^ world1.Seed);
             this.recursiveGenerate(world1, i2 >> 4, i4 >> 4, 0, 0, (sbyte[])null);
 			double d13 = double.MaxValue;
-			ChunkPosition chunkPosition15 = null;
+			ChunkPosition? chunkPosition15 = null;
 			System.Collections.IEnumerator iterator16 = this.coordMap.Values.GetEnumerator();
 
 			ChunkPosition chunkPosition19;
@@ -129,7 +129,7 @@ namespace net.minecraft.src
 				System.Collections.IList list25 = this.func_40482_a();
 				if (list25 != null)
 				{
-					ChunkPosition chunkPosition26 = null;
+					ChunkPosition? chunkPosition26 = null;
 					System.Collections.IEnumerator iterator27 = list25.GetEnumerator();
 
 					while (iterator27.MoveNext())

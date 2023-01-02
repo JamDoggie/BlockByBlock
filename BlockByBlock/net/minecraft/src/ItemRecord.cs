@@ -1,7 +1,9 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
 
-	public class ItemRecord : Item
+    public class ItemRecord : Item
 	{
 		public readonly string recordName;
 

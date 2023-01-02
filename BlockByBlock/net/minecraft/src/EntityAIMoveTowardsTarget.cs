@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class EntityAIMoveTowardsTarget : EntityAIBase
+    public class EntityAIMoveTowardsTarget : EntityAIBase
 	{
 		private EntityCreature theEntity;
 		private EntityLiving? targetEntity;

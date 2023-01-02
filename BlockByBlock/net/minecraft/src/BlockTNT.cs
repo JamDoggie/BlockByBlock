@@ -1,10 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-	public class BlockTNT : Block
+    public class BlockTNT : Block
 	{
 		public BlockTNT(int i1, int i2) : base(i1, i2, Material.tnt)
 		{

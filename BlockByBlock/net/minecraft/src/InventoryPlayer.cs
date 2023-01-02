@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class InventoryPlayer : IInventory
+    public class InventoryPlayer : IInventory
 	{
 		public ItemStack[] mainInventory = new ItemStack[36];
 		public ItemStack[] armorInventory = new ItemStack[4];

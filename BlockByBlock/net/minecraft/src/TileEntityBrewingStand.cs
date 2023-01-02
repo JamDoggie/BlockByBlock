@@ -1,9 +1,10 @@
 ﻿using System.Linq;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class TileEntityBrewingStand : TileEntity, IInventory
+    public class TileEntityBrewingStand : TileEntity, IInventory
 	{
 		private ItemStack[] brewingItemStacks = new ItemStack[4];
 		private int brewTime;

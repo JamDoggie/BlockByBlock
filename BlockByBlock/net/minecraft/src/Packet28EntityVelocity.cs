@@ -1,9 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-	public class Packet28EntityVelocity : Packet
+    public class Packet28EntityVelocity : Packet
 	{
 		public int entityId;
 		public int motionX;

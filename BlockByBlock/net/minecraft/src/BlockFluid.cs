@@ -1,10 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
+using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-	public abstract class BlockFluid : Block
+    public abstract class BlockFluid : Block
 	{
 		protected internal BlockFluid(int i1, Material material2) : base(i1, (material2 == Material.lava ? 14 : 12) * 16 + 13, material2)
 		{

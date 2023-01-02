@@ -1,11 +1,12 @@
 ﻿using BlockByBlock.java_extensions;
 using BlockByBlock.sound;
+using net.minecraft.client.entity;
 using OpenTK.Mathematics;
 using System;
 
 namespace net.minecraft.src
 {
-	public class SoundManager
+    public class SoundManager
 	{
 		private bool InstanceFieldsInitialized = false;
 

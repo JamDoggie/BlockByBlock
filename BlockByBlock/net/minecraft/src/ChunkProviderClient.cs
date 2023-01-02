@@ -82,7 +82,7 @@ namespace net.minecraft.src
 			return null;
 		}
 
-		public virtual ChunkPosition findClosestStructure(World world1, string string2, int i3, int i4, int i5)
+		public virtual ChunkPosition? findClosestStructure(World world1, string string2, int i3, int i4, int i5)
 		{
 			return null;
 		}

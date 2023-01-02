@@ -1,6 +1,8 @@
-﻿namespace net.minecraft.src
+﻿using net.minecraft.client.entity;
+
+namespace net.minecraft.src
 {
-	public class TileEntityChest : TileEntity, IInventory
+    public class TileEntityChest : TileEntity, IInventory
 	{
 		private ItemStack[] chestContents = new ItemStack[36];
 		public bool adjacentChestChecked = false;
