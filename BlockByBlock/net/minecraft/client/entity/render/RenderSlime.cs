@@ -19,7 +19,6 @@ namespace net.minecraft.client.entity.render
             if (i2 == 0)
             {
                 RenderPassModel = scaleAmount;
-                GL.Enable(EnableCap.Normalize);
                 GL.Enable(EnableCap.Blend);
                 GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                 return 1;

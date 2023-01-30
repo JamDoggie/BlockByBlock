@@ -15,6 +15,7 @@ namespace BlockByBlock.net.minecraft.render
         SmoothShadingState,
         LightingState,
         OverrideBrightnessState,
-        FogState
+        FogState,
+        ColorMaterialState
     }
 }

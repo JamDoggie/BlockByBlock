@@ -50,7 +50,6 @@ namespace net.minecraft.src
 				float f9 = ((float)(i5 / 16 * 16) + 15.99F) / 256.0F;
 				float f10 = 0.0F;
 				float f11 = 0.3F;
-				GL.Enable(EnableCap.RescaleNormal);
                 Minecraft.renderPipeline.ModelMatrix.Translate(-f10, -f11, 0.0F);
 				float f12 = 1.5F;
 				Minecraft.renderPipeline.ModelMatrix.Scale(f12, f12, f12);
@@ -61,7 +60,7 @@ namespace net.minecraft.src
 				if (itemStack2 != null && itemStack2.hasEffect() && i3 == 0)
 				{
 					GL.DepthFunc(DepthFunction.Equal);
-					GL.Disable(EnableCap.Lighting);
+					Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
 					this.mc.renderEngine.bindTexture(this.mc.renderEngine.getTexture("%blur%/misc/glint.png"));
 					GL.Enable(EnableCap.Blend);
 					GL.BlendFunc(BlendingFactor.SrcColor, BlendingFactor.One);
@@ -83,11 +82,9 @@ namespace net.minecraft.src
 					this.renderItemIn2D(tessellator4, 0.0F, 0.0F, 1.0F, 1.0F);
                     Minecraft.renderPipeline.TextureMatrix.PopMatrix();
 					GL.Disable(EnableCap.Blend);
-					GL.Enable(EnableCap.Lighting);
-					GL.DepthFunc(DepthFunction.Lequal);
+                    Minecraft.renderPipeline.SetState(RenderState.LightingState, true);
+                    GL.DepthFunc(DepthFunction.Lequal);
 				}
-                
-				GL.Disable(EnableCap.RescaleNormal);
 			}
 
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
@@ -201,7 +198,7 @@ namespace net.minecraft.src
 			ItemStack itemStack14 = this.itemToRender;
 			f6 = this.mc.theWorld.getLightBrightness(MathHelper.floor_double(entityPlayerSP3.posX), MathHelper.floor_double(entityPlayerSP3.posY), MathHelper.floor_double(entityPlayerSP3.posZ));
 			f6 = 1.0F;
-			int i15 = this.mc.theWorld.getLightBrightnessForSkyBlocks(MathHelper.floor_double(entityPlayerSP3.posX), MathHelper.floor_double(entityPlayerSP3.posY), MathHelper.floor_double(entityPlayerSP3.posZ), 0);
+			int i15 = this.mc.theWorld.GetLightBrightnessForSkyBlocks(MathHelper.floor_double(entityPlayerSP3.posX), MathHelper.floor_double(entityPlayerSP3.posY), MathHelper.floor_double(entityPlayerSP3.posZ), 0);
 			int i8 = i15 % 65536;
 			int i9 = i15 / 65536;
 			LightmapManager.setLightmapTextureCoords(LightmapManager.lightmapTexUnit, (float)i8 / 1.0F, (float)i9 / 1.0F);
@@ -247,7 +244,7 @@ namespace net.minecraft.src
                 Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 0.0F * f7 - (1.0F - f2) * 1.2F - f16 * 0.5F + 0.04F, -0.9F * f7);
                 Minecraft.renderPipeline.ModelMatrix.Rotate(90.0F, 0.0F, 1.0F, 0.0F);
                 Minecraft.renderPipeline.ModelMatrix.Rotate(f16 * -85.0F, 0.0F, 0.0F, 1.0F);
-				GL.Enable(EnableCap.RescaleNormal);
+                
 				GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTextureForDownloadableImage(this.mc.thePlayer.skinUrl, this.mc.thePlayer.Texture));
 
 				for (i9 = 0; i9 < 2; ++i9)
@@ -328,7 +325,7 @@ namespace net.minecraft.src
 
 				Minecraft.renderPipeline.ModelMatrix.Translate(0.7F * f7, -0.65F * f7 - (1.0F - f2) * 0.6F, -0.9F * f7);
                 Minecraft.renderPipeline.ModelMatrix.Rotate(45.0F, 0.0F, 1.0F, 0.0F);
-				GL.Enable(EnableCap.RescaleNormal);
+                
 				f16 = entityPlayerSP3.getSwingProgress(f1);
 				f18 = MathHelper.sin(f16 * f16 * (float)Math.PI);
 				f10 = MathHelper.sin(MathHelper.sqrt_float(f16) * (float)Math.PI);
@@ -410,7 +407,7 @@ namespace net.minecraft.src
 				Minecraft.renderPipeline.ModelMatrix.Translate(-f10 * 0.3F, MathHelper.sin(MathHelper.sqrt_float(f16) * (float)Math.PI * 2.0F) * 0.4F, -f18 * 0.4F);
 				Minecraft.renderPipeline.ModelMatrix.Translate(0.8F * f7, -0.75F * f7 - (1.0F - f2) * 0.6F, -0.9F * f7);
 				Minecraft.renderPipeline.ModelMatrix.Rotate(45.0F, 0.0F, 1.0F, 0.0F);
-                GL.Enable(EnableCap.RescaleNormal);
+                
 				f16 = entityPlayerSP3.getSwingProgress(f1);
 				f18 = MathHelper.sin(f16 * f16 * (float)Math.PI);
 				f10 = MathHelper.sin(MathHelper.sqrt_float(f16) * (float)Math.PI);
@@ -430,8 +427,7 @@ namespace net.minecraft.src
 				renderPlayer21.drawFirstPersonHand();
                 Minecraft.renderPipeline.ModelMatrix.PopMatrix();
 			}
-
-			GL.Disable(EnableCap.RescaleNormal);
+            
 			RenderHelper.disableStandardItemLighting();
 		}
 

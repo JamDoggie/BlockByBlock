@@ -46,7 +46,7 @@ namespace net.minecraft.src
 		{
 			get
 			{
-				return (sbyte)7;
+				return 7;
 			}
 		}
 

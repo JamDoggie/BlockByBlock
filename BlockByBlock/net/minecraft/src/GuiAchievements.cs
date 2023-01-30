@@ -189,9 +189,8 @@ namespace net.minecraft.src
             Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 0.0F, -200.0F);
             Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
             Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
-			GL.Enable(EnableCap.RescaleNormal);
-			GL.Enable(EnableCap.ColorMaterial);
-			this.mc.renderEngine.bindTexture(i6);
+            Minecraft.renderPipeline.SetState(RenderState.ColorMaterialState, true);
+            this.mc.renderEngine.bindTexture(i6);
 			int i12 = i4 + 288 >> 4;
 			int i13 = i5 + 288 >> 4;
 			int i14 = (i4 + 288) % 16;
@@ -289,10 +288,9 @@ namespace net.minecraft.src
 			RenderItem renderItem34 = new RenderItem();
 			RenderHelper.enableGUIStandardItemLighting();
 			Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
-			GL.Enable(EnableCap.RescaleNormal);
-			GL.Enable(EnableCap.ColorMaterial);
+            Minecraft.renderPipeline.SetState(RenderState.ColorMaterialState, true);
 
-			int i39;
+            int i39;
 			int i40;
 			for (i24 = 0; i24 < AchievementList.achievementList.Count; ++i24)
 			{

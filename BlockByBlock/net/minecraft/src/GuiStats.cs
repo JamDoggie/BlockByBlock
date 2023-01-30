@@ -92,11 +92,10 @@
 		private void drawItemSprite(int i1, int i2, int i3)
 		{
 			this.drawButtonBackground(i1 + 1, i2 + 1);
-			GL.Enable(EnableCap.RescaleNormal);
+            
 			RenderHelper.enableGUIStandardItemLighting();
 			renderItem.drawItemIntoGui(this.fontRenderer, this.mc.renderEngine, i3, 0, Item.itemsList[i3].getIconFromDamage(0), i1 + 2, i2 + 2);
 			RenderHelper.disableStandardItemLighting();
-			GL.Disable(EnableCap.RescaleNormal);
 		}
 
 		private void drawButtonBackground(int i1, int i2)

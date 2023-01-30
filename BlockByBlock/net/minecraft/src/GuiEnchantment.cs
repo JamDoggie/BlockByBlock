@@ -129,10 +129,8 @@ namespace net.minecraft.src
 			{
 				f12 = 1.0F;
 			}
-
-			GL.Enable(EnableCap.RescaleNormal);
+            
 			bookModel.render((Entity)null, 0.0F, f11, f12, f10, 0.0F, 0.0625F);
-			GL.Disable(EnableCap.RescaleNormal);
 			RenderHelper.disableStandardItemLighting();
 			GL.Viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
             Minecraft.renderPipeline.ProjectionMatrix.PopMatrix();

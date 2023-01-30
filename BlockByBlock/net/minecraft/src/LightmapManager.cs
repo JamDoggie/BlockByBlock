@@ -11,8 +11,8 @@ namespace net.minecraft.src
 
 		public static void initializeTextures()
 		{
-			defaultTexUnit = 33984;
-			lightmapTexUnit = 33985;
+			defaultTexUnit = 0;
+			lightmapTexUnit = 1;
 
 			int uniform = Minecraft.renderPipeline.GetUniform(lightTexUniform);
 			GL.Uniform1(uniform, 1);
@@ -22,18 +22,14 @@ namespace net.minecraft.src
 		{
 			set
 			{
-				GL.ActiveTexture((TextureUnit)value);
+				GL.ActiveTexture((TextureUnit)(value + 33984));
 				Minecraft.renderPipeline.SetActiveTexture(value);
 			}
 		}
 
 		public static void setLightmapTextureCoords(int texUnit, float x, float y) // TODO: remove texUnit parameter.
 		{
-			float normalizedX = x / 16f;
-            float normalizedY = y / 16f;
-
-			Minecraft.renderPipeline.SetLightmapCoords((normalizedX / (17F)) + 0.0625f, (normalizedY / (17F)) + 0.0625f);
+			Minecraft.renderPipeline.SetLightmapCoords(x, y);
 		}
 	}
-
 }

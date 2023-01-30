@@ -824,71 +824,79 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual int getSkyBlockTypeBrightness(EnumSkyBlock enumSkyBlock1, int i2, int i3, int i4)
+		private string blockBrightnessSection = "blockBrightness";
+		private string section1 = "section1";
+        private string section2 = "section2";
+        private string section3 = "section3";
+        private string section4 = "section4";
+        private string section5 = "section5";
+        private string section6 = "section6";
+
+        public virtual int GetSkyBlockTypeBrightness(EnumSkyBlock enumSkyBlock1, int x, int y, int z)
 		{
-			if (this.worldProvider.hasNoSky && enumSkyBlock1 == EnumSkyBlock.Sky)
-			{
-				return 0;
-			}
-			else
-			{
-				if (i3 < 0)
-				{
-					i3 = 0;
-				}
+            if (this.worldProvider.hasNoSky && enumSkyBlock1 == EnumSkyBlock.Sky)
+            {
+                return 0;
+            }
+            else
+            {
+                if (y < 0)
+                {
+                    y = 0;
+                }
 
-				if (i3 >= 256)
-				{
-					return enumSkyBlock1.defaultLightValue;
-				}
-				else if (i2 >= -30000000 && i4 >= -30000000 && i2 < 30000000 && i4 < 30000000)
-				{
-					int i5 = i2 >> 4;
-					int i6 = i4 >> 4;
-					if (!this.chunkExists(i5, i6))
-					{
-						return enumSkyBlock1.defaultLightValue;
-					}
-					else if (Block.useNeighborBrightness[this.getBlockId(i2, i3, i4)])
-					{
-						int i12 = this.getSavedLightValue(enumSkyBlock1, i2, i3 + 1, i4);
-						int i8 = this.getSavedLightValue(enumSkyBlock1, i2 + 1, i3, i4);
-						int i9 = this.getSavedLightValue(enumSkyBlock1, i2 - 1, i3, i4);
-						int i10 = this.getSavedLightValue(enumSkyBlock1, i2, i3, i4 + 1);
-						int i11 = this.getSavedLightValue(enumSkyBlock1, i2, i3, i4 - 1);
-						if (i8 > i12)
-						{
-							i12 = i8;
-						}
+                if (y >= 256)
+                {
+                    return enumSkyBlock1.defaultLightValue;
+                }
+                else if (x >= -30000000 && z >= -30000000 && x < 30000000 && z < 30000000)
+                {
+                    int i5 = x >> 4;
+                    int i6 = z >> 4;
+                    if (!this.chunkExists(i5, i6))
+                    {
+                        return enumSkyBlock1.defaultLightValue;
+                    }
+                    else if (Block.useNeighborBrightness[this.getBlockId(x, y, z)])
+                    {
+                        int i12 = this.getSavedLightValue(enumSkyBlock1, x, y + 1, z);
+                        int i8 = this.getSavedLightValue(enumSkyBlock1, x + 1, y, z);
+                        int i9 = this.getSavedLightValue(enumSkyBlock1, x - 1, y, z);
+                        int i10 = this.getSavedLightValue(enumSkyBlock1, x, y, z + 1);
+                        int i11 = this.getSavedLightValue(enumSkyBlock1, x, y, z - 1);
+                        if (i8 > i12)
+                        {
+                            i12 = i8;
+                        }
 
-						if (i9 > i12)
-						{
-							i12 = i9;
-						}
+                        if (i9 > i12)
+                        {
+                            i12 = i9;
+                        }
 
-						if (i10 > i12)
-						{
-							i12 = i10;
-						}
+                        if (i10 > i12)
+                        {
+                            i12 = i10;
+                        }
 
-						if (i11 > i12)
-						{
-							i12 = i11;
-						}
+                        if (i11 > i12)
+                        {
+                            i12 = i11;
+                        }
 
-						return i12;
-					}
-					else
-					{
-						Chunk chunk7 = this.getChunkFromChunkCoords(i5, i6);
-						return chunk7.getSavedLightValue(enumSkyBlock1, i2 & 15, i3, i4 & 15);
-					}
-				}
-				else
-				{
-					return enumSkyBlock1.defaultLightValue;
-				}
-			}
+                        return i12;
+                    }
+                    else
+                    {
+                        Chunk chunk7 = this.getChunkFromChunkCoords(i5, i6);
+                        return chunk7.getSavedLightValue(enumSkyBlock1, x & 15, y, z & 15);
+                    }
+                }
+                else
+                {
+                    return enumSkyBlock1.defaultLightValue;
+                }
+            }
 		}
 
 		public virtual int getSavedLightValue(EnumSkyBlock enumSkyBlock1, int i2, int i3, int i4)
@@ -956,16 +964,16 @@ namespace net.minecraft.src
 
 		}
 
-		public virtual int getLightBrightnessForSkyBlocks(int i1, int i2, int i3, int i4)
+		public virtual int GetLightBrightnessForSkyBlocks(int x, int y, int z, int minimumBlockLight)
 		{
-			int i5 = this.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, i1, i2, i3);
-			int i6 = this.getSkyBlockTypeBrightness(EnumSkyBlock.Block, i1, i2, i3);
-			if (i6 < i4)
+            int skyLight = this.GetSkyBlockTypeBrightness(EnumSkyBlock.Sky, x, y, z);
+			int blockLight = this.GetSkyBlockTypeBrightness(EnumSkyBlock.Block, x, y, z);
+			if (blockLight < minimumBlockLight)
 			{
-				i6 = i4;
+				blockLight = minimumBlockLight;
 			}
 
-			return i5 << 20 | i6 << 4;
+			return skyLight << 20 | blockLight << 4;
 		}
 
 		public virtual float getBrightness(int i1, int i2, int i3, int i4)

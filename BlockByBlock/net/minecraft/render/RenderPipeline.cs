@@ -48,11 +48,11 @@ namespace net.minecraft.render
         public void InitRenderer()
         {
             #region DEBUG PRINTING
-            /*_debugProcCallbackHandle = GCHandle.Alloc(_debugProcCallback);
+            _debugProcCallbackHandle = GCHandle.Alloc(_debugProcCallback);
 
             GL.DebugMessageCallback(_debugProcCallback, IntPtr.Zero);
             GL.Enable(EnableCap.DebugOutput);
-            GL.Enable(EnableCap.DebugOutputSynchronous);*/
+            GL.Enable(EnableCap.DebugOutputSynchronous);
             #endregion
 
             GLProgram = GL.CreateProgram();
@@ -76,6 +76,8 @@ namespace net.minecraft.render
 
             SetState(RenderState.TextureState, true);
             SetState(RenderState.ColorState, true);
+
+            Tessellator.instance.Init();
         }
 
         public int GetUniform(string uniform)
@@ -224,7 +226,6 @@ namespace net.minecraft.render
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine($"{messageString}");
             }
-            
         }
     }
 

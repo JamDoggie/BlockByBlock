@@ -8,16 +8,12 @@ namespace net.minecraft.src
 	{
 		private string name;
 
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: abstract void write(java.io.DataOutput dataOutput1) throws java.io.IOException;
 		internal abstract void write(BinaryWriter dataOutput1);
-
-		// JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in C#:
-		// ORIGINAL LINE: abstract void load(java.io.DataInput dataInput1) throws java.io.IOException;
+        
 		internal abstract void load(BinaryReader dataInput1);
 
 		public abstract sbyte Id {get;}
-
+        
 		protected internal NBTBase(string string1)
 		{
 			if (string.ReferenceEquals(string1, null))
@@ -55,7 +51,6 @@ namespace net.minecraft.src
 
 		public static NBTBase readNamedTag(BinaryReader dataInput0)
 		{
-
             sbyte b1 = dataInput0.ReadSByte();
 			if (b1 == 0)
 			{

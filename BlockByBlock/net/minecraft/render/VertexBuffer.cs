@@ -8,7 +8,7 @@ namespace BlockByBlock.net.minecraft.render
 {
     public struct VertexBuffer
     {
-        public int Length;
+        public int SizeInBytes;
         public int VertexCount;
         public int GLHandle;
         public int DrawMode;
@@ -18,9 +18,9 @@ namespace BlockByBlock.net.minecraft.render
         public bool HasTexture;
         public bool HasNormal;
 
-        public VertexBuffer(int length, int elements, int glHandle, int drawMode, bool hasBrightness, bool hasColor, bool hasTexture, bool hasNormal)
+        public VertexBuffer(int sizeInBytes, int elements, int glHandle, int drawMode, bool hasBrightness, bool hasColor, bool hasTexture, bool hasNormal)
         {
-            Length = length;
+            SizeInBytes = sizeInBytes;
             GLHandle = glHandle;
             VertexCount = elements;
             HasBrightness = hasBrightness;

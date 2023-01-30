@@ -23,6 +23,7 @@ uniform int AlphaTestState;
 uniform int LightingState;
 uniform int OverrideBrightnessState;
 uniform int FogState = 0;
+uniform int ColorMaterialState;
 
 uniform mat4 projectionMatrix;
 uniform mat3 normalMatrix;
@@ -67,10 +68,11 @@ void main()
 
 	if (OverrideBrightnessState == 1)
 	{
-		lightTexCoords = BrightnessOverride;
+		lightTexCoords = vec2(((BrightnessOverride.x / 16) / 17) + 0.0625, ((BrightnessOverride.y / 16) / 17) + 0.0625);
 	}
 
 	vec4 lightMapColor = mix(texture(lightTexture, lightTexCoords), colorWhite, flipRange(LightmapState));
+	
 
 	// FOG
 	float fogFactor;
@@ -86,7 +88,7 @@ void main()
 	if (FogMode == 1)
 	{
 		const float LOG2 = 1.442695;
-		float fogZ = gl_FragCoord.z / gl_FragCoord.w;
+		float fogZ = length(vertPos);
 	
 		fogFactor = exp2( -FogDensity * 
 							FogDensity * 

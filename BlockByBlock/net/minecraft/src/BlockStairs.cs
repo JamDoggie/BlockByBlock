@@ -112,9 +112,9 @@ namespace net.minecraft.src
 			this.modelBlock.onBlockDestroyedByPlayer(world1, i2, i3, i4, i5);
 		}
 
-		public override int getMixedBrightnessForBlock(IBlockAccess iBlockAccess1, int i2, int i3, int i4)
+		public override int GetMixedBrightnessForBlock(IBlockAccess iBlockAccess1, int i2, int i3, int i4)
 		{
-			return this.modelBlock.getMixedBrightnessForBlock(iBlockAccess1, i2, i3, i4);
+			return this.modelBlock.GetMixedBrightnessForBlock(iBlockAccess1, i2, i3, i4);
 		}
 
 		public override float getBlockBrightness(IBlockAccess iBlockAccess1, int i2, int i3, int i4)

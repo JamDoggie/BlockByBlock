@@ -87,16 +87,16 @@
 			return this.worldObj.worldProvider.lightBrightnessTable[i5];
 		}
 
-		public virtual int getLightBrightnessForSkyBlocks(int i1, int i2, int i3, int i4)
+		public virtual int GetLightBrightnessForSkyBlocks(int i1, int i2, int i3, int minBrightness)
 		{
-			int i5 = this.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, i1, i2, i3);
-			int i6 = this.getSkyBlockTypeBrightness(EnumSkyBlock.Block, i1, i2, i3);
-			if (i6 < i4)
+			int skyBrightness = this.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, i1, i2, i3);
+			int blockBrightness = this.getSkyBlockTypeBrightness(EnumSkyBlock.Block, i1, i2, i3);
+			if (blockBrightness < minBrightness)
 			{
-				i6 = i4;
+				blockBrightness = minBrightness;
 			}
 
-			int lightValue = i5 << 20 | i6 << 4;
+			int lightValue = skyBrightness << 20 | blockBrightness << 4;
             
             return lightValue;
 		}

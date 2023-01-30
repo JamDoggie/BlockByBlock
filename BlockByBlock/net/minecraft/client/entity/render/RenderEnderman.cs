@@ -51,7 +51,6 @@ namespace net.minecraft.client.entity.render
             base.renderEquippedItems(entityEnderman1, f2);
             if (entityEnderman1.Carried > 0)
             {
-                GL.Enable(EnableCap.RescaleNormal);
                 Minecraft.renderPipeline.ModelMatrix.PushMatrix();
                 float f3 = 0.5F;
                 Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 0.6875F, -0.75F);
@@ -68,7 +67,6 @@ namespace net.minecraft.client.entity.render
                 loadTexture("/terrain.png");
                 renderBlocks.renderBlockAsItem(Block.blocksList[entityEnderman1.Carried], entityEnderman1.CarryingData, 1.0F);
                 Minecraft.renderPipeline.ModelMatrix.PopMatrix();
-                GL.Disable(EnableCap.RescaleNormal);
             }
 
         }

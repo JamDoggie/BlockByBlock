@@ -108,8 +108,8 @@ namespace net.minecraft.client.entity.render
                                 d43 += d34 * 2.0D;
                             }
 
-                            tessellator10.addVertex(d41 + d22, d4 + i26 * 16, d43 + d24);
-                            tessellator10.addVertex(d37 + d27, d4 + (i26 + 1) * 16, d39 + d29);
+                            tessellator10.AddVertex(d41 + d22, d4 + i26 * 16, d43 + d24);
+                            tessellator10.AddVertex(d37 + d27, d4 + (i26 + 1) * 16, d39 + d29);
                         }
 
                         tessellator10.DrawImmediate();

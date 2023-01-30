@@ -5,7 +5,7 @@ precision highp float;
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec2 texCoord;
 layout(location = 2) in vec4 color;
-layout(location = 3) in vec3 normals;
+layout(location = 3) in vec4 normals;
 layout(location = 4) in vec2 brightness;
 
 out vec2 outTexCoord;
@@ -74,7 +74,7 @@ vec3 fnormal(mat3 normalMatrix, vec3 inNormal)
 
 void flight(vec3 normal, vec4 ecPosition, float alphaFade, out vec4 returnColor, inout vec4 Ambient, inout vec4 Diffuse, inout vec4 Specular)
 {
-    vec4 color;
+    vec4 lightColor;
     vec3 ecPosition3;
     vec3 eye;
 
@@ -89,12 +89,12 @@ void flight(vec3 normal, vec4 ecPosition, float alphaFade, out vec4 returnColor,
     directionalLight(0, normal, ecPosition3, Ambient, Diffuse, Specular);
     directionalLight(1, normal, ecPosition3, Ambient, Diffuse, Specular);
 
-    color = LightModelAmbient +
+    lightColor = LightModelAmbient +
             Ambient  * material_ambient +
             Diffuse  * material_diffuse;
-    color += Specular * material_specular;
-    color = clamp( color, 0.0, 1.0 );
-    returnColor = color;
+    lightColor += Specular * material_specular;
+    lightColor = clamp( lightColor, 0.0, 1.0 );
+    returnColor = lightColor;
 
     returnColor.a *= alphaFade;
 }
@@ -102,11 +102,10 @@ void flight(vec3 normal, vec4 ecPosition, float alphaFade, out vec4 returnColor,
 void main()
 {
 	gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-
+	
     outTexCoord = texCoord;
-	outColor = color;
-    outNormals = normals;
-    outBrightness = brightness;
+	outColor = vec4(color.x / 255.0, color.y / 255.0, color.z / 255.0, color.w / 255.0);
+    outBrightness = vec2(((brightness.x / 16) / 17) + 0.0625, ((brightness.y / 16) / 17) + 0.0625);
 
     vertPos = (modelViewMatrix * vec4(position, 1.0)).xyz;
 
@@ -119,7 +118,7 @@ void main()
         vec3  transformedNormal;
         float alphaFade = 1.0;
 
-        transformedNormal = fnormal(normalMatrix, normals);
+        transformedNormal = fnormal(normalMatrix, vec3(normals));
 	
         vec4 lightColor;
 

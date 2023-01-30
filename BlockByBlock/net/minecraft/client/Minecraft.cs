@@ -306,7 +306,11 @@ namespace net.minecraft.client
 
 		public static DirectoryInfo getAppDir(string string0)
 		{
-			return new DirectoryInfo("C:\\Users\\JamDo\\Documents\\Minecraft 1.2.5 Game Folder\\");
+			DirectoryInfo stupidHardcodedDirectory = new DirectoryInfo("C:\\Users\\JamDo\\Documents\\Minecraft 1.2.5 Game Folder\\");
+
+
+            if (stupidHardcodedDirectory.Exists)
+				return stupidHardcodedDirectory;
 
 			string string1 = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 			DirectoryInfo file2;
@@ -480,7 +484,7 @@ namespace net.minecraft.client
 
 				try
 				{
-					GLAllocation.deleteTexturesAndDisplayLists();
+					GLAllocation.DeleteTextures();
 				}
 				catch (Exception)
 				{
@@ -732,7 +736,6 @@ namespace net.minecraft.client
 			try
 			{
 				field_28006_b = new sbyte[0];
-				this.renderGlobal.func_28137_f();
 			}
 			catch (Exception)
 			{
@@ -826,8 +829,8 @@ namespace net.minecraft.client
 			frameTimes[numRecordedFrameTimes++ & frameTimes.Length - 1] = j7 - this.prevFrameTime;
 			this.prevFrameTime = j7;
 			GL.Clear(ClearBufferMask.DepthBufferBit);
-			GL.Enable(EnableCap.ColorMaterial);
-			renderPipeline.ProjectionMatrix.LoadIdentity();
+            Minecraft.renderPipeline.SetState(RenderState.ColorMaterialState, true);
+            renderPipeline.ProjectionMatrix.LoadIdentity();
 
             renderPipeline.ProjectionMatrix.Ortho(0.0D, displayWidth, displayHeight, 0.0D, 1000.0D, 3000.0D);
             renderPipeline.ModelMatrix.LoadIdentity();
@@ -838,15 +841,15 @@ namespace net.minecraft.client
 			tessellator.startDrawing(7);
 			int i10 = (int)(j5 / 200000L);
 			tessellator.ColorOpaque_I = 536870912;
-			tessellator.addVertex(0.0D, (double)(this.displayHeight - i10), 0.0D);
-			tessellator.addVertex(0.0D, (double)this.displayHeight, 0.0D);
-			tessellator.addVertex((double)frameTimes.Length, (double)this.displayHeight, 0.0D);
-			tessellator.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i10), 0.0D);
+			tessellator.AddVertex(0.0D, (double)(this.displayHeight - i10), 0.0D);
+			tessellator.AddVertex(0.0D, (double)this.displayHeight, 0.0D);
+			tessellator.AddVertex((double)frameTimes.Length, (double)this.displayHeight, 0.0D);
+			tessellator.AddVertex((double)frameTimes.Length, (double)(this.displayHeight - i10), 0.0D);
 			tessellator.ColorOpaque_I = 0x20200000;
-			tessellator.addVertex(0.0D, (double)(this.displayHeight - i10 * 2), 0.0D);
-			tessellator.addVertex(0.0D, (double)(this.displayHeight - i10), 0.0D);
-			tessellator.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i10), 0.0D);
-			tessellator.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i10 * 2), 0.0D);
+			tessellator.AddVertex(0.0D, (double)(this.displayHeight - i10 * 2), 0.0D);
+			tessellator.AddVertex(0.0D, (double)(this.displayHeight - i10), 0.0D);
+			tessellator.AddVertex((double)frameTimes.Length, (double)(this.displayHeight - i10), 0.0D);
+			tessellator.AddVertex((double)frameTimes.Length, (double)(this.displayHeight - i10 * 2), 0.0D);
 			tessellator.DrawImmediate();
 			long j11 = 0L;
 
@@ -859,10 +862,10 @@ namespace net.minecraft.client
 			i13 = (int)(j11 / 200000L / (long)frameTimes.Length);
 			tessellator.startDrawing(7);
 			tessellator.ColorOpaque_I = 0x20400000;
-			tessellator.addVertex(0.0D, (double)(this.displayHeight - i13), 0.0D);
-			tessellator.addVertex(0.0D, (double)this.displayHeight, 0.0D);
-			tessellator.addVertex((double)frameTimes.Length, (double)this.displayHeight, 0.0D);
-			tessellator.addVertex((double)frameTimes.Length, (double)(this.displayHeight - i13), 0.0D);
+			tessellator.AddVertex(0.0D, (double)(this.displayHeight - i13), 0.0D);
+			tessellator.AddVertex(0.0D, (double)this.displayHeight, 0.0D);
+			tessellator.AddVertex((double)frameTimes.Length, (double)this.displayHeight, 0.0D);
+			tessellator.AddVertex((double)frameTimes.Length, (double)(this.displayHeight - i13), 0.0D);
 			tessellator.DrawImmediate();
 			tessellator.startDrawing(1);
 
@@ -886,11 +889,11 @@ namespace net.minecraft.client
 
 				long j18 = frameTimes[i14] / 200000L;
 				long j20 = tickTimes[i14] / 200000L;
-				tessellator.addVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - j18) + 0.5F), 0.0D);
-				tessellator.addVertex((double)((float)i14 + 0.5F), (double)((float)this.displayHeight + 0.5F), 0.0D);
+				tessellator.AddVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - j18) + 0.5F), 0.0D);
+				tessellator.AddVertex((double)((float)i14 + 0.5F), (double)((float)this.displayHeight + 0.5F), 0.0D);
 				tessellator.ColorOpaque_I = (int)unchecked((int)0xFF000000) + i16 * 65536 + i16 * 256 + i16 * 1;
-				tessellator.addVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - j18) + 0.5F), 0.0D);
-				tessellator.addVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - (j18 - j20)) + 0.5F), 0.0D);
+				tessellator.AddVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - j18) + 0.5F), 0.0D);
+				tessellator.AddVertex((double)((float)i14 + 0.5F), (double)((float)((long)this.displayHeight - (j18 - j20)) + 0.5F), 0.0D);
 			}
 
 			tessellator.DrawImmediate();
@@ -900,10 +903,10 @@ namespace net.minecraft.client
 			GL.Enable(EnableCap.Blend);
 			tessellator.startDrawingQuads();
 			tessellator.setColorRGBA_I(0, 200);
-			tessellator.addVertex((double)((float)i15 - (float)s26 * 1.1F), (double)((float)i16 - (float)s26 * 0.6F - 16.0F), 0.0D);
-			tessellator.addVertex((double)((float)i15 - (float)s26 * 1.1F), (double)(i16 + s26 * 2), 0.0D);
-			tessellator.addVertex((double)((float)i15 + (float)s26 * 1.1F), (double)(i16 + s26 * 2), 0.0D);
-			tessellator.addVertex((double)((float)i15 + (float)s26 * 1.1F), (double)((float)i16 - (float)s26 * 0.6F - 16.0F), 0.0D);
+			tessellator.AddVertex((double)((float)i15 - (float)s26 * 1.1F), (double)((float)i16 - (float)s26 * 0.6F - 16.0F), 0.0D);
+			tessellator.AddVertex((double)((float)i15 - (float)s26 * 1.1F), (double)(i16 + s26 * 2), 0.0D);
+			tessellator.AddVertex((double)((float)i15 + (float)s26 * 1.1F), (double)(i16 + s26 * 2), 0.0D);
+			tessellator.AddVertex((double)((float)i15 + (float)s26 * 1.1F), (double)((float)i16 - (float)s26 * 0.6F - 16.0F), 0.0D);
 			tessellator.DrawImmediate();
 			GL.Disable(EnableCap.Blend);
 			double d27 = 0.0D;
@@ -915,7 +918,7 @@ namespace net.minecraft.client
 				i21 = MathHelper.floor_double(profilerResult29.sectionPercentage / 4.0D) + 1;
 				tessellator.startDrawing(6);
 				tessellator.ColorOpaque_I = profilerResult29.DisplayColor;
-				tessellator.addVertex((double)i15, (double)i16, 0.0D);
+				tessellator.AddVertex((double)i15, (double)i16, 0.0D);
 
 				int i22;
 				float f23;
@@ -926,7 +929,7 @@ namespace net.minecraft.client
 					f23 = (float)((d27 + profilerResult29.sectionPercentage * (double)i22 / (double)i21) * (double)(float)Math.PI * 2.0D / 100.0D);
 					f24 = MathHelper.sin(f23) * (float)s26;
 					f25 = MathHelper.cos(f23) * (float)s26 * 0.5F;
-					tessellator.addVertex((double)((float)i15 + f24), (double)((float)i16 - f25), 0.0D);
+					tessellator.AddVertex((double)((float)i15 + f24), (double)((float)i16 - f25), 0.0D);
 				}
 
 				tessellator.DrawImmediate();
@@ -938,8 +941,8 @@ namespace net.minecraft.client
 					f23 = (float)((d27 + profilerResult29.sectionPercentage * (double)i22 / (double)i21) * (double)(float)Math.PI * 2.0D / 100.0D);
 					f24 = MathHelper.sin(f23) * (float)s26;
 					f25 = MathHelper.cos(f23) * (float)s26 * 0.5F;
-					tessellator.addVertex((double)((float)i15 + f24), (double)((float)i16 - f25), 0.0D);
-					tessellator.addVertex((double)((float)i15 + f24), (double)((float)i16 - f25 + 10.0F), 0.0D);
+					tessellator.AddVertex((double)((float)i15 + f24), (double)((float)i16 - f25), 0.0D);
+					tessellator.AddVertex((double)((float)i15 + f24), (double)((float)i16 - f25 + 10.0F), 0.0D);
 				}
 
 				tessellator.DrawImmediate();

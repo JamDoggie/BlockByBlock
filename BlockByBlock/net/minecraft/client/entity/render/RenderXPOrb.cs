@@ -55,7 +55,6 @@ namespace net.minecraft.client.entity.render
             tessellator11.AddVertexWithUV((double)(0.0F - f17), (double)(1.0F - f18), 0.0D, (double)f12, (double)f14);
             tessellator11.DrawImmediate();
             GL.Disable(EnableCap.Blend);
-            GL.Disable(EnableCap.RescaleNormal);
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
         }
 

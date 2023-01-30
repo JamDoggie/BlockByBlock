@@ -103,8 +103,7 @@
                     
 					RenderHelper.enableGUIStandardItemLighting();
 					Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
-					GL.Enable(EnableCap.RescaleNormal);
-					GL.Enable(EnableCap.ColorMaterial);
+					Minecraft.renderPipeline.SetState(RenderState.ColorMaterialState, true);
 					Minecraft.renderPipeline.SetState(RenderState.LightingState, true);
 					this.itemRender.renderItemIntoGUI(this.theGame.fontRenderer, this.theGame.renderEngine, this.theAchievement.theItemStack, i5 + 8, i6 + 8);
 					Minecraft.renderPipeline.SetState(RenderState.LightingState, false);

@@ -38,33 +38,35 @@ namespace net.minecraft.src
 			rotationXZ = MathHelper.cos(f5 * (float)Math.PI / 180.0F);
 		}
 
-		public static Vec3D projectViewFromEntity(EntityLiving entityLiving0, double d1)
+		public static Vec3D projectViewFromEntity(EntityLiving ent, double scale)
 		{
-			double d3 = entityLiving0.prevPosX + (entityLiving0.posX - entityLiving0.prevPosX) * d1;
-			double d5 = entityLiving0.prevPosY + (entityLiving0.posY - entityLiving0.prevPosY) * d1 + (double)entityLiving0.EyeHeight;
-			double d7 = entityLiving0.prevPosZ + (entityLiving0.posZ - entityLiving0.prevPosZ) * d1;
-			double d9 = d3 + (double)(objectX * 1.0F);
-			double d11 = d5 + (double)(objectY * 1.0F);
-			double d13 = d7 + (double)(objectZ * 1.0F);
-			return Vec3D.createVector(d9, d11, d13);
+			double d3 = ent.prevPosX + (ent.posX - ent.prevPosX) * scale;
+			double d5 = ent.prevPosY + (ent.posY - ent.prevPosY) * scale + (double)ent.EyeHeight;
+			double d7 = ent.prevPosZ + (ent.posZ - ent.prevPosZ) * scale;
+            
+			double x = d3 + (double)(objectX * 1.0F);
+			double y = d5 + (double)(objectY * 1.0F);
+			double z = d7 + (double)(objectZ * 1.0F);
+            
+			return Vec3D.createVector(x, y, z);
 		}
 
 		public static int getBlockIdAtEntityViewpoint(World world0, EntityLiving entityLiving1, float f2)
 		{
 			Vec3D vec3D3 = projectViewFromEntity(entityLiving1, (double)f2);
 			ChunkPosition chunkPosition4 = new(vec3D3);
-			int i5 = world0.getBlockId(chunkPosition4.x, chunkPosition4.y, chunkPosition4.z);
-			if (i5 != 0 && Block.blocksList[i5].blockMaterial.Liquid)
+			int blockId = world0.getBlockId(chunkPosition4.x, chunkPosition4.y, chunkPosition4.z);
+			if (blockId != 0 && Block.blocksList[blockId].blockMaterial.Liquid)
 			{
 				float f6 = BlockFluid.getFluidHeightPercent(world0.getBlockMetadata(chunkPosition4.x, chunkPosition4.y, chunkPosition4.z)) - 0.11111111F;
 				float f7 = (float)(chunkPosition4.y + 1) - f6;
 				if (vec3D3.yCoord >= (double)f7)
 				{
-					i5 = world0.getBlockId(chunkPosition4.x, chunkPosition4.y + 1, chunkPosition4.z);
+					blockId = world0.getBlockId(chunkPosition4.x, chunkPosition4.y + 1, chunkPosition4.z);
 				}
 			}
 
-			return i5;
+			return blockId;
 		}
 	}
 

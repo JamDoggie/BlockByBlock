@@ -967,7 +967,7 @@ namespace net.minecraft.src
 
 					if (i16 > 0)
 					{
-						renderGlobal5.renderAllRenderLists(1, (double)f1);
+						renderGlobal5.RenderAllWorldRenderers(1, (double)f1);
 					}
 
                     Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, false);
@@ -1215,7 +1215,7 @@ namespace net.minecraft.src
 									d35 = (double)((float)i20 + 0.5F) - entityLiving41.posZ;
 									float f37 = MathHelper.sqrt_double(d33 * d33 + d35 * d35) / (float)b16;
 									float f38 = 1.0F;
-									tessellator8.Brightness = world42.getLightBrightnessForSkyBlocks(i21, i30, i20, 0);
+									tessellator8.Brightness = world42.GetLightBrightnessForSkyBlocks(i21, i30, i20, 0);
 									tessellator8.setColorRGBA_F(f38, f38, f38, ((1.0F - f37 * f37) * 0.5F + 0.5F) * f2);
 									tessellator8.setTranslation(-d9 * 1.0D, -d11 * 1.0D, -d13 * 1.0D);
 									tessellator8.AddVertexWithUV((double)((float)i21 - f23) + 0.5D, (double)i27, (double)((float)i20 - f24) + 0.5D, (double)(0.0F * f29), (double)((float)i27 * f29 / 4.0F + f32 * f29));
@@ -1245,7 +1245,7 @@ namespace net.minecraft.src
 									double d47 = (double)((float)i20 + 0.5F) - entityLiving41.posZ;
 									float f39 = MathHelper.sqrt_double(d35 * d35 + d47 * d47) / (float)b16;
 									float f40 = 1.0F;
-									tessellator8.Brightness = (world42.getLightBrightnessForSkyBlocks(i21, i30, i20, 0) * 3 + 15728880) / 4;
+									tessellator8.Brightness = (world42.GetLightBrightnessForSkyBlocks(i21, i30, i20, 0) * 3 + 15728880) / 4;
 									tessellator8.setColorRGBA_F(f40, f40, f40, ((1.0F - f39 * f39) * 0.3F + 0.5F) * f2);
 									tessellator8.setTranslation(-d9 * 1.0D, -d11 * 1.0D, -d13 * 1.0D);
 									tessellator8.AddVertexWithUV((double)((float)i21 - f23) + 0.5D, (double)i27, (double)((float)i20 - f24) + 0.5D, (double)(0.0F * f29 + f46), (double)((float)i27 * f29 / 4.0F + f32 * f29 + f34));

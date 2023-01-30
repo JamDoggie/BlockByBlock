@@ -511,9 +511,6 @@ namespace net.minecraft.src
 		{
 			Profiler.startSection("opengl_attributes");
             GL.BindTexture(TextureTarget.Texture2D, i4);
-            
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, 0);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmapSgis, 0);
 
             if (useMipmaps)
 			{

@@ -73,6 +73,7 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta15" />
     <PackageReference Include="TextCopy" Version="6.1.0" />
+    <PackageReference Include="Varena" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>

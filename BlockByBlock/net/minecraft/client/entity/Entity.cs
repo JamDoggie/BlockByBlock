@@ -830,7 +830,7 @@ namespace net.minecraft.client.entity
             {
                 double d4 = (boundingBox.maxY - boundingBox.minY) * 0.66D;
                 int i6 = MathHelper.floor_double(posY - yOffset + d4);
-                return worldObj.getLightBrightnessForSkyBlocks(i2, i6, i3, 0);
+                return worldObj.GetLightBrightnessForSkyBlocks(i2, i6, i3, 0);
             }
             else
             {

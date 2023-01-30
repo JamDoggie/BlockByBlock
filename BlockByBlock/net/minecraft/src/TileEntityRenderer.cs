@@ -90,7 +90,7 @@ namespace net.minecraft.src
 		{
 			if (tileEntity1.getDistanceFrom(this.playerX, this.playerY, this.playerZ) < 4096.0D)
 			{
-				int i3 = this.worldObj.getLightBrightnessForSkyBlocks(tileEntity1.xCoord, tileEntity1.yCoord, tileEntity1.zCoord, 0);
+				int i3 = this.worldObj.GetLightBrightnessForSkyBlocks(tileEntity1.xCoord, tileEntity1.yCoord, tileEntity1.zCoord, 0);
 				int i4 = i3 % 65536;
 				int i5 = i3 / 65536;
 				LightmapManager.setLightmapTextureCoords(LightmapManager.lightmapTexUnit, (float)i4 / 1.0F, (float)i5 / 1.0F);

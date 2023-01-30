@@ -39,7 +39,7 @@ namespace net.minecraft.src
             Minecraft.renderPipeline.ModelMatrix.PushMatrix();
             Minecraft.renderPipeline.ModelMatrix.Translate((float)i4, (float)i5, 0.0F);
             Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
-			GL.Enable(EnableCap.RescaleNormal);
+            
 			Slot slot6 = null;
 			short s7 = 240;
 			short s8 = 240;
@@ -77,7 +77,7 @@ namespace net.minecraft.src
 				itemRenderer.zLevel = 0.0F;
 			}
 
-			GL.Disable(EnableCap.RescaleNormal);
+            
 			RenderHelper.disableStandardItemLighting();
 			Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
 			GL.Disable(EnableCap.DepthTest);

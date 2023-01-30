@@ -74,7 +74,7 @@ namespace net.minecraft.client.entity.render
                 float f13 = handleRotationFloat(ent, f9);
                 rotateCorpse(ent, f13, f10, f9);
                 float f14 = 0.0625F;
-                GL.Enable(EnableCap.RescaleNormal);
+                
                 Minecraft.renderPipeline.ModelMatrix.Scale(-1.0F, -1.0F, 1.0F);
                 preRenderCallback(ent, f9);
                 Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, -24.0F * f14 - 0.0078125F, 0.0F);
@@ -195,8 +195,6 @@ namespace net.minecraft.client.entity.render
                     Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
                     Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
                 }
-
-                GL.Disable(EnableCap.RescaleNormal);
             }
             catch (Exception exception25)
             {
@@ -319,10 +317,10 @@ namespace net.minecraft.client.entity.render
                 tessellator.startDrawingQuads();
                 int i16 = fontRenderer11.getStringWidth(text) / 2;
                 tessellator.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
-                tessellator.addVertex(-i16 - 1, -1 + b15, 0.0D);
-                tessellator.addVertex(-i16 - 1, 8 + b15, 0.0D);
-                tessellator.addVertex(i16 + 1, 8 + b15, 0.0D);
-                tessellator.addVertex(i16 + 1, -1 + b15, 0.0D);
+                tessellator.AddVertex(-i16 - 1, -1 + b15, 0.0D);
+                tessellator.AddVertex(-i16 - 1, 8 + b15, 0.0D);
+                tessellator.AddVertex(i16 + 1, 8 + b15, 0.0D);
+                tessellator.AddVertex(i16 + 1, -1 + b15, 0.0D);
                 tessellator.DrawImmediate();
                 Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
                 fontRenderer11.drawString(text, -fontRenderer11.getStringWidth(text) / 2, b15, 553648127);

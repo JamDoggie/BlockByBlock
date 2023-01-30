@@ -46,7 +46,6 @@ namespace net.minecraft.client.entity.render
             }
 
             Minecraft.renderPipeline.ModelMatrix.Translate((float)d2, (float)d4 + f11, (float)d6);
-            GL.Enable(EnableCap.RescaleNormal);
             int i15;
             float f18;
             float f19;
@@ -131,8 +130,7 @@ namespace net.minecraft.client.entity.render
                     func_40267_a(i14, b13);
                 }
             }
-
-            GL.Disable(EnableCap.RescaleNormal);
+            
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
         }
 
@@ -377,10 +375,10 @@ namespace net.minecraft.client.entity.render
         {
             tessellator1.startDrawingQuads();
             tessellator1.ColorOpaque_I = i6;
-            tessellator1.addVertex(i2 + 0, i3 + 0, 0.0D);
-            tessellator1.addVertex(i2 + 0, i3 + i5, 0.0D);
-            tessellator1.addVertex(i2 + i4, i3 + i5, 0.0D);
-            tessellator1.addVertex(i2 + i4, i3 + 0, 0.0D);
+            tessellator1.AddVertex(i2 + 0, i3 + 0, 0.0D);
+            tessellator1.AddVertex(i2 + 0, i3 + i5, 0.0D);
+            tessellator1.AddVertex(i2 + i4, i3 + i5, 0.0D);
+            tessellator1.AddVertex(i2 + i4, i3 + 0, 0.0D);
             tessellator1.DrawImmediate();
         }
 

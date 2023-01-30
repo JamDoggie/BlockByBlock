@@ -59,7 +59,7 @@ namespace BlockByBlock.helpers
         /// <param name="objPos"></param>
         public static void UnProject(float winx, float winy, float winz, Matrix4 modelMatrix, Matrix4 projMatrix, int[] viewport, float[] objPos)
         {
-            Vector3 result = Vector3.Unproject(new Vector3(winx, winy, winz), viewport[0], viewport[1], viewport[2], viewport[3], projMatrix[0, 0], projMatrix[1, 1], modelMatrix);
+            Vector3 result = Vector3.Unproject(new Vector3(winx, winy, winz), viewport[0], viewport[1], viewport[2], viewport[3], projMatrix[0, 0], projMatrix[1, 1], (modelMatrix * projMatrix).Inverted());
             objPos[0] = result.X;
             objPos[1] = result.Y;
             objPos[2] = result.Z;

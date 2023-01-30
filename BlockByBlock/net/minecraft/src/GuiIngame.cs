@@ -282,7 +282,6 @@ namespace net.minecraft.src
 				}
 
 				GL.Disable(EnableCap.Blend);
-				GL.Enable(EnableCap.RescaleNormal);
 				RenderHelper.enableGUIStandardItemLighting();
 
 				for (i18 = 0; i18 < 9; ++i18)
@@ -293,7 +292,6 @@ namespace net.minecraft.src
 				}
 
 				RenderHelper.disableStandardItemLighting();
-				GL.Disable(EnableCap.RescaleNormal);
 			}
 
 			float f33;

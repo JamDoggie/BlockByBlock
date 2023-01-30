@@ -19,7 +19,6 @@ namespace net.minecraft.client.entity.render
         {
             Minecraft.renderPipeline.ModelMatrix.PushMatrix();
             Minecraft.renderPipeline.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
-            GL.Enable(EnableCap.RescaleNormal);
             float f10 = field_40269_a;
             Minecraft.renderPipeline.ModelMatrix.Scale(f10 / 1.0F, f10 / 1.0F, f10 / 1.0F);
             sbyte b11 = 46;
@@ -41,7 +40,6 @@ namespace net.minecraft.client.entity.render
             tessellator12.AddVertexWithUV((double)(f17 - f18), (double)(1.0F - f19), 0.0D, (double)f14, (double)f15);
             tessellator12.AddVertexWithUV((double)(0.0F - f18), (double)(1.0F - f19), 0.0D, (double)f13, (double)f15);
             tessellator12.DrawImmediate();
-            GL.Disable(EnableCap.RescaleNormal);
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
         }
 

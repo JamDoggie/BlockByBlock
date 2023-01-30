@@ -470,10 +470,10 @@ namespace net.minecraft.src
             GL.Enable(EnableCap.ColorLogicOp);
 			GL.LogicOp(LogicOp.OrReverse);
 			tessellator6.startDrawingQuads();
-			tessellator6.addVertex((double)i1, (double)i4, 0.0D);
-			tessellator6.addVertex((double)i3, (double)i4, 0.0D);
-			tessellator6.addVertex((double)i3, (double)i2, 0.0D);
-			tessellator6.addVertex((double)i1, (double)i2, 0.0D);
+			tessellator6.AddVertex((double)i1, (double)i4, 0.0D);
+			tessellator6.AddVertex((double)i3, (double)i4, 0.0D);
+			tessellator6.AddVertex((double)i3, (double)i2, 0.0D);
+			tessellator6.AddVertex((double)i1, (double)i2, 0.0D);
 			tessellator6.DrawImmediate();
 			GL.Disable(EnableCap.ColorLogicOp);
 			Minecraft.renderPipeline.SetState(RenderState.TextureState, true);

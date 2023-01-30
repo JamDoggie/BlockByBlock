@@ -396,10 +396,10 @@ namespace net.minecraft.src
 						tessellator12 = Tessellator.instance;
                         Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
                         tessellator12.startDrawingQuads();
-						tessellator12.addVertex((double)this.posX, (double)(this.posY + (float)(this.FONT_HEIGHT / 2)), 0.0D);
-						tessellator12.addVertex((double)(this.posX + f14), (double)(this.posY + (float)(this.FONT_HEIGHT / 2)), 0.0D);
-						tessellator12.addVertex((double)(this.posX + f14), (double)(this.posY + (float)(this.FONT_HEIGHT / 2) - 1.0F), 0.0D);
-						tessellator12.addVertex((double)this.posX, (double)(this.posY + (float)(this.FONT_HEIGHT / 2) - 1.0F), 0.0D);
+						tessellator12.AddVertex((double)this.posX, (double)(this.posY + (float)(this.FONT_HEIGHT / 2)), 0.0D);
+						tessellator12.AddVertex((double)(this.posX + f14), (double)(this.posY + (float)(this.FONT_HEIGHT / 2)), 0.0D);
+						tessellator12.AddVertex((double)(this.posX + f14), (double)(this.posY + (float)(this.FONT_HEIGHT / 2) - 1.0F), 0.0D);
+						tessellator12.AddVertex((double)this.posX, (double)(this.posY + (float)(this.FONT_HEIGHT / 2) - 1.0F), 0.0D);
 						tessellator12.DrawImmediate();
                         Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
                     }
@@ -410,10 +410,10 @@ namespace net.minecraft.src
                         Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
                         tessellator12.startDrawingQuads();
 						int i13 = z6 ? -1 : 0;
-						tessellator12.addVertex((double)(this.posX + (float)i13), (double)(this.posY + (float)this.FONT_HEIGHT), 0.0D);
-						tessellator12.addVertex((double)(this.posX + f14), (double)(this.posY + (float)this.FONT_HEIGHT), 0.0D);
-						tessellator12.addVertex((double)(this.posX + f14), (double)(this.posY + (float)this.FONT_HEIGHT - 1.0F), 0.0D);
-						tessellator12.addVertex((double)(this.posX + (float)i13), (double)(this.posY + (float)this.FONT_HEIGHT - 1.0F), 0.0D);
+						tessellator12.AddVertex((double)(this.posX + (float)i13), (double)(this.posY + (float)this.FONT_HEIGHT), 0.0D);
+						tessellator12.AddVertex((double)(this.posX + f14), (double)(this.posY + (float)this.FONT_HEIGHT), 0.0D);
+						tessellator12.AddVertex((double)(this.posX + f14), (double)(this.posY + (float)this.FONT_HEIGHT - 1.0F), 0.0D);
+						tessellator12.AddVertex((double)(this.posX + (float)i13), (double)(this.posY + (float)this.FONT_HEIGHT - 1.0F), 0.0D);
 						tessellator12.DrawImmediate();
 						Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
 					}

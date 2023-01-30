@@ -1,5 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using System;
+using System.Numerics;
 
 namespace net.minecraft.src
 {
@@ -27,7 +28,14 @@ namespace net.minecraft.src
 		private float aoLightValueXPos;
 		private float aoLightValueYPos;
 		private float aoLightValueZPos;
-		private float aoLightValueScratchXYZNNN;
+
+		private float aoLightValueScratchTopLeft;
+        private float aoLightValueScratchTopRight;
+        private float aoLightValueScratchBottomRight;
+        private float aoLightValueScratchBottomLeft;
+
+
+        private float aoLightValueScratchXYZNNN;
 		private float aoLightValueScratchXYNN;
 		private float aoLightValueScratchXYZNNP;
 		private float aoLightValueScratchYZNN;
@@ -47,6 +55,12 @@ namespace net.minecraft.src
 		private float aoLightValueScratchXZPN;
 		private float aoLightValueScratchXZNP;
 		private float aoLightValueScratchXZPP;
+
+		private int aoBrightnessTopLeft;
+		private int aoBrightnessTopRight;
+		private int aoBrightnessBottomLeft;
+		private int aoBrightnessBottomRight;
+
 		private int aoBrightnessXYZNNN;
 		private int aoBrightnessXYNN;
 		private int aoBrightnessXYZNNP;
@@ -67,6 +81,7 @@ namespace net.minecraft.src
 		private int aoBrightnessXZPN;
 		private int aoBrightnessXZNP;
 		private int aoBrightnessXZPP;
+
 		private int aoType = 1;
 		private int brightnessTopLeft;
 		private int brightnessBottomLeft;
@@ -181,7 +196,7 @@ namespace net.minecraft.src
 			float f10 = 1.0F;
 			float f11 = 0.8F;
 			float f12 = 0.6F;
-			int i25 = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			int i25 = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			tessellator5.Brightness = i25;
 			tessellator5.setColorOpaque_F(f9, f9, f9);
 			int i27 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 0);
@@ -200,7 +215,7 @@ namespace net.minecraft.src
 			tessellator5.AddVertexWithUV(d38, d42, d44, d30, d34);
 			tessellator5.AddVertexWithUV(d40, d42, d44, d32, d34);
 			tessellator5.AddVertexWithUV(d40, d42, d46, d32, d36);
-			tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
+			tessellator5.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
 			tessellator5.setColorOpaque_F(f10, f10, f10);
 			i27 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 1);
 			i28 = (i27 & 15) << 4;
@@ -277,7 +292,7 @@ namespace net.minecraft.src
 
 			if (i27 != 2 && (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 - 1, 2)))
 			{
-				tessellator5.Brightness = block1.minZ > 0.0D ? i25 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
+				tessellator5.Brightness = block1.minZ > 0.0D ? i25 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
 				tessellator5.setColorOpaque_F(f11, f11, f11);
 				this.flipTexture = b64 == 2;
 				this.renderEastFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 2));
@@ -285,7 +300,7 @@ namespace net.minecraft.src
 
 			if (i27 != 3 && (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 + 1, 3)))
 			{
-				tessellator5.Brightness = block1.maxZ < 1.0D ? i25 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
+				tessellator5.Brightness = block1.maxZ < 1.0D ? i25 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
 				tessellator5.setColorOpaque_F(f11, f11, f11);
 				this.flipTexture = b64 == 3;
 				this.renderWestFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 3));
@@ -293,7 +308,7 @@ namespace net.minecraft.src
 
 			if (i27 != 4 && (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 - 1, i3, i4, 4)))
 			{
-				tessellator5.Brightness = block1.minZ > 0.0D ? i25 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
+				tessellator5.Brightness = block1.minZ > 0.0D ? i25 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
 				tessellator5.setColorOpaque_F(f12, f12, f12);
 				this.flipTexture = b64 == 4;
 				this.renderNorthFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 4));
@@ -301,7 +316,7 @@ namespace net.minecraft.src
 
 			if (i27 != 5 && (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 + 1, i3, i4, 5)))
 			{
-				tessellator5.Brightness = block1.maxZ < 1.0D ? i25 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
+				tessellator5.Brightness = block1.maxZ < 1.0D ? i25 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
 				tessellator5.setColorOpaque_F(f12, f12, f12);
 				this.flipTexture = b64 == 5;
 				this.renderSouthFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 5));
@@ -324,7 +339,7 @@ namespace net.minecraft.src
 			this.renderStandardBlock(blockBrewingStand1, i2, i3, i4);
 			this.clearOverrideBlockTexture();
 			Tessellator tessellator5 = Tessellator.instance;
-			tessellator5.Brightness = blockBrewingStand1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator5.Brightness = blockBrewingStand1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			float f6 = 1.0F;
 			int i7 = blockBrewingStand1.colorMultiplier(this.blockAccess, i2, i3, i4);
 			float f8 = (float)(i7 >> 16 & 255) / 255.0F;
@@ -377,7 +392,7 @@ namespace net.minecraft.src
 		{
 			this.renderStandardBlock(blockCauldron1, i2, i3, i4);
 			Tessellator tessellator5 = Tessellator.instance;
-			tessellator5.Brightness = blockCauldron1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator5.Brightness = blockCauldron1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			float f6 = 1.0F;
 			int i7 = blockCauldron1.colorMultiplier(this.blockAccess, i2, i3, i4);
 			float f8 = (float)(i7 >> 16 & 255) / 255.0F;
@@ -414,7 +429,7 @@ namespace net.minecraft.src
 		{
 			int i5 = this.blockAccess.getBlockMetadata(i2, i3, i4);
 			Tessellator tessellator6 = Tessellator.instance;
-			tessellator6.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator6.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			tessellator6.setColorOpaque_F(1.0F, 1.0F, 1.0F);
 			double d7 = (double)0.4F;
 			double d9 = 0.5D - d7;
@@ -450,7 +465,7 @@ namespace net.minecraft.src
 			int i7 = (i5 & 12) >> 2;
 			this.renderStandardBlock(block1, i2, i3, i4);
 			Tessellator tessellator8 = Tessellator.instance;
-			tessellator8.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator8.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			tessellator8.setColorOpaque_F(1.0F, 1.0F, 1.0F);
 			double d9 = -0.1875D;
 			double d11 = 0.0D;
@@ -843,7 +858,7 @@ namespace net.minecraft.src
 				this.overrideBlockTexture = -1;
 			}
 
-			tessellator8.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator8.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			float f13 = 1.0F;
 			if (Block.lightValue[block1.blockID] > 0)
 			{
@@ -1014,7 +1029,7 @@ namespace net.minecraft.src
 			}
 
 			tessellator5.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-			tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator5.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			int i7 = (i6 & 15) << 4;
 			int i8 = i6 & 240;
 			double d9 = (double)((float)i7 / 256.0F);
@@ -1217,7 +1232,7 @@ namespace net.minecraft.src
 				i7 = this.overrideBlockTexture;
 			}
 
-			tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator5.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			float f8 = 1.0F;
 			float f9 = (float)i6 / 15.0F;
 			float f10 = f9 * 0.6F + 0.4F;
@@ -1453,7 +1468,7 @@ namespace net.minecraft.src
 				i6 &= 7;
 			}
 
-			tessellator5.Brightness = blockRail1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator5.Brightness = blockRail1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			tessellator5.setColorOpaque_F(1.0F, 1.0F, 1.0F);
 			int i8 = (i7 & 15) << 4;
 			int i9 = i7 & 240;
@@ -1533,7 +1548,7 @@ namespace net.minecraft.src
 				i6 = this.overrideBlockTexture;
 			}
 
-			tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator5.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			float f7 = 1.0F;
 			tessellator5.setColorOpaque_F(f7, f7, f7);
 			int i22 = (i6 & 15) << 4;
@@ -1590,7 +1605,7 @@ namespace net.minecraft.src
 			}
 
 			float f7 = 1.0F;
-			tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator5.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			int i8 = block1.colorMultiplier(this.blockAccess, i2, i3, i4);
 			float f9 = (float)(i8 >> 16 & 255) / 255.0F;
 			float f10 = (float)(i8 >> 8 & 255) / 255.0F;
@@ -1667,7 +1682,7 @@ namespace net.minecraft.src
 		{
 			int i5 = this.blockAccess.Height;
 			Tessellator tessellator6 = Tessellator.instance;
-			tessellator6.Brightness = blockPane1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator6.Brightness = blockPane1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			float f7 = 1.0F;
 			int i8 = blockPane1.colorMultiplier(this.blockAccess, i2, i3, i4);
 			float f9 = (float)(i8 >> 16 & 255) / 255.0F;
@@ -2092,7 +2107,7 @@ namespace net.minecraft.src
 		public virtual bool renderCrossedSquares(Block block1, int i2, int i3, int i4)
 		{
 			Tessellator tessellator5 = Tessellator.instance;
-			tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator5.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			float f6 = 1.0F;
 			int i7 = block1.colorMultiplier(this.blockAccess, i2, i3, i4);
 			float f8 = (float)(i7 >> 16 & 255) / 255.0F;
@@ -2120,7 +2135,7 @@ namespace net.minecraft.src
 		{
 			BlockStem blockStem5 = (BlockStem)block1;
 			Tessellator tessellator6 = Tessellator.instance;
-			tessellator6.Brightness = blockStem5.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator6.Brightness = blockStem5.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			float f7 = 1.0F;
 			int i8 = blockStem5.colorMultiplier(this.blockAccess, i2, i3, i4);
 			float f9 = (float)(i8 >> 16 & 255) / 255.0F;
@@ -2146,7 +2161,7 @@ namespace net.minecraft.src
 		public virtual bool renderBlockCrops(Block block1, int i2, int i3, int i4)
 		{
 			Tessellator tessellator5 = Tessellator.instance;
-			tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator5.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			tessellator5.setColorOpaque_F(1.0F, 1.0F, 1.0F);
 			this.renderBlockCropsImpl(block1, this.blockAccess.getBlockMetadata(i2, i3, i4), (double)i2, (double)((float)i3 - 0.0625F), (double)i4);
 			return true;
@@ -2294,7 +2309,7 @@ namespace net.minecraft.src
 			long j18 = (long)(i2 * 3129871) ^ (long)i4 * 116129781L ^ (long)i3;
 			j18 = j18 * j18 * 42317861L + j18 * 11L;
 			int i20 = (int)(j18 >> 16 & 3L);
-			tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator5.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			float f21 = (float)i2 + 0.5F;
 			float f22 = (float)i4 + 0.5F;
 			float f23 = (float)(i20 & 1) * 0.5F * (float)(1 - i20 / 2 % 2 * 2);
@@ -2484,7 +2499,7 @@ namespace net.minecraft.src
 
 					double d42 = (double)(MathHelper.sin(f35) * 8.0F) / 256.0D;
 					double d44 = (double)(MathHelper.cos(f35) * 8.0F) / 256.0D;
-					tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+					tessellator5.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 					float f46 = 1.0F;
 					tessellator5.setColorOpaque_F(f15 * f46 * f7, f15 * f46 * f8, f15 * f46 * f9);
 					tessellator5.AddVertexWithUV((double)(i2 + 0), (double)i3 + d24, (double)(i4 + 0), d38 - d44 - d42, d40 - d44 + d42);
@@ -2495,7 +2510,7 @@ namespace net.minecraft.src
 
 				if (this.renderAllFaces || z11)
 				{
-					tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
+					tessellator5.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
 					float f64 = 1.0F;
 					tessellator5.setColorOpaque_F(f14 * f64, f14 * f64, f14 * f64);
 					this.renderBottomFace(block1, (double)i2, (double)i3 + d32, (double)i4, block1.getBlockTextureFromSide(0));
@@ -2580,7 +2595,7 @@ namespace net.minecraft.src
 						double d57 = ((double)i67 + (1.0D - d41) * 16.0D) / 256.0D;
 						double d59 = ((double)i67 + (1.0D - d43) * 16.0D) / 256.0D;
 						double d61 = ((double)(i67 + 16) - 0.01D) / 256.0D;
-						tessellator5.Brightness = block1.getMixedBrightnessForBlock(this.blockAccess, i65, i3, i37);
+						tessellator5.Brightness = block1.GetMixedBrightnessForBlock(this.blockAccess, i65, i3, i37);
 						float f63 = 1.0F;
 						if (i34 < 2)
 						{
@@ -2653,7 +2668,7 @@ namespace net.minecraft.src
 			float f9 = 0.6F;
 			Tessellator tessellator10 = Tessellator.instance;
 			tessellator10.startDrawingQuads();
-			tessellator10.Brightness = block1.getMixedBrightnessForBlock(world2, i3, i4, i5);
+			tessellator10.Brightness = block1.GetMixedBrightnessForBlock(world2, i3, i4, i5);
 			float f11 = 1.0F;
 			float f12 = 1.0F;
 			if (f12 < f11)
@@ -2706,15 +2721,15 @@ namespace net.minecraft.src
 			tessellator10.DrawImmediate();
 		}
 
-		public virtual bool renderStandardBlock(Block block1, int i2, int i3, int i4)
+		public virtual bool renderStandardBlock(Block block1, int x, int y, int z)
 		{
-			int blockColor = block1.colorMultiplier(this.blockAccess, i2, i3, i4);
-			float f6 = (float)(blockColor >> 16 & 255) / 255.0F;
-			float f7 = (float)(blockColor >> 8 & 255) / 255.0F;
-			float f8 = (float)(blockColor & 255) / 255.0F;
-
-			return Minecraft.AmbientOcclusionEnabled && Block.lightValue[block1.blockID] == 0 ? this.renderStandardBlockWithAmbientOcclusion(block1, i2, i3, i4, f6, f7, f8) : this.renderStandardBlockWithColorMultiplier(block1, i2, i3, i4, f6, f7, f8);
-		}
+			int blockColor = block1.colorMultiplier(this.blockAccess, x, y, z);
+			float r = (float)(blockColor >> 16 & 255) / 255.0F;
+			float g = (float)(blockColor >> 8 & 255) / 255.0F;
+			float b = (float)(blockColor & 255) / 255.0F;
+            
+            return Minecraft.AmbientOcclusionEnabled && Block.lightValue[block1.blockID] == 0 ? this.RenderStandardBlockWithAmbientOcclusion(block1, x, y, z, r, g, b) : this.renderStandardBlockWithColorMultiplier(block1, x, y, z, r, g, b);
+        }
 
 		private static string section1 = "section1";
         private static string section2 = "section2";
@@ -2723,793 +2738,821 @@ namespace net.minecraft.src
         private static string section5 = "section5";
         private static string section6 = "section6";
         private static string section7 = "section7";
-        
+        private static string section8 = "section8";
 
-        public virtual bool renderStandardBlockWithAmbientOcclusion(Block block1, int i2, int i3, int i4, float f5, float f6, float f7)
+        /// <summary>
+		/// Queues all the necessary vertex information into the tessellator for a given block in the world. This method provides per vertex light data
+		/// as opposed to the per face lighting that is applied when smooth lighting is disabled.
+		/// </summary>
+		/// <param name="block"></param>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="z"></param>
+		/// <param name="r"></param>
+		/// <param name="g"></param>
+		/// <param name="b"></param>
+		/// <returns>whether or not anything was drawn.</returns>
+        public virtual bool RenderStandardBlockWithAmbientOcclusion(Block block, int x, int y, int z, float r, float g, float b)
 		{
-			this.enableAO = true;
-			bool z8 = false;
-			float f9 = this.lightValueOwn;
-			float f10 = this.lightValueOwn;
-			float f11 = this.lightValueOwn;
-			float f12 = this.lightValueOwn;
-			bool z13 = true;
-			bool z14 = true;
-			bool z15 = true;
-			bool z16 = true;
-			bool z17 = true;
-			bool z18 = true;
-			this.lightValueOwn = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3, i4);
-			this.aoLightValueXNeg = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3, i4);
-			this.aoLightValueYNeg = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 - 1, i4);
-			this.aoLightValueZNeg = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3, i4 - 1);
-			this.aoLightValueXPos = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3, i4);
-			this.aoLightValueYPos = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 + 1, i4);
-			this.aoLightValueZPos = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3, i4 + 1);
-			int i19 = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
-			int i20 = i19;
-			int i21 = i19;
-			int i22 = i19;
-			int i23 = i19;
-			int i24 = i19;
-			int i25 = i19;
-			if (block1.minY <= 0.0D)
+			enableAO = true;
+			bool facesDrawn = false;
+			float topLeftBrightness = lightValueOwn;
+			float bottomLeftBrightness = lightValueOwn;
+			float bottomRightBrightness = lightValueOwn;
+			float topRightBrightness = lightValueOwn;
+			bool bottomFaceColored = true;
+			bool topFaceColored = true;
+			bool eastFaceColored = true;
+			bool westFaceColored = true;
+			bool northFaceColored = true;
+			bool southFaceColored = true;
+			lightValueOwn = block.GetAmbientOcclusionLightValue(blockAccess, x, y, z);
+			aoLightValueXNeg = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y, z);
+			aoLightValueYNeg = block.GetAmbientOcclusionLightValue(blockAccess, x, y - 1, z);
+			aoLightValueZNeg = block.GetAmbientOcclusionLightValue(blockAccess, x, y, z - 1);
+			aoLightValueXPos = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y, z);
+			aoLightValueYPos = block.GetAmbientOcclusionLightValue(blockAccess, x, y + 1, z);
+			aoLightValueZPos = block.GetAmbientOcclusionLightValue(blockAccess, x, y, z + 1);
+
+
+            int blockBrightness = block.GetMixedBrightnessForBlock(blockAccess, x, y, z);
+			int minXBrightness = blockBrightness;
+			int minYBrightness = blockBrightness;
+			int minZBrightness = blockBrightness;
+			int maxXBrightness = blockBrightness;
+			int maxYBrightness = blockBrightness;
+			int maxZBrightness = blockBrightness;
+			if (block.minY <= 0.0D)
 			{
-				i21 = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
+				minYBrightness = block.GetMixedBrightnessForBlock(blockAccess, x, y - 1, z);
 			}
 
-			if (block1.maxY >= 1.0D)
+			if (block.maxY >= 1.0D)
 			{
-				i24 = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
+				maxYBrightness = block.GetMixedBrightnessForBlock(blockAccess, x, y + 1, z);
 			}
 
-			if (block1.minX <= 0.0D)
+			if (block.minX <= 0.0D)
 			{
-				i20 = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
+				minXBrightness = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y, z);
 			}
 
-			if (block1.maxX >= 1.0D)
+			if (block.maxX >= 1.0D)
 			{
-				i23 = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
+				maxXBrightness = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y, z);
 			}
 
-			if (block1.minZ <= 0.0D)
+			if (block.minZ <= 0.0D)
 			{
-				i22 = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
+				minZBrightness = block.GetMixedBrightnessForBlock(blockAccess, x, y, z - 1);
 			}
 
-			if (block1.maxZ >= 1.0D)
+			if (block.maxZ >= 1.0D)
 			{
-				i25 = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
+				maxZBrightness = block.GetMixedBrightnessForBlock(blockAccess, x, y, z + 1);
 			}
+
+            // Debug mark
+            Tessellator tessellator = Tessellator.instance;
+			tessellator.Brightness = 983055;
             
-			// Debug mark
-
-            Tessellator tessellator26 = Tessellator.instance;
-			tessellator26.Brightness = 983055;
-			this.aoGrassXYZPPC = Block.canBlockGrass[this.blockAccess.getBlockId(i2 + 1, i3 + 1, i4)];
-			this.aoGrassXYZPNC = Block.canBlockGrass[this.blockAccess.getBlockId(i2 + 1, i3 - 1, i4)];
-			this.aoGrassXYZPCP = Block.canBlockGrass[this.blockAccess.getBlockId(i2 + 1, i3, i4 + 1)];
-			this.aoGrassXYZPCN = Block.canBlockGrass[this.blockAccess.getBlockId(i2 + 1, i3, i4 - 1)];
-			this.aoGrassXYZNPC = Block.canBlockGrass[this.blockAccess.getBlockId(i2 - 1, i3 + 1, i4)];
-			this.aoGrassXYZNNC = Block.canBlockGrass[this.blockAccess.getBlockId(i2 - 1, i3 - 1, i4)];
-			this.aoGrassXYZNCN = Block.canBlockGrass[this.blockAccess.getBlockId(i2 - 1, i3, i4 - 1)];
-			this.aoGrassXYZNCP = Block.canBlockGrass[this.blockAccess.getBlockId(i2 - 1, i3, i4 + 1)];
-			this.aoGrassXYZCPP = Block.canBlockGrass[this.blockAccess.getBlockId(i2, i3 + 1, i4 + 1)];
-			this.aoGrassXYZCPN = Block.canBlockGrass[this.blockAccess.getBlockId(i2, i3 + 1, i4 - 1)];
-			this.aoGrassXYZCNP = Block.canBlockGrass[this.blockAccess.getBlockId(i2, i3 - 1, i4 + 1)];
-			this.aoGrassXYZCNN = Block.canBlockGrass[this.blockAccess.getBlockId(i2, i3 - 1, i4 - 1)];
-			if (block1.blockIndexInTexture == 3)
-			{
-				z18 = false;
-				z17 = false;
-				z16 = false;
-				z15 = false;
-				z13 = false;
-			}
-
-			if (this.overrideBlockTexture >= 0)
-			{
-				z18 = false;
-				z17 = false;
-				z16 = false;
-				z15 = false;
-				z13 = false;
-			}
+			aoGrassXYZPPC = Block.canBlockGrass[blockAccess.getBlockId(x + 1, y + 1, z)];
+			aoGrassXYZPNC = Block.canBlockGrass[blockAccess.getBlockId(x + 1, y - 1, z)];
+			aoGrassXYZPCP = Block.canBlockGrass[blockAccess.getBlockId(x + 1, y, z + 1)];
+			aoGrassXYZPCN = Block.canBlockGrass[blockAccess.getBlockId(x + 1, y, z - 1)];
+			aoGrassXYZNPC = Block.canBlockGrass[blockAccess.getBlockId(x - 1, y + 1, z)];
+			aoGrassXYZNNC = Block.canBlockGrass[blockAccess.getBlockId(x - 1, y - 1, z)];
+			aoGrassXYZNCN = Block.canBlockGrass[blockAccess.getBlockId(x - 1, y, z - 1)];
+			aoGrassXYZNCP = Block.canBlockGrass[blockAccess.getBlockId(x - 1, y, z + 1)];
+			aoGrassXYZCPP = Block.canBlockGrass[blockAccess.getBlockId(x, y + 1, z + 1)];
+			aoGrassXYZCPN = Block.canBlockGrass[blockAccess.getBlockId(x, y + 1, z - 1)];
+			aoGrassXYZCNP = Block.canBlockGrass[blockAccess.getBlockId(x, y - 1, z + 1)];
+			aoGrassXYZCNN = Block.canBlockGrass[blockAccess.getBlockId(x, y - 1, z - 1)];
             
-            if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 - 1, i4, 0))
+			if (block.blockIndexInTexture == 3)
 			{
-				if (this.aoType > 0)
+				southFaceColored = false;
+				northFaceColored = false;
+				westFaceColored = false;
+				eastFaceColored = false;
+				bottomFaceColored = false;
+			}
+
+			if (overrideBlockTexture >= 0)
+			{
+				southFaceColored = false;
+				northFaceColored = false;
+				westFaceColored = false;
+				eastFaceColored = false;
+				bottomFaceColored = false;
+			}
+
+            #region top face
+            if (renderAllFaces || block.shouldSideBeRendered(blockAccess, x, y + 1, z, 1))
+            {
+                if (aoType > 0)
+                {
+                    if (block.maxY >= 1.0D)
+                    {
+                        ++y;
+                    }
+
+                    aoBrightnessXYNP = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y, z);
+                    aoBrightnessXYPP = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y, z);
+                    aoBrightnessYZPN = block.GetMixedBrightnessForBlock(blockAccess, x, y, z - 1);
+                    aoBrightnessYZPP = block.GetMixedBrightnessForBlock(blockAccess, x, y, z + 1);
+                    aoLightValueScratchXYNP = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y, z);
+                    aoLightValueScratchXYPP = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y, z);
+                    aoLightValueScratchYZPN = block.GetAmbientOcclusionLightValue(blockAccess, x, y, z - 1);
+                    aoLightValueScratchYZPP = block.GetAmbientOcclusionLightValue(blockAccess, x, y, z + 1);
+                    
+                    if (!aoGrassXYZCPN && !aoGrassXYZNPC)
+                    {
+                        aoLightValueScratchXYZNPN = aoLightValueScratchXYNP;
+                        aoBrightnessXYZNPN = aoBrightnessXYNP;
+                    }
+                    else
+                    {
+                        aoLightValueScratchXYZNPN = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y, z - 1);
+                        aoBrightnessXYZNPN = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y, z - 1);
+                    }
+
+                    if (!aoGrassXYZCPN && !aoGrassXYZPPC)
+                    {
+                        aoLightValueScratchXYZPPN = aoLightValueScratchXYPP;
+                        aoBrightnessXYZPPN = aoBrightnessXYPP;
+                    }
+                    else
+                    {
+                        aoLightValueScratchXYZPPN = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y, z - 1);
+                        aoBrightnessXYZPPN = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y, z - 1);
+                    }
+
+                    if (!aoGrassXYZCPP && !aoGrassXYZNPC)
+                    {
+                        aoLightValueScratchXYZNPP = aoLightValueScratchXYNP;
+                        aoBrightnessXYZNPP = aoBrightnessXYNP;
+                    }
+                    else
+                    {
+                        aoLightValueScratchXYZNPP = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y, z + 1);
+                        aoBrightnessXYZNPP = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y, z + 1);
+                    }
+
+                    if (!aoGrassXYZCPP && !aoGrassXYZPPC)
+                    {
+                        aoLightValueScratchXYZPPP = aoLightValueScratchXYPP;
+                        aoBrightnessXYZPPP = aoBrightnessXYPP;
+                    }
+                    else
+                    {
+                        aoLightValueScratchXYZPPP = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y, z + 1);
+                        aoBrightnessXYZPPP = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y, z + 1);
+                    }
+
+                    if (block.maxY >= 1.0D)
+                    {
+                        --y;
+                    }
+
+                    topRightBrightness = (aoLightValueScratchXYZNPP + aoLightValueScratchXYNP + aoLightValueScratchYZPP + aoLightValueYPos) / 4.0F;
+                    topLeftBrightness = (aoLightValueScratchYZPP + aoLightValueYPos + aoLightValueScratchXYZPPP + aoLightValueScratchXYPP) / 4.0F;
+                    bottomLeftBrightness = (aoLightValueYPos + aoLightValueScratchYZPN + aoLightValueScratchXYPP + aoLightValueScratchXYZPPN) / 4.0F;
+                    bottomRightBrightness = (aoLightValueScratchXYNP + aoLightValueScratchXYZNPN + aoLightValueYPos + aoLightValueScratchYZPN) / 4.0F;
+                    brightnessTopRight = getAoBrightness(aoBrightnessXYZNPP, aoBrightnessXYNP, aoBrightnessYZPP, maxYBrightness);
+                    brightnessTopLeft = getAoBrightness(aoBrightnessYZPP, aoBrightnessXYZPPP, aoBrightnessXYPP, maxYBrightness);
+                    brightnessBottomLeft = getAoBrightness(aoBrightnessYZPN, aoBrightnessXYPP, aoBrightnessXYZPPN, maxYBrightness);
+                    brightnessBottomRight = getAoBrightness(aoBrightnessXYNP, aoBrightnessXYZNPN, aoBrightnessYZPN, maxYBrightness);
+                }
+                else
+                {
+                    topRightBrightness = aoLightValueYPos;
+                    bottomRightBrightness = aoLightValueYPos;
+                    bottomLeftBrightness = aoLightValueYPos;
+                    topLeftBrightness = aoLightValueYPos;
+                    brightnessTopLeft = brightnessBottomLeft = brightnessBottomRight = brightnessTopRight = maxYBrightness;
+                }
+
+                colorRedTopLeft = colorRedBottomLeft = colorRedBottomRight = colorRedTopRight = topFaceColored ? r : 1.0F;
+                colorGreenTopLeft = colorGreenBottomLeft = colorGreenBottomRight = colorGreenTopRight = topFaceColored ? g : 1.0F;
+                colorBlueTopLeft = colorBlueBottomLeft = colorBlueBottomRight = colorBlueTopRight = topFaceColored ? b : 1.0F;
+                colorRedTopLeft *= topLeftBrightness;
+                colorGreenTopLeft *= topLeftBrightness;
+                colorBlueTopLeft *= topLeftBrightness;
+                colorRedBottomLeft *= bottomLeftBrightness;
+                colorGreenBottomLeft *= bottomLeftBrightness;
+                colorBlueBottomLeft *= bottomLeftBrightness;
+                colorRedBottomRight *= bottomRightBrightness;
+                colorGreenBottomRight *= bottomRightBrightness;
+                colorBlueBottomRight *= bottomRightBrightness;
+                colorRedTopRight *= topRightBrightness;
+                colorGreenTopRight *= topRightBrightness;
+                colorBlueTopRight *= topRightBrightness;
+                renderTopFace(block, (double)x, (double)y, (double)z, block.getBlockTexture(blockAccess, x, y, z, 1));
+                facesDrawn = true;
+            }
+            #endregion
+
+            #region bottom face
+            if (renderAllFaces || block.shouldSideBeRendered(blockAccess, x, y - 1, z, 0))
+			{
+				if (aoType > 0)
 				{
-					if (block1.minY <= 0.0D)
+					if (block.minY <= 0.0D)
 					{
-						--i3;
+						--y;
 					}
 
-					this.aoBrightnessXYNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
-					this.aoBrightnessYZNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
-					this.aoBrightnessYZNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
-					this.aoBrightnessXYPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
-					this.aoLightValueScratchXYNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3, i4);
-					this.aoLightValueScratchYZNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3, i4 - 1);
-					this.aoLightValueScratchYZNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3, i4 + 1);
-					this.aoLightValueScratchXYPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3, i4);
-					if (!this.aoGrassXYZCNN && !this.aoGrassXYZNNC)
+					aoBrightnessXYNN = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y, z);
+					aoBrightnessYZNN = block.GetMixedBrightnessForBlock(blockAccess, x, y, z - 1);
+					aoBrightnessYZNP = block.GetMixedBrightnessForBlock(blockAccess, x, y, z + 1);
+					aoBrightnessXYPN = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y, z);
+					aoLightValueScratchXYNN = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y, z);
+					aoLightValueScratchYZNN = block.GetAmbientOcclusionLightValue(blockAccess, x, y, z - 1);
+					aoLightValueScratchYZNP = block.GetAmbientOcclusionLightValue(blockAccess, x, y, z + 1);
+					aoLightValueScratchXYPN = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y, z);
+					if (!aoGrassXYZCNN && !aoGrassXYZNNC)
 					{
-						this.aoLightValueScratchXYZNNN = this.aoLightValueScratchXYNN;
-						this.aoBrightnessXYZNNN = this.aoBrightnessXYNN;
+						aoLightValueScratchXYZNNN = aoLightValueScratchXYNN;
+						aoBrightnessXYZNNN = aoBrightnessXYNN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZNNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3, i4 - 1);
-						this.aoBrightnessXYZNNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4 - 1);
+						aoLightValueScratchXYZNNN = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y, z - 1);
+						aoBrightnessXYZNNN = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y, z - 1);
 					}
 
-					if (!this.aoGrassXYZCNP && !this.aoGrassXYZNNC)
+					if (!aoGrassXYZCNP && !aoGrassXYZNNC)
 					{
-						this.aoLightValueScratchXYZNNP = this.aoLightValueScratchXYNN;
-						this.aoBrightnessXYZNNP = this.aoBrightnessXYNN;
+						aoLightValueScratchXYZNNP = aoLightValueScratchXYNN;
+						aoBrightnessXYZNNP = aoBrightnessXYNN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZNNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3, i4 + 1);
-						this.aoBrightnessXYZNNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4 + 1);
+						aoLightValueScratchXYZNNP = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y, z + 1);
+						aoBrightnessXYZNNP = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y, z + 1);
 					}
 
-					if (!this.aoGrassXYZCNN && !this.aoGrassXYZPNC)
+					if (!aoGrassXYZCNN && !aoGrassXYZPNC)
 					{
-						this.aoLightValueScratchXYZPNN = this.aoLightValueScratchXYPN;
-						this.aoBrightnessXYZPNN = this.aoBrightnessXYPN;
+						aoLightValueScratchXYZPNN = aoLightValueScratchXYPN;
+						aoBrightnessXYZPNN = aoBrightnessXYPN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZPNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3, i4 - 1);
-						this.aoBrightnessXYZPNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4 - 1);
+						aoLightValueScratchXYZPNN = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y, z - 1);
+						aoBrightnessXYZPNN = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y, z - 1);
 					}
 
-					if (!this.aoGrassXYZCNP && !this.aoGrassXYZPNC)
+					if (!aoGrassXYZCNP && !aoGrassXYZPNC)
 					{
-						this.aoLightValueScratchXYZPNP = this.aoLightValueScratchXYPN;
-						this.aoBrightnessXYZPNP = this.aoBrightnessXYPN;
+						aoLightValueScratchXYZPNP = aoLightValueScratchXYPN;
+						aoBrightnessXYZPNP = aoBrightnessXYPN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZPNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3, i4 + 1);
-						this.aoBrightnessXYZPNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4 + 1);
+						aoLightValueScratchXYZPNP = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y, z + 1);
+						aoBrightnessXYZPNP = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y, z + 1);
 					}
 
-					if (block1.minY <= 0.0D)
+					if (block.minY <= 0.0D)
 					{
-						++i3;
+						++y;
 					}
 
-					f9 = (this.aoLightValueScratchXYZNNP + this.aoLightValueScratchXYNN + this.aoLightValueScratchYZNP + this.aoLightValueYNeg) / 4.0F;
-					f12 = (this.aoLightValueScratchYZNP + this.aoLightValueYNeg + this.aoLightValueScratchXYZPNP + this.aoLightValueScratchXYPN) / 4.0F;
-					f11 = (this.aoLightValueYNeg + this.aoLightValueScratchYZNN + this.aoLightValueScratchXYPN + this.aoLightValueScratchXYZPNN) / 4.0F;
-					f10 = (this.aoLightValueScratchXYNN + this.aoLightValueScratchXYZNNN + this.aoLightValueYNeg + this.aoLightValueScratchYZNN) / 4.0F;
-					this.brightnessTopLeft = this.getAoBrightness(this.aoBrightnessXYZNNP, this.aoBrightnessXYNN, this.aoBrightnessYZNP, i21);
-					this.brightnessTopRight = this.getAoBrightness(this.aoBrightnessYZNP, this.aoBrightnessXYZPNP, this.aoBrightnessXYPN, i21);
-					this.brightnessBottomRight = this.getAoBrightness(this.aoBrightnessYZNN, this.aoBrightnessXYPN, this.aoBrightnessXYZPNN, i21);
-					this.brightnessBottomLeft = this.getAoBrightness(this.aoBrightnessXYNN, this.aoBrightnessXYZNNN, this.aoBrightnessYZNN, i21);
+					topLeftBrightness = (aoLightValueScratchXYZNNP + aoLightValueScratchXYNN + aoLightValueScratchYZNP + aoLightValueYNeg) / 4.0F;
+					topRightBrightness = (aoLightValueScratchYZNP + aoLightValueYNeg + aoLightValueScratchXYZPNP + aoLightValueScratchXYPN) / 4.0F;
+					bottomRightBrightness = (aoLightValueYNeg + aoLightValueScratchYZNN + aoLightValueScratchXYPN + aoLightValueScratchXYZPNN) / 4.0F;
+					bottomLeftBrightness = (aoLightValueScratchXYNN + aoLightValueScratchXYZNNN + aoLightValueYNeg + aoLightValueScratchYZNN) / 4.0F;
+					brightnessTopLeft = getAoBrightness(aoBrightnessXYZNNP, aoBrightnessXYNN, aoBrightnessYZNP, minYBrightness);
+					brightnessTopRight = getAoBrightness(aoBrightnessYZNP, aoBrightnessXYZPNP, aoBrightnessXYPN, minYBrightness);
+					brightnessBottomRight = getAoBrightness(aoBrightnessYZNN, aoBrightnessXYPN, aoBrightnessXYZPNN, minYBrightness);
+					brightnessBottomLeft = getAoBrightness(aoBrightnessXYNN, aoBrightnessXYZNNN, aoBrightnessYZNN, minYBrightness);
 				}
 				else
 				{
-					f12 = this.aoLightValueYNeg;
-					f11 = this.aoLightValueYNeg;
-					f10 = this.aoLightValueYNeg;
-					f9 = this.aoLightValueYNeg;
-					this.brightnessTopLeft = this.brightnessBottomLeft = this.brightnessBottomRight = this.brightnessTopRight = this.aoBrightnessXYNN;
+					topRightBrightness = aoLightValueYNeg;
+					bottomRightBrightness = aoLightValueYNeg;
+					bottomLeftBrightness = aoLightValueYNeg;
+					topLeftBrightness = aoLightValueYNeg;
+					brightnessTopLeft = brightnessBottomLeft = brightnessBottomRight = brightnessTopRight = aoBrightnessXYNN;
 				}
 
-				this.colorRedTopLeft = this.colorRedBottomLeft = this.colorRedBottomRight = this.colorRedTopRight = (z13 ? f5 : 1.0F) * 0.5F;
-				this.colorGreenTopLeft = this.colorGreenBottomLeft = this.colorGreenBottomRight = this.colorGreenTopRight = (z13 ? f6 : 1.0F) * 0.5F;
-				this.colorBlueTopLeft = this.colorBlueBottomLeft = this.colorBlueBottomRight = this.colorBlueTopRight = (z13 ? f7 : 1.0F) * 0.5F;
-				this.colorRedTopLeft *= f9;
-				this.colorGreenTopLeft *= f9;
-				this.colorBlueTopLeft *= f9;
-				this.colorRedBottomLeft *= f10;
-				this.colorGreenBottomLeft *= f10;
-				this.colorBlueBottomLeft *= f10;
-				this.colorRedBottomRight *= f11;
-				this.colorGreenBottomRight *= f11;
-				this.colorBlueBottomRight *= f11;
-				this.colorRedTopRight *= f12;
-				this.colorGreenTopRight *= f12;
-				this.colorBlueTopRight *= f12;
-				this.renderBottomFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 0));
-				z8 = true;
+				colorRedTopLeft = colorRedBottomLeft = colorRedBottomRight = colorRedTopRight = (bottomFaceColored ? r : 1.0F) * 0.5F;
+				colorGreenTopLeft = colorGreenBottomLeft = colorGreenBottomRight = colorGreenTopRight = (bottomFaceColored ? g : 1.0F) * 0.5F;
+				colorBlueTopLeft = colorBlueBottomLeft = colorBlueBottomRight = colorBlueTopRight = (bottomFaceColored ? b : 1.0F) * 0.5F;
+				colorRedTopLeft *= topLeftBrightness;
+				colorGreenTopLeft *= topLeftBrightness;
+				colorBlueTopLeft *= topLeftBrightness;
+				colorRedBottomLeft *= bottomLeftBrightness;
+				colorGreenBottomLeft *= bottomLeftBrightness;
+				colorBlueBottomLeft *= bottomLeftBrightness;
+				colorRedBottomRight *= bottomRightBrightness;
+				colorGreenBottomRight *= bottomRightBrightness;
+				colorBlueBottomRight *= bottomRightBrightness;
+				colorRedTopRight *= topRightBrightness;
+				colorGreenTopRight *= topRightBrightness;
+				colorBlueTopRight *= topRightBrightness;
+				renderBottomFace(block, (double)x, (double)y, (double)z, block.getBlockTexture(blockAccess, x, y, z, 0));
+				facesDrawn = true;
 			}
-            
-            if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 + 1, i4, 1))
-			{
-				if (this.aoType > 0)
-				{
-					if (block1.maxY >= 1.0D)
-					{
-						++i3;
-					}
+            #endregion
 
-					this.aoBrightnessXYNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
-					this.aoBrightnessXYPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
-					this.aoBrightnessYZPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
-					this.aoBrightnessYZPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
-					this.aoLightValueScratchXYNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3, i4);
-					this.aoLightValueScratchXYPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3, i4);
-					this.aoLightValueScratchYZPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3, i4 - 1);
-					this.aoLightValueScratchYZPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3, i4 + 1);
-					if (!this.aoGrassXYZCPN && !this.aoGrassXYZNPC)
-					{
-						this.aoLightValueScratchXYZNPN = this.aoLightValueScratchXYNP;
-						this.aoBrightnessXYZNPN = this.aoBrightnessXYNP;
-					}
-					else
-					{
-						this.aoLightValueScratchXYZNPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3, i4 - 1);
-						this.aoBrightnessXYZNPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4 - 1);
-					}
-
-					if (!this.aoGrassXYZCPN && !this.aoGrassXYZPPC)
-					{
-						this.aoLightValueScratchXYZPPN = this.aoLightValueScratchXYPP;
-						this.aoBrightnessXYZPPN = this.aoBrightnessXYPP;
-					}
-					else
-					{
-						this.aoLightValueScratchXYZPPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3, i4 - 1);
-						this.aoBrightnessXYZPPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4 - 1);
-					}
-
-					if (!this.aoGrassXYZCPP && !this.aoGrassXYZNPC)
-					{
-						this.aoLightValueScratchXYZNPP = this.aoLightValueScratchXYNP;
-						this.aoBrightnessXYZNPP = this.aoBrightnessXYNP;
-					}
-					else
-					{
-						this.aoLightValueScratchXYZNPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3, i4 + 1);
-						this.aoBrightnessXYZNPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4 + 1);
-					}
-
-					if (!this.aoGrassXYZCPP && !this.aoGrassXYZPPC)
-					{
-						this.aoLightValueScratchXYZPPP = this.aoLightValueScratchXYPP;
-						this.aoBrightnessXYZPPP = this.aoBrightnessXYPP;
-					}
-					else
-					{
-						this.aoLightValueScratchXYZPPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3, i4 + 1);
-						this.aoBrightnessXYZPPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4 + 1);
-					}
-
-					if (block1.maxY >= 1.0D)
-					{
-						--i3;
-					}
-
-					f12 = (this.aoLightValueScratchXYZNPP + this.aoLightValueScratchXYNP + this.aoLightValueScratchYZPP + this.aoLightValueYPos) / 4.0F;
-					f9 = (this.aoLightValueScratchYZPP + this.aoLightValueYPos + this.aoLightValueScratchXYZPPP + this.aoLightValueScratchXYPP) / 4.0F;
-					f10 = (this.aoLightValueYPos + this.aoLightValueScratchYZPN + this.aoLightValueScratchXYPP + this.aoLightValueScratchXYZPPN) / 4.0F;
-					f11 = (this.aoLightValueScratchXYNP + this.aoLightValueScratchXYZNPN + this.aoLightValueYPos + this.aoLightValueScratchYZPN) / 4.0F;
-					this.brightnessTopRight = this.getAoBrightness(this.aoBrightnessXYZNPP, this.aoBrightnessXYNP, this.aoBrightnessYZPP, i24);
-					this.brightnessTopLeft = this.getAoBrightness(this.aoBrightnessYZPP, this.aoBrightnessXYZPPP, this.aoBrightnessXYPP, i24);
-					this.brightnessBottomLeft = this.getAoBrightness(this.aoBrightnessYZPN, this.aoBrightnessXYPP, this.aoBrightnessXYZPPN, i24);
-					this.brightnessBottomRight = this.getAoBrightness(this.aoBrightnessXYNP, this.aoBrightnessXYZNPN, this.aoBrightnessYZPN, i24);
-				}
-				else
-				{
-					f12 = this.aoLightValueYPos;
-					f11 = this.aoLightValueYPos;
-					f10 = this.aoLightValueYPos;
-					f9 = this.aoLightValueYPos;
-					this.brightnessTopLeft = this.brightnessBottomLeft = this.brightnessBottomRight = this.brightnessTopRight = i24;
-				}
-
-				this.colorRedTopLeft = this.colorRedBottomLeft = this.colorRedBottomRight = this.colorRedTopRight = z14 ? f5 : 1.0F;
-				this.colorGreenTopLeft = this.colorGreenBottomLeft = this.colorGreenBottomRight = this.colorGreenTopRight = z14 ? f6 : 1.0F;
-				this.colorBlueTopLeft = this.colorBlueBottomLeft = this.colorBlueBottomRight = this.colorBlueTopRight = z14 ? f7 : 1.0F;
-				this.colorRedTopLeft *= f9;
-				this.colorGreenTopLeft *= f9;
-				this.colorBlueTopLeft *= f9;
-				this.colorRedBottomLeft *= f10;
-				this.colorGreenBottomLeft *= f10;
-				this.colorBlueBottomLeft *= f10;
-				this.colorRedBottomRight *= f11;
-				this.colorGreenBottomRight *= f11;
-				this.colorBlueBottomRight *= f11;
-				this.colorRedTopRight *= f12;
-				this.colorGreenTopRight *= f12;
-				this.colorBlueTopRight *= f12;
-				this.renderTopFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 1));
-				z8 = true;
-			}
-            
+            #region east face
             int i27;
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 - 1, 2))
+			if (renderAllFaces || block.shouldSideBeRendered(blockAccess, x, y, z - 1, 2))
 			{
-				if (this.aoType > 0)
+				if (aoType > 0)
 				{
-					if (block1.minZ <= 0.0D)
+					if (block.minZ <= 0.0D)
 					{
-						--i4;
+						--z;
 					}
 
-					this.aoLightValueScratchXZNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3, i4);
-					this.aoLightValueScratchYZNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 - 1, i4);
-					this.aoLightValueScratchYZPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 + 1, i4);
-					this.aoLightValueScratchXZPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3, i4);
-					this.aoBrightnessXZNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
-					this.aoBrightnessYZNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
-					this.aoBrightnessYZPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
-					this.aoBrightnessXZPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
-					if (!this.aoGrassXYZNCN && !this.aoGrassXYZCNN)
+					aoLightValueScratchXZNN = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y, z);
+					aoLightValueScratchYZNN = block.GetAmbientOcclusionLightValue(blockAccess, x, y - 1, z);
+					aoLightValueScratchYZPN = block.GetAmbientOcclusionLightValue(blockAccess, x, y + 1, z);
+					aoLightValueScratchXZPN = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y, z);
+					aoBrightnessXZNN = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y, z);
+					aoBrightnessYZNN = block.GetMixedBrightnessForBlock(blockAccess, x, y - 1, z);
+					aoBrightnessYZPN = block.GetMixedBrightnessForBlock(blockAccess, x, y + 1, z);
+					aoBrightnessXZPN = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y, z);
+					if (!aoGrassXYZNCN && !aoGrassXYZCNN)
 					{
-						this.aoLightValueScratchXYZNNN = this.aoLightValueScratchXZNN;
-						this.aoBrightnessXYZNNN = this.aoBrightnessXZNN;
+						aoLightValueScratchXYZNNN = aoLightValueScratchXZNN;
+						aoBrightnessXYZNNN = aoBrightnessXZNN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZNNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3 - 1, i4);
-						this.aoBrightnessXYZNNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3 - 1, i4);
+						aoLightValueScratchXYZNNN = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y - 1, z);
+						aoBrightnessXYZNNN = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y - 1, z);
 					}
 
-					if (!this.aoGrassXYZNCN && !this.aoGrassXYZCPN)
+					if (!aoGrassXYZNCN && !aoGrassXYZCPN)
 					{
-						this.aoLightValueScratchXYZNPN = this.aoLightValueScratchXZNN;
-						this.aoBrightnessXYZNPN = this.aoBrightnessXZNN;
+						aoLightValueScratchXYZNPN = aoLightValueScratchXZNN;
+						aoBrightnessXYZNPN = aoBrightnessXZNN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZNPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3 + 1, i4);
-						this.aoBrightnessXYZNPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3 + 1, i4);
+						aoLightValueScratchXYZNPN = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y + 1, z);
+						aoBrightnessXYZNPN = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y + 1, z);
 					}
 
-					if (!this.aoGrassXYZPCN && !this.aoGrassXYZCNN)
+					if (!aoGrassXYZPCN && !aoGrassXYZCNN)
 					{
-						this.aoLightValueScratchXYZPNN = this.aoLightValueScratchXZPN;
-						this.aoBrightnessXYZPNN = this.aoBrightnessXZPN;
+						aoLightValueScratchXYZPNN = aoLightValueScratchXZPN;
+						aoBrightnessXYZPNN = aoBrightnessXZPN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZPNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3 - 1, i4);
-						this.aoBrightnessXYZPNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3 - 1, i4);
+						aoLightValueScratchXYZPNN = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y - 1, z);
+						aoBrightnessXYZPNN = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y - 1, z);
 					}
 
-					if (!this.aoGrassXYZPCN && !this.aoGrassXYZCPN)
+					if (!aoGrassXYZPCN && !aoGrassXYZCPN)
 					{
-						this.aoLightValueScratchXYZPPN = this.aoLightValueScratchXZPN;
-						this.aoBrightnessXYZPPN = this.aoBrightnessXZPN;
+						aoLightValueScratchXYZPPN = aoLightValueScratchXZPN;
+						aoBrightnessXYZPPN = aoBrightnessXZPN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZPPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3 + 1, i4);
-						this.aoBrightnessXYZPPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3 + 1, i4);
+						aoLightValueScratchXYZPPN = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y + 1, z);
+						aoBrightnessXYZPPN = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y + 1, z);
 					}
 
-					if (block1.minZ <= 0.0D)
+					if (block.minZ <= 0.0D)
 					{
-						++i4;
+						++z;
 					}
 
-					f9 = (this.aoLightValueScratchXZNN + this.aoLightValueScratchXYZNPN + this.aoLightValueZNeg + this.aoLightValueScratchYZPN) / 4.0F;
-					f10 = (this.aoLightValueZNeg + this.aoLightValueScratchYZPN + this.aoLightValueScratchXZPN + this.aoLightValueScratchXYZPPN) / 4.0F;
-					f11 = (this.aoLightValueScratchYZNN + this.aoLightValueZNeg + this.aoLightValueScratchXYZPNN + this.aoLightValueScratchXZPN) / 4.0F;
-					f12 = (this.aoLightValueScratchXYZNNN + this.aoLightValueScratchXZNN + this.aoLightValueScratchYZNN + this.aoLightValueZNeg) / 4.0F;
-					this.brightnessTopLeft = this.getAoBrightness(this.aoBrightnessXZNN, this.aoBrightnessXYZNPN, this.aoBrightnessYZPN, i22);
-					this.brightnessBottomLeft = this.getAoBrightness(this.aoBrightnessYZPN, this.aoBrightnessXZPN, this.aoBrightnessXYZPPN, i22);
-					this.brightnessBottomRight = this.getAoBrightness(this.aoBrightnessYZNN, this.aoBrightnessXYZPNN, this.aoBrightnessXZPN, i22);
-					this.brightnessTopRight = this.getAoBrightness(this.aoBrightnessXYZNNN, this.aoBrightnessXZNN, this.aoBrightnessYZNN, i22);
+					topLeftBrightness = (aoLightValueScratchXZNN + aoLightValueScratchXYZNPN + aoLightValueZNeg + aoLightValueScratchYZPN) / 4.0F;
+					bottomLeftBrightness = (aoLightValueZNeg + aoLightValueScratchYZPN + aoLightValueScratchXZPN + aoLightValueScratchXYZPPN) / 4.0F;
+					bottomRightBrightness = (aoLightValueScratchYZNN + aoLightValueZNeg + aoLightValueScratchXYZPNN + aoLightValueScratchXZPN) / 4.0F;
+					topRightBrightness = (aoLightValueScratchXYZNNN + aoLightValueScratchXZNN + aoLightValueScratchYZNN + aoLightValueZNeg) / 4.0F;
+					brightnessTopLeft = getAoBrightness(aoBrightnessXZNN, aoBrightnessXYZNPN, aoBrightnessYZPN, minZBrightness);
+					brightnessBottomLeft = getAoBrightness(aoBrightnessYZPN, aoBrightnessXZPN, aoBrightnessXYZPPN, minZBrightness);
+					brightnessBottomRight = getAoBrightness(aoBrightnessYZNN, aoBrightnessXYZPNN, aoBrightnessXZPN, minZBrightness);
+					brightnessTopRight = getAoBrightness(aoBrightnessXYZNNN, aoBrightnessXZNN, aoBrightnessYZNN, minZBrightness);
 				}
 				else
 				{
-					f12 = this.aoLightValueZNeg;
-					f11 = this.aoLightValueZNeg;
-					f10 = this.aoLightValueZNeg;
-					f9 = this.aoLightValueZNeg;
-					this.brightnessTopLeft = this.brightnessBottomLeft = this.brightnessBottomRight = this.brightnessTopRight = i22;
+					topRightBrightness = aoLightValueZNeg;
+					bottomRightBrightness = aoLightValueZNeg;
+					bottomLeftBrightness = aoLightValueZNeg;
+					topLeftBrightness = aoLightValueZNeg;
+					brightnessTopLeft = brightnessBottomLeft = brightnessBottomRight = brightnessTopRight = minZBrightness;
 				}
-
-				this.colorRedTopLeft = this.colorRedBottomLeft = this.colorRedBottomRight = this.colorRedTopRight = (z15 ? f5 : 1.0F) * 0.8F;
-				this.colorGreenTopLeft = this.colorGreenBottomLeft = this.colorGreenBottomRight = this.colorGreenTopRight = (z15 ? f6 : 1.0F) * 0.8F;
-				this.colorBlueTopLeft = this.colorBlueBottomLeft = this.colorBlueBottomRight = this.colorBlueTopRight = (z15 ? f7 : 1.0F) * 0.8F;
-				this.colorRedTopLeft *= f9;
-				this.colorGreenTopLeft *= f9;
-				this.colorBlueTopLeft *= f9;
-				this.colorRedBottomLeft *= f10;
-				this.colorGreenBottomLeft *= f10;
-				this.colorBlueBottomLeft *= f10;
-				this.colorRedBottomRight *= f11;
-				this.colorGreenBottomRight *= f11;
-				this.colorBlueBottomRight *= f11;
-				this.colorRedTopRight *= f12;
-				this.colorGreenTopRight *= f12;
-				this.colorBlueTopRight *= f12;
-				i27 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 2);
-				this.renderEastFace(block1, (double)i2, (double)i3, (double)i4, i27);
-				if (fancyGrass && i27 == 3 && this.overrideBlockTexture < 0)
+                
+                colorRedTopLeft = colorRedBottomLeft = colorRedBottomRight = colorRedTopRight = (eastFaceColored ? r : 1.0F) * 0.8F;
+				colorGreenTopLeft = colorGreenBottomLeft = colorGreenBottomRight = colorGreenTopRight = (eastFaceColored ? g : 1.0F) * 0.8F;
+				colorBlueTopLeft = colorBlueBottomLeft = colorBlueBottomRight = colorBlueTopRight = (eastFaceColored ? b : 1.0F) * 0.8F;
+				colorRedTopLeft *= topLeftBrightness;
+				colorGreenTopLeft *= topLeftBrightness;
+				colorBlueTopLeft *= topLeftBrightness;
+				colorRedBottomLeft *= bottomLeftBrightness;
+				colorGreenBottomLeft *= bottomLeftBrightness;
+				colorBlueBottomLeft *= bottomLeftBrightness;
+				colorRedBottomRight *= bottomRightBrightness;
+				colorGreenBottomRight *= bottomRightBrightness;
+				colorBlueBottomRight *= bottomRightBrightness;
+				colorRedTopRight *= topRightBrightness;
+				colorGreenTopRight *= topRightBrightness;
+				colorBlueTopRight *= topRightBrightness;
+				i27 = block.getBlockTexture(blockAccess, x, y, z, 2);
+				renderEastFace(block, (double)x, (double)y, (double)z, i27);
+				if (fancyGrass && i27 == 3 && overrideBlockTexture < 0)
 				{
-					this.colorRedTopLeft *= f5;
-					this.colorRedBottomLeft *= f5;
-					this.colorRedBottomRight *= f5;
-					this.colorRedTopRight *= f5;
-					this.colorGreenTopLeft *= f6;
-					this.colorGreenBottomLeft *= f6;
-					this.colorGreenBottomRight *= f6;
-					this.colorGreenTopRight *= f6;
-					this.colorBlueTopLeft *= f7;
-					this.colorBlueBottomLeft *= f7;
-					this.colorBlueBottomRight *= f7;
-					this.colorBlueTopRight *= f7;
-					this.renderEastFace(block1, (double)i2, (double)i3, (double)i4, 38);
+					colorRedTopLeft *= r;
+					colorRedBottomLeft *= r;
+					colorRedBottomRight *= r;
+					colorRedTopRight *= r;
+					colorGreenTopLeft *= g;
+					colorGreenBottomLeft *= g;
+					colorGreenBottomRight *= g;
+					colorGreenTopRight *= g;
+					colorBlueTopLeft *= b;
+					colorBlueBottomLeft *= b;
+					colorBlueBottomRight *= b;
+					colorBlueTopRight *= b;
+					renderEastFace(block, (double)x, (double)y, (double)z, 38);
 				}
 
-				z8 = true;
+				facesDrawn = true;
 			}
-            
-            if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 + 1, 3))
+            #endregion
+
+            #region west face
+            if (renderAllFaces || block.shouldSideBeRendered(blockAccess, x, y, z + 1, 3))
 			{
-				if (this.aoType > 0)
+				if (aoType > 0)
 				{
-					if (block1.maxZ >= 1.0D)
+					if (block.maxZ >= 1.0D)
 					{
-						++i4;
+						++z;
 					}
 
-					this.aoLightValueScratchXZNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3, i4);
-					this.aoLightValueScratchXZPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3, i4);
-					this.aoLightValueScratchYZNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 - 1, i4);
-					this.aoLightValueScratchYZPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 + 1, i4);
-					this.aoBrightnessXZNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
-					this.aoBrightnessXZPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
-					this.aoBrightnessYZNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
-					this.aoBrightnessYZPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
-					if (!this.aoGrassXYZNCP && !this.aoGrassXYZCNP)
+					aoLightValueScratchXZNP = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y, z);
+					aoLightValueScratchXZPP = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y, z);
+					aoLightValueScratchYZNP = block.GetAmbientOcclusionLightValue(blockAccess, x, y - 1, z);
+					aoLightValueScratchYZPP = block.GetAmbientOcclusionLightValue(blockAccess, x, y + 1, z);
+					aoBrightnessXZNP = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y, z);
+					aoBrightnessXZPP = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y, z);
+					aoBrightnessYZNP = block.GetMixedBrightnessForBlock(blockAccess, x, y - 1, z);
+					aoBrightnessYZPP = block.GetMixedBrightnessForBlock(blockAccess, x, y + 1, z);
+					if (!aoGrassXYZNCP && !aoGrassXYZCNP)
 					{
-						this.aoLightValueScratchXYZNNP = this.aoLightValueScratchXZNP;
-						this.aoBrightnessXYZNNP = this.aoBrightnessXZNP;
+						aoLightValueScratchXYZNNP = aoLightValueScratchXZNP;
+						aoBrightnessXYZNNP = aoBrightnessXZNP;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZNNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3 - 1, i4);
-						this.aoBrightnessXYZNNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3 - 1, i4);
+						aoLightValueScratchXYZNNP = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y - 1, z);
+						aoBrightnessXYZNNP = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y - 1, z);
 					}
 
-					if (!this.aoGrassXYZNCP && !this.aoGrassXYZCPP)
+					if (!aoGrassXYZNCP && !aoGrassXYZCPP)
 					{
-						this.aoLightValueScratchXYZNPP = this.aoLightValueScratchXZNP;
-						this.aoBrightnessXYZNPP = this.aoBrightnessXZNP;
+						aoLightValueScratchXYZNPP = aoLightValueScratchXZNP;
+						aoBrightnessXYZNPP = aoBrightnessXZNP;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZNPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 - 1, i3 + 1, i4);
-						this.aoBrightnessXYZNPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3 + 1, i4);
+						aoLightValueScratchXYZNPP = block.GetAmbientOcclusionLightValue(blockAccess, x - 1, y + 1, z);
+						aoBrightnessXYZNPP = block.GetMixedBrightnessForBlock(blockAccess, x - 1, y + 1, z);
 					}
 
-					if (!this.aoGrassXYZPCP && !this.aoGrassXYZCNP)
+					if (!aoGrassXYZPCP && !aoGrassXYZCNP)
 					{
-						this.aoLightValueScratchXYZPNP = this.aoLightValueScratchXZPP;
-						this.aoBrightnessXYZPNP = this.aoBrightnessXZPP;
+						aoLightValueScratchXYZPNP = aoLightValueScratchXZPP;
+						aoBrightnessXYZPNP = aoBrightnessXZPP;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZPNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3 - 1, i4);
-						this.aoBrightnessXYZPNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3 - 1, i4);
+						aoLightValueScratchXYZPNP = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y - 1, z);
+						aoBrightnessXYZPNP = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y - 1, z);
 					}
 
-					if (!this.aoGrassXYZPCP && !this.aoGrassXYZCPP)
+					if (!aoGrassXYZPCP && !aoGrassXYZCPP)
 					{
-						this.aoLightValueScratchXYZPPP = this.aoLightValueScratchXZPP;
-						this.aoBrightnessXYZPPP = this.aoBrightnessXZPP;
+						aoLightValueScratchXYZPPP = aoLightValueScratchXZPP;
+						aoBrightnessXYZPPP = aoBrightnessXZPP;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZPPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2 + 1, i3 + 1, i4);
-						this.aoBrightnessXYZPPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3 + 1, i4);
+						aoLightValueScratchXYZPPP = block.GetAmbientOcclusionLightValue(blockAccess, x + 1, y + 1, z);
+						aoBrightnessXYZPPP = block.GetMixedBrightnessForBlock(blockAccess, x + 1, y + 1, z);
 					}
 
-					if (block1.maxZ >= 1.0D)
+					if (block.maxZ >= 1.0D)
 					{
-						--i4;
+						--z;
 					}
 
-					f9 = (this.aoLightValueScratchXZNP + this.aoLightValueScratchXYZNPP + this.aoLightValueZPos + this.aoLightValueScratchYZPP) / 4.0F;
-					f12 = (this.aoLightValueZPos + this.aoLightValueScratchYZPP + this.aoLightValueScratchXZPP + this.aoLightValueScratchXYZPPP) / 4.0F;
-					f11 = (this.aoLightValueScratchYZNP + this.aoLightValueZPos + this.aoLightValueScratchXYZPNP + this.aoLightValueScratchXZPP) / 4.0F;
-					f10 = (this.aoLightValueScratchXYZNNP + this.aoLightValueScratchXZNP + this.aoLightValueScratchYZNP + this.aoLightValueZPos) / 4.0F;
-					this.brightnessTopLeft = this.getAoBrightness(this.aoBrightnessXZNP, this.aoBrightnessXYZNPP, this.aoBrightnessYZPP, i25);
-					this.brightnessTopRight = this.getAoBrightness(this.aoBrightnessYZPP, this.aoBrightnessXZPP, this.aoBrightnessXYZPPP, i25);
-					this.brightnessBottomRight = this.getAoBrightness(this.aoBrightnessYZNP, this.aoBrightnessXYZPNP, this.aoBrightnessXZPP, i25);
-					this.brightnessBottomLeft = this.getAoBrightness(this.aoBrightnessXYZNNP, this.aoBrightnessXZNP, this.aoBrightnessYZNP, i25);
+					topLeftBrightness = (aoLightValueScratchXZNP + aoLightValueScratchXYZNPP + aoLightValueZPos + aoLightValueScratchYZPP) / 4.0F;
+					topRightBrightness = (aoLightValueZPos + aoLightValueScratchYZPP + aoLightValueScratchXZPP + aoLightValueScratchXYZPPP) / 4.0F;
+					bottomRightBrightness = (aoLightValueScratchYZNP + aoLightValueZPos + aoLightValueScratchXYZPNP + aoLightValueScratchXZPP) / 4.0F;
+					bottomLeftBrightness = (aoLightValueScratchXYZNNP + aoLightValueScratchXZNP + aoLightValueScratchYZNP + aoLightValueZPos) / 4.0F;
+					brightnessTopLeft = getAoBrightness(aoBrightnessXZNP, aoBrightnessXYZNPP, aoBrightnessYZPP, maxZBrightness);
+					brightnessTopRight = getAoBrightness(aoBrightnessYZPP, aoBrightnessXZPP, aoBrightnessXYZPPP, maxZBrightness);
+					brightnessBottomRight = getAoBrightness(aoBrightnessYZNP, aoBrightnessXYZPNP, aoBrightnessXZPP, maxZBrightness);
+					brightnessBottomLeft = getAoBrightness(aoBrightnessXYZNNP, aoBrightnessXZNP, aoBrightnessYZNP, maxZBrightness);
 				}
 				else
 				{
-					f12 = this.aoLightValueZPos;
-					f11 = this.aoLightValueZPos;
-					f10 = this.aoLightValueZPos;
-					f9 = this.aoLightValueZPos;
-					this.brightnessTopLeft = this.brightnessBottomLeft = this.brightnessBottomRight = this.brightnessTopRight = i25;
+					topRightBrightness = aoLightValueZPos;
+					bottomRightBrightness = aoLightValueZPos;
+					bottomLeftBrightness = aoLightValueZPos;
+					topLeftBrightness = aoLightValueZPos;
+					brightnessTopLeft = brightnessBottomLeft = brightnessBottomRight = brightnessTopRight = maxZBrightness;
 				}
 
-				this.colorRedTopLeft = this.colorRedBottomLeft = this.colorRedBottomRight = this.colorRedTopRight = (z16 ? f5 : 1.0F) * 0.8F;
-				this.colorGreenTopLeft = this.colorGreenBottomLeft = this.colorGreenBottomRight = this.colorGreenTopRight = (z16 ? f6 : 1.0F) * 0.8F;
-				this.colorBlueTopLeft = this.colorBlueBottomLeft = this.colorBlueBottomRight = this.colorBlueTopRight = (z16 ? f7 : 1.0F) * 0.8F;
-				this.colorRedTopLeft *= f9;
-				this.colorGreenTopLeft *= f9;
-				this.colorBlueTopLeft *= f9;
-				this.colorRedBottomLeft *= f10;
-				this.colorGreenBottomLeft *= f10;
-				this.colorBlueBottomLeft *= f10;
-				this.colorRedBottomRight *= f11;
-				this.colorGreenBottomRight *= f11;
-				this.colorBlueBottomRight *= f11;
-				this.colorRedTopRight *= f12;
-				this.colorGreenTopRight *= f12;
-				this.colorBlueTopRight *= f12;
-				i27 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 3);
-				this.renderWestFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 3));
-				if (fancyGrass && i27 == 3 && this.overrideBlockTexture < 0)
+				colorRedTopLeft = colorRedBottomLeft = colorRedBottomRight = colorRedTopRight = (westFaceColored ? r : 1.0F) * 0.8F;
+				colorGreenTopLeft = colorGreenBottomLeft = colorGreenBottomRight = colorGreenTopRight = (westFaceColored ? g : 1.0F) * 0.8F;
+				colorBlueTopLeft = colorBlueBottomLeft = colorBlueBottomRight = colorBlueTopRight = (westFaceColored ? b : 1.0F) * 0.8F;
+				colorRedTopLeft *= topLeftBrightness;
+				colorGreenTopLeft *= topLeftBrightness;
+				colorBlueTopLeft *= topLeftBrightness;
+				colorRedBottomLeft *= bottomLeftBrightness;
+				colorGreenBottomLeft *= bottomLeftBrightness;
+				colorBlueBottomLeft *= bottomLeftBrightness;
+				colorRedBottomRight *= bottomRightBrightness;
+				colorGreenBottomRight *= bottomRightBrightness;
+				colorBlueBottomRight *= bottomRightBrightness;
+				colorRedTopRight *= topRightBrightness;
+				colorGreenTopRight *= topRightBrightness;
+				colorBlueTopRight *= topRightBrightness;
+				i27 = block.getBlockTexture(blockAccess, x, y, z, 3);
+				renderWestFace(block, (double)x, (double)y, (double)z, block.getBlockTexture(blockAccess, x, y, z, 3));
+				if (fancyGrass && i27 == 3 && overrideBlockTexture < 0)
 				{
-					this.colorRedTopLeft *= f5;
-					this.colorRedBottomLeft *= f5;
-					this.colorRedBottomRight *= f5;
-					this.colorRedTopRight *= f5;
-					this.colorGreenTopLeft *= f6;
-					this.colorGreenBottomLeft *= f6;
-					this.colorGreenBottomRight *= f6;
-					this.colorGreenTopRight *= f6;
-					this.colorBlueTopLeft *= f7;
-					this.colorBlueBottomLeft *= f7;
-					this.colorBlueBottomRight *= f7;
-					this.colorBlueTopRight *= f7;
-					this.renderWestFace(block1, (double)i2, (double)i3, (double)i4, 38);
+					colorRedTopLeft *= r;
+					colorRedBottomLeft *= r;
+					colorRedBottomRight *= r;
+					colorRedTopRight *= r;
+					colorGreenTopLeft *= g;
+					colorGreenBottomLeft *= g;
+					colorGreenBottomRight *= g;
+					colorGreenTopRight *= g;
+					colorBlueTopLeft *= b;
+					colorBlueBottomLeft *= b;
+					colorBlueBottomRight *= b;
+					colorBlueTopRight *= b;
+					renderWestFace(block, (double)x, (double)y, (double)z, 38);
 				}
 
-				z8 = true;
+				facesDrawn = true;
 			}
-            
-            if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 - 1, i3, i4, 4))
+            #endregion
+
+            #region north face
+            if (renderAllFaces || block.shouldSideBeRendered(blockAccess, x - 1, y, z, 4))
 			{
-				if (this.aoType > 0)
+				if (aoType > 0)
 				{
-					if (block1.minX <= 0.0D)
+					if (block.minX <= 0.0D)
 					{
-						--i2;
+						--x;
 					}
 
-					this.aoLightValueScratchXYNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 - 1, i4);
-					this.aoLightValueScratchXZNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3, i4 - 1);
-					this.aoLightValueScratchXZNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3, i4 + 1);
-					this.aoLightValueScratchXYNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 + 1, i4);
-					this.aoBrightnessXYNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
-					this.aoBrightnessXZNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
-					this.aoBrightnessXZNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
-					this.aoBrightnessXYNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
-					if (!this.aoGrassXYZNCN && !this.aoGrassXYZNNC)
+					aoLightValueScratchXYNN = block.GetAmbientOcclusionLightValue(blockAccess, x, y - 1, z);
+					aoLightValueScratchXZNN = block.GetAmbientOcclusionLightValue(blockAccess, x, y, z - 1);
+					aoLightValueScratchXZNP = block.GetAmbientOcclusionLightValue(blockAccess, x, y, z + 1);
+					aoLightValueScratchXYNP = block.GetAmbientOcclusionLightValue(blockAccess, x, y + 1, z);
+					aoBrightnessXYNN = block.GetMixedBrightnessForBlock(blockAccess, x, y - 1, z);
+					aoBrightnessXZNN = block.GetMixedBrightnessForBlock(blockAccess, x, y, z - 1);
+					aoBrightnessXZNP = block.GetMixedBrightnessForBlock(blockAccess, x, y, z + 1);
+					aoBrightnessXYNP = block.GetMixedBrightnessForBlock(blockAccess, x, y + 1, z);
+					if (!aoGrassXYZNCN && !aoGrassXYZNNC)
 					{
-						this.aoLightValueScratchXYZNNN = this.aoLightValueScratchXZNN;
-						this.aoBrightnessXYZNNN = this.aoBrightnessXZNN;
+						aoLightValueScratchXYZNNN = aoLightValueScratchXZNN;
+						aoBrightnessXYZNNN = aoBrightnessXZNN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZNNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 - 1, i4 - 1);
-						this.aoBrightnessXYZNNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4 - 1);
+						aoLightValueScratchXYZNNN = block.GetAmbientOcclusionLightValue(blockAccess, x, y - 1, z - 1);
+						aoBrightnessXYZNNN = block.GetMixedBrightnessForBlock(blockAccess, x, y - 1, z - 1);
 					}
 
-					if (!this.aoGrassXYZNCP && !this.aoGrassXYZNNC)
+					if (!aoGrassXYZNCP && !aoGrassXYZNNC)
 					{
-						this.aoLightValueScratchXYZNNP = this.aoLightValueScratchXZNP;
-						this.aoBrightnessXYZNNP = this.aoBrightnessXZNP;
+						aoLightValueScratchXYZNNP = aoLightValueScratchXZNP;
+						aoBrightnessXYZNNP = aoBrightnessXZNP;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZNNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 - 1, i4 + 1);
-						this.aoBrightnessXYZNNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4 + 1);
+						aoLightValueScratchXYZNNP = block.GetAmbientOcclusionLightValue(blockAccess, x, y - 1, z + 1);
+						aoBrightnessXYZNNP = block.GetMixedBrightnessForBlock(blockAccess, x, y - 1, z + 1);
 					}
 
-					if (!this.aoGrassXYZNCN && !this.aoGrassXYZNPC)
+					if (!aoGrassXYZNCN && !aoGrassXYZNPC)
 					{
-						this.aoLightValueScratchXYZNPN = this.aoLightValueScratchXZNN;
-						this.aoBrightnessXYZNPN = this.aoBrightnessXZNN;
+						aoLightValueScratchXYZNPN = aoLightValueScratchXZNN;
+						aoBrightnessXYZNPN = aoBrightnessXZNN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZNPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 + 1, i4 - 1);
-						this.aoBrightnessXYZNPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4 - 1);
+						aoLightValueScratchXYZNPN = block.GetAmbientOcclusionLightValue(blockAccess, x, y + 1, z - 1);
+						aoBrightnessXYZNPN = block.GetMixedBrightnessForBlock(blockAccess, x, y + 1, z - 1);
 					}
 
-					if (!this.aoGrassXYZNCP && !this.aoGrassXYZNPC)
+					if (!aoGrassXYZNCP && !aoGrassXYZNPC)
 					{
-						this.aoLightValueScratchXYZNPP = this.aoLightValueScratchXZNP;
-						this.aoBrightnessXYZNPP = this.aoBrightnessXZNP;
+						aoLightValueScratchXYZNPP = aoLightValueScratchXZNP;
+						aoBrightnessXYZNPP = aoBrightnessXZNP;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZNPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 + 1, i4 + 1);
-						this.aoBrightnessXYZNPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4 + 1);
+						aoLightValueScratchXYZNPP = block.GetAmbientOcclusionLightValue(blockAccess, x, y + 1, z + 1);
+						aoBrightnessXYZNPP = block.GetMixedBrightnessForBlock(blockAccess, x, y + 1, z + 1);
 					}
 
-					if (block1.minX <= 0.0D)
+					if (block.minX <= 0.0D)
 					{
-						++i2;
+						++x;
 					}
 
-					f12 = (this.aoLightValueScratchXYNN + this.aoLightValueScratchXYZNNP + this.aoLightValueXNeg + this.aoLightValueScratchXZNP) / 4.0F;
-					f9 = (this.aoLightValueXNeg + this.aoLightValueScratchXZNP + this.aoLightValueScratchXYNP + this.aoLightValueScratchXYZNPP) / 4.0F;
-					f10 = (this.aoLightValueScratchXZNN + this.aoLightValueXNeg + this.aoLightValueScratchXYZNPN + this.aoLightValueScratchXYNP) / 4.0F;
-					f11 = (this.aoLightValueScratchXYZNNN + this.aoLightValueScratchXYNN + this.aoLightValueScratchXZNN + this.aoLightValueXNeg) / 4.0F;
-					this.brightnessTopRight = this.getAoBrightness(this.aoBrightnessXYNN, this.aoBrightnessXYZNNP, this.aoBrightnessXZNP, i20);
-					this.brightnessTopLeft = this.getAoBrightness(this.aoBrightnessXZNP, this.aoBrightnessXYNP, this.aoBrightnessXYZNPP, i20);
-					this.brightnessBottomLeft = this.getAoBrightness(this.aoBrightnessXZNN, this.aoBrightnessXYZNPN, this.aoBrightnessXYNP, i20);
-					this.brightnessBottomRight = this.getAoBrightness(this.aoBrightnessXYZNNN, this.aoBrightnessXYNN, this.aoBrightnessXZNN, i20);
+					topRightBrightness = (aoLightValueScratchXYNN + aoLightValueScratchXYZNNP + aoLightValueXNeg + aoLightValueScratchXZNP) / 4.0F;
+					topLeftBrightness = (aoLightValueXNeg + aoLightValueScratchXZNP + aoLightValueScratchXYNP + aoLightValueScratchXYZNPP) / 4.0F;
+					bottomLeftBrightness = (aoLightValueScratchXZNN + aoLightValueXNeg + aoLightValueScratchXYZNPN + aoLightValueScratchXYNP) / 4.0F;
+					bottomRightBrightness = (aoLightValueScratchXYZNNN + aoLightValueScratchXYNN + aoLightValueScratchXZNN + aoLightValueXNeg) / 4.0F;
+					brightnessTopRight = getAoBrightness(aoBrightnessXYNN, aoBrightnessXYZNNP, aoBrightnessXZNP, minXBrightness);
+					brightnessTopLeft = getAoBrightness(aoBrightnessXZNP, aoBrightnessXYNP, aoBrightnessXYZNPP, minXBrightness);
+					brightnessBottomLeft = getAoBrightness(aoBrightnessXZNN, aoBrightnessXYZNPN, aoBrightnessXYNP, minXBrightness);
+					brightnessBottomRight = getAoBrightness(aoBrightnessXYZNNN, aoBrightnessXYNN, aoBrightnessXZNN, minXBrightness);
 				}
 				else
 				{
-					f12 = this.aoLightValueXNeg;
-					f11 = this.aoLightValueXNeg;
-					f10 = this.aoLightValueXNeg;
-					f9 = this.aoLightValueXNeg;
-					this.brightnessTopLeft = this.brightnessBottomLeft = this.brightnessBottomRight = this.brightnessTopRight = i20;
+					topRightBrightness = aoLightValueXNeg;
+					bottomRightBrightness = aoLightValueXNeg;
+					bottomLeftBrightness = aoLightValueXNeg;
+					topLeftBrightness = aoLightValueXNeg;
+					brightnessTopLeft = brightnessBottomLeft = brightnessBottomRight = brightnessTopRight = minXBrightness;
 				}
 
-				this.colorRedTopLeft = this.colorRedBottomLeft = this.colorRedBottomRight = this.colorRedTopRight = (z17 ? f5 : 1.0F) * 0.6F;
-				this.colorGreenTopLeft = this.colorGreenBottomLeft = this.colorGreenBottomRight = this.colorGreenTopRight = (z17 ? f6 : 1.0F) * 0.6F;
-				this.colorBlueTopLeft = this.colorBlueBottomLeft = this.colorBlueBottomRight = this.colorBlueTopRight = (z17 ? f7 : 1.0F) * 0.6F;
-				this.colorRedTopLeft *= f9;
-				this.colorGreenTopLeft *= f9;
-				this.colorBlueTopLeft *= f9;
-				this.colorRedBottomLeft *= f10;
-				this.colorGreenBottomLeft *= f10;
-				this.colorBlueBottomLeft *= f10;
-				this.colorRedBottomRight *= f11;
-				this.colorGreenBottomRight *= f11;
-				this.colorBlueBottomRight *= f11;
-				this.colorRedTopRight *= f12;
-				this.colorGreenTopRight *= f12;
-				this.colorBlueTopRight *= f12;
-				i27 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 4);
-				this.renderNorthFace(block1, (double)i2, (double)i3, (double)i4, i27);
-				if (fancyGrass && i27 == 3 && this.overrideBlockTexture < 0)
+				colorRedTopLeft = colorRedBottomLeft = colorRedBottomRight = colorRedTopRight = (northFaceColored ? r : 1.0F) * 0.6F;
+				colorGreenTopLeft = colorGreenBottomLeft = colorGreenBottomRight = colorGreenTopRight = (northFaceColored ? g : 1.0F) * 0.6F;
+				colorBlueTopLeft = colorBlueBottomLeft = colorBlueBottomRight = colorBlueTopRight = (northFaceColored ? b : 1.0F) * 0.6F;
+				colorRedTopLeft *= topLeftBrightness;
+				colorGreenTopLeft *= topLeftBrightness;
+				colorBlueTopLeft *= topLeftBrightness;
+				colorRedBottomLeft *= bottomLeftBrightness;
+				colorGreenBottomLeft *= bottomLeftBrightness;
+				colorBlueBottomLeft *= bottomLeftBrightness;
+				colorRedBottomRight *= bottomRightBrightness;
+				colorGreenBottomRight *= bottomRightBrightness;
+				colorBlueBottomRight *= bottomRightBrightness;
+				colorRedTopRight *= topRightBrightness;
+				colorGreenTopRight *= topRightBrightness;
+				colorBlueTopRight *= topRightBrightness;
+				i27 = block.getBlockTexture(blockAccess, x, y, z, 4);
+				renderNorthFace(block, (double)x, (double)y, (double)z, i27);
+				if (fancyGrass && i27 == 3 && overrideBlockTexture < 0)
 				{
-					this.colorRedTopLeft *= f5;
-					this.colorRedBottomLeft *= f5;
-					this.colorRedBottomRight *= f5;
-					this.colorRedTopRight *= f5;
-					this.colorGreenTopLeft *= f6;
-					this.colorGreenBottomLeft *= f6;
-					this.colorGreenBottomRight *= f6;
-					this.colorGreenTopRight *= f6;
-					this.colorBlueTopLeft *= f7;
-					this.colorBlueBottomLeft *= f7;
-					this.colorBlueBottomRight *= f7;
-					this.colorBlueTopRight *= f7;
-					this.renderNorthFace(block1, (double)i2, (double)i3, (double)i4, 38);
+					colorRedTopLeft *= r;
+					colorRedBottomLeft *= r;
+					colorRedBottomRight *= r;
+					colorRedTopRight *= r;
+					colorGreenTopLeft *= g;
+					colorGreenBottomLeft *= g;
+					colorGreenBottomRight *= g;
+					colorGreenTopRight *= g;
+					colorBlueTopLeft *= b;
+					colorBlueBottomLeft *= b;
+					colorBlueBottomRight *= b;
+					colorBlueTopRight *= b;
+					renderNorthFace(block, (double)x, (double)y, (double)z, 38);
 				}
 
-				z8 = true;
+				facesDrawn = true;
 			}
-            
-            if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 + 1, i3, i4, 5))
+            #endregion
+
+            #region south face
+            if (renderAllFaces || block.shouldSideBeRendered(blockAccess, x + 1, y, z, 5))
 			{
-				if (this.aoType > 0)
+				if (aoType > 0)
 				{
-					if (block1.maxX >= 1.0D)
+					if (block.maxX >= 1.0D)
 					{
-						++i2;
+						++x;
 					}
 
-					this.aoLightValueScratchXYPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 - 1, i4);
-					this.aoLightValueScratchXZPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3, i4 - 1);
-					this.aoLightValueScratchXZPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3, i4 + 1);
-					this.aoLightValueScratchXYPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 + 1, i4);
-					this.aoBrightnessXYPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
-					this.aoBrightnessXZPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
-					this.aoBrightnessXZPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
-					this.aoBrightnessXYPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
-					if (!this.aoGrassXYZPNC && !this.aoGrassXYZPCN)
+					aoLightValueScratchXYPN = block.GetAmbientOcclusionLightValue(blockAccess, x, y - 1, z);
+					aoLightValueScratchXZPN = block.GetAmbientOcclusionLightValue(blockAccess, x, y, z - 1);
+					aoLightValueScratchXZPP = block.GetAmbientOcclusionLightValue(blockAccess, x, y, z + 1);
+					aoLightValueScratchXYPP = block.GetAmbientOcclusionLightValue(blockAccess, x, y + 1, z);
+					aoBrightnessXYPN = block.GetMixedBrightnessForBlock(blockAccess, x, y - 1, z);
+					aoBrightnessXZPN = block.GetMixedBrightnessForBlock(blockAccess, x, y, z - 1);
+					aoBrightnessXZPP = block.GetMixedBrightnessForBlock(blockAccess, x, y, z + 1);
+					aoBrightnessXYPP = block.GetMixedBrightnessForBlock(blockAccess, x, y + 1, z);
+					if (!aoGrassXYZPNC && !aoGrassXYZPCN)
 					{
-						this.aoLightValueScratchXYZPNN = this.aoLightValueScratchXZPN;
-						this.aoBrightnessXYZPNN = this.aoBrightnessXZPN;
+						aoLightValueScratchXYZPNN = aoLightValueScratchXZPN;
+						aoBrightnessXYZPNN = aoBrightnessXZPN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZPNN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 - 1, i4 - 1);
-						this.aoBrightnessXYZPNN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4 - 1);
+						aoLightValueScratchXYZPNN = block.GetAmbientOcclusionLightValue(blockAccess, x, y - 1, z - 1);
+						aoBrightnessXYZPNN = block.GetMixedBrightnessForBlock(blockAccess, x, y - 1, z - 1);
 					}
 
-					if (!this.aoGrassXYZPNC && !this.aoGrassXYZPCP)
+					if (!aoGrassXYZPNC && !aoGrassXYZPCP)
 					{
-						this.aoLightValueScratchXYZPNP = this.aoLightValueScratchXZPP;
-						this.aoBrightnessXYZPNP = this.aoBrightnessXZPP;
+						aoLightValueScratchXYZPNP = aoLightValueScratchXZPP;
+						aoBrightnessXYZPNP = aoBrightnessXZPP;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZPNP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 - 1, i4 + 1);
-						this.aoBrightnessXYZPNP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4 + 1);
+						aoLightValueScratchXYZPNP = block.GetAmbientOcclusionLightValue(blockAccess, x, y - 1, z + 1);
+						aoBrightnessXYZPNP = block.GetMixedBrightnessForBlock(blockAccess, x, y - 1, z + 1);
 					}
 
-					if (!this.aoGrassXYZPPC && !this.aoGrassXYZPCN)
+					if (!aoGrassXYZPPC && !aoGrassXYZPCN)
 					{
-						this.aoLightValueScratchXYZPPN = this.aoLightValueScratchXZPN;
-						this.aoBrightnessXYZPPN = this.aoBrightnessXZPN;
+						aoLightValueScratchXYZPPN = aoLightValueScratchXZPN;
+						aoBrightnessXYZPPN = aoBrightnessXZPN;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZPPN = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 + 1, i4 - 1);
-						this.aoBrightnessXYZPPN = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4 - 1);
+						aoLightValueScratchXYZPPN = block.GetAmbientOcclusionLightValue(blockAccess, x, y + 1, z - 1);
+						aoBrightnessXYZPPN = block.GetMixedBrightnessForBlock(blockAccess, x, y + 1, z - 1);
 					}
 
-					if (!this.aoGrassXYZPPC && !this.aoGrassXYZPCP)
+					if (!aoGrassXYZPPC && !aoGrassXYZPCP)
 					{
-						this.aoLightValueScratchXYZPPP = this.aoLightValueScratchXZPP;
-						this.aoBrightnessXYZPPP = this.aoBrightnessXZPP;
+						aoLightValueScratchXYZPPP = aoLightValueScratchXZPP;
+						aoBrightnessXYZPPP = aoBrightnessXZPP;
 					}
 					else
 					{
-						this.aoLightValueScratchXYZPPP = block1.getAmbientOcclusionLightValue(this.blockAccess, i2, i3 + 1, i4 + 1);
-						this.aoBrightnessXYZPPP = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4 + 1);
+						aoLightValueScratchXYZPPP = block.GetAmbientOcclusionLightValue(blockAccess, x, y + 1, z + 1);
+						aoBrightnessXYZPPP = block.GetMixedBrightnessForBlock(blockAccess, x, y + 1, z + 1);
 					}
 
-					if (block1.maxX >= 1.0D)
+					if (block.maxX >= 1.0D)
 					{
-						--i2;
+						--x;
 					}
 
-					f9 = (this.aoLightValueScratchXYPN + this.aoLightValueScratchXYZPNP + this.aoLightValueXPos + this.aoLightValueScratchXZPP) / 4.0F;
-					f12 = (this.aoLightValueXPos + this.aoLightValueScratchXZPP + this.aoLightValueScratchXYPP + this.aoLightValueScratchXYZPPP) / 4.0F;
-					f11 = (this.aoLightValueScratchXZPN + this.aoLightValueXPos + this.aoLightValueScratchXYZPPN + this.aoLightValueScratchXYPP) / 4.0F;
-					f10 = (this.aoLightValueScratchXYZPNN + this.aoLightValueScratchXYPN + this.aoLightValueScratchXZPN + this.aoLightValueXPos) / 4.0F;
-					this.brightnessTopLeft = this.getAoBrightness(this.aoBrightnessXYPN, this.aoBrightnessXYZPNP, this.aoBrightnessXZPP, i23);
-					this.brightnessTopRight = this.getAoBrightness(this.aoBrightnessXZPP, this.aoBrightnessXYPP, this.aoBrightnessXYZPPP, i23);
-					this.brightnessBottomRight = this.getAoBrightness(this.aoBrightnessXZPN, this.aoBrightnessXYZPPN, this.aoBrightnessXYPP, i23);
-					this.brightnessBottomLeft = this.getAoBrightness(this.aoBrightnessXYZPNN, this.aoBrightnessXYPN, this.aoBrightnessXZPN, i23);
+					topLeftBrightness = (aoLightValueScratchXYPN + aoLightValueScratchXYZPNP + aoLightValueXPos + aoLightValueScratchXZPP) / 4.0F;
+					topRightBrightness = (aoLightValueXPos + aoLightValueScratchXZPP + aoLightValueScratchXYPP + aoLightValueScratchXYZPPP) / 4.0F;
+					bottomRightBrightness = (aoLightValueScratchXZPN + aoLightValueXPos + aoLightValueScratchXYZPPN + aoLightValueScratchXYPP) / 4.0F;
+					bottomLeftBrightness = (aoLightValueScratchXYZPNN + aoLightValueScratchXYPN + aoLightValueScratchXZPN + aoLightValueXPos) / 4.0F;
+					brightnessTopLeft = getAoBrightness(aoBrightnessXYPN, aoBrightnessXYZPNP, aoBrightnessXZPP, maxXBrightness);
+					brightnessTopRight = getAoBrightness(aoBrightnessXZPP, aoBrightnessXYPP, aoBrightnessXYZPPP, maxXBrightness);
+					brightnessBottomRight = getAoBrightness(aoBrightnessXZPN, aoBrightnessXYZPPN, aoBrightnessXYPP, maxXBrightness);
+					brightnessBottomLeft = getAoBrightness(aoBrightnessXYZPNN, aoBrightnessXYPN, aoBrightnessXZPN, maxXBrightness);
 				}
 				else
 				{
-					f12 = this.aoLightValueXPos;
-					f11 = this.aoLightValueXPos;
-					f10 = this.aoLightValueXPos;
-					f9 = this.aoLightValueXPos;
-					this.brightnessTopLeft = this.brightnessBottomLeft = this.brightnessBottomRight = this.brightnessTopRight = i23;
+					topRightBrightness = aoLightValueXPos;
+					bottomRightBrightness = aoLightValueXPos;
+					bottomLeftBrightness = aoLightValueXPos;
+					topLeftBrightness = aoLightValueXPos;
+					brightnessTopLeft = brightnessBottomLeft = brightnessBottomRight = brightnessTopRight = maxXBrightness;
 				}
 
-				this.colorRedTopLeft = this.colorRedBottomLeft = this.colorRedBottomRight = this.colorRedTopRight = (z18 ? f5 : 1.0F) * 0.6F;
-				this.colorGreenTopLeft = this.colorGreenBottomLeft = this.colorGreenBottomRight = this.colorGreenTopRight = (z18 ? f6 : 1.0F) * 0.6F;
-				this.colorBlueTopLeft = this.colorBlueBottomLeft = this.colorBlueBottomRight = this.colorBlueTopRight = (z18 ? f7 : 1.0F) * 0.6F;
-				this.colorRedTopLeft *= f9;
-				this.colorGreenTopLeft *= f9;
-				this.colorBlueTopLeft *= f9;
-				this.colorRedBottomLeft *= f10;
-				this.colorGreenBottomLeft *= f10;
-				this.colorBlueBottomLeft *= f10;
-				this.colorRedBottomRight *= f11;
-				this.colorGreenBottomRight *= f11;
-				this.colorBlueBottomRight *= f11;
-				this.colorRedTopRight *= f12;
-				this.colorGreenTopRight *= f12;
-				this.colorBlueTopRight *= f12;
-				i27 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 5);
-				this.renderSouthFace(block1, (double)i2, (double)i3, (double)i4, i27);
-				if (fancyGrass && i27 == 3 && this.overrideBlockTexture < 0)
+				colorRedTopLeft = colorRedBottomLeft = colorRedBottomRight = colorRedTopRight = (southFaceColored ? r : 1.0F) * 0.6F;
+				colorGreenTopLeft = colorGreenBottomLeft = colorGreenBottomRight = colorGreenTopRight = (southFaceColored ? g : 1.0F) * 0.6F;
+				colorBlueTopLeft = colorBlueBottomLeft = colorBlueBottomRight = colorBlueTopRight = (southFaceColored ? b : 1.0F) * 0.6F;
+				colorRedTopLeft *= topLeftBrightness;
+				colorGreenTopLeft *= topLeftBrightness;
+				colorBlueTopLeft *= topLeftBrightness;
+				colorRedBottomLeft *= bottomLeftBrightness;
+				colorGreenBottomLeft *= bottomLeftBrightness;
+				colorBlueBottomLeft *= bottomLeftBrightness;
+				colorRedBottomRight *= bottomRightBrightness;
+				colorGreenBottomRight *= bottomRightBrightness;
+				colorBlueBottomRight *= bottomRightBrightness;
+				colorRedTopRight *= topRightBrightness;
+				colorGreenTopRight *= topRightBrightness;
+				colorBlueTopRight *= topRightBrightness;
+				i27 = block.getBlockTexture(blockAccess, x, y, z, 5);
+				renderSouthFace(block, (double)x, (double)y, (double)z, i27);
+				if (fancyGrass && i27 == 3 && overrideBlockTexture < 0)
 				{
-					this.colorRedTopLeft *= f5;
-					this.colorRedBottomLeft *= f5;
-					this.colorRedBottomRight *= f5;
-					this.colorRedTopRight *= f5;
-					this.colorGreenTopLeft *= f6;
-					this.colorGreenBottomLeft *= f6;
-					this.colorGreenBottomRight *= f6;
-					this.colorGreenTopRight *= f6;
-					this.colorBlueTopLeft *= f7;
-					this.colorBlueBottomLeft *= f7;
-					this.colorBlueBottomRight *= f7;
-					this.colorBlueTopRight *= f7;
-					this.renderSouthFace(block1, (double)i2, (double)i3, (double)i4, 38);
+					colorRedTopLeft *= r;
+					colorRedBottomLeft *= r;
+					colorRedBottomRight *= r;
+					colorRedTopRight *= r;
+					colorGreenTopLeft *= g;
+					colorGreenBottomLeft *= g;
+					colorGreenBottomRight *= g;
+					colorGreenTopRight *= g;
+					colorBlueTopLeft *= b;
+					colorBlueBottomLeft *= b;
+					colorBlueBottomRight *= b;
+					colorBlueTopRight *= b;
+					renderSouthFace(block, (double)x, (double)y, (double)z, 38);
 				}
 
-				z8 = true;
+				facesDrawn = true;
 			}
-            
-			this.enableAO = false;
-			return z8;
+			#endregion
+
+			enableAO = false;
+			return facesDrawn;
 		}
 
 		private int getAoBrightness(int i1, int i2, int i3, int i4)
@@ -3532,113 +3575,122 @@ namespace net.minecraft.src
 			return i1 + i2 + i3 + i4 >> 2 & 16711935;
 		}
 
-		public virtual bool renderStandardBlockWithColorMultiplier(Block block1, int i2, int i3, int i4, float f5, float f6, float f7)
+		public virtual bool renderStandardBlockWithColorMultiplier(Block block, int x, int y, int z, float r, float g, float b)
 		{
 			this.enableAO = false;
 			Tessellator tessellator = Tessellator.instance;
 			bool z9 = false;
-			float f10 = 0.5F;
-			float f11 = 1.0F;
-			float f12 = 0.8F;
-			float f13 = 0.6F;
-			float f14 = f11 * f5;
-			float f15 = f11 * f6;
-			float f16 = f11 * f7;
-			float f17 = f10;
-			float f18 = f12;
-			float f19 = f13;
-			float f20 = f10;
-			float f21 = f12;
-			float f22 = f13;
-			float f23 = f10;
-			float f24 = f12;
-			float f25 = f13;
-			if (block1 != Block.grass)
+            float colorBlendMultiplier = 1.0F;
+            float bottomMultipler = 0.5F;
+			float eastMultiplier = 0.8F;
+			float northMultiplier = 0.6F;
+			float topMultiplerR = colorBlendMultiplier * r;
+			float topMultiplierG = colorBlendMultiplier * g;
+			float topMultiplierB = colorBlendMultiplier * b;
+			float bottomR = bottomMultipler;
+			float eastR = eastMultiplier;
+			float northR = northMultiplier;
+			float bottomG = bottomMultipler;
+			float eastG = eastMultiplier;
+			float northG = northMultiplier;
+			float bottomB = bottomMultipler;
+			float eastB = eastMultiplier;
+			float northB = northMultiplier;
+			if (block != Block.grass)
 			{
-				f17 = f10 * f5;
-				f18 = f12 * f5;
-				f19 = f13 * f5;
-				f20 = f10 * f6;
-				f21 = f12 * f6;
-				f22 = f13 * f6;
-				f23 = f10 * f7;
-				f24 = f12 * f7;
-				f25 = f13 * f7;
+                // These multipliers are used for their corresponding opposite sides, too.
+                // Ex. north is also used for south, bottom is also used for top, etc.
+                bottomR = bottomMultipler * r;
+				eastR = eastMultiplier * r;
+				northR = northMultiplier * r;
+				bottomG = bottomMultipler * g;
+				eastG = eastMultiplier * g;
+				northG = northMultiplier * g;
+				bottomB = bottomMultipler * b;
+				eastB = eastMultiplier * b;
+				northB = northMultiplier * b;
 			}
 
-			int i26 = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 - 1, i4, 0))
+			int blockBrightness = block.GetMixedBrightnessForBlock(this.blockAccess, x, y, z);
+
+			// Bottom face
+			if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y - 1, z, 0))
 			{
-				tessellator.Brightness = block1.minY > 0.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
-				tessellator.setColorOpaque_F(f17, f20, f23);
-				this.renderBottomFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 0));
+				tessellator.Brightness = block.minY > 0.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x, y - 1, z);
+				tessellator.setColorOpaque_F(bottomR, bottomG, bottomB);
+				this.renderBottomFace(block, (double)x, (double)y, (double)z, block.getBlockTexture(this.blockAccess, x, y, z, 0));
 				z9 = true;
 			}
 
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 + 1, i4, 1))
+			// Top face
+			if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y + 1, z, 1))
 			{
-				tessellator.Brightness = block1.maxY < 1.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
-				tessellator.setColorOpaque_F(f14, f15, f16);
-				this.renderTopFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 1));
+				tessellator.Brightness = block.maxY < 1.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x, y + 1, z);
+				tessellator.setColorOpaque_F(topMultiplerR, topMultiplierG, topMultiplierB);
+				this.renderTopFace(block, (double)x, (double)y, (double)z, block.getBlockTexture(this.blockAccess, x, y, z, 1));
 				z9 = true;
 			}
 
+            // East face
 			int i28;
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 - 1, 2))
+			if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y, z - 1, 2))
 			{
-				tessellator.Brightness = block1.minZ > 0.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
-				tessellator.setColorOpaque_F(f18, f21, f24);
-				i28 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 2);
-				this.renderEastFace(block1, (double)i2, (double)i3, (double)i4, i28);
+				tessellator.Brightness = block.minZ > 0.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x, y, z - 1);
+				tessellator.setColorOpaque_F(eastR, eastG, eastB);
+				i28 = block.getBlockTexture(this.blockAccess, x, y, z, 2);
+				this.renderEastFace(block, (double)x, (double)y, (double)z, i28);
 				if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
 				{
-					tessellator.setColorOpaque_F(f18 * f5, f21 * f6, f24 * f7);
-					this.renderEastFace(block1, (double)i2, (double)i3, (double)i4, 38);
+					tessellator.setColorOpaque_F(eastR * r, eastG * g, eastB * b);
+					this.renderEastFace(block, (double)x, (double)y, (double)z, 38);
 				}
 
 				z9 = true;
 			}
 
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 + 1, 3))
+            // West face
+			if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y, z + 1, 3))
 			{
-				tessellator.Brightness = block1.maxZ < 1.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
-				tessellator.setColorOpaque_F(f18, f21, f24);
-				i28 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 3);
-				this.renderWestFace(block1, (double)i2, (double)i3, (double)i4, i28);
+				tessellator.Brightness = block.maxZ < 1.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x, y, z + 1);
+				tessellator.setColorOpaque_F(eastR, eastG, eastB);
+				i28 = block.getBlockTexture(this.blockAccess, x, y, z, 3);
+				this.renderWestFace(block, (double)x, (double)y, (double)z, i28);
 				if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
 				{
-					tessellator.setColorOpaque_F(f18 * f5, f21 * f6, f24 * f7);
-					this.renderWestFace(block1, (double)i2, (double)i3, (double)i4, 38);
+					tessellator.setColorOpaque_F(eastR * r, eastG * g, eastB * b);
+					this.renderWestFace(block, (double)x, (double)y, (double)z, 38);
 				}
 
 				z9 = true;
 			}
 
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 - 1, i3, i4, 4))
+			// North face
+			if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x - 1, y, z, 4))
 			{
-				tessellator.Brightness = block1.minX > 0.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
-				tessellator.setColorOpaque_F(f19, f22, f25);
-				i28 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 4);
-				this.renderNorthFace(block1, (double)i2, (double)i3, (double)i4, i28);
+				tessellator.Brightness = block.minX > 0.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x - 1, y, z);
+				tessellator.setColorOpaque_F(northR, northG, northB);
+				i28 = block.getBlockTexture(this.blockAccess, x, y, z, 4);
+				this.renderNorthFace(block, (double)x, (double)y, (double)z, i28);
 				if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
 				{
-					tessellator.setColorOpaque_F(f19 * f5, f22 * f6, f25 * f7);
-					this.renderNorthFace(block1, (double)i2, (double)i3, (double)i4, 38);
+					tessellator.setColorOpaque_F(northR * r, northG * g, northB * b);
+					this.renderNorthFace(block, (double)x, (double)y, (double)z, 38);
 				}
 
 				z9 = true;
 			}
 
-			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 + 1, i3, i4, 5))
+			// South face
+			if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x + 1, y, z, 5))
 			{
-				tessellator.Brightness = block1.maxX < 1.0D ? i26 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
-				tessellator.setColorOpaque_F(f19, f22, f25);
-				i28 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 5);
-				this.renderSouthFace(block1, (double)i2, (double)i3, (double)i4, i28);
+				tessellator.Brightness = block.maxX < 1.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x + 1, y, z);
+				tessellator.setColorOpaque_F(northR, northG, northB);
+				i28 = block.getBlockTexture(this.blockAccess, x, y, z, 5);
+				this.renderSouthFace(block, (double)x, (double)y, (double)z, i28);
 				if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
 				{
-					tessellator.setColorOpaque_F(f19 * f5, f22 * f6, f25 * f7);
-					this.renderSouthFace(block1, (double)i2, (double)i3, (double)i4, 38);
+					tessellator.setColorOpaque_F(northR * r, northG * g, northB * b);
+					this.renderSouthFace(block, (double)x, (double)y, (double)z, 38);
 				}
 
 				z9 = true;
@@ -3646,8 +3698,132 @@ namespace net.minecraft.src
 
 			return z9;
 		}
+        
+        public virtual bool RenderStandardBlockSmoothAlternate(Block block, int x, int y, int z, float r, float g, float b)
+        {
+            this.enableAO = true;
+            Tessellator tessellator = Tessellator.instance;
+            bool z9 = false;
+            float colorBlendMultiplier = 1.0F;
+            float bottomMultipler = 0.5F;
+            float eastMultiplier = 0.8F;
+            float northMultiplier = 0.6F;
+            float topMultiplerR = colorBlendMultiplier * r;
+            float topMultiplierG = colorBlendMultiplier * g;
+            float topMultiplierB = colorBlendMultiplier * b;
+            float bottomR = bottomMultipler;
+            float eastR = eastMultiplier;
+            float northR = northMultiplier;
+            float bottomG = bottomMultipler;
+            float eastG = eastMultiplier;
+            float northG = northMultiplier;
+            float bottomB = bottomMultipler;
+            float eastB = eastMultiplier;
+            float northB = northMultiplier;
+            if (block != Block.grass)
+            {
+                // These multipliers are used for their corresponding opposite sides, too.
+                // Ex. north is also used for south, west is used for east, with the exception of the top and bottom.
+                bottomR = bottomMultipler * r;
+                eastR = eastMultiplier * r;
+                northR = northMultiplier * r;
+                bottomG = bottomMultipler * g;
+                eastG = eastMultiplier * g;
+                northG = northMultiplier * g;
+                bottomB = bottomMultipler * b;
+                eastB = eastMultiplier * b;
+                northB = northMultiplier * b;
+            }
 
-		public virtual bool renderBlockCactus(Block block1, int i2, int i3, int i4)
+            int blockBrightness = block.GetMixedBrightnessForBlock(this.blockAccess, x, y, z);
+
+            // Bottom face
+            if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y - 1, z, 0))
+            {
+                tessellator.Brightness = block.minY > 0.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x, y - 1, z);
+                tessellator.setColorOpaque_F(bottomR, bottomG, bottomB);
+                this.renderBottomFace(block, (double)x, (double)y, (double)z, block.getBlockTexture(this.blockAccess, x, y, z, 0));
+                z9 = true;
+            }
+
+            // Top face
+            if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y + 1, z, 1))
+            {
+                tessellator.Brightness = block.maxY < 1.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x, y + 1, z);
+                tessellator.setColorOpaque_F(topMultiplerR, topMultiplierG, topMultiplierB);
+                this.renderTopFace(block, (double)x, (double)y, (double)z, block.getBlockTexture(this.blockAccess, x, y, z, 1));
+                z9 = true;
+            }
+
+            // East face
+            int i28;
+            if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y, z - 1, 2))
+            {
+                tessellator.Brightness = block.minZ > 0.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x, y, z - 1);
+                tessellator.setColorOpaque_F(eastR, eastG, eastB);
+                i28 = block.getBlockTexture(this.blockAccess, x, y, z, 2);
+                this.renderEastFace(block, (double)x, (double)y, (double)z, i28);
+                if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
+                {
+                    tessellator.setColorOpaque_F(eastR * r, eastG * g, eastB * b);
+                    this.renderEastFace(block, (double)x, (double)y, (double)z, 38);
+                }
+
+                z9 = true;
+            }
+
+            // West face
+            if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y, z + 1, 3))
+            {
+                tessellator.Brightness = block.maxZ < 1.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x, y, z + 1);
+                tessellator.setColorOpaque_F(eastR, eastG, eastB);
+                i28 = block.getBlockTexture(this.blockAccess, x, y, z, 3);
+                this.renderWestFace(block, (double)x, (double)y, (double)z, i28);
+                if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
+                {
+                    tessellator.setColorOpaque_F(eastR * r, eastG * g, eastB * b);
+                    this.renderWestFace(block, (double)x, (double)y, (double)z, 38);
+                }
+
+                z9 = true;
+            }
+
+            // North face
+            if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x - 1, y, z, 4))
+            {
+                tessellator.Brightness = block.minX > 0.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x - 1, y, z);
+                tessellator.setColorOpaque_F(northR, northG, northB);
+                i28 = block.getBlockTexture(this.blockAccess, x, y, z, 4);
+                this.renderNorthFace(block, (double)x, (double)y, (double)z, i28);
+                if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
+                {
+                    tessellator.setColorOpaque_F(northR * r, northG * g, northB * b);
+                    this.renderNorthFace(block, (double)x, (double)y, (double)z, 38);
+                }
+
+                z9 = true;
+            }
+
+            // South face
+            if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x + 1, y, z, 5))
+            {
+                tessellator.Brightness = block.maxX < 1.0D ? blockBrightness : block.GetMixedBrightnessForBlock(this.blockAccess, x + 1, y, z);
+                tessellator.setColorOpaque_F(northR, northG, northB);
+                i28 = block.getBlockTexture(this.blockAccess, x, y, z, 5);
+                this.renderSouthFace(block, (double)x, (double)y, (double)z, i28);
+                if (fancyGrass && i28 == 3 && this.overrideBlockTexture < 0)
+                {
+                    tessellator.setColorOpaque_F(northR * r, northG * g, northB * b);
+                    this.renderSouthFace(block, (double)x, (double)y, (double)z, 38);
+                }
+
+                z9 = true;
+            }
+
+            return z9;
+        }
+
+        public virtual bool renderBlockCactus(Block block1, int i2, int i3, int i4)
 		{
 			int i5 = block1.colorMultiplier(this.blockAccess, i2, i3, i4);
 			float f6 = (float)(i5 >> 16 & 255) / 255.0F;
@@ -3678,10 +3854,10 @@ namespace net.minecraft.src
 			float f24 = f12 * f7;
 			float f25 = f13 * f7;
 			float f26 = 0.0625F;
-			int i28 = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			int i28 = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 - 1, i4, 0))
 			{
-				tessellator8.Brightness = block1.minY > 0.0D ? i28 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
+				tessellator8.Brightness = block1.minY > 0.0D ? i28 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
 				tessellator8.setColorOpaque_F(f14, f18, f22);
 				this.renderBottomFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 0));
 				z9 = true;
@@ -3689,7 +3865,7 @@ namespace net.minecraft.src
 
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3 + 1, i4, 1))
 			{
-				tessellator8.Brightness = block1.maxY < 1.0D ? i28 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
+				tessellator8.Brightness = block1.maxY < 1.0D ? i28 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
 				tessellator8.setColorOpaque_F(f15, f19, f23);
 				this.renderTopFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 1));
 				z9 = true;
@@ -3697,7 +3873,7 @@ namespace net.minecraft.src
 
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 - 1, 2))
 			{
-				tessellator8.Brightness = block1.minZ > 0.0D ? i28 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
+				tessellator8.Brightness = block1.minZ > 0.0D ? i28 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
 				tessellator8.setColorOpaque_F(f16, f20, f24);
 				tessellator8.addTranslation(0.0F, 0.0F, f26);
 				this.renderEastFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 2));
@@ -3707,7 +3883,7 @@ namespace net.minecraft.src
 
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2, i3, i4 + 1, 3))
 			{
-				tessellator8.Brightness = block1.maxZ < 1.0D ? i28 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
+				tessellator8.Brightness = block1.maxZ < 1.0D ? i28 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
 				tessellator8.setColorOpaque_F(f16, f20, f24);
 				tessellator8.addTranslation(0.0F, 0.0F, -f26);
 				this.renderWestFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 3));
@@ -3717,7 +3893,7 @@ namespace net.minecraft.src
 
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 - 1, i3, i4, 4))
 			{
-				tessellator8.Brightness = block1.minX > 0.0D ? i28 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
+				tessellator8.Brightness = block1.minX > 0.0D ? i28 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
 				tessellator8.setColorOpaque_F(f17, f21, f25);
 				tessellator8.addTranslation(f26, 0.0F, 0.0F);
 				this.renderNorthFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 4));
@@ -3727,7 +3903,7 @@ namespace net.minecraft.src
 
 			if (this.renderAllFaces || block1.shouldSideBeRendered(this.blockAccess, i2 + 1, i3, i4, 5))
 			{
-				tessellator8.Brightness = block1.maxX < 1.0D ? i28 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
+				tessellator8.Brightness = block1.maxX < 1.0D ? i28 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
 				tessellator8.setColorOpaque_F(f17, f21, f25);
 				tessellator8.addTranslation(-f26, 0.0F, 0.0F);
 				this.renderSouthFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 5));
@@ -4082,16 +4258,16 @@ namespace net.minecraft.src
 			float f9 = 1.0F;
 			float f10 = 0.8F;
 			float f11 = 0.6F;
-			int i12 = block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
-			tessellator5.Brightness = block1.minY > 0.0D ? i12 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
+			int i12 = block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4);
+			tessellator5.Brightness = block1.minY > 0.0D ? i12 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3 - 1, i4);
 			tessellator5.setColorOpaque_F(f8, f8, f8);
 			this.renderBottomFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 0));
 			z7 = true;
-			tessellator5.Brightness = block1.maxY < 1.0D ? i12 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
+			tessellator5.Brightness = block1.maxY < 1.0D ? i12 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3 + 1, i4);
 			tessellator5.setColorOpaque_F(f9, f9, f9);
 			this.renderTopFace(block1, (double)i2, (double)i3, (double)i4, block1.getBlockTexture(this.blockAccess, i2, i3, i4, 1));
 			z7 = true;
-			tessellator5.Brightness = block1.minZ > 0.0D ? i12 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
+			tessellator5.Brightness = block1.minZ > 0.0D ? i12 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 - 1);
 			tessellator5.setColorOpaque_F(f10, f10, f10);
 			int i14 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 2);
 			if (i14 < 0)
@@ -4103,7 +4279,7 @@ namespace net.minecraft.src
 			this.renderEastFace(block1, (double)i2, (double)i3, (double)i4, i14);
 			z7 = true;
 			this.flipTexture = false;
-			tessellator5.Brightness = block1.maxZ < 1.0D ? i12 : block1.getMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
+			tessellator5.Brightness = block1.maxZ < 1.0D ? i12 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2, i3, i4 + 1);
 			tessellator5.setColorOpaque_F(f10, f10, f10);
 			i14 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 3);
 			if (i14 < 0)
@@ -4115,7 +4291,7 @@ namespace net.minecraft.src
 			this.renderWestFace(block1, (double)i2, (double)i3, (double)i4, i14);
 			z7 = true;
 			this.flipTexture = false;
-			tessellator5.Brightness = block1.minX > 0.0D ? i12 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
+			tessellator5.Brightness = block1.minX > 0.0D ? i12 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2 - 1, i3, i4);
 			tessellator5.setColorOpaque_F(f11, f11, f11);
 			i14 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 4);
 			if (i14 < 0)
@@ -4127,7 +4303,7 @@ namespace net.minecraft.src
 			this.renderNorthFace(block1, (double)i2, (double)i3, (double)i4, i14);
 			z7 = true;
 			this.flipTexture = false;
-			tessellator5.Brightness = block1.maxX < 1.0D ? i12 : block1.getMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
+			tessellator5.Brightness = block1.maxX < 1.0D ? i12 : block1.GetMixedBrightnessForBlock(this.blockAccess, i2 + 1, i3, i4);
 			tessellator5.setColorOpaque_F(f11, f11, f11);
 			i14 = block1.getBlockTexture(this.blockAccess, i2, i3, i4, 5);
 			if (i14 < 0)
@@ -4852,7 +5028,6 @@ namespace net.minecraft.src
 				else if (i6 == 22)
 				{
 					ChestItemRenderHelper.instance.func_35609_a(block1, i2, f3);
-					GL.Enable(EnableCap.RescaleNormal);
 				}
 				else if (i6 == 6)
 				{

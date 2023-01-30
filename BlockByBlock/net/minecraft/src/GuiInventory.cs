@@ -1,4 +1,5 @@
 ﻿using System;
+using BlockByBlock.net.minecraft.render;
 using net.minecraft.client;
 using net.minecraft.client.entity;
 using OpenTK.Graphics.OpenGL;
@@ -75,8 +76,8 @@ namespace net.minecraft.src
 			int i6 = this.guiTop;
 			this.drawTexturedModalRect(i5, i6, 0, 0, this.xSize, this.ySize);
 			this.displayDebuffEffects();
-			GL.Enable(EnableCap.RescaleNormal);
-			GL.Enable(EnableCap.ColorMaterial);
+
+			Minecraft.renderPipeline.SetState(RenderState.ColorMaterialState, true);
             Minecraft.renderPipeline.ModelMatrix.PushMatrix();
             Minecraft.renderPipeline.ModelMatrix.Translate((float)(i5 + 51), (float)(i6 + 75), 50.0F);
 			float f7 = 30.0F;
@@ -103,8 +104,7 @@ namespace net.minecraft.src
 			this.mc.thePlayer.rotationPitch = f10;
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
 			RenderHelper.disableStandardItemLighting();
-			GL.Disable(EnableCap.RescaleNormal);
-            GL.Disable(EnableCap.ColorMaterial);
+            Minecraft.renderPipeline.SetState(RenderState.ColorMaterialState, false);
         }
 
 		protected internal override void actionPerformed(GuiButton guiButton1)

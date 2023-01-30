@@ -87,10 +87,10 @@ namespace net.minecraft.client.entity.render
                 }
 
                 tessellator24.setColorRGBA_F(f21 * f17, f22 * f17, f23 * f17, 1.0F);
-                tessellator24.addVertex(d2, d4 + (double)f13, d6);
-                tessellator24.addVertex(d2, d4 + (double)f13, d6 + 1.0D);
-                tessellator24.addVertex(d2 + 1.0D, d4 + (double)f13, d6 + 1.0D);
-                tessellator24.addVertex(d2 + 1.0D, d4 + (double)f13, d6);
+                tessellator24.AddVertex(d2, d4 + (double)f13, d6);
+                tessellator24.AddVertex(d2, d4 + (double)f13, d6 + 1.0D);
+                tessellator24.AddVertex(d2 + 1.0D, d4 + (double)f13, d6 + 1.0D);
+                tessellator24.AddVertex(d2 + 1.0D, d4 + (double)f13, d6);
                 tessellator24.DrawImmediate();
                 Minecraft.renderPipeline.TextureMatrix.PopMatrix();
             }

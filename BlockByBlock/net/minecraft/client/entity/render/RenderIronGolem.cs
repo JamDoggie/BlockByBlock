@@ -49,7 +49,6 @@ namespace net.minecraft.client.entity.render
             base.renderEquippedItems(entityIronGolem1, f2);
             if (entityIronGolem1.func_48117_D_() != 0)
             {
-                GL.Enable(EnableCap.RescaleNormal);
                 Minecraft.renderPipeline.ModelMatrix.PushMatrix();
                 Minecraft.renderPipeline.ModelMatrix.Rotate(5.0F + 180.0F * field_48422_c.field_48233_c.rotateAngleX / (float)Math.PI, 1.0F, 0.0F, 0.0F);
                 Minecraft.renderPipeline.ModelMatrix.Translate(-0.6875F, 1.25F, -0.9375F);
@@ -65,7 +64,6 @@ namespace net.minecraft.client.entity.render
                 loadTexture("/terrain.png");
                 renderBlocks.renderBlockAsItem(Block.plantRed, 0, 1.0F);
                 Minecraft.renderPipeline.ModelMatrix.PopMatrix();
-                GL.Disable(EnableCap.RescaleNormal);
             }
         }
 

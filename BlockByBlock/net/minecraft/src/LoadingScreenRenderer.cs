@@ -118,15 +118,15 @@ namespace net.minecraft.src
                             Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
                             tessellator7.startDrawingQuads();
 							tessellator7.ColorOpaque_I = 8421504;
-							tessellator7.addVertex((double)i12, (double)i13, 0.0D);
-							tessellator7.addVertex((double)i12, (double)(i13 + b11), 0.0D);
-							tessellator7.addVertex((double)(i12 + b10), (double)(i13 + b11), 0.0D);
-							tessellator7.addVertex((double)(i12 + b10), (double)i13, 0.0D);
+							tessellator7.AddVertex((double)i12, (double)i13, 0.0D);
+							tessellator7.AddVertex((double)i12, (double)(i13 + b11), 0.0D);
+							tessellator7.AddVertex((double)(i12 + b10), (double)(i13 + b11), 0.0D);
+							tessellator7.AddVertex((double)(i12 + b10), (double)i13, 0.0D);
 							tessellator7.ColorOpaque_I = 8454016;
-							tessellator7.addVertex((double)i12, (double)i13, 0.0D);
-							tessellator7.addVertex((double)i12, (double)(i13 + b11), 0.0D);
-							tessellator7.addVertex((double)(i12 + value), (double)(i13 + b11), 0.0D);
-							tessellator7.addVertex((double)(i12 + value), (double)i13, 0.0D);
+							tessellator7.AddVertex((double)i12, (double)i13, 0.0D);
+							tessellator7.AddVertex((double)i12, (double)(i13 + b11), 0.0D);
+							tessellator7.AddVertex((double)(i12 + value), (double)(i13 + b11), 0.0D);
+							tessellator7.AddVertex((double)(i12 + value), (double)i13, 0.0D);
 							tessellator7.DrawImmediate();
                             Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
                         }

@@ -18,13 +18,13 @@ namespace net.minecraft.client.entity.render
             Minecraft.renderPipeline.ModelMatrix.PushMatrix();
             Minecraft.renderPipeline.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
             Minecraft.renderPipeline.ModelMatrix.Rotate(f8, 0.0F, 1.0F, 0.0F);
-            GL.Enable(EnableCap.RescaleNormal);
+
             loadTexture("/art/kz.png");
             EnumArt enumArt10 = entityPainting1.art;
             float f11 = 0.0625F;
             Minecraft.renderPipeline.ModelMatrix.Scale(f11, f11, f11);
             func_159_a(entityPainting1, enumArt10.sizeX, enumArt10.sizeY, enumArt10.offsetX, enumArt10.offsetY);
-            GL.Disable(EnableCap.RescaleNormal);
+            
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
         }
 
@@ -123,7 +123,7 @@ namespace net.minecraft.client.entity.render
                 i6 = MathHelper.floor_double(entityPainting1.posZ + (double)(f2 / 16.0F));
             }
 
-            int i7 = renderManager.worldObj.getLightBrightnessForSkyBlocks(i4, i5, i6, 0);
+            int i7 = renderManager.worldObj.GetLightBrightnessForSkyBlocks(i4, i5, i6, 0);
             int i8 = i7 % 65536;
             int i9 = i7 / 65536;
             LightmapManager.setLightmapTextureCoords(LightmapManager.lightmapTexUnit, i8, i9);

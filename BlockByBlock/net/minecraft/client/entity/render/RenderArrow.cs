@@ -26,7 +26,7 @@ namespace net.minecraft.client.entity.render
             float f18 = (5 + b11 * 10) / 32.0F;
             float f19 = (10 + b11 * 10) / 32.0F;
             float f20 = 0.05625F;
-            GL.Enable(EnableCap.RescaleNormal);
+            
             float f21 = entityArrow1.arrowShake - f9;
             if (f21 > 0.0F)
             {
@@ -63,8 +63,7 @@ namespace net.minecraft.client.entity.render
                 tessellator10.AddVertexWithUV(-8.0D, 2.0D, 0.0D, (double)f12, (double)f15);
                 tessellator10.DrawImmediate();
             }
-
-            GL.Disable(EnableCap.RescaleNormal);
+            
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
         }
 

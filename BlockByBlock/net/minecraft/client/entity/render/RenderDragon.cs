@@ -176,12 +176,12 @@ namespace net.minecraft.client.entity.render
                     float f8 = random6.NextSingle() * 20.0F + 5.0F + f5 * 10.0F;
                     float f9 = random6.NextSingle() * 2.0F + 1.0F + f5 * 2.0F;
                     tessellator3.setColorRGBA_I(0xFFFFFF, (int)(255.0F * (1.0F - f5)));
-                    tessellator3.addVertex(0.0D, 0.0D, 0.0D);
+                    tessellator3.AddVertex(0.0D, 0.0D, 0.0D);
                     tessellator3.setColorRGBA_I(16711935, 0);
-                    tessellator3.addVertex(-0.866D * (double)f9, (double)f8, (double)(-0.5F * f9));
-                    tessellator3.addVertex(0.866D * (double)f9, (double)f8, (double)(-0.5F * f9));
-                    tessellator3.addVertex(0.0D, (double)f8, (double)(1.0F * f9));
-                    tessellator3.addVertex(-0.866D * (double)f9, (double)f8, (double)(-0.5F * f9));
+                    tessellator3.AddVertex(-0.866D * (double)f9, (double)f8, (double)(-0.5F * f9));
+                    tessellator3.AddVertex(0.866D * (double)f9, (double)f8, (double)(-0.5F * f9));
+                    tessellator3.AddVertex(0.0D, (double)f8, (double)(1.0F * f9));
+                    tessellator3.AddVertex(-0.866D * (double)f9, (double)f8, (double)(-0.5F * f9));
                     tessellator3.DrawImmediate();
                 }
 

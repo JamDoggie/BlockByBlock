@@ -45,7 +45,6 @@
 				}
 
                 Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-				GL.Enable(EnableCap.RescaleNormal);
 				Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
                 Minecraft.renderPipeline.ModelMatrix.Translate((float)d2, (float)d4 + 1.0F, (float)d6 + 1.0F);
                 Minecraft.renderPipeline.ModelMatrix.Scale(1.0F, -1.0F, -1.0F);
@@ -107,7 +106,6 @@
 				f12 = 1.0F - f12 * f12 * f12;
 				modelChest14.chestLid.rotateAngleX = -(f12 * (float)Math.PI / 2.0F);
 				modelChest14.renderAll();
-				GL.Disable(EnableCap.RescaleNormal);
                 Minecraft.renderPipeline.ModelMatrix.PopMatrix();
 				Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 			}

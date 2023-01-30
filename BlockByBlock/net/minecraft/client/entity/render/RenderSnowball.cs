@@ -19,7 +19,7 @@ namespace net.minecraft.client.entity.render
         {
             Minecraft.renderPipeline.ModelMatrix.PushMatrix();
             Minecraft.renderPipeline.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
-            GL.Enable(EnableCap.RescaleNormal);
+            
             Minecraft.renderPipeline.ModelMatrix.Scale(0.5F, 0.5F, 0.5F);
             loadTexture("/gui/items.png");
             Tessellator tessellator10 = Tessellator.instance;
@@ -37,7 +37,6 @@ namespace net.minecraft.client.entity.render
             }
 
             func_40265_a(tessellator10, itemIconIndex);
-            GL.Disable(EnableCap.RescaleNormal);
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
         }
 

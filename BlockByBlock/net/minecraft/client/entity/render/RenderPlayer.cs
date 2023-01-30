@@ -133,10 +133,10 @@ namespace net.minecraft.client.entity.render
                         tessellator14.startDrawingQuads();
                         int i15 = fontRenderer13.getStringWidth(string12) / 2;
                         tessellator14.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
-                        tessellator14.addVertex(-i15 - 1, -1.0D, 0.0D);
-                        tessellator14.addVertex(-i15 - 1, 8.0D, 0.0D);
-                        tessellator14.addVertex(i15 + 1, 8.0D, 0.0D);
-                        tessellator14.addVertex(i15 + 1, -1.0D, 0.0D);
+                        tessellator14.AddVertex(-i15 - 1, -1.0D, 0.0D);
+                        tessellator14.AddVertex(-i15 - 1, 8.0D, 0.0D);
+                        tessellator14.AddVertex(i15 + 1, 8.0D, 0.0D);
+                        tessellator14.AddVertex(i15 + 1, -1.0D, 0.0D);
                         tessellator14.DrawImmediate();
                         Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
                         GL.DepthMask(true);

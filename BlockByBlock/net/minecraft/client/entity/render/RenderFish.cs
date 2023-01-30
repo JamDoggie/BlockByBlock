@@ -13,7 +13,7 @@ namespace net.minecraft.client.entity.render
         {
             Minecraft.renderPipeline.ModelMatrix.PushMatrix();
             Minecraft.renderPipeline.ModelMatrix.Translate((float)d2, (float)d4, (float)d6);
-            GL.Enable(EnableCap.RescaleNormal);
+
             Minecraft.renderPipeline.ModelMatrix.Scale(0.5F, 0.5F, 0.5F);
             sbyte b10 = 1;
             sbyte b11 = 2;
@@ -35,7 +35,7 @@ namespace net.minecraft.client.entity.render
             tessellator12.AddVertexWithUV((double)(f17 - f18), (double)(1.0F - f19), 0.0D, (double)f14, (double)f15);
             tessellator12.AddVertexWithUV((double)(0.0F - f18), (double)(1.0F - f19), 0.0D, (double)f13, (double)f15);
             tessellator12.DrawImmediate();
-            GL.Disable(EnableCap.RescaleNormal);
+            
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
             if (entityFishHook1.angler != null)
             {
@@ -77,7 +77,7 @@ namespace net.minecraft.client.entity.render
                 for (int i47 = 0; i47 <= b46; ++i47)
                 {
                     float f48 = i47 / (float)b46;
-                    tessellator12.addVertex(d2 + d40 * (double)f48, d4 + d42 * (double)(f48 * f48 + f48) * 0.5D + 0.25D, d6 + d44 * (double)f48);
+                    tessellator12.AddVertex(d2 + d40 * (double)f48, d4 + d42 * (double)(f48 * f48 + f48) * 0.5D + 0.25D, d6 + d44 * (double)f48);
                 }
 
                 tessellator12.DrawImmediate();
