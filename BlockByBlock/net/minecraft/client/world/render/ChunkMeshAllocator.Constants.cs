@@ -9,7 +9,7 @@ namespace net.minecraft.client.world.render
 {
     public partial class ChunkMeshAllocator
     {
-        public const int DefaultBufferVerticeSize = 70000 * 32;
+        public const int DefaultBufferVerticeSize = 50000000 * 32;
         public const int BufferIncreaseStep = 1000000 * 32;
     }
 }

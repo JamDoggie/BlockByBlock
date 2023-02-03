@@ -6,6 +6,7 @@ using BlockByBlock.net.minecraft.client.entity.render;
 using BlockByBlock.net.minecraft.render;
 using javax.swing;
 using net.minecraft.client.entity;
+using net.minecraft.client.entity.render;
 using net.minecraft.client.world.render;
 using OpenTK.Graphics.OpenGL;
 
@@ -368,11 +369,11 @@ namespace net.minecraft.src
 			}
 		}
 
-		private void markRenderersForNewPosition(int i1, int i2, int i3)
+		private void markRenderersForNewPosition(int rendererX, int rendererY, int rendererZ)
 		{
-			i1 -= 8;
-			i2 -= 8;
-			i3 -= 8;
+			rendererX -= 8;
+			rendererY -= 8;
+			rendererZ -= 8;
 			this.minBlockX = int.MaxValue;
 			this.minBlockY = int.MaxValue;
 			this.minBlockZ = int.MaxValue;
@@ -384,62 +385,62 @@ namespace net.minecraft.src
 
 			for (int i6 = 0; i6 < this.renderChunksWide; ++i6)
 			{
-				int i7 = i6 * 16;
-				int i8 = i7 + i5 - i1;
+				int x = i6 * 16;
+				int i8 = x + i5 - rendererX;
 				if (i8 < 0)
 				{
 					i8 -= i4 - 1;
 				}
 
 				i8 /= i4;
-				i7 -= i8 * i4;
-				if (i7 < this.minBlockX)
+				x -= i8 * i4;
+				if (x < this.minBlockX)
 				{
-					this.minBlockX = i7;
+					this.minBlockX = x;
 				}
 
-				if (i7 > this.maxBlockX)
+				if (x > this.maxBlockX)
 				{
-					this.maxBlockX = i7;
+					this.maxBlockX = x;
 				}
 
 				for (int i9 = 0; i9 < this.renderChunksDeep; ++i9)
 				{
-					int i10 = i9 * 16;
-					int i11 = i10 + i5 - i3;
+					int z = i9 * 16;
+					int i11 = z + i5 - rendererZ;
 					if (i11 < 0)
 					{
 						i11 -= i4 - 1;
 					}
 
 					i11 /= i4;
-					i10 -= i11 * i4;
-					if (i10 < this.minBlockZ)
+					z -= i11 * i4;
+					if (z < this.minBlockZ)
 					{
-						this.minBlockZ = i10;
+						this.minBlockZ = z;
 					}
 
-					if (i10 > this.maxBlockZ)
+					if (z > this.maxBlockZ)
 					{
-						this.maxBlockZ = i10;
+						this.maxBlockZ = z;
 					}
 
 					for (int i12 = 0; i12 < this.renderChunksTall; ++i12)
 					{
-						int i13 = i12 * 16;
-						if (i13 < this.minBlockY)
+						int y = i12 * 16;
+						if (y < this.minBlockY)
 						{
-							this.minBlockY = i13;
+							this.minBlockY = y;
 						}
 
-						if (i13 > this.maxBlockY)
+						if (y > this.maxBlockY)
 						{
-							this.maxBlockY = i13;
+							this.maxBlockY = y;
 						}
 
 						WorldRenderer worldRenderer14 = this.worldRenderers[(i9 * this.renderChunksTall + i12) * this.renderChunksWide + i6];
 						bool z15 = worldRenderer14.needsUpdate;
-						worldRenderer14.setPosition(i7, i13, i10);
+						worldRenderer14.setPosition(x, y, z);
 						if (!z15 && worldRenderer14.needsUpdate)
 						{
 							this.worldRenderersToUpdate.Add(worldRenderer14);
@@ -617,8 +618,11 @@ namespace net.minecraft.src
 					}
 				}
 			}
-
 		}
+
+		private float worldRenderX;
+		private float worldRenderY;
+		private float worldRenderZ;
 
 		private int renderSortedRenderers(int i1, int i2, int pass, double d4)
 		{
@@ -656,10 +660,14 @@ namespace net.minecraft.src
 			}
 
             EntityLiving entityLiving19 = this.mc.renderViewEntity;
-			double d20 = entityLiving19.lastTickPosX + (entityLiving19.posX - entityLiving19.lastTickPosX) * d4;
-			double d10 = entityLiving19.lastTickPosY + (entityLiving19.posY - entityLiving19.lastTickPosY) * d4;
-			double d12 = entityLiving19.lastTickPosZ + (entityLiving19.posZ - entityLiving19.lastTickPosZ) * d4;
+			double x = entityLiving19.lastTickPosX + (entityLiving19.posX - entityLiving19.lastTickPosX) * d4;
+			double y = entityLiving19.lastTickPosY + (entityLiving19.posY - entityLiving19.lastTickPosY) * d4;
+			double z = entityLiving19.lastTickPosZ + (entityLiving19.posZ - entityLiving19.lastTickPosZ) * d4;
 			int i14 = 0;
+
+			worldRenderX = (float)x;
+			worldRenderY = (float)y;
+			worldRenderZ = (float)z;
 
 			int i15;
 			for (i15 = 0; i15 < this.allRenderLists.Length; ++i15)
@@ -684,18 +692,16 @@ namespace net.minecraft.src
 				if (renderListIndex < 0)
 				{
 					renderListIndex = i14++;
-					this.allRenderLists[renderListIndex].SetPosition(renderer.posXMinus, renderer.posYMinus, renderer.posZMinus, d20, d10, d12);
+					this.allRenderLists[renderListIndex].SetPosition(renderer.posXMinus, renderer.posYMinus, renderer.posZMinus, x, y, z);
                 }
 
-                renderer.SetRenderPos(d20, d10, d12, renderer.posXMinus, renderer.posYMinus, renderer.posZMinus);
+                //renderer.SetRenderPos(x, y, z, renderer.posXMinus, renderer.posYMinus, renderer.posZMinus);
             }
 			Profiler.endStartSection("tessellateWorldRenderers");
             RenderAllWorldRenderers(pass, d4);
 			Profiler.endSection();
             return i6;
 		}
-
-		private static string profilerDrawName = "draw";
         
 		public virtual void RenderAllWorldRenderers(int pass, double d2)
 		{
@@ -705,15 +711,13 @@ namespace net.minecraft.src
 
             this.mc.gameRenderer.enableLightmap(d2);
 
-			// Draw world VBO
-			if (meshAllocator.DataAllocations.Values.Count > 0)
-			{
-                
-			}
-
-			Tessellator.instance.DrawMeshAllocator(meshAllocator.WorldBuffer, meshAllocator);
-
-            /*for (int i = 0; i < glRenderLists.Count; i++)
+            // Draw world VBO
+			modelMatrix.PushMatrix();
+            modelMatrix.Translate(-worldRenderX, -worldRenderY, -worldRenderZ);
+			GL.Enable(EnableCap.CullFace);
+            Tessellator.instance.DrawMeshAllocator(meshAllocator.WorldBuffer, meshAllocator);
+			modelMatrix.PopMatrix();
+			/*for (int i = 0; i < glRenderLists.Count; i++)
             {
                 WorldRenderer? renderer = (WorldRenderer?)glRenderLists[i];
                 

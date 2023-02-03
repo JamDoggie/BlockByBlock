@@ -4,21 +4,24 @@ namespace net.minecraft.client.world.render
 {
     public unsafe class UnsafeByteBuffer : IDisposable
     {
-        public nint Handle => _ptr;
+        public nint Handle => _hGlobal;
         public int Size => _size;
 
-        private readonly nint _ptr;
+        private readonly byte* _ptr;
+        private readonly nint _hGlobal;
         private readonly int _size;
 
         public UnsafeByteBuffer(int size)
         {
-            _ptr = Marshal.AllocHGlobal(size);
+            _hGlobal = Marshal.AllocHGlobal(size);
+            _ptr = (byte*)_hGlobal;
             _size = size;
         }
         
         /// <summary>
         /// WARNING: there is no bounds checking on this for performance reasons.
-        /// Please be responsible.
+        /// This just accesses the raw internal pointer. Please be responsible, and do your own bounds checking
+        /// if necessary.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -26,18 +29,18 @@ namespace net.minecraft.client.world.render
         {
             get
             {
-                return ((byte*)_ptr)[index];
+                return _ptr[index];
             }
 
             set
             {
-                ((byte*)_ptr)[index] = value;
+                _ptr[index] = value;
             }
         }
 
         public void Dispose()
         {
-            Marshal.FreeHGlobal(_ptr);
+            Marshal.FreeHGlobal(_hGlobal);
             GC.SuppressFinalize(this);
         }
 

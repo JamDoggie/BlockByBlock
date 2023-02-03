@@ -16,16 +16,16 @@ namespace net.minecraft.src
 		private bool field_1235_h = false;
 		private bool field_1234_i = false;
 
-		public virtual void SetPosition(int i1, int i2, int i3, double d4, double d6, double d8)
+		public virtual void SetPosition(int i1, int i2, int i3, double x, double y, double z)
 		{
 			field_1235_h = true;
 			displayLists.clear();
 			X2 = i1;
 			Y2 = i2;
 			Z2 = i3;
-			X1 = d4;
-			Y1 = d6;
-			Z1 = d8;
+			X1 = x;
+			Y1 = y;
+			Z1 = z;
 		}
 
 		public virtual bool PositionMatches(int i1, int i2, int i3)

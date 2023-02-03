@@ -1,15 +1,16 @@
 ﻿using BlockByBlock.net.minecraft.render;
+using javax.swing.text;
 using net.minecraft.src;
 using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.client.world.render
 {
-    public partial class ChunkMeshAllocator : IAllocator
+    public unsafe partial class ChunkMeshAllocator : IAllocator
     {
         public UnsafeByteBuffer Buffer { get; set; }
         public Dictionary<int, BufferSegment> DataAllocations = new(); // Id, Offset
-        public List<BufferSegment> FreeSegments = new();
-        
+        public LinkedList<BufferSegment> bufferSegments = new();
+
         private int maxAllocationOffset = 0;
         private int currentIdNum = 0;
 
@@ -27,7 +28,7 @@ namespace net.minecraft.client.world.render
             {
                 int worldVBO = worldVBOBuffer[0];
                 WorldBuffer = new(DefaultBufferVerticeSize, 0, worldVBO, 7, true, true, true, false);
-                GL.NamedBufferData(worldVBO, Buffer.Size, Buffer.Handle, BufferUsageHint.DynamicDraw);
+                GL.NamedBufferData(worldVBO, Buffer.Size, (nint)Buffer.Handle, BufferUsageHint.DynamicDraw);
             }
         }
 
@@ -37,94 +38,107 @@ namespace net.minecraft.client.world.render
 
             if (maxAllocationOffset == 0)
             {
-                id = PlaceData(0, data);
+                bufferSegments.AddFirst(new BufferSegment(0, data.Length, null));
+                id = PlaceData(0, data, bufferSegments.First);
+
                 maxAllocationOffset += data.Length;
                 return id;
             }
-            
-            // Find the smallest free segment that can fit the data.
-            BufferSegment? bestFreeSegmentToFill = null;
 
-            foreach (BufferSegment freeSegment in FreeSegments)
+            // Find the smallest free segment that can fit the data.
+            LinkedListNode<BufferSegment>? smallestSegment = null;
+
+            LinkedListNode<BufferSegment>? node = bufferSegments.First;
+            for (int i = 0; i < bufferSegments.Count; i++)
             {
-                if (freeSegment.Size >= data.Length)
+                if (node == null)
+                    break;
+
+                BufferSegment currentSegment = node.ValueRef;
+
+                if (currentSegment.IsFree && currentSegment.Size >= data.Length)
                 {
-                    if (bestFreeSegmentToFill == null)
+                    if (smallestSegment == null)
                     {
-                        bestFreeSegmentToFill = freeSegment;
+                        smallestSegment = node;
                     }
-                    else
+                    else if (currentSegment.Size < smallestSegment?.ValueRef.Size)
                     {
-                        if (freeSegment.Size < bestFreeSegmentToFill?.Size)
-                        {
-                            bestFreeSegmentToFill = freeSegment;
-                        }
+                        smallestSegment = node;
                     }
                 }
-            }
 
-            if (bestFreeSegmentToFill != null)
+                node = node?.Next;
+            }
+            
+            if (smallestSegment != null)
             {
                 // We found a good free segment that can fit the data.
-                id = PlaceData(bestFreeSegmentToFill!.Value.Offset, data);
+                id = PlaceData(smallestSegment!.Value.Offset, data, smallestSegment);
                 return id;
             }
             
             // We didn't find a free segment that can fit the data, so we'll have to allocate a new one.
-            id = PlaceData(maxAllocationOffset, data);
+            LinkedListNode<BufferSegment> lastSegment = bufferSegments.AddLast(new BufferSegment(maxAllocationOffset, data.Length, null));
+            id = PlaceData(maxAllocationOffset, data, lastSegment);
             maxAllocationOffset += data.Length;
             return id;
         }
 
         public bool FreeData(int id)
         {
-            Console.WriteLine("Free called");
-
             if (!DataAllocations.ContainsKey(id))
                 return false;
 
-            BufferSegment segment = DataAllocations[id];
+            BufferSegment allocatedSegment = DataAllocations[id];
 
-            FreeSegments.Add(segment);
-
-            if (segment.Offset + segment.Size == maxAllocationOffset)
+            LinkedListNode<BufferSegment>? allocatedSegmentNode = null;
+            LinkedListNode<BufferSegment>? nodeIter = bufferSegments.First;
+            for (int i = 0; i < bufferSegments.Count; i++)
             {
-                // The segment is at the end of the buffer, so we can shrink the allocation space.
-                maxAllocationOffset -= segment.Size;
+                if (nodeIter == null)
+                    break;
+
+                if (nodeIter.ValueRef.DataHandle == allocatedSegment.DataHandle)
+                {
+                    allocatedSegmentNode = nodeIter;
+                    allocatedSegmentNode.ValueRef.DataHandle = null;
+                    break;
+                }
+
+                nodeIter = nodeIter?.Next;
             }
 
-            MergeAdjacentFreeSegments();
+            if (allocatedSegment.Offset + allocatedSegment.Size == maxAllocationOffset && bufferSegments.Last?.ValueRef.DataHandle == allocatedSegment.DataHandle)
+            {
+                // The segment is at the end of the buffer, so we can shrink the allocation space & remove the free segment.
+                maxAllocationOffset -= allocatedSegment.Size;
+                
+                if (allocatedSegmentNode != null)
+                    bufferSegments.Remove(allocatedSegmentNode);
+            }
+            else
+            {
+                MergeAdjacentFreeSegments(allocatedSegmentNode);
+            }
 
             return DataAllocations.Remove(id);
         }
 
         public void FrameUpdate()
         {
-#if DEBUG
+#if DEBUGTOOLS
             if (MinecraftApplet.mcWindow.KeyboardState.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.LeftBracket))
             {
                 Console.WriteLine($"Actual allocated buffer size: {Buffer.Size}, amount of buffer used: {maxAllocationOffset}");
             }
 #endif
-
-            if (FreeSegments.Count > 100)
-                Defragment();
-        }
-
-        public BufferSegment? GetAllocationOffset(int id)
-        {
-            bool exists = DataAllocations.TryGetValue(id, out BufferSegment offset);
-            
-            return exists ? offset : null;
         }
 
         public void ResizeBuffer(int newSize)
         {
             Console.WriteLine("Buffer resize!");
-
-            //byte[] newBuffer = new byte[newSize];
-            //Array.Copy(Buffer, newBuffer, Buffer.Size);
-
+            
             UnsafeByteBuffer newBuffer = new(newSize);
             Buffer.CopyTo(newBuffer);
 
@@ -136,91 +150,77 @@ namespace net.minecraft.client.world.render
         public void Defragment()
         {
             Console.WriteLine("Defragmenting!");
-
-            
         }
 
-        private int PlaceData(int offset, Span<byte> inData)
+        private int PlaceData(int offset, Span<byte> inData, LinkedListNode<BufferSegment>? existingFreeSpace)
         {
             Profiler.startSection("placeData");
             // Check if the data would exceed the current buffer size, and expand the buffer if so.
             if (offset + inData.Length > Buffer.Size)
                 ResizeBuffer(Math.Max(Buffer.Size + BufferIncreaseStep, offset + inData.Length));
-
+            
             for (int i = 0; i < inData.Length; i++)
             {
                 Buffer[offset + i] = inData[i];
             }
 
-            BufferSegment segment = new(offset, inData.Length);
-
             int id = currentIdNum;
-            DataAllocations.Add(id, segment);
-
-            // If we allocated in a free segment, update FreeSegments accordingly.
-            if (FreeSegments.Count > 0)
+            BufferSegment segment = new(offset, inData.Length, id);
+            
+            // If we allocated in a free segment, split or remove the free segment depending on if we fully fill it or not.
+            if (existingFreeSpace != null)
             {
-                for (int i = FreeSegments.Count - 1; i >= 0; i--)
-                {
-                    BufferSegment freeSegment = FreeSegments[i];
+                BufferSegment freeSegment = existingFreeSpace.ValueRef;
 
-                    if (freeSegment.Offset == offset)
-                    {
-                        if (freeSegment.Size == inData.Length)
-                        {
-                            FreeSegments.RemoveAt(i);
-                            break;
-                        }
-                        else
-                        {
-                            FreeSegments[i] = new(freeSegment.Offset + inData.Length, freeSegment.Size - inData.Length);
-                            break;
-                        }
-                    }
+                if (freeSegment.Size == inData.Length)
+                {
+                    existingFreeSpace.Value = segment;
+                }
+                else
+                {
+                    freeSegment = new BufferSegment(freeSegment.Offset + inData.Length, freeSegment.Size - inData.Length, null);
+
+                    existingFreeSpace.Value = segment;
+                    bufferSegments.AddAfter(existingFreeSpace, freeSegment);
                 }
             }
 
-            MergeAdjacentFreeSegments();
+            DataAllocations.Add(id, segment);
 
             UpdateGLArrayForSegment(segment);
             UpdateVertexCount();
 
-            unchecked // Allow an overflow by design, by the time we wrap around from
-                      // int.MaxValue to 0, all positive IDs should be gone.
+            unchecked // Allow an overflow in case this number somehow reaches the max.
             {
                 currentIdNum++;
             }
+            
             Profiler.endSection();
             return id;
         }
 
-        private void MergeAdjacentFreeSegments()
+        /// <summary>
+        /// Takes in the linked list node for a free segment, and merges it with any directly adjacent free segments.
+        /// </summary>
+        /// <param name="freeSegment"></param>
+        private void MergeAdjacentFreeSegments(LinkedListNode<BufferSegment> freeSegment)
         {
-            // Remove any free segments that border eachother, and merge them into one.
-            for (int i = 0; i < FreeSegments.Count; i++)
+            // Merge the given free segment with neighboring free segments.
+            LinkedListNode<BufferSegment>? leftSegment = freeSegment.Previous;
+            LinkedListNode<BufferSegment>? rightSegment = freeSegment.Next;
+
+            if (leftSegment != null && leftSegment.ValueRef.IsFree)
             {
-                BufferSegment segment = FreeSegments[i];
+                leftSegment.ValueRef.Size += freeSegment.ValueRef.Size;
+                bufferSegments.Remove(freeSegment);
 
-                for (int j = 0; j < FreeSegments.Count; j++)
-                {
-                    if (i == j)
-                        continue;
-
-                    BufferSegment otherSegment = FreeSegments[j];
-
-                    if (segment.Offset + segment.Size == otherSegment.Offset)
-                    {
-                        FreeSegments[i] = new(segment.Offset, segment.Size + otherSegment.Size);
-                        FreeSegments.RemoveAt(j);
-                        break;
-                    }
-                    else if (otherSegment.Offset + otherSegment.Size == segment.Offset)
-                    {
-                        FreeSegments[i] = new(otherSegment.Offset, segment.Size + otherSegment.Size);
-                        FreeSegments.RemoveAt(j);
-                        break;
-                    }
-                }
+                freeSegment = leftSegment;
+            }
+            
+            if (rightSegment != null && rightSegment.ValueRef.IsFree)
+            {
+                freeSegment.ValueRef.Size += rightSegment.ValueRef.Size;
+                bufferSegments.Remove(rightSegment);
             }
         }
 
@@ -250,24 +250,28 @@ namespace net.minecraft.client.world.render
             int vertices = WorldBuffer.VertexCount;
             WorldBuffer = new(Buffer.Size, vertices, worldVBO, 7, true, true, true, false);
             GL.NamedBufferData(worldVBO, Buffer.Size, IntPtr.Zero, BufferUsageHint.DynamicDraw);
-            GL.NamedBufferSubData(worldVBO, 0, maxAllocationOffset, Buffer.Handle);
+            GL.NamedBufferSubData(worldVBO, 0, maxAllocationOffset, (nint)Buffer.Handle);
         }
 
         private void UpdateGLArrayForSegment(BufferSegment segment)
         {
-            GL.NamedBufferSubData(WorldBuffer.GLHandle, segment.Offset, segment.Size, Buffer.Handle + segment.Offset);
+            GL.NamedBufferSubData(WorldBuffer.GLHandle, segment.Offset, segment.Size, (nint)Buffer.Handle + segment.Offset);
         }
     }
 
     public struct BufferSegment
     {
+        public bool IsFree => DataHandle == null;
+
         public int Offset;
         public int Size;
+        public int? DataHandle; // Will be null if this segment represents free space.
 
-        public BufferSegment(int offset, int size)
+        public BufferSegment(int offset, int size, int? handle)
         {
             Offset = offset;
             Size = size;
+            DataHandle = handle;
         }
     }
 }

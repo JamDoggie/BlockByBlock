@@ -77,29 +77,29 @@ namespace net.minecraft.src
             }
         }
 
-        public virtual void setPosition(int i1, int i2, int i3)
+        public virtual void setPosition(int x, int y, int z)
         {
-            if (i1 != this.posX || i2 != this.posY || i3 != this.posZ)
+            if (x != posX || y != posY || z != posZ)
             {
-                this.setDontDraw();
-                this.posX = i1;
-                this.posY = i2;
-                this.posZ = i3;
-                this.posXPlus = i1 + 8;
-                this.posYPlus = i2 + 8;
-                this.posZPlus = i3 + 8;
-                this.posXClip = i1 & 1023;
-                this.posYClip = i2;
-                this.posZClip = i3 & 1023;
-                this.posXMinus = i1 - this.posXClip;
-                this.posYMinus = i2 - this.posYClip;
-                this.posZMinus = i3 - this.posZClip;
+                setDontDraw();
+                posX = x;
+                posY = y;
+                posZ = z;
+                posXPlus = x + 8;
+                posYPlus = y + 8;
+                posZPlus = z + 8;
+                posXClip = x & 1023;
+                posYClip = y;
+                posZClip = z & 1023;
+                posXMinus = x - posXClip;
+                posYMinus = y - posYClip;
+                posZMinus = z - posZClip;
                 float f4 = 6.0F;
-                this.rendererBoundingBox = AxisAlignedBB.getBoundingBox((double)((float)i1 - f4), (double)((float)i2 - f4), (double)((float)i3 - f4), (double)((float)(i1 + 16) + f4), (double)((float)(i2 + 16) + f4), (double)((float)(i3 + 16) + f4));
+                rendererBoundingBox = AxisAlignedBB.getBoundingBox((double)((float)x - f4), (double)((float)y - f4), (double)((float)z - f4), (double)((float)(x + 16) + f4), (double)((float)(y + 16) + f4), (double)((float)(z + 16) + f4));
 
-                AABBVBO = Renderer.BuildAABBVBO(AxisAlignedBB.getBoundingBoxFromPool((double)((float)this.posXClip - f4), (double)((float)this.posYClip - f4), (double)((float)this.posZClip - f4), (double)((float)(this.posXClip + 16) + f4), (double)((float)(this.posYClip + 16) + f4), (double)((float)(this.posZClip + 16) + f4)));
+                AABBVBO = Renderer.BuildAABBVBO(AxisAlignedBB.getBoundingBoxFromPool((double)((float)posXClip - f4), (double)((float)posYClip - f4), (double)((float)posZClip - f4), (double)((float)(posXClip + 16) + f4), (double)((float)(posYClip + 16) + f4), (double)((float)(posZClip + 16) + f4)));
 
-                this.markDirty();
+                markDirty();
             }
         }
 
@@ -115,11 +115,13 @@ namespace net.minecraft.src
 
         internal void setupGLTranslation(MatrixStack stack)
         {
-            stack.Translate((float)this.posXClip, (float)this.posYClip, (float)this.posZClip);
+            //stack.Translate((float)this.posXClip, (float)this.posYClip, (float)this.posZClip);
+            //tessellator.setTranslation(posXMinus, posYMinus, posZMinus);
         }
 
         public virtual void updateRenderer()
         {
+            Profiler.startSection("updateRenderer");
             if (this.needsUpdate)
             {
                 this.needsUpdate = false;
@@ -174,7 +176,7 @@ namespace net.minecraft.src
                                             Minecraft.renderPipeline.ModelMatrix.Scale(f19, f19, f19);
                                             Minecraft.renderPipeline.ModelMatrix.Translate(8.0F, 8.0F, 8.0F);
 
-                                            tessellator.setTranslation((double)(-this.posX), (double)(-this.posY), (double)(-this.posZ));
+                                            //tessellator.setTranslation((double)(-this.posX), (double)(-this.posY), (double)(-this.posZ));
                                         }
 
                                         if (currentPass == 0 && Block.blocksList[i18].hasTileEntity())
@@ -211,7 +213,12 @@ namespace net.minecraft.src
                             if (meshDataAllocations[currentPass] != null)
                                 meshAllocator.FreeData(meshDataAllocations[currentPass]!.Value);
 
-                            meshDataAllocations[currentPass] = meshAllocator.AllocateData(meshData);
+                            if (meshData.Length > 0)
+                            {
+                                meshDataAllocations[currentPass] = meshAllocator.AllocateData(meshData);
+                            }
+
+                            
                             Profiler.endSection();
                             
                             tessellator.setTranslation(0.0D, 0.0D, 0.0D);
@@ -242,6 +249,7 @@ namespace net.minecraft.src
                 this.isChunkLit = Chunk.isLit;
                 this.isInitialized = true;
             }
+            Profiler.endSection();
         }
 
         public virtual float distanceToEntitySquared(Entity entity1)
@@ -256,7 +264,7 @@ namespace net.minecraft.src
         {
             for (int i = 0; i < 2; ++i)
             {
-                this.skipRenderPass[i] = true;
+                skipRenderPass[i] = true;
                 if (meshDataAllocations[i] != null)
                 {
                     meshAllocator.FreeData(meshDataAllocations[i]!.Value);
@@ -264,14 +272,14 @@ namespace net.minecraft.src
                 }
             }
 
-            this.isInFrustum = false;
-            this.isInitialized = false;
+            isInFrustum = false;
+            isInitialized = false;
         }
 
         public virtual void stopRendering()
         {
-            this.setDontDraw();
-            this.worldObj = null;
+            setDontDraw();
+            worldObj = null;
         }
 
         public virtual void updateInFrustum(ICamera iCamera1)

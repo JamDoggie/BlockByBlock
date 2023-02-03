@@ -197,11 +197,11 @@
 			int iter = 0;
 			foreach (KeyValuePair<int, BufferSegment> pair in meshAllocator.DataAllocations)
 			{
-                offsets[iter] = pair.Value.Offset;
+                offsets[iter] = pair.Value.Offset / VertexSize;
                 lengths[iter] = pair.Value.Size / VertexSize;
                 iter++;
             }
-
+			
             if (vbo.DrawMode == 7) // Any vertices that are given as quads are automatically converted to tris
                                    // beforehand because GL_QUADS (draw mode 7) has been obsolete for quite some time.
             {
