@@ -286,7 +286,7 @@ namespace net.minecraft.src
 
 			Achievement achievement32 = null;
 			RenderItem renderItem34 = new RenderItem();
-			RenderHelper.enableGUIStandardItemLighting();
+			GameLighting.EnableGUIStandardItemLighting();
 			Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
             Minecraft.renderPipeline.SetState(RenderState.ColorMaterialState, true);
 
@@ -399,7 +399,7 @@ namespace net.minecraft.src
 
 			GL.Enable(EnableCap.DepthTest);
 			Minecraft.renderPipeline.SetState(RenderState.LightingState, true);
-			RenderHelper.disableStandardItemLighting();
+			GameLighting.DisableMeshLighting();
 		}
 
 		public override bool doesGuiPauseGame()

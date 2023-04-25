@@ -1,6 +1,6 @@
 ﻿#version 460
 
-precision highp float;
+precision lowp float;
 
 out vec4 outputColor;
 
@@ -52,14 +52,14 @@ void main()
 	vec4 colorWhite = vec4(1.0, 1.0, 1.0, 1.0); // White color, mixed in when a given state is disabled instead of the texture or color.
                                                 // The color white is used because when multiplied it has no effect on the final output.
 
-	float textureMixValue = flipRange(TextureState); // 0 means the texture will be multiplied in the final output, 1 means the color white will be.
-	float colorMixValue = flipRange(ColorState); // 0 means the input color will be multiplied in the final output, 1 means the color white will be.
+	float textureMixValue = TextureState; // 0 means the texture will be multiplied in the final output, 1 means the color white will be.
+	float colorMixValue = ColorState; // 0 means the input color will be multiplied in the final output, 1 means the color white will be.
 	// The idea is that you can choose to use render the texture, the color, or a mixture of the two.
 	
 	// Lerp between our input colors and the color white.
 	vec4 texFragment = texture(activeTexture, outTexCoord);
-    vec4 texColor = mix(texFragment, colorWhite, textureMixValue); 
-	vec4 color = mix(outColor, colorWhite, colorMixValue);
+    vec4 texColor = mix(colorWhite, texFragment, textureMixValue); 
+	vec4 color = mix(colorWhite, outColor, colorMixValue);
 
 	if (AlphaTestState == 1 && TextureState == 1 && texColor.a <= AlphaTestThreshold) // If the alpha test is enabled, and the texture is enabled, and the alpha value is less than AlphaTestThreshold, discard the pixel. 
 		discard;
@@ -71,7 +71,7 @@ void main()
 		lightTexCoords = vec2(((BrightnessOverride.x / 16) / 17) + 0.0625, ((BrightnessOverride.y / 16) / 17) + 0.0625);
 	}
 
-	vec4 lightMapColor = mix(texture(lightTexture, lightTexCoords), colorWhite, flipRange(LightmapState));
+	vec4 lightMapColor = mix(colorWhite, texture(lightTexture, lightTexCoords), LightmapState);
 	
 
 	// FOG

@@ -94,7 +94,7 @@ namespace net.minecraft.src
 
             float f8 = 1.0F;
             Minecraft.renderPipeline.ModelMatrix.LoadIdentity();
-			RenderHelper.enableStandardItemLighting();
+			GameLighting.EnableMeshLighting();
             Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 3.3F, -16.0F);
             Minecraft.renderPipeline.ModelMatrix.Scale(f8, f8, f8);
 			float f9 = 5.0F;
@@ -131,11 +131,11 @@ namespace net.minecraft.src
 			}
             
 			bookModel.render((Entity)null, 0.0F, f11, f12, f10, 0.0F, 0.0625F);
-			RenderHelper.disableStandardItemLighting();
+			GameLighting.DisableMeshLighting();
 			GL.Viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
             Minecraft.renderPipeline.ProjectionMatrix.PopMatrix();
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
-			RenderHelper.disableStandardItemLighting();
+			GameLighting.DisableMeshLighting();
 			Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i4);
 			EnchantmentNameParts.instance.RandSeed = this.containerEnchantment.nameSeed;

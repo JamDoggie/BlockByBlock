@@ -110,7 +110,7 @@ namespace net.minecraft.client.entity.render
                 Minecraft.renderPipeline.ModelMatrix.Rotate((float)-Math.Atan2((double)f14, (double)f12) * 180.0F / (float)Math.PI - 90.0F, 0.0F, 1.0F, 0.0F);
                 Minecraft.renderPipeline.ModelMatrix.Rotate((float)-Math.Atan2((double)f15, (double)f13) * 180.0F / (float)Math.PI - 90.0F, 1.0F, 0.0F, 0.0F);
                 Tessellator tessellator17 = Tessellator.instance;
-                RenderHelper.disableStandardItemLighting();
+                GameLighting.DisableMeshLighting();
                 GL.Disable(EnableCap.CullFace);
                 loadTexture("/mob/enderdragon/beam.png");
                 Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, true);
@@ -133,7 +133,7 @@ namespace net.minecraft.client.entity.render
                 tessellator17.DrawImmediate();
                 GL.Enable(EnableCap.CullFace);
                 Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, false);
-                RenderHelper.enableStandardItemLighting();
+                GameLighting.EnableMeshLighting();
                 Minecraft.renderPipeline.ModelMatrix.PopMatrix();
             }
 
@@ -145,7 +145,7 @@ namespace net.minecraft.client.entity.render
             Tessellator tessellator3 = Tessellator.instance;
             if (entityDragon1.field_40178_aA > 0)
             {
-                RenderHelper.disableStandardItemLighting();
+                GameLighting.DisableMeshLighting();
                 float f4 = (entityDragon1.field_40178_aA + f2) / 200.0F;
                 float f5 = 0.0F;
                 if (f4 > 0.8F)
@@ -193,7 +193,7 @@ namespace net.minecraft.client.entity.render
                 Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
                 Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
                 Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-                RenderHelper.enableStandardItemLighting();
+                GameLighting.EnableMeshLighting();
             }
 
         }

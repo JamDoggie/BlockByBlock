@@ -93,9 +93,9 @@
 		{
 			this.drawButtonBackground(i1 + 1, i2 + 1);
             
-			RenderHelper.enableGUIStandardItemLighting();
+			GameLighting.EnableGUIStandardItemLighting();
 			renderItem.drawItemIntoGui(this.fontRenderer, this.mc.renderEngine, i3, 0, Item.itemsList[i3].getIconFromDamage(0), i1 + 2, i2 + 2);
-			RenderHelper.disableStandardItemLighting();
+			GameLighting.DisableMeshLighting();
 		}
 
 		private void drawButtonBackground(int i1, int i2)

@@ -206,15 +206,15 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual int drawStringWithShadow(string string1, int i2, int i3, int i4)
+		public virtual int drawStringWithShadow(string string1, int x, int y, int i4)
 		{
 			if (this.bidiFlag)
 			{
 				string1 = this.bidiReorder(string1);
 			}
 
-			int i5 = this.func_50101_a(string1, i2 + 1, i3 + 1, i4, true);
-			i5 = Math.Max(i5, this.func_50101_a(string1, i2, i3, i4, false));
+			int i5 = this.drawText(string1, x + 1, y + 1, i4, true);
+			i5 = Math.Max(i5, this.drawText(string1, x, y, i4, false));
 			return i5;
 		}
 
@@ -225,7 +225,7 @@ namespace net.minecraft.src
 				string1 = this.bidiReorder(string1);
 			}
 
-			this.func_50101_a(string1, i2, i3, i4, false);
+			this.drawText(string1, i2, i3, i4, false);
 		}
 
 		private string bidiReorder(string str)
@@ -424,7 +424,7 @@ namespace net.minecraft.src
 
 		}
 
-		public virtual int func_50101_a(string string1, int i2, int i3, int i4, bool z5)
+		public virtual int drawText(string string1, int x, int y, int i4, bool z5)
 		{
 			if (!string.ReferenceEquals(string1, null))
 			{
@@ -444,8 +444,8 @@ namespace net.minecraft.src
 				this.field_50118_p = (float)(i4 & 255) / 255.0F;
 				this.field_50117_q = (float)(i4 >> 24 & 255) / 255.0F;
 				Minecraft.renderPipeline.SetColor(this.field_50115_n, this.field_50116_o, this.field_50118_p, this.field_50117_q);
-				this.posX = (float)i2;
-				this.posY = (float)i3;
+				this.posX = (float)x;
+				this.posY = (float)y;
 				this.renderStringAtPos(string1, z5);
 				return (int)this.posX;
 			}
@@ -652,7 +652,7 @@ namespace net.minecraft.src
 								string10 = "\u00a7" + string13[string13.LastIndexOf("\u00a7", StringComparison.Ordinal) + 1];
 							}
 
-							this.func_50101_a(string13, i2, i3, i5, z6);
+							this.drawText(string13, i2, i3, i5, z6);
 							i3 += this.FONT_HEIGHT;
 						}
 					}
@@ -664,7 +664,7 @@ namespace net.minecraft.src
 							string10 = "\u00a7" + string11[string11.LastIndexOf("\u00a7", StringComparison.Ordinal) + 1];
 						}
 
-						this.func_50101_a(string11, i2, i3, i5, z6);
+						this.drawText(string11, i2, i3, i5, z6);
 						i3 += this.FONT_HEIGHT;
 					}
 				}

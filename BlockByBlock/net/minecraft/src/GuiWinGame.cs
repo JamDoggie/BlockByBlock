@@ -151,7 +151,7 @@ namespace net.minecraft.src
 
 		public override void drawScreen(int i1, int i2, float f3)
 		{
-			this.func_41040_b(i1, i2, f3);
+			func_41040_b(i1, i2, f3);
 			Tessellator tessellator4 = Tessellator.instance;
 			short s5 = 274;
 			int i6 = this.width / 2 - s5 / 2;
@@ -159,7 +159,7 @@ namespace net.minecraft.src
 			float f8 = -((float)this.updateCounter + f3) * this.field_41043_e;
             Minecraft.renderPipeline.ModelMatrix.PushMatrix();
             Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, f8, 0.0F);
-			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/title/mclogo.png"));
+			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/gui/refinedgui/blockbyblock-logo.png"));
             Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
 			this.drawTexturedModalRect(i6, i7, 0, 0, 155, 44);
 			this.drawTexturedModalRect(i6 + 155, i7, 0, 45, 155, 44);
@@ -189,9 +189,9 @@ namespace net.minecraft.src
 					{
 						fontRenderer.fontRandom.SetSeed((long)i10 * 4238972211L + (long)(this.updateCounter / 4));
 						fontRenderer.fontRandom = new RandomExtended((long)i10 * 4238972211L + (long)(this.updateCounter / 4));
-						this.fontRenderer.func_50101_a(string12, i6 + 1, i9 + 1, 0xFFFFFF, true);
+						this.fontRenderer.drawText(string12, i6 + 1, i9 + 1, 0xFFFFFF, true);
                         fontRenderer.fontRandom.SetSeed((long)i10 * 4238972211L + (long)(this.updateCounter / 4));
-                        this.fontRenderer.func_50101_a(string12, i6, i9, 0xFFFFFF, false);
+                        this.fontRenderer.drawText(string12, i6, i9, 0xFFFFFF, false);
 					}
 				}
 

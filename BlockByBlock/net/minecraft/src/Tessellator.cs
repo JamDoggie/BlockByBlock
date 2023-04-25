@@ -1,12 +1,16 @@
-﻿namespace net.minecraft.src
+﻿#pragma warning disable CA2014
+
+namespace net.minecraft.src
 {
     using BlockByBlock.helpers;
 	using BlockByBlock.net.minecraft.render;
 	using BlockByBlock.sound;
 	using com.sun.org.apache.xerces.@internal.impl.dv.xs;
+	using com.sun.tools.corba.se.logutil;
 	using java.lang;
 	using javax.swing;
 	using net.minecraft.client;
+	using net.minecraft.client.entity;
 	using net.minecraft.client.entity.render;
 	using net.minecraft.client.world.render;
 	using OpenTK.Graphics.OpenGL;
@@ -47,11 +51,16 @@
 		private int vboCount = 10;
 		private int bufferSize;
 		private IntPtr bufferPointer;
-		
-		
-		
-        
-		private Tessellator(int bufSize)
+		private int previousWorldRendererBufferSize = -1;
+		private int renderingTerrainUniform = -1;
+
+		#region Unsafe terrain optimization things
+		private UnsafeIntBuffer? chunkPositionsBuffer;
+        private UnsafeIntBuffer? chunkMeshOffsets;
+        private UnsafeIntBuffer? chunkMeshLengths;
+        #endregion
+
+        private Tessellator(int bufSize)
 		{
 			bufferSize = bufSize;
 			byteBuffer = GLAllocation.createDirectByteBuffer(bufSize * 4);
@@ -62,10 +71,7 @@
 
 			// VBOs
 			vertexBuffers = new int[vboCount];
-			GL.GenBuffers(vertexBuffers.Length, vertexBuffers);
-            
-            VAO = GL.GenVertexArray();
-            GL.BindVertexArray(VAO);
+			GL.CreateBuffers(vertexBuffers.Length, vertexBuffers);
         }
 
         ~Tessellator()
@@ -75,32 +81,62 @@
 
 		private bool hasCopiedBuffer = false;
 		private Random testRand = new();
-
-		private bool test = false;
         
         internal void Init()
 		{
-            // Vertex
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, VertexSize, 0);
+            int[] vao = new int[1];
+            GL.CreateVertexArrays(1, vao);
 
+            VAO = vao[0];
+
+            SetupVertexArray();
+
+            renderingTerrainUniform = GL.GetUniformLocation(Minecraft.renderPipeline.GLProgram, "RenderingTerrain");
+        }
+
+		internal unsafe void SetupVertexArray()
+		{
+			// Main vertex array
+            GL.EnableVertexArrayAttrib(VAO, 0);
+            GL.EnableVertexArrayAttrib(VAO, 1);
+            GL.EnableVertexArrayAttrib(VAO, 2);
+            GL.EnableVertexArrayAttrib(VAO, 3);
+            GL.EnableVertexArrayAttrib(VAO, 4);
+
+            GL.VertexArrayAttribFormat(VAO, 0, 3, VertexAttribType.Float, false, 0);
+			GL.VertexArrayAttribFormat(VAO, 1, 2, VertexAttribType.Float, false, 12);
+			GL.VertexArrayAttribFormat(VAO, 2, 4, VertexAttribType.UnsignedByte, false, 20);
+			GL.VertexArrayAttribFormat(VAO, 3, 4, VertexAttribType.Byte, false, 24);
+			GL.VertexArrayAttribFormat(VAO, 4, 2, VertexAttribType.Short, false, 28);
+			
+            GL.VertexArrayAttribBinding(VAO, 0, 0);
+            GL.VertexArrayAttribBinding(VAO, 1, 0);
+            GL.VertexArrayAttribBinding(VAO, 2, 0);
+            GL.VertexArrayAttribBinding(VAO, 3, 0);
+            GL.VertexArrayAttribBinding(VAO, 4, 0);
+
+			GL.BindVertexArray(VAO);
+
+            // Vertex
+            /*GL.EnableVertexAttribArray(0);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, VertexSize, 0);
+            
             // Texture Coords
             GL.EnableVertexAttribArray(1);
             GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, VertexSize, 12);
-
+            
             // Color
             GL.EnableVertexAttribArray(2);
             GL.VertexAttribPointer(2, 4, VertexAttribPointerType.UnsignedByte, false, VertexSize, 20);
-
+            
             // Normal
             GL.EnableVertexAttribArray(3);
             GL.VertexAttribPointer(3, 4, VertexAttribPointerType.Byte, false, VertexSize, 24);
-
+            
             // Brightness
             GL.EnableVertexAttribArray(4);
-            GL.VertexAttribPointer(4, 2, VertexAttribPointerType.Short, false, VertexSize, 28);
+            GL.VertexAttribPointer(4, 2, VertexAttribPointerType.Short, false, VertexSize, 28);*/
         }
-
 
 		public unsafe virtual int DrawImmediate()
 		{
@@ -173,47 +209,127 @@
             if (!vbo.HasBrightness)
                 Minecraft.renderPipeline.SetState(RenderState.OverrideBrightnessState, false);
         }
-        
-        public unsafe virtual void DrawMeshAllocator(VertexBuffer vbo, ChunkMeshAllocator meshAllocator)
-        {
+		
+		public virtual void TessellateOcclusionQuery(int vbo)
+		{
             uploadMatrixStacks();
 
-            SetupVertexArrays(vbo.GLHandle);
+			SetupVertexArrays(vbo);
 
-            if (!vbo.HasBrightness)
-            {
-                Minecraft.renderPipeline.SetState(RenderState.OverrideBrightnessState, true);
-                Minecraft.renderPipeline.SetBrightnessOverrideCoords(Minecraft.renderPipeline.LightmapCoords.X, Minecraft.renderPipeline.LightmapCoords.Y);
-            }
+            GL.DrawArrays(PrimitiveType.Triangles, 0, vbo);
+        }
 
-			if (meshAllocator.DataAllocations.Count > 0)
-			{
-                
-			}
-
-            int* offsets = stackalloc int[meshAllocator.DataAllocations.Count];
-            int* lengths = stackalloc int[meshAllocator.DataAllocations.Count];
-
-			int iter = 0;
-			foreach (KeyValuePair<int, BufferSegment> pair in meshAllocator.DataAllocations)
-			{
-                offsets[iter] = pair.Value.Offset / VertexSize;
-                lengths[iter] = pair.Value.Size / VertexSize;
-                iter++;
-            }
+        public unsafe virtual void DrawMeshAllocator(VertexBuffer vbo, ChunkMeshAllocator meshAllocator, WorldRenderer[] sortedRenderers, int pass)
+        {
+			Profiler.startSection("drawMeshAllocator");
+            Profiler.startSection("setStates");
 			
-            if (vbo.DrawMode == 7) // Any vertices that are given as quads are automatically converted to tris
-                                   // beforehand because GL_QUADS (draw mode 7) has been obsolete for quite some time.
-            {
-				GL.MultiDrawArrays(PrimitiveType.Triangles, offsets, lengths, meshAllocator.DataAllocations.Count);
-            }
-            else
-            {
-                GL.MultiDrawArrays((PrimitiveType)vbo.DrawMode, offsets, lengths, meshAllocator.DataAllocations.Count);
-            }
+			try
+			{
+                int renderersWithThisPass = 0;
 
-            if (!vbo.HasBrightness)
-                Minecraft.renderPipeline.SetState(RenderState.OverrideBrightnessState, false);
+                foreach (WorldRenderer renderer in sortedRenderers)
+                {
+                    if (renderer.skipRenderPass[pass] || !renderer.isVisible)
+                        continue;
+
+                    renderersWithThisPass++;
+                }
+
+                if (renderersWithThisPass == 0)
+                    return;
+
+                uploadMatrixStacks();
+
+                SetupVertexArrays(vbo.GLHandle);
+
+                if (!vbo.HasBrightness)
+                { 
+                    Minecraft.renderPipeline.SetState(RenderState.OverrideBrightnessState, true);
+                    Minecraft.renderPipeline.SetBrightnessOverrideCoords(Minecraft.renderPipeline.LightmapCoords.X, Minecraft.renderPipeline.LightmapCoords.Y);
+                }
+				
+                GL.Uniform1(renderingTerrainUniform, 1);
+
+                Profiler.startSection("pass");
+                Profiler.startSection("allocateBuffers");
+
+                if (previousWorldRendererBufferSize != sortedRenderers.Length)
+                {
+                    chunkPositionsBuffer?.Dispose();
+                    chunkMeshOffsets?.Dispose();
+                    chunkMeshLengths?.Dispose();
+
+                    chunkPositionsBuffer = new(3 * sortedRenderers.Length);
+                    chunkMeshOffsets = new(sortedRenderers.Length);
+                    chunkMeshLengths = new(sortedRenderers.Length);
+
+                    GL.NamedBufferData(meshAllocator.PositionsSSBO, sortedRenderers.Length * 3 * sizeof(float), IntPtr.Zero, BufferUsageHint.StreamDraw);
+
+                    previousWorldRendererBufferSize = sortedRenderers.Length;
+                }
+
+                if (chunkPositionsBuffer == null || chunkMeshOffsets == null || chunkMeshLengths == null)
+                    throw new IllegalStateException("Buffers were never allocated. This should be impossible.");
+
+                int chunkOffsetsCount = renderersWithThisPass * 3;
+
+                Profiler.endStartSection("setOffsetsAndSSBOLocations");
+                int iter = 0;
+
+                for (int i = 0; i < sortedRenderers.Length; i++)
+                {
+                    WorldRenderer renderer = sortedRenderers[i];
+
+                    if (renderer.skipRenderPass[pass] || !renderer.isVisible)
+                        continue;
+
+                    if (renderer.meshDataAllocations[pass] != null)
+                    {
+                        BufferSegment segment = meshAllocator.DataAllocations[renderer.meshDataAllocations[pass]!.Value];
+
+                        chunkMeshOffsets[iter] = segment.Offset / VertexSize;
+                        chunkMeshLengths[iter] = segment.Size / VertexSize;
+
+                        Vector3 chunkOffset = new((float)((double)renderer.X2 - renderer.X1), (float)((double)renderer.Y2 - renderer.Y1), (float)((double)renderer.Z2 - renderer.Z1));
+                        chunkPositionsBuffer[iter * 3 + 0] = JTypes.FloatToRawIntBits(chunkOffset.X);
+                        chunkPositionsBuffer[iter * 3 + 1] = JTypes.FloatToRawIntBits(chunkOffset.Y);
+                        chunkPositionsBuffer[iter * 3 + 2] = JTypes.FloatToRawIntBits(chunkOffset.Z);
+
+                        iter++;
+                    }
+                }
+
+                Profiler.endStartSection("allocateInBuffer");
+
+                GL.NamedBufferSubData(meshAllocator.PositionsSSBO, 0, chunkOffsetsCount * sizeof(float), (nint)chunkPositionsBuffer.Pointer);
+
+                Profiler.endStartSection("draw");
+				
+
+                if (vbo.DrawMode == 7) // Any vertices that are given as quads are automatically converted to tris
+                                       // beforehand because GL_QUADS (draw mode 7) has been obsolete for quite some time.
+                {
+                    GL.MultiDrawArrays(PrimitiveType.Triangles, (int*)chunkMeshOffsets.Pointer, (int*)chunkMeshLengths.Pointer, renderersWithThisPass);
+                }
+                else
+                {
+                    GL.MultiDrawArrays((PrimitiveType)vbo.DrawMode, (int*)chunkMeshOffsets.Pointer, (int*)chunkMeshLengths.Pointer, renderersWithThisPass);
+                }
+
+                Profiler.endSection();
+                Profiler.endSection();
+
+                GL.Uniform1(renderingTerrainUniform, 0);
+
+                if (!vbo.HasBrightness)
+                    Minecraft.renderPipeline.SetState(RenderState.OverrideBrightnessState, false);
+            }
+            finally
+			{
+                Profiler.endSection();
+                Profiler.endSection();
+            }
         }
 
         private void uploadMatrixStacks()
@@ -233,10 +349,6 @@
         public void SetupVertexArrays(int vbo)
         {
             GL.VertexArrayVertexBuffer(VAO, 0, vbo, 0, VertexSize);
-            GL.VertexArrayVertexBuffer(VAO, 1, vbo, 12, VertexSize);
-            GL.VertexArrayVertexBuffer(VAO, 2, vbo, 20, VertexSize);
-            GL.VertexArrayVertexBuffer(VAO, 3, vbo, 24, VertexSize);
-            GL.VertexArrayVertexBuffer(VAO, 4, vbo, 28, VertexSize);
         }
 
 
@@ -593,20 +705,27 @@
             normal = intByteUnion.integer;
 		}
 
-		public virtual void setTranslation(double d1, double d3, double d5)
+		public virtual void setTranslation(double x, double y, double z)
 		{
-			xOffset = d1;
-			yOffset = d3;
-			zOffset = d5;
+			xOffset = x;
+			yOffset = y;
+			zOffset = z;
 		}
 
-		public virtual void addTranslation(float f1, float f2, float f3)
+		public virtual void addTranslation(float x, float y, float z)
 		{
-			xOffset += (double)f1;
-			yOffset += (double)f2;
-			zOffset += (double)f3;
+			xOffset += x;
+			yOffset += y;
+			zOffset += z;
 		}
-	}
+
+        public virtual void addTranslation(double x, double y, double z)
+        {
+            xOffset += x;
+            yOffset += y;
+            zOffset += z;
+        }
+    }
 
     [StructLayout(LayoutKind.Explicit)]
     struct IntFloatShortUnion

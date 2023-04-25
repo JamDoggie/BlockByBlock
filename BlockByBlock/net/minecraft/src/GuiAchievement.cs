@@ -101,7 +101,7 @@
 						this.theGame.fontRenderer.drawString(this.achievementStatName, i5 + 30, i6 + 18, -1);
 					}
                     
-					RenderHelper.enableGUIStandardItemLighting();
+					GameLighting.EnableGUIStandardItemLighting();
 					Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
 					Minecraft.renderPipeline.SetState(RenderState.ColorMaterialState, true);
 					Minecraft.renderPipeline.SetState(RenderState.LightingState, true);

@@ -918,20 +918,20 @@ namespace net.minecraft.src
 				this.SetupFog(0, f1);
 				Minecraft.renderPipeline.SetState(RenderState.FogState, true);
 				GL.BindTexture(TextureTarget.Texture2D, mc.renderEngine.getTexture("/terrain.png"));
-				RenderHelper.disableStandardItemLighting();
+				GameLighting.DisableMeshLighting();
 				Profiler.endStartSection("terrain");
 				renderGlobal5.sortAndRender(entityLiving4, 0, (double)f1);
 				Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, false);
                 EntityPlayer entityPlayer21;
 				if (this.debugViewDirection == 0)
 				{
-					RenderHelper.enableStandardItemLighting();
+					GameLighting.EnableMeshLighting();
 					Profiler.endStartSection("entities");
 					renderGlobal5.renderEntities(entityLiving4.getPosition(f1), frustrum19, f1);
 					this.enableLightmap((double)f1);
 					Profiler.endStartSection("litParticles");
 					effectRenderer6.func_1187_b(entityLiving4, f1);
-					RenderHelper.disableStandardItemLighting();
+					GameLighting.DisableMeshLighting();
 					this.SetupFog(0, f1);
 					Profiler.endStartSection("particles");
 					effectRenderer6.renderParticles(entityLiving4, f1);

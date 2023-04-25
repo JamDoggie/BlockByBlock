@@ -36,7 +36,7 @@ namespace BlockByBlock.net.minecraft.client.entity.particle
                 float f16 = (float)(prevPosZ + (posZ - prevPosZ) * (double)f2 - interpPosZ);
                 Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
                 Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
-                RenderHelper.disableStandardItemLighting();
+                GameLighting.DisableMeshLighting();
                 tessellator1.startDrawingQuads();
                 tessellator1.setColorRGBA_F(particleRed, particleGreen, particleBlue, 1.0F);
                 tessellator1.SetNormal(0.0F, 1.0F, 0.0F);

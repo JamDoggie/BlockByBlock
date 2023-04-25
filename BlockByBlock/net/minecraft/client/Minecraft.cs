@@ -31,7 +31,7 @@ namespace net.minecraft.client
 		}
 
 		public static sbyte[] field_28006_b = new sbyte[10485760];
-		private static Minecraft theMinecraft;
+		public static Minecraft Instance;
 		public PlayerController playerController;
 		private bool fullscreen = false;
 		private bool hasCrashed = false;
@@ -123,7 +123,7 @@ namespace net.minecraft.client
 				this.hideQuitButton = false;
 			}
 
-			theMinecraft = this;
+			Instance = this;
 		}
 
 		public virtual void onMinecraftCrash(UnexpectedThrowable unexpectedThrowable1)
@@ -633,7 +633,7 @@ namespace net.minecraft.client
 				Profiler.startSection("render");
 				Profiler.startSection("display");
                 renderPipeline.SetState(RenderState.TextureState, true);
-
+				
                 mcApplet.SwapBuffers();
 
 				mcApplet.IsVisible = true;
@@ -657,7 +657,7 @@ namespace net.minecraft.client
 					Profiler.endSection();
 				}
 
-				GL.Flush();
+				
 				Profiler.endSection();
 				if (!mcApplet.IsFocused && this.fullscreen)
 				{
@@ -835,7 +835,7 @@ namespace net.minecraft.client
             renderPipeline.ProjectionMatrix.Ortho(0.0D, displayWidth, displayHeight, 0.0D, 1000.0D, 3000.0D);
             renderPipeline.ModelMatrix.LoadIdentity();
             renderPipeline.ModelMatrix.Translate(0.0F, 0.0F, -2000.0F);
-			GL.LineWidth(1.0F); // OpenGL TODO: WTF?
+			GL.LineWidth(1.0F);
             renderPipeline.SetState(RenderState.TextureState, false);
             Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawing(7);
@@ -2144,7 +2144,7 @@ namespace net.minecraft.client
 		{
 			get
 			{
-				return theMinecraft == null || !theMinecraft.gameSettings.hideGUI;
+				return Instance == null || !Instance.gameSettings.hideGUI;
 			}
 		}
 
@@ -2152,7 +2152,7 @@ namespace net.minecraft.client
 		{
 			get
 			{
-				return theMinecraft != null && theMinecraft.gameSettings.fancyGraphics;
+				return Instance != null && Instance.gameSettings.fancyGraphics;
 			}
 		}
 
@@ -2160,7 +2160,7 @@ namespace net.minecraft.client
 		{
 			get
 			{
-				return theMinecraft != null && theMinecraft.gameSettings.ambientOcclusion;
+				return Instance != null && Instance.gameSettings.ambientOcclusion;
 			}
 		}
 
@@ -2168,7 +2168,7 @@ namespace net.minecraft.client
 		{
 			get
 			{
-				return theMinecraft != null && theMinecraft.gameSettings.showDebugInfo;
+				return Instance != null && Instance.gameSettings.showDebugInfo;
 			}
 		}
 

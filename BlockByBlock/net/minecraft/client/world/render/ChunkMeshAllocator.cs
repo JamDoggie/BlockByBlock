@@ -1,11 +1,14 @@
 ﻿using BlockByBlock.net.minecraft.render;
 using javax.swing.text;
+using net.minecraft.client.entity;
 using net.minecraft.src;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
+using System.Security.Policy;
 
 namespace net.minecraft.client.world.render
 {
-    public unsafe partial class ChunkMeshAllocator : IAllocator
+    public unsafe partial class ChunkMeshAllocator
     {
         public UnsafeByteBuffer Buffer { get; set; }
         public Dictionary<int, BufferSegment> DataAllocations = new(); // Id, Offset
@@ -16,30 +19,32 @@ namespace net.minecraft.client.world.render
 
         // GL
         public VertexBuffer WorldBuffer;
+        internal int PositionsSSBO;
 
         public ChunkMeshAllocator()
         {
             Buffer = new(DefaultBufferVerticeSize);
 
-            int[] worldVBOBuffer = { 0 };
-            GL.CreateBuffers(1, worldVBOBuffer);
+            int[] buffers = { 0, 0 }; // 0 = world VBO, 1 = positions SSBO
+            GL.CreateBuffers(2, buffers);
+            
+            int worldVBO = buffers[0];
+            WorldBuffer = new(DefaultBufferVerticeSize, 0, worldVBO, 7, true, true, true, false);
+            GL.NamedBufferData(worldVBO, Buffer.Size, Buffer.Handle, BufferUsageHint.DynamicDraw);
+            
+            PositionsSSBO = buffers[1];
 
-            if (worldVBOBuffer.Length > 0)
-            {
-                int worldVBO = worldVBOBuffer[0];
-                WorldBuffer = new(DefaultBufferVerticeSize, 0, worldVBO, 7, true, true, true, false);
-                GL.NamedBufferData(worldVBO, Buffer.Size, (nint)Buffer.Handle, BufferUsageHint.DynamicDraw);
-            }
+            GL.BindBufferBase(BufferRangeTarget.ShaderStorageBuffer, 5, PositionsSSBO);
         }
-
-        public int AllocateData(Span<byte> data)
+        
+        public int AllocateData(Span<byte> data, WorldRenderer renderer, int pass)
         {
             int id;
 
             if (maxAllocationOffset == 0)
             {
-                bufferSegments.AddFirst(new BufferSegment(0, data.Length, null));
-                id = PlaceData(0, data, bufferSegments.First);
+                bufferSegments.AddFirst(new BufferSegment(0, data.Length, null, null));
+                id = PlaceData(0, data, bufferSegments.First, renderer, pass);
 
                 maxAllocationOffset += data.Length;
                 return id;
@@ -74,13 +79,13 @@ namespace net.minecraft.client.world.render
             if (smallestSegment != null)
             {
                 // We found a good free segment that can fit the data.
-                id = PlaceData(smallestSegment!.Value.Offset, data, smallestSegment);
+                id = PlaceData(smallestSegment!.Value.Offset, data, smallestSegment, renderer, pass);
                 return id;
             }
             
             // We didn't find a free segment that can fit the data, so we'll have to allocate a new one.
-            LinkedListNode<BufferSegment> lastSegment = bufferSegments.AddLast(new BufferSegment(maxAllocationOffset, data.Length, null));
-            id = PlaceData(maxAllocationOffset, data, lastSegment);
+            LinkedListNode<BufferSegment> lastSegment = bufferSegments.AddLast(new BufferSegment(maxAllocationOffset, data.Length, null, null));
+            id = PlaceData(maxAllocationOffset, data, lastSegment, renderer, pass);
             maxAllocationOffset += data.Length;
             return id;
         }
@@ -140,19 +145,14 @@ namespace net.minecraft.client.world.render
             Console.WriteLine("Buffer resize!");
             
             UnsafeByteBuffer newBuffer = new(newSize);
-            Buffer.CopyTo(newBuffer);
+            Buffer.CopyBytesTo(newBuffer);
 
             Buffer = newBuffer;
 
             ReallocateEntireBuffer();
         }
-
-        public void Defragment()
-        {
-            Console.WriteLine("Defragmenting!");
-        }
-
-        private int PlaceData(int offset, Span<byte> inData, LinkedListNode<BufferSegment>? existingFreeSpace)
+        
+        private int PlaceData(int offset, Span<byte> inData, LinkedListNode<BufferSegment>? existingFreeSpace, WorldRenderer? renderer, int pass)
         {
             Profiler.startSection("placeData");
             // Check if the data would exceed the current buffer size, and expand the buffer if so.
@@ -165,7 +165,7 @@ namespace net.minecraft.client.world.render
             }
 
             int id = currentIdNum;
-            BufferSegment segment = new(offset, inData.Length, id);
+            BufferSegment segment = new(offset, inData.Length, id, renderer, pass);
             
             // If we allocated in a free segment, split or remove the free segment depending on if we fully fill it or not.
             if (existingFreeSpace != null)
@@ -178,7 +178,7 @@ namespace net.minecraft.client.world.render
                 }
                 else
                 {
-                    freeSegment = new BufferSegment(freeSegment.Offset + inData.Length, freeSegment.Size - inData.Length, null);
+                    freeSegment = new(freeSegment.Offset + inData.Length, freeSegment.Size - inData.Length, null, null);
 
                     existingFreeSpace.Value = segment;
                     bufferSegments.AddAfter(existingFreeSpace, freeSegment);
@@ -239,8 +239,6 @@ namespace net.minecraft.client.world.render
 
         private void ReallocateEntireBuffer()
         {
-            //Defragment();
-
             // Reallocate the entire buffer.
             // This is done when the buffer is resized, or when the buffer is cleared.
             // This is done because the buffer is a single array, and we can't just resize it.
@@ -266,12 +264,19 @@ namespace net.minecraft.client.world.render
         public int Offset;
         public int Size;
         public int? DataHandle; // Will be null if this segment represents free space.
+        public WeakReference<WorldRenderer>? RendererRef;
+        public int? RenderPass;
 
-        public BufferSegment(int offset, int size, int? handle)
+        public BufferSegment(int offset, int size, int? handle, WorldRenderer? renderer, int? renderPass = null)
         {
             Offset = offset;
             Size = size;
             DataHandle = handle;
+
+            if (renderer != null)
+                RendererRef = new(renderer);
+
+            RenderPass = renderPass;
         }
     }
 }

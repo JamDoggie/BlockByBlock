@@ -282,7 +282,7 @@ namespace net.minecraft.src
 				}
 
 				GL.Disable(EnableCap.Blend);
-				RenderHelper.enableGUIStandardItemLighting();
+				GameLighting.EnableGUIStandardItemLighting();
 
 				for (i18 = 0; i18 < 9; ++i18)
 				{
@@ -291,7 +291,7 @@ namespace net.minecraft.src
 					this.renderInventorySlot(i18, i19, i20, f1);
 				}
 
-				RenderHelper.disableStandardItemLighting();
+				GameLighting.DisableMeshLighting();
 			}
 
 			float f33;

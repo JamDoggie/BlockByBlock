@@ -1,20 +1,21 @@
-﻿using System.Runtime.InteropServices;
+﻿using BlockByBlock.sound;
+using System.Runtime.InteropServices;
 
 namespace net.minecraft.client.world.render
 {
     public unsafe class UnsafeByteBuffer : IDisposable
     {
         public nint Handle => _hGlobal;
-        public int Size => _size;
+        public virtual int Size => _size;
+        public readonly byte* Pointer;
 
-        private readonly byte* _ptr;
-        private readonly nint _hGlobal;
-        private readonly int _size;
+        protected readonly nint _hGlobal;
+        protected readonly int _size;
 
         public UnsafeByteBuffer(int size)
         {
             _hGlobal = Marshal.AllocHGlobal(size);
-            _ptr = (byte*)_hGlobal;
+            Pointer = (byte*)_hGlobal;
             _size = size;
         }
         
@@ -25,16 +26,16 @@ namespace net.minecraft.client.world.render
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public byte this[int index]
+        public virtual byte this[int index]
         {
             get
             {
-                return _ptr[index];
+                return Pointer[index];
             }
 
             set
             {
-                _ptr[index] = value;
+                Pointer[index] = value;
             }
         }
 
@@ -44,7 +45,7 @@ namespace net.minecraft.client.world.render
             GC.SuppressFinalize(this);
         }
 
-        public void CopyTo(UnsafeByteBuffer newBuffer)
+        public void CopyBytesTo(UnsafeByteBuffer newBuffer)
         {
             int amountToCopy = Math.Min(_size, newBuffer._size);
 
@@ -54,7 +55,7 @@ namespace net.minecraft.client.world.render
             }
         }
         
-        public static void Copy(UnsafeByteBuffer source, int sourceOffset, UnsafeByteBuffer destination, int destinationOffset, int length)
+        public static void CopyBytes(UnsafeByteBuffer source, int sourceOffset, UnsafeByteBuffer destination, int destinationOffset, int length)
         {
             if (sourceOffset < 0 || sourceOffset >= source._size)
                 throw new IndexOutOfRangeException("Source offset out of range of source buffer.");
@@ -76,6 +77,28 @@ namespace net.minecraft.client.world.render
         ~UnsafeByteBuffer()
         {
             Dispose();
+        }
+    }
+
+    public unsafe class UnsafeIntBuffer : UnsafeByteBuffer
+    {
+        public UnsafeIntBuffer(int size) : base(size * sizeof(int))
+        {
+        }
+
+        public override int Size => _size / sizeof(int);
+        
+        public int this[int index]
+        {
+            get
+            {
+                return ((int*)Pointer)[index];
+            }
+
+            set
+            {
+                ((int*)Pointer)[index] = value;
+            }
         }
     }
 }

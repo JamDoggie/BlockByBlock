@@ -1,12 +1,17 @@
 ﻿#version 460
 
-precision highp float;
+precision lowp float;
 
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec2 texCoord;
 layout(location = 2) in vec4 color;
 layout(location = 3) in vec4 normals;
 layout(location = 4) in vec2 brightness;
+
+layout(binding = 5) buffer chunkPositionLayout
+{
+    float chunkPositions[];
+};
 
 out vec2 outTexCoord;
 out vec4 outColor;
@@ -22,6 +27,7 @@ uniform mat4 modelViewMatrix;
 
 uniform int LightingState;
 uniform int SmoothLightingState;
+uniform int RenderingTerrain = 0;
 
 // END OF INITIAL DECLARATIONS || START OF LIGHTING \\
 vec4 Specular = vec4(1.0, 1.0, 1.0, 1.0);
@@ -101,13 +107,22 @@ void flight(vec3 normal, vec4 ecPosition, float alphaFade, out vec4 returnColor,
 
 void main()
 {
-	gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vec3 pos = position;
+
+    if (RenderingTerrain == 1)
+    {
+        pos.x += chunkPositions[gl_DrawID * 3 + 0];
+        pos.y += chunkPositions[gl_DrawID * 3 + 1];
+        pos.z += chunkPositions[gl_DrawID * 3 + 2];
+    }
+
+	gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
 	
     outTexCoord = texCoord;
 	outColor = vec4(color.x / 255.0, color.y / 255.0, color.z / 255.0, color.w / 255.0);
     outBrightness = vec2(((brightness.x / 16) / 17) + 0.0625, ((brightness.y / 16) / 17) + 0.0625);
 
-    vertPos = (modelViewMatrix * vec4(position, 1.0)).xyz;
+    vertPos = (modelViewMatrix * vec4(pos, 1.0)).xyz;
 
     if (LightingState == 1)
     {
@@ -122,7 +137,7 @@ void main()
 	
         vec4 lightColor;
 
-        vec4 ecPosition = modelViewMatrix * vec4(position, 1.0);
+        vec4 ecPosition = modelViewMatrix * vec4(pos, 1.0);
 
         // This function outputs the result to lightColor.
         flight(transformedNormal, ecPosition, alphaFade, lightColor, Ambient, Diffuse, Specular);

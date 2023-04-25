@@ -98,9 +98,9 @@ namespace net.minecraft.src
 			Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
 		}
 
-		public virtual void drawCenteredString(FontRenderer fontRenderer1, string string2, int i3, int i4, int i5)
+		public virtual void drawCenteredString(FontRenderer fontRenderer1, string string2, int x, int y, int i5)
 		{
-			fontRenderer1.drawStringWithShadow(string2, i3 - fontRenderer1.getStringWidth(string2) / 2, i4, i5);
+			fontRenderer1.drawStringWithShadow(string2, x - fontRenderer1.getStringWidth(string2) / 2, y, i5);
 		}
 
 		public virtual void drawString(FontRenderer fontRenderer1, string string2, int i3, int i4, int i5)
@@ -108,16 +108,16 @@ namespace net.minecraft.src
 			fontRenderer1.drawStringWithShadow(string2, i3, i4, i5);
 		}
 
-		public virtual void drawTexturedModalRect(int i1, int i2, int i3, int i4, int i5, int i6)
+		public virtual void drawTexturedModalRect(int x, int y, int x1, int y1, int width, int height)
 		{
 			float f7 = 0.00390625F;
 			float f8 = 0.00390625F;
 			Tessellator tessellator9 = Tessellator.instance;
 			tessellator9.startDrawingQuads();
-			tessellator9.AddVertexWithUV((double)(i1 + 0), (double)(i2 + i6), (double)this.zLevel, (double)((float)(i3 + 0) * f7), (double)((float)(i4 + i6) * f8));
-			tessellator9.AddVertexWithUV((double)(i1 + i5), (double)(i2 + i6), (double)this.zLevel, (double)((float)(i3 + i5) * f7), (double)((float)(i4 + i6) * f8));
-			tessellator9.AddVertexWithUV((double)(i1 + i5), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + i5) * f7), (double)((float)(i4 + 0) * f8));
-			tessellator9.AddVertexWithUV((double)(i1 + 0), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + 0) * f7), (double)((float)(i4 + 0) * f8));
+			tessellator9.AddVertexWithUV((double)(x + 0), (double)(y + height), (double)this.zLevel, (double)((float)(x1 + 0) * f7), (double)((float)(y1 + height) * f8));
+			tessellator9.AddVertexWithUV((double)(x + width), (double)(y + height), (double)this.zLevel, (double)((float)(x1 + width) * f7), (double)((float)(y1 + height) * f8));
+			tessellator9.AddVertexWithUV((double)(x + width), (double)(y + 0), (double)this.zLevel, (double)((float)(x1 + width) * f7), (double)((float)(y1 + 0) * f8));
+			tessellator9.AddVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel, (double)((float)(x1 + 0) * f7), (double)((float)(y1 + 0) * f8));
 			tessellator9.DrawImmediate();
 		}
 	}

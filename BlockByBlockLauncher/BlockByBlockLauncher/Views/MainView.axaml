@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:BlockByBlockLauncher.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BlockByBlockLauncher.Views.MainView"
+             Foreground="White"
+             Background="#171C2C">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+                to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <viewModels:MainViewModel />
+    </Design.DataContext>
+
+	<Grid>
+		<StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Top">
+			<StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0 20 0 0">
+				<Button IsEnabled="{Binding !LoggedIn, Mode=TwoWay}" Command="{Binding LogInCommand}">Log In</Button>
+				<Button IsEnabled="{Binding LoggedIn, Mode=TwoWay}" Command="{Binding LogOutCommand}">Log Out</Button>
+			</StackPanel>
+			<Label HorizontalAlignment="Center" Content="{Binding UsernameText}"></Label>
+		</StackPanel>
+
+
+		<StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0 0 0 10">
+			<Label Content="{Binding LoadingProgress}" HorizontalAlignment="Center"></Label>
+			<ProgressBar Value="{Binding LoadingProgressValue}" HorizontalAlignment="Center" Margin="0 0 0 10" Width="600" Height="20"></ProgressBar>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+				<Button IsEnabled="{Binding LoggedIn}">Launch</Button>
+			</StackPanel>
+		</StackPanel>
+
+		<Grid IsVisible="{Binding AwaitingLogin}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#B3000000">
+			<Label HorizontalAlignment="Center" VerticalAlignment="Center">Please log in to your Microsoft account using the browser tab open on your default browser.</Label>
+		</Grid>
+	</Grid>
+	
+	
+</UserControl>

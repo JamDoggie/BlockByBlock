@@ -35,7 +35,7 @@ namespace net.minecraft.src
 			int i4 = this.guiLeft;
 			int i5 = this.guiTop;
 			this.drawGuiContainerBackgroundLayer(f3, i1, i2);
-			RenderHelper.enableGUIStandardItemLighting();
+			GameLighting.EnableGUIStandardItemLighting();
             Minecraft.renderPipeline.ModelMatrix.PushMatrix();
             Minecraft.renderPipeline.ModelMatrix.Translate((float)i4, (float)i5, 0.0F);
             Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -78,7 +78,7 @@ namespace net.minecraft.src
 			}
 
             
-			RenderHelper.disableStandardItemLighting();
+			GameLighting.DisableMeshLighting();
 			Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
 			GL.Disable(EnableCap.DepthTest);
 			if (inventoryPlayer21.ItemStack == null && slot6 != null && slot6.HasStack)

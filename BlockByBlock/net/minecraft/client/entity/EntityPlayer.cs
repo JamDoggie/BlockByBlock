@@ -263,9 +263,9 @@ namespace net.minecraft.client.entity
                 field_20065_s = field_20062_v = posY;
             }
 
-            field_20063_u += d10 * 0.25D;
-            field_20061_w += d5 * 0.25D;
-            field_20062_v += d3 * 0.25D;
+            field_20063_u += d10 * 0.25D; // x
+            field_20061_w += d5 * 0.25D; // z
+            field_20062_v += d3 * 0.25D; // y
             addStat(StatList.minutesPlayedStat, 1);
             if (ridingEntity == null)
             {
@@ -821,13 +821,11 @@ namespace net.minecraft.client.entity
                                 {
                                     do
                                     {
-                                        //JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
                                         if (!iterator4.MoveNext())
                                         {
                                             return;
                                         }
 
-                                        //JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
                                         Entity entity5 = (Entity)iterator4.Current;
                                         entityWolf6 = (EntityWolf)entity5;
                                     } while (!entityWolf6.Tamed);

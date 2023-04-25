@@ -15,7 +15,7 @@
 			{
 				Tessellator tessellator10 = Tessellator.instance;
 				this.bindTextureByName("/terrain.png");
-				RenderHelper.disableStandardItemLighting();
+				GameLighting.DisableMeshLighting();
 				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 				GL.Enable(EnableCap.Blend);
 				GL.Disable(EnableCap.CullFace);
@@ -50,7 +50,7 @@
 
 				tessellator10.setTranslation(0.0D, 0.0D, 0.0D);
 				tessellator10.DrawImmediate();
-				RenderHelper.enableStandardItemLighting();
+				GameLighting.EnableMeshLighting();
 			}
 
 		}

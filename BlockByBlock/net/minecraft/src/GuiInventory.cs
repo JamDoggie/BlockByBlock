@@ -89,7 +89,7 @@ namespace net.minecraft.src
 			float f11 = (float)(i5 + 51) - this.xSize_lo;
 			float f12 = (float)(i6 + 75 - 50) - this.ySize_lo;
             Minecraft.renderPipeline.ModelMatrix.Rotate(135.0F, 0.0F, 1.0F, 0.0F);
-			RenderHelper.enableStandardItemLighting();
+			GameLighting.EnableMeshLighting();
             Minecraft.renderPipeline.ModelMatrix.Rotate(-135.0F, 0.0F, 1.0F, 0.0F);
             Minecraft.renderPipeline.ModelMatrix.Rotate(-((float)Math.Atan((double)(f12 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
 			this.mc.thePlayer.renderYawOffset = (float)Math.Atan((double)(f11 / 40.0F)) * 20.0F;
@@ -103,7 +103,7 @@ namespace net.minecraft.src
 			this.mc.thePlayer.rotationYaw = f9;
 			this.mc.thePlayer.rotationPitch = f10;
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
-			RenderHelper.disableStandardItemLighting();
+			GameLighting.DisableMeshLighting();
             Minecraft.renderPipeline.SetState(RenderState.ColorMaterialState, false);
         }
 

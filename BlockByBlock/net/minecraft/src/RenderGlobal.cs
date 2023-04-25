@@ -55,20 +55,13 @@ namespace net.minecraft.src
 		private int renderersSkippingRenderPass;
 		private int dummyRenderInt;
 		private int worldRenderersCheckIndex;
-		private System.Collections.IList glRenderLists = new ArrayList();
+		private System.Collections.IList activeWorldRenderers = new ArrayList();
 		private ChunkMeshAllocator meshAllocator;
 
 		private VertexBuffer starVBO;
         private VertexBuffer sky1VBO;
         private VertexBuffer sky2VBO;
-
-        private RenderList[] allRenderLists { get; set; } = new RenderList[]
-		{
-			new RenderList(),
-			new RenderList(),
-			new RenderList(),
-			new RenderList()
-		};
+		
 		internal double prevSortX = -9999.0D;
 		internal double prevSortY = -9999.0D;
 		internal double prevSortZ = -9999.0D;
@@ -85,7 +78,7 @@ namespace net.minecraft.src
 			if (this.occlusionEnabled)
 			{
 				glOcclusionQueryBase = new int[b3 * b3 * b4];
-				GL.Arb.GenQueries(glOcclusionQueryBase.Length, glOcclusionQueryBase); // PORTING TODO: Wasn't 100% sure about the first argument here. Investigate if this doesn't work.
+				GL.GenQueries(glOcclusionQueryBase.Length, glOcclusionQueryBase); // PORTING TODO: Wasn't 100% sure about the first argument here. Investigate if this doesn't work.
 			}
             
 			Minecraft.renderPipeline.ModelMatrix.PushMatrix();
@@ -209,20 +202,20 @@ namespace net.minecraft.src
 
 		public virtual void loadRenderers()
 		{
-			if (this.worldObj != null)
+			if (worldObj != null)
 			{
-				Block.leaves.GraphicsLevel = this.mc.gameSettings.fancyGraphics;
-				this.renderDistance = this.mc.gameSettings.renderDistance;
+				Block.leaves.GraphicsLevel = mc.gameSettings.fancyGraphics;
+				renderDistance = mc.gameSettings.renderDistance;
 				int i1;
-				if (this.worldRenderers != null)
+				if (worldRenderers != null)
 				{
-					for (i1 = 0; i1 < this.worldRenderers.Length; ++i1)
+					for (i1 = 0; i1 < worldRenderers.Length; ++i1)
 					{
-						this.worldRenderers[i1].stopRendering();
+						worldRenderers[i1].stopRendering();
 					}
 				}
 
-				i1 = 64 << 3 - this.renderDistance;
+				i1 = 64 << 3 - renderDistance;
 				if (i1 > 400)
 				{
 					i1 = 400;
@@ -231,8 +224,8 @@ namespace net.minecraft.src
 				renderChunksWide = i1 / 16 + 1;
 				renderChunksTall = 16;
 				renderChunksDeep = i1 / 16 + 1;
-				worldRenderers = new WorldRenderer[this.renderChunksWide * this.renderChunksTall * this.renderChunksDeep];
-				sortedWorldRenderers = new WorldRenderer[this.renderChunksWide * this.renderChunksTall * this.renderChunksDeep];
+				worldRenderers = new WorldRenderer[renderChunksWide * renderChunksTall * renderChunksDeep];
+				sortedWorldRenderers = new WorldRenderer[renderChunksWide * renderChunksTall * renderChunksDeep];
 				int i2 = 0;
 				int i3 = 0;
 				minBlockX = 0;
@@ -243,57 +236,57 @@ namespace net.minecraft.src
 				maxBlockZ = renderChunksDeep;
 
 				int i4;
-				for (i4 = 0; i4 < this.worldRenderersToUpdate.Count; ++i4)
+				for (i4 = 0; i4 < worldRenderersToUpdate.Count; ++i4)
 				{
-					((WorldRenderer)this.worldRenderersToUpdate[i4]).needsUpdate = false;
+					((WorldRenderer)worldRenderersToUpdate[i4]).needsUpdate = false;
 				}
 
-				this.worldRenderersToUpdate.Clear();
-				this.tileEntities.Clear();
+				worldRenderersToUpdate.Clear();
+				tileEntities.Clear();
 
-				for (i4 = 0; i4 < this.renderChunksWide; ++i4)
+				for (i4 = 0; i4 < renderChunksWide; ++i4)
 				{
-					for (int i5 = 0; i5 < this.renderChunksTall; ++i5)
+					for (int i5 = 0; i5 < renderChunksTall; ++i5)
 					{
-						for (int i6 = 0; i6 < this.renderChunksDeep; ++i6)
+						for (int i6 = 0; i6 < renderChunksDeep; ++i6)
 						{
-							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4] = new WorldRenderer(this.worldObj, this.tileEntities, i4 * 16, i5 * 16, i6 * 16, meshAllocator);
-							if (this.occlusionEnabled)
+							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4] = new WorldRenderer(worldObj, tileEntities, i4 * 16, i5 * 16, i6 * 16, meshAllocator);
+							if (occlusionEnabled)
 							{
-								this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].glOcclusionQuery = this.glOcclusionQueryBase[i3];
+								worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].glOcclusionQuery = glOcclusionQueryBase[i3];
 							}
 
-							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].isWaitingOnOcclusionQuery = false;
-							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].isVisible = true;
-							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].isInFrustum = true;
-							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].chunkIndex = i3++;
-							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].markDirty();
-							this.sortedWorldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4] = this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4];
-							this.worldRenderersToUpdate.Add(this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4]);
+							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].isWaitingOnOcclusionQuery = false;
+							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].isVisible = true;
+							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].isInFrustum = true;
+							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].chunkIndex = i3++;
+							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].markDirty();
+							sortedWorldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4] = worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4];
+							worldRenderersToUpdate.Add(worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4]);
 							i2 += 3;
 						}
 					}
 				}
 
-				if (this.worldObj != null)
+				if (worldObj != null)
 				{
-					EntityLiving entityLiving7 = this.mc.renderViewEntity;
+					EntityLiving entityLiving7 = mc.renderViewEntity;
 					if (entityLiving7 != null)
 					{
-						this.markRenderersForNewPosition(MathHelper.floor_double(entityLiving7.posX), MathHelper.floor_double(entityLiving7.posY), MathHelper.floor_double(entityLiving7.posZ));
-						Array.Sort(this.sortedWorldRenderers, new EntitySorter(entityLiving7));
+						markRenderersForNewPosition(MathHelper.floor_double(entityLiving7.posX), MathHelper.floor_double(entityLiving7.posY), MathHelper.floor_double(entityLiving7.posZ));
+						Array.Sort(sortedWorldRenderers, new EntitySorter(entityLiving7));
 					}
 				}
 
-				this.renderEntitiesStartupCounter = 2;
+				renderEntitiesStartupCounter = 2;
 			}
 		}
 
 		public virtual void renderEntities(Vec3D vec3D1, ICamera iCamera2, float f3)
 		{
-			if (this.renderEntitiesStartupCounter > 0)
+			if (renderEntitiesStartupCounter > 0)
 			{
-				--this.renderEntitiesStartupCounter;
+				--renderEntitiesStartupCounter;
 			}
 			else
 			{
@@ -341,7 +334,7 @@ namespace net.minecraft.src
 				}
 
 				Profiler.endStartSection("tileentities");
-				RenderHelper.enableStandardItemLighting();
+				GameLighting.EnableMeshLighting();
 
 				for (i6 = 0; i6 < this.tileEntities.Count; ++i6)
 				{
@@ -371,7 +364,7 @@ namespace net.minecraft.src
 
 		private void markRenderersForNewPosition(int rendererX, int rendererY, int rendererZ)
 		{
-			rendererX -= 8;
+            rendererX -= 8;
 			rendererY -= 8;
 			rendererZ -= 8;
 			this.minBlockX = int.MaxValue;
@@ -380,20 +373,20 @@ namespace net.minecraft.src
 			this.maxBlockX = int.MinValue;
 			this.maxBlockY = int.MinValue;
 			this.maxBlockZ = int.MinValue;
-			int i4 = this.renderChunksWide * 16;
-			int i5 = i4 / 2;
+			int renderDistanceInBlocks = this.renderChunksWide * 16;
+			int renderDistanceBlocksHalved = renderDistanceInBlocks / 2;
 
-			for (int i6 = 0; i6 < this.renderChunksWide; ++i6)
+			for (int chunkIter = 0; chunkIter < this.renderChunksWide; chunkIter++)
 			{
-				int x = i6 * 16;
-				int i8 = x + i5 - rendererX;
+				int x = chunkIter * 16;
+				int i8 = x + renderDistanceBlocksHalved - rendererX;
 				if (i8 < 0)
 				{
-					i8 -= i4 - 1;
+					i8 -= renderDistanceInBlocks - 1;
 				}
 
-				i8 /= i4;
-				x -= i8 * i4;
+				i8 /= renderDistanceInBlocks;
+				x -= i8 * renderDistanceInBlocks;
 				if (x < this.minBlockX)
 				{
 					this.minBlockX = x;
@@ -407,14 +400,14 @@ namespace net.minecraft.src
 				for (int i9 = 0; i9 < this.renderChunksDeep; ++i9)
 				{
 					int z = i9 * 16;
-					int i11 = z + i5 - rendererZ;
+					int i11 = z + renderDistanceBlocksHalved - rendererZ;
 					if (i11 < 0)
 					{
-						i11 -= i4 - 1;
+						i11 -= renderDistanceInBlocks - 1;
 					}
 
-					i11 /= i4;
-					z -= i11 * i4;
+					i11 /= renderDistanceInBlocks;
+					z -= i11 * renderDistanceInBlocks;
 					if (z < this.minBlockZ)
 					{
 						this.minBlockZ = z;
@@ -438,7 +431,7 @@ namespace net.minecraft.src
 							this.maxBlockY = y;
 						}
 
-						WorldRenderer worldRenderer14 = this.worldRenderers[(i9 * this.renderChunksTall + i12) * this.renderChunksWide + i6];
+						WorldRenderer worldRenderer14 = this.worldRenderers[(i9 * this.renderChunksTall + i12) * this.renderChunksWide + chunkIter];
 						bool z15 = worldRenderer14.needsUpdate;
 						worldRenderer14.setPosition(x, y, z);
 						if (!z15 && worldRenderer14.needsUpdate)
@@ -448,7 +441,6 @@ namespace net.minecraft.src
 					}
 				}
 			}
-
 		}
 
 		public virtual int sortAndRender(EntityLiving entityLiving1, int pass, double d3)
@@ -457,27 +449,27 @@ namespace net.minecraft.src
 
 			for (int i5 = 0; i5 < 10; ++i5)
 			{
-				this.worldRenderersCheckIndex = (this.worldRenderersCheckIndex + 1) % this.worldRenderers.Length;
-				WorldRenderer worldRenderer6 = this.worldRenderers[this.worldRenderersCheckIndex];
-				if (worldRenderer6.needsUpdate && !this.worldRenderersToUpdate.Contains(worldRenderer6))
+				worldRenderersCheckIndex = (worldRenderersCheckIndex + 1) % worldRenderers.Length;
+				WorldRenderer worldRenderer6 = worldRenderers[worldRenderersCheckIndex];
+				if (worldRenderer6.needsUpdate && !worldRenderersToUpdate.Contains(worldRenderer6))
 				{
-					this.worldRenderersToUpdate.Add(worldRenderer6);
+					worldRenderersToUpdate.Add(worldRenderer6);
 				}
 			}
 
-			if (this.mc.gameSettings.renderDistance != this.renderDistance)
+			if (mc.gameSettings.renderDistance != renderDistance)
 			{
-				this.loadRenderers();
+				loadRenderers();
 			}
 
 			if (pass == 0)
 			{
-				this.renderersLoaded = 0;
-				this.dummyRenderInt = 0;
-				this.renderersBeingClipped = 0;
-				this.renderersBeingOccluded = 0;
-				this.renderersBeingRendered = 0;
-				this.renderersSkippingRenderPass = 0;
+				renderersLoaded = 0;
+				dummyRenderInt = 0;
+				renderersBeingClipped = 0;
+				renderersBeingOccluded = 0;
+				renderersBeingRendered = 0;
+				renderersSkippingRenderPass = 0;
 			}
 
 			double d33 = entityLiving1.lastTickPosX + (entityLiving1.posX - entityLiving1.lastTickPosX) * d3;
@@ -495,7 +487,7 @@ namespace net.minecraft.src
 				Array.Sort(this.sortedWorldRenderers, new EntitySorter(entityLiving1));
 			}
 
-			RenderHelper.disableStandardItemLighting();
+			GameLighting.DisableMeshLighting();
 			sbyte b17 = 0;
 			int i34;
 			if (this.occlusionEnabled && this.mc.gameSettings.advancedOpengl && pass == 0)
@@ -609,11 +601,11 @@ namespace net.minecraft.src
 				if (this.sortedWorldRenderers[i3].isWaitingOnOcclusionQuery)
 				{
                     //Console.WriteLine($"World Renderer {i3} is waiting on occlusion query ({i1},{i2})");
-                    GL.Arb.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, QueryObjectParameterName.QueryResultAvailable, this.occlusionResult);
+                    GL.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, GetQueryObjectParam.QueryResultAvailable, this.occlusionResult);
 					if (this.occlusionResult[0] != 0)
 					{
 						this.sortedWorldRenderers[i3].isWaitingOnOcclusionQuery = false;
-						GL.Arb.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, QueryObjectParameterName.QueryResult, this.occlusionResult);
+						GL.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, GetQueryObjectParam.QueryResult, this.occlusionResult);
 						this.sortedWorldRenderers[i3].isVisible = this.occlusionResult[0] != 0;
 					}
 				}
@@ -627,7 +619,7 @@ namespace net.minecraft.src
 		private int renderSortedRenderers(int i1, int i2, int pass, double d4)
 		{
 			Profiler.startSection("addWorldRenderers");
-            this.glRenderLists.Clear();
+            this.activeWorldRenderers.Clear();
 			int i6 = 0;
 
 			for (int i7 = i1; i7 < i2; ++i7)
@@ -655,7 +647,7 @@ namespace net.minecraft.src
 
 				if (!this.sortedWorldRenderers[i7].skipRenderPass[pass] && this.sortedWorldRenderers[i7].isInFrustum && (!this.occlusionEnabled || this.sortedWorldRenderers[i7].isVisible))
 				{
-                    this.glRenderLists.Add(this.sortedWorldRenderers[i7]);
+                    this.activeWorldRenderers.Add(this.sortedWorldRenderers[i7]);
                 }
 			}
 
@@ -663,40 +655,22 @@ namespace net.minecraft.src
 			double x = entityLiving19.lastTickPosX + (entityLiving19.posX - entityLiving19.lastTickPosX) * d4;
 			double y = entityLiving19.lastTickPosY + (entityLiving19.posY - entityLiving19.lastTickPosY) * d4;
 			double z = entityLiving19.lastTickPosZ + (entityLiving19.posZ - entityLiving19.lastTickPosZ) * d4;
-			int i14 = 0;
+
+            int i14 = 0;
 
 			worldRenderX = (float)x;
 			worldRenderY = (float)y;
 			worldRenderZ = (float)z;
-
-			int i15;
-			for (i15 = 0; i15 < this.allRenderLists.Length; ++i15)
-			{
-				this.allRenderLists[i15].func_859_b();
-			}
+			
 			Profiler.endStartSection("positionWorldRenderers");
-			for (i15 = 0; i15 < this.glRenderLists.Count; ++i15)
+			
+			for (int i = 0; i < this.activeWorldRenderers.Count; ++i)
 			{
-				WorldRenderer? renderer = (WorldRenderer?)this.glRenderLists[i15];
-				int renderListIndex = -1;
+				WorldRenderer? renderer = (WorldRenderer?)this.activeWorldRenderers[i];
 
-				for (int i = 0; i < i14; ++i)
-				{
-					if (this.allRenderLists[i].PositionMatches(renderer.posXMinus, renderer.posYMinus, renderer.posZMinus))
-					{
-						renderListIndex = i;
-						break;
-					}
-				}
-
-				if (renderListIndex < 0)
-				{
-					renderListIndex = i14++;
-					this.allRenderLists[renderListIndex].SetPosition(renderer.posXMinus, renderer.posYMinus, renderer.posZMinus, x, y, z);
-                }
-
-                //renderer.SetRenderPos(x, y, z, renderer.posXMinus, renderer.posYMinus, renderer.posZMinus);
+                renderer.SetRenderPos(x, y, z, renderer.posXMinus, renderer.posYMinus, renderer.posZMinus);
             }
+			
 			Profiler.endStartSection("tessellateWorldRenderers");
             RenderAllWorldRenderers(pass, d4);
 			Profiler.endSection();
@@ -709,47 +683,20 @@ namespace net.minecraft.src
 
             MatrixStack modelMatrix = Minecraft.renderPipeline.ModelMatrix;
 
-            this.mc.gameRenderer.enableLightmap(d2);
+            mc.gameRenderer.enableLightmap(d2);
 
             // Draw world VBO
 			modelMatrix.PushMatrix();
-            modelMatrix.Translate(-worldRenderX, -worldRenderY, -worldRenderZ);
 			GL.Enable(EnableCap.CullFace);
-            Tessellator.instance.DrawMeshAllocator(meshAllocator.WorldBuffer, meshAllocator);
-			modelMatrix.PopMatrix();
-			/*for (int i = 0; i < glRenderLists.Count; i++)
-            {
-                WorldRenderer? renderer = (WorldRenderer?)glRenderLists[i];
-                
-                if (renderer != null && renderer.VBOsToRender != null)
-                {
-                    modelMatrix.PushMatrix();
-                    renderer.setupGLTranslation(modelMatrix);
-                    Minecraft.renderPipeline.ModelMatrix.Translate((float)((double)renderer.X2 - renderer.X1), (float)((double)renderer.Y2 - renderer.Y1), (float)((double)renderer.Z2 - renderer.Z1));
+            Tessellator.instance.DrawMeshAllocator(meshAllocator.WorldBuffer, meshAllocator, sortedWorldRenderers, pass);
+            modelMatrix.PopMatrix();
 
-                    for (int j = 0; j < renderer.VBOsToRender.Length; j++)
-                    {
-                        if (j != pass)
-                            continue;
-
-                        VertexBuffer? vbo = renderer.VBOsToRender[j];
-
-                        if (vbo != null && !renderer.skipRenderPass[j])
-                        {
-                            Tessellator.instance.Draw(vbo.Value);
-                        }
-                    }
-
-                    modelMatrix.PopMatrix();
-                }
-            }*/
-
-            this.mc.gameRenderer.disableLightmap(d2);
+            mc.gameRenderer.disableLightmap(d2);
         }
 
 		public virtual void updateClouds()
 		{
-			++this.cloudOffsetX;
+			++cloudOffsetX;
 		}
 
 		public virtual void renderSky(float f1)
@@ -760,7 +707,7 @@ namespace net.minecraft.src
                 Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
                 GL.Enable(EnableCap.Blend);
 				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-				RenderHelper.disableStandardItemLighting();
+				GameLighting.DisableMeshLighting();
 				GL.DepthMask(false);
 				this.renderEngine.bindTexture(this.renderEngine.getTexture("/misc/tunnel.png"));
 				Tessellator tessellator19 = Tessellator.instance;
@@ -829,7 +776,7 @@ namespace net.minecraft.src
                 Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
                 GL.Enable(EnableCap.Blend);
 				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-				RenderHelper.disableStandardItemLighting();
+				GameLighting.DisableMeshLighting();
 				float[] f22 = this.worldObj.worldProvider.calcSunriseSunsetColors(this.worldObj.getCelestialAngle(f1), f1);
 				float f9;
 				float f10;

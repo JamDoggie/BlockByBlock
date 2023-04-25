@@ -51,14 +51,18 @@
 
   <ItemGroup>
     <None Remove="font.txt" />
+    <None Remove="gui\refinedgui\blockbyblock-logo.png" />
     <None Remove="pack.png" />
     <None Remove="pack.txt" />
     <None Remove="particles.png" />
     <None Remove="terrain.png" />
+    <None Remove="title\mclogo.png" />
+    <None Remove="title\mojang.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="font.txt" />
+    <EmbeddedResource Include="gui\refinedgui\blockbyblock-logo.png" />
     <EmbeddedResource Include="pack.png" />
     <EmbeddedResource Include="pack.txt" />
     <EmbeddedResource Include="particles.png" />
@@ -67,7 +71,7 @@
 
   <ItemGroup>
     <PackageReference Include="IKVM" Version="8.2.2-prerelease0553" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="OpenTK" Version="4.7.5" />
     <PackageReference Include="SharpZipLib" Version="1.4.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />

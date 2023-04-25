@@ -182,7 +182,7 @@ namespace net.minecraft.src
             Minecraft.renderPipeline.ModelMatrix.PushMatrix();
             Minecraft.renderPipeline.ModelMatrix.Rotate(f4, 1.0F, 0.0F, 0.0F);
             Minecraft.renderPipeline.ModelMatrix.Rotate(entityPlayerSP3.prevRotationYaw + (entityPlayerSP3.rotationYaw - entityPlayerSP3.prevRotationYaw) * f1, 0.0F, 1.0F, 0.0F);
-			RenderHelper.enableStandardItemLighting();
+			GameLighting.EnableMeshLighting();
             Minecraft.renderPipeline.ModelMatrix.PopMatrix();
 			float f6;
 			float f7;
@@ -428,7 +428,7 @@ namespace net.minecraft.src
                 Minecraft.renderPipeline.ModelMatrix.PopMatrix();
 			}
             
-			RenderHelper.disableStandardItemLighting();
+			GameLighting.DisableMeshLighting();
 		}
 
 		public virtual void renderOverlays(float f1)

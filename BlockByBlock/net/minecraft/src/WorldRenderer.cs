@@ -17,15 +17,15 @@ namespace net.minecraft.src
         public World worldObj;
         private static Tessellator tessellator = Tessellator.instance;
         public static int chunksUpdated = 0;
-        public int posX;
-        public int posY;
-        public int posZ;
-        public int posXMinus;
-        public int posYMinus;
-        public int posZMinus;
-        public int posXClip;
-        public int posYClip;
-        public int posZClip;
+        public int posX { get; set; }
+        public int posY { get; set; }
+        public int posZ { get; set; }
+        public int posXMinus { get; set; }
+        public int posYMinus { get; set; }
+        public int posZMinus { get; set; }
+        public int posXClip { get; set; }
+        public int posYClip { get; set; }
+        public int posZClip { get; set; }
 
         public int X2 = 0;
         public int Y2 = 0;
@@ -34,7 +34,7 @@ namespace net.minecraft.src
         public double Y1 = 0;
         public double Z1 = 0;
 
-        public bool isInFrustum = false;
+        public bool isInFrustum { get; set; } = false;
         public bool[] skipRenderPass = new bool[2];
         public int posXPlus;
         public int posYPlus;
@@ -44,17 +44,17 @@ namespace net.minecraft.src
         public int chunkIndex;
         public bool isVisible = true;
         public bool isWaitingOnOcclusionQuery;
-        public int glOcclusionQuery;
+        public int glOcclusionQuery { get; set; }
         public bool isChunkLit;
         private bool isInitialized = false;
         public IList tileEntityRenderers = new ArrayList();
         private IList tileEntities;
         private int bytesDrawn;
         private ChunkMeshAllocator meshAllocator;
-
+        
         private VertexBuffer? AABBVBO = null;
         
-        private int?[] meshDataAllocations = { null, null };
+        public int?[] meshDataAllocations = { null, null };
 
         public WorldRenderer(World world1, IList list2, int x, int y, int z, ChunkMeshAllocator meshAllocator)
         {
@@ -105,44 +105,44 @@ namespace net.minecraft.src
 
         public virtual void SetRenderPos(double x, double y, double z, int x2, int y2, int z2)
         {
-            this.X1 = x;
-            this.Y1 = y;
-            this.Z1 = z;
-            this.X2 = x2;
-            this.Y2 = y2;
-            this.Z2 = z2;
+            X1 = x;
+            Y1 = y;
+            Z1 = z;
+            X2 = x2;
+            Y2 = y2;
+            Z2 = z2;
         }
 
-        internal void setupGLTranslation(MatrixStack stack)
+        internal void setupGLTranslation()
         {
             //stack.Translate((float)this.posXClip, (float)this.posYClip, (float)this.posZClip);
-            //tessellator.setTranslation(posXMinus, posYMinus, posZMinus);
+            tessellator.setTranslation(posXClip, posYClip, posZClip);
         }
 
         public virtual void updateRenderer()
         {
             Profiler.startSection("updateRenderer");
-            if (this.needsUpdate)
+            if (needsUpdate)
             {
-                this.needsUpdate = false;
-                int i1 = this.posX;
-                int i2 = this.posY;
-                int i3 = this.posZ;
-                int i4 = this.posX + 16;
-                int i5 = this.posY + 16;
-                int i6 = this.posZ + 16;
+                needsUpdate = false;
+                int i1 = posX;
+                int i2 = posY;
+                int i3 = posZ;
+                int i4 = posX + 16;
+                int i5 = posY + 16;
+                int i6 = posZ + 16;
 
                 for (int i7 = 0; i7 < 2; ++i7)
                 {
-                    this.skipRenderPass[i7] = true;
+                    skipRenderPass[i7] = true;
                 }
 
                 Chunk.isLit = false;
                 HashSet<object> hashSet21 = new HashSet<object>();
-                hashSet21.AddAll(this.tileEntityRenderers);
-                this.tileEntityRenderers.Clear();
+                hashSet21.AddAll(tileEntityRenderers);
+                tileEntityRenderers.Clear();
                 sbyte b8 = 1;
-                ChunkCache chunkCache9 = new ChunkCache(this.worldObj, i1 - b8, i2 - b8, i3 - b8, i4 + b8, i5 + b8, i6 + b8);
+                ChunkCache chunkCache9 = new ChunkCache(worldObj, i1 - b8, i2 - b8, i3 - b8, i4 + b8, i5 + b8, i6 + b8);
                 if (!chunkCache9.getChunksEmpty_IDK())
                 {
                     ++chunksUpdated;
@@ -170,13 +170,11 @@ namespace net.minecraft.src
                                             tessellator.StartBuildingVBO(7);
 
                                             Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-                                            this.setupGLTranslation(Minecraft.renderPipeline.ModelMatrix);
+                                            
                                             float f19 = 1F;
-                                            Minecraft.renderPipeline.ModelMatrix.Translate(-8.0F, -8.0F, -8.0F);
-                                            Minecraft.renderPipeline.ModelMatrix.Scale(f19, f19, f19);
-                                            Minecraft.renderPipeline.ModelMatrix.Translate(8.0F, 8.0F, 8.0F);
-
-                                            //tessellator.setTranslation((double)(-this.posX), (double)(-this.posY), (double)(-this.posZ));
+                                            setupGLTranslation();
+                                            
+                                            tessellator.addTranslation((double)(-posX), (double)(-posY), (double)(-posZ));
                                         }
 
                                         if (currentPass == 0 && Block.blocksList[i18].hasTileEntity())
@@ -184,7 +182,7 @@ namespace net.minecraft.src
                                             TileEntity tileEntity23 = chunkCache9.getBlockTileEntity(i17, i15, i16);
                                             if (TileEntityRenderer.instance.hasSpecialRenderer(tileEntity23))
                                             {
-                                                this.tileEntityRenderers.Add(tileEntity23);
+                                                tileEntityRenderers.Add(tileEntity23);
                                             }
                                         }
 
@@ -215,9 +213,8 @@ namespace net.minecraft.src
 
                             if (meshData.Length > 0)
                             {
-                                meshDataAllocations[currentPass] = meshAllocator.AllocateData(meshData);
+                                meshDataAllocations[currentPass] = meshAllocator.AllocateData(meshData, this, currentPass);
                             }
-
                             
                             Profiler.endSection();
                             
@@ -230,7 +227,7 @@ namespace net.minecraft.src
 
                         if (rendererContainsBlocks)
                         {
-                            this.skipRenderPass[currentPass] = false;
+                            skipRenderPass[currentPass] = false;
                         }
 
                         if (!z12)
@@ -290,7 +287,7 @@ namespace net.minecraft.src
         public virtual void TessellateOcclusionQueryAABB()
         {
             if (AABBVBO != null)
-                Tessellator.instance.Draw(AABBVBO.Value);
+                Tessellator.instance.TessellateOcclusionQuery(AABBVBO.Value.GLHandle);
         }
 
         public virtual bool skipAllRenderPasses()

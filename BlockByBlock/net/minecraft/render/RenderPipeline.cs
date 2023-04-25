@@ -33,7 +33,8 @@ namespace net.minecraft.render
         private static GCHandle _debugProcCallbackHandle;
         #endregion
 
-        private Dictionary<string, int> _uniformLocations = new Dictionary<string, int>();
+        private Dictionary<string, int> _uniformLocations = new();
+        private Dictionary<RenderState, int> _renderStateUniformLocations = new();
 
         public RenderPipeline()
         {
@@ -78,6 +79,7 @@ namespace net.minecraft.render
             SetState(RenderState.ColorState, true);
 
             Tessellator.instance.Init();
+            GameLighting.InitializeLighting();
         }
 
         public int GetUniform(string uniform)
@@ -92,10 +94,23 @@ namespace net.minecraft.render
 
             return location;
         }
-        
+
+        public int GetRenderStateUniform(RenderState state)
+        {
+            if (_renderStateUniformLocations.ContainsKey(state))
+            {
+                return _renderStateUniformLocations[state];
+            }
+
+            int location = GetUniform(state.ToString());
+            _renderStateUniformLocations.Add(state, location);
+
+            return location;
+        }
+
         public void SetState(RenderState state, bool active)
         {
-            int uniform = GetUniform(state.ToString());
+            int uniform = GetRenderStateUniform(state);
             GL.ProgramUniform1(GLProgram, uniform, active ? 1 : 0);
         }
 
