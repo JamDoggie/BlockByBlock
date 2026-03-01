@@ -280,7 +280,9 @@ namespace net.minecraft.src
 
 		protected internal virtual void passSpecialRender(EntityLiving entityLiving1, double d2, double d4, double d6)
 		{
-			if (Minecraft.DebugInfoEnabled)
+			if (Minecraft.
+				
+				InfoEnabled)
 			{
 				;
 			}
