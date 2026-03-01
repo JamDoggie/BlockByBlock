@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class DamageSource
+	public class DamageSource
 	{
 		public static DamageSource inFire = (new DamageSource("inFire")).setFireDamage();
 		public static DamageSource onFire = (new DamageSource("onFire")).setDamageBypassesArmor().setFireDamage();

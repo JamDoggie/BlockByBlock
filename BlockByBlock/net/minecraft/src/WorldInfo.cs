@@ -1,9 +1,7 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
 
-    public class WorldInfo
+	public class WorldInfo
 	{
 		private long randomSeed;
 		private WorldType terrainType = WorldType.DEFAULT;

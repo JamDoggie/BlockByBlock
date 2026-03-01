@@ -1,9 +1,8 @@
 ﻿namespace net.minecraft.src
 {
-    using net.minecraft.client.entity;
-    using Minecraft = net.minecraft.client.Minecraft;
+	using Minecraft = net.minecraft.client.Minecraft;
 
-    public abstract class PlayerController
+	public abstract class PlayerController
 	{
 		protected internal readonly Minecraft mc;
 		public bool isInTestMode = false;
@@ -121,11 +120,7 @@
 		{
 		}
 
-		/// <summary>
-		/// TODO: check that this name is accurate. Changing this to true seems to make the player camera turn like the title screen panorama, even in game.
-		/// </summary>
-		/// <returns>false, always.</returns>
-		public virtual bool IsPanoramaCamera()
+		public virtual bool func_35643_e()
 		{
 			return false;
 		}
@@ -135,10 +130,6 @@
 			entityPlayer1.stopUsingItem();
 		}
 
-		/// <summary>
-		/// Mystery constant. This returns false.
-		/// </summary>
-		/// <returns>false, always.</returns>
 		public virtual bool func_35642_f()
 		{
 			return false;

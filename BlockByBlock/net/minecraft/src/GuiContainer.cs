@@ -1,13 +1,10 @@
 ﻿using System;
-using BlockByBlock.net.minecraft.render;
-using net.minecraft.client;
-using net.minecraft.client.entity.render;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace net.minecraft.src
 {
-    public abstract class GuiContainer : GuiScreen
+	public abstract class GuiContainer : GuiScreen
 	{
 		protected internal static RenderItem itemRenderer = new RenderItem();
 		protected internal int xSize = 176;
@@ -35,16 +32,16 @@ namespace net.minecraft.src
 			int i4 = this.guiLeft;
 			int i5 = this.guiTop;
 			this.drawGuiContainerBackgroundLayer(f3, i1, i2);
-			GameLighting.EnableGUIStandardItemLighting();
-            Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-            Minecraft.renderPipeline.ModelMatrix.Translate((float)i4, (float)i5, 0.0F);
-            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
-            
+			RenderHelper.enableGUIStandardItemLighting();
+			GL.PushMatrix();
+			GL.Translate((float)i4, (float)i5, 0.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Enable(EnableCap.RescaleNormal);
 			Slot slot6 = null;
 			short s7 = 240;
 			short s8 = 240;
-			LightmapManager.setLightmapTextureCoords(LightmapManager.lightmapTexUnit, (float)s7 / 1.0F, (float)s8 / 1.0F);
-			Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)s7 / 1.0F, (float)s8 / 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 
 			int i10;
 			for (int i20 = 0; i20 < this.inventorySlots.inventorySlots.Count; ++i20)
@@ -54,12 +51,12 @@ namespace net.minecraft.src
 				if (this.isMouseOverSlot(slot22, i1, i2))
 				{
 					slot6 = slot22;
-					Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
+					GL.Disable(EnableCap.Lighting);
 					GL.Disable(EnableCap.DepthTest);
 					int i9 = slot22.xDisplayPosition;
 					i10 = slot22.yDisplayPosition;
 					this.drawGradientRect(i9, i10, i9 + 16, i10 + 16, -2130706433, -2130706433);
-					Minecraft.renderPipeline.SetState(RenderState.LightingState, true);
+					GL.Enable(EnableCap.Lighting);
 					GL.Enable(EnableCap.DepthTest);
 				}
 			}
@@ -68,7 +65,7 @@ namespace net.minecraft.src
 			InventoryPlayer inventoryPlayer21 = this.mc.thePlayer.inventory;
 			if (inventoryPlayer21.ItemStack != null)
 			{
-                Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 0.0F, 32.0F);
+				GL.Translate(0.0F, 0.0F, 32.0F);
 				this.zLevel = 200.0F;
 				itemRenderer.zLevel = 200.0F;
 				itemRenderer.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, inventoryPlayer21.ItemStack, i1 - i4 - 8, i2 - i5 - 8);
@@ -77,9 +74,9 @@ namespace net.minecraft.src
 				itemRenderer.zLevel = 0.0F;
 			}
 
-            
-			GameLighting.DisableMeshLighting();
-			Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
+			GL.Disable(EnableCap.RescaleNormal);
+			RenderHelper.disableStandardItemLighting();
+			GL.Disable(EnableCap.Lighting);
 			GL.Disable(EnableCap.DepthTest);
 			if (inventoryPlayer21.ItemStack == null && slot6 != null && slot6.HasStack)
 			{
@@ -149,10 +146,10 @@ namespace net.minecraft.src
 				}
 			}
 
-            Minecraft.renderPipeline.ModelMatrix.PopMatrix();
+			GL.PopMatrix();
 			base.drawScreen(i1, i2, f3);
-            Minecraft.renderPipeline.SetState(RenderState.LightingState, true);
-            GL.Enable(EnableCap.DepthTest);
+			GL.Enable(EnableCap.Lighting);
+			GL.Enable(EnableCap.DepthTest);
 		}
 
 		protected internal virtual void drawGuiContainerForegroundLayer()
@@ -174,10 +171,10 @@ namespace net.minecraft.src
 				int i8 = slot1.BackgroundIconIndex;
 				if (i8 >= 0)
 				{
-					Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
+					GL.Disable(EnableCap.Lighting);
 					this.mc.renderEngine.bindTexture(this.mc.renderEngine.getTexture("/gui/items.png"));
 					this.drawTexturedModalRect(i2, i3, i8 % 16 * 16, i8 / 16 * 16, 16, 16);
-					Minecraft.renderPipeline.SetState(RenderState.LightingState, true);
+					GL.Enable(EnableCap.Lighting);
 					z5 = true;
 				}
 			}

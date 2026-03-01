@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class Potion
+	public class Potion
 	{
 		public static readonly Potion[] potionTypes = new Potion[32];
 		public const Potion field_35676_b = null;

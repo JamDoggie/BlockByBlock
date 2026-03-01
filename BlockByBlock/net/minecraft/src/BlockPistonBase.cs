@@ -1,10 +1,9 @@
 ﻿using System.Collections;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class BlockPistonBase : Block
+	public class BlockPistonBase : Block
 	{
 		private bool isSticky;
 		private static bool ignoreUpdates;

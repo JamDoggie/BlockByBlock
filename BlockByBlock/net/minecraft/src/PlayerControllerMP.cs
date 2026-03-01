@@ -1,9 +1,8 @@
 ﻿namespace net.minecraft.src
 {
-    using net.minecraft.client.entity;
-    using Minecraft = net.minecraft.client.Minecraft;
+	using Minecraft = net.minecraft.client.Minecraft;
 
-    public class PlayerControllerMP : PlayerController
+	public class PlayerControllerMP : PlayerController
 	{
 		private int currentBlockX = -1;
 		private int currentBlockY = -1;

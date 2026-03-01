@@ -8,8 +8,6 @@ using System.Text.RegularExpressions;
 using OpenTK.Graphics.OpenGL;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using net.minecraft.client;
-using BlockByBlock.net.minecraft.render;
 
 namespace net.minecraft.src
 {
@@ -24,7 +22,7 @@ namespace net.minecraft.src
 		private readonly int[] glyphTextureName = new int[256];
 		private int[] colorCode = new int[32];
 		private int boundTextureName;
-		private readonly TextureManager renderEngine;
+		private readonly RenderEngine renderEngine;
 		private float posX;
 		private float posY;
 		private bool unicodeFlag;
@@ -39,7 +37,7 @@ namespace net.minecraft.src
 			this.renderEngine = null;
 		}
 
-		public FontRenderer(GameSettings gameSettings1, string string2, TextureManager renderEngine3, bool z4)
+		public FontRenderer(GameSettings gameSettings1, string string2, RenderEngine renderEngine3, bool z4)
 		{
 			this.renderEngine = renderEngine3;
 			this.unicodeFlag = z4;
@@ -55,7 +53,7 @@ namespace net.minecraft.src
 			int i19 = bufferedImage5.Width;
 			int i7 = bufferedImage5.Height;
 			int[] i8 = new int[i19 * i7];
-			TextureManager.FillIntBufferWithImage(bufferedImage5, i8);
+			RenderEngine.FillIntBufferWithImage(bufferedImage5, i8);
 			int i9;
 			int i10;
 			int i11;
@@ -109,7 +107,17 @@ namespace net.minecraft.src
 				{
 					i11 += 85;
 				}
-                
+
+				if (gameSettings1.anaglyph)
+				{
+					int i20 = (i11 * 30 + i12 * 59 + i13 * 11) / 100;
+					i15 = (i11 * 30 + i12 * 70) / 100;
+					i16 = (i11 * 30 + i13 * 70) / 100;
+					i11 = i20;
+					i12 = i15;
+					i13 = i16;
+				}
+
 				if (i9 >= 16)
 				{
 					i11 /= 4;
@@ -139,18 +147,17 @@ namespace net.minecraft.src
 			}
 
 			float f6 = (float)this.charWidth[i1] - 0.01F;
-			
-
-			Tessellator tessellator = Tessellator.instance;
-
-			tessellator.startDrawing(5); // Triangle Strip
-            tessellator.AddVertexWithUV(posX + f5, posY, 0.0F, f3 / 128.0F, f4 / 128.0F);
-            tessellator.AddVertexWithUV(posX - f5, posY + 7.99F, 0.0F, f3 / 128.0F, (f4 + 7.99F) / 128.0F);
-            tessellator.AddVertexWithUV(posX + f6 + f5, posY, 0.0F, (f3 + f6) / 128.0F, f4 / 128.0F);
-			tessellator.AddVertexWithUV(posX + f6 - f5, posY + 7.99F, 0.0F, (f3 + f6) / 128.0F, (f4 + 7.99F) / 128.0F);
-			tessellator.DrawImmediate();
-
-            return (float)this.charWidth[i1];
+			GL.Begin(PrimitiveType.TriangleStrip);
+			GL.TexCoord2(f3 / 128.0F, f4 / 128.0F);
+			GL.Vertex3(this.posX + f5, this.posY, 0.0F);
+			GL.TexCoord2(f3 / 128.0F, (f4 + 7.99F) / 128.0F);
+			GL.Vertex3(this.posX - f5, this.posY + 7.99F, 0.0F);
+			GL.TexCoord2((f3 + f6) / 128.0F, f4 / 128.0F);
+			GL.Vertex3(this.posX + f6 + f5, this.posY, 0.0F);
+			GL.TexCoord2((f3 + f6) / 128.0F, (f4 + 7.99F) / 128.0F);
+			GL.Vertex3(this.posX + f6 - f5, this.posY + 7.99F, 0.0F);
+			GL.End();
+			return (float)this.charWidth[i1];
 		}
 
 		private void loadGlyphTexture(int i1)
@@ -166,8 +173,6 @@ namespace net.minecraft.src
 
 		private float func_50111_a(char c1, bool z2)
 		{
-			Tessellator tessellator = Tessellator.instance;
-
 			if (this.glyphWidth[c1] == 0)
 			{
 				return 0.0F;
@@ -187,34 +192,36 @@ namespace net.minecraft.src
 				}
 
 				int i4 = (int)((uint)this.glyphWidth[c1] >> 4);
-				int i5 = glyphWidth[c1] & 15;
-				float f6 = i4;
-				float f7 = (i5 + 1);
-				float f8 = (c1 % 16 * 16) + f6;
-				float f9 = ((c1 & 255) / 16 * 16);
+				int i5 = this.glyphWidth[c1] & 15;
+				float f6 = (float)i4;
+				float f7 = (float)(i5 + 1);
+				float f8 = (float)(c1 % 16 * 16) + f6;
+				float f9 = (float)((c1 & 255) / 16 * 16);
 				float f10 = f7 - f6 - 0.02F;
 				float f11 = z2 ? 1.0F : 0.0F;
-
-                tessellator.startDrawing(5); // Triangle Strip
-                tessellator.AddVertexWithUV(posX + f11, posY, 0.0F, f8 / 256.0F, f9 / 256.0F);
-                tessellator.AddVertexWithUV(posX - f11, posY + 7.99F, 0.0F, f8 / 256.0F, (f9 + 15.98F) / 256.0F);
-                tessellator.AddVertexWithUV(posX + f10 / 2.0F + f11, posY, 0.0F, (f8 + f10) / 256.0F, f9 / 256.0F);
-                tessellator.AddVertexWithUV(posX + f10 / 2.0F - f11, posY + 7.99F, 0.0F, (f8 + f10) / 256.0F, (f9 + 15.98F) / 256.0F);
-                tessellator.DrawImmediate();
-
+				GL.Begin(PrimitiveType.TriangleStrip);
+				GL.TexCoord2(f8 / 256.0F, f9 / 256.0F);
+				GL.Vertex3(this.posX + f11, this.posY, 0.0F);
+				GL.TexCoord2(f8 / 256.0F, (f9 + 15.98F) / 256.0F);
+				GL.Vertex3(this.posX - f11, this.posY + 7.99F, 0.0F);
+				GL.TexCoord2((f8 + f10) / 256.0F, f9 / 256.0F);
+				GL.Vertex3(this.posX + f10 / 2.0F + f11, this.posY, 0.0F);
+				GL.TexCoord2((f8 + f10) / 256.0F, (f9 + 15.98F) / 256.0F);
+				GL.Vertex3(this.posX + f10 / 2.0F - f11, this.posY + 7.99F, 0.0F);
+				GL.End();
 				return (f7 - f6) / 2.0F + 1.0F;
 			}
 		}
 
-		public virtual int drawStringWithShadow(string string1, int x, int y, int i4)
+		public virtual int drawStringWithShadow(string string1, int i2, int i3, int i4)
 		{
 			if (this.bidiFlag)
 			{
 				string1 = this.bidiReorder(string1);
 			}
 
-			int i5 = this.drawText(string1, x + 1, y + 1, i4, true);
-			i5 = Math.Max(i5, this.drawText(string1, x, y, i4, false));
+			int i5 = this.func_50101_a(string1, i2 + 1, i3 + 1, i4, true);
+			i5 = Math.Max(i5, this.func_50101_a(string1, i2, i3, i4, false));
 			return i5;
 		}
 
@@ -225,7 +232,7 @@ namespace net.minecraft.src
 				string1 = this.bidiReorder(string1);
 			}
 
-			this.drawText(string1, i2, i3, i4, false);
+			this.func_50101_a(string1, i2, i3, i4, false);
 		}
 
 		private string bidiReorder(string str)
@@ -334,7 +341,7 @@ namespace net.minecraft.src
 						}
 
 						i11 = this.colorCode[i10];
-                        Minecraft.renderPipeline.SetColor((float)(i11 >> 16) / 255.0F, (float)(i11 >> 8 & 255) / 255.0F, (float)(i11 & 255) / 255.0F);
+						GL.Color3((float)(i11 >> 16) / 255.0F, (float)(i11 >> 8 & 255) / 255.0F, (float)(i11 & 255) / 255.0F);
 					}
 					else if (i10 == 16)
 					{
@@ -363,8 +370,8 @@ namespace net.minecraft.src
 						z7 = false;
 						z6 = false;
 						z5 = false;
-                        Minecraft.renderPipeline.SetColor(this.field_50115_n, this.field_50116_o, this.field_50118_p, this.field_50117_q);
-                    }
+						GL.Color4(this.field_50115_n, this.field_50116_o, this.field_50118_p, this.field_50117_q);
+					}
 
 					++i8;
 				}
@@ -394,28 +401,28 @@ namespace net.minecraft.src
 					if (z7)
 					{
 						tessellator12 = Tessellator.instance;
-                        Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
-                        tessellator12.startDrawingQuads();
-						tessellator12.AddVertex((double)this.posX, (double)(this.posY + (float)(this.FONT_HEIGHT / 2)), 0.0D);
-						tessellator12.AddVertex((double)(this.posX + f14), (double)(this.posY + (float)(this.FONT_HEIGHT / 2)), 0.0D);
-						tessellator12.AddVertex((double)(this.posX + f14), (double)(this.posY + (float)(this.FONT_HEIGHT / 2) - 1.0F), 0.0D);
-						tessellator12.AddVertex((double)this.posX, (double)(this.posY + (float)(this.FONT_HEIGHT / 2) - 1.0F), 0.0D);
-						tessellator12.DrawImmediate();
-                        Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
-                    }
+						GL.Disable(EnableCap.Texture2D);
+						tessellator12.startDrawingQuads();
+						tessellator12.addVertex((double)this.posX, (double)(this.posY + (float)(this.FONT_HEIGHT / 2)), 0.0D);
+						tessellator12.addVertex((double)(this.posX + f14), (double)(this.posY + (float)(this.FONT_HEIGHT / 2)), 0.0D);
+						tessellator12.addVertex((double)(this.posX + f14), (double)(this.posY + (float)(this.FONT_HEIGHT / 2) - 1.0F), 0.0D);
+						tessellator12.addVertex((double)this.posX, (double)(this.posY + (float)(this.FONT_HEIGHT / 2) - 1.0F), 0.0D);
+						tessellator12.draw();
+						GL.Enable(EnableCap.Texture2D);
+					}
 
 					if (z6)
 					{
 						tessellator12 = Tessellator.instance;
-                        Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
-                        tessellator12.startDrawingQuads();
+						GL.Disable(EnableCap.Texture2D);
+						tessellator12.startDrawingQuads();
 						int i13 = z6 ? -1 : 0;
-						tessellator12.AddVertex((double)(this.posX + (float)i13), (double)(this.posY + (float)this.FONT_HEIGHT), 0.0D);
-						tessellator12.AddVertex((double)(this.posX + f14), (double)(this.posY + (float)this.FONT_HEIGHT), 0.0D);
-						tessellator12.AddVertex((double)(this.posX + f14), (double)(this.posY + (float)this.FONT_HEIGHT - 1.0F), 0.0D);
-						tessellator12.AddVertex((double)(this.posX + (float)i13), (double)(this.posY + (float)this.FONT_HEIGHT - 1.0F), 0.0D);
-						tessellator12.DrawImmediate();
-						Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
+						tessellator12.addVertex((double)(this.posX + (float)i13), (double)(this.posY + (float)this.FONT_HEIGHT), 0.0D);
+						tessellator12.addVertex((double)(this.posX + f14), (double)(this.posY + (float)this.FONT_HEIGHT), 0.0D);
+						tessellator12.addVertex((double)(this.posX + f14), (double)(this.posY + (float)this.FONT_HEIGHT - 1.0F), 0.0D);
+						tessellator12.addVertex((double)(this.posX + (float)i13), (double)(this.posY + (float)this.FONT_HEIGHT - 1.0F), 0.0D);
+						tessellator12.draw();
+						GL.Enable(EnableCap.Texture2D);
 					}
 
 					this.posX += f14;
@@ -424,7 +431,7 @@ namespace net.minecraft.src
 
 		}
 
-		public virtual int drawText(string string1, int x, int y, int i4, bool z5)
+		public virtual int func_50101_a(string string1, int i2, int i3, int i4, bool z5)
 		{
 			if (!string.ReferenceEquals(string1, null))
 			{
@@ -443,9 +450,9 @@ namespace net.minecraft.src
 				this.field_50116_o = (float)(i4 >> 8 & 255) / 255.0F;
 				this.field_50118_p = (float)(i4 & 255) / 255.0F;
 				this.field_50117_q = (float)(i4 >> 24 & 255) / 255.0F;
-				Minecraft.renderPipeline.SetColor(this.field_50115_n, this.field_50116_o, this.field_50118_p, this.field_50117_q);
-				this.posX = (float)x;
-				this.posY = (float)y;
+				GL.Color4(this.field_50115_n, this.field_50116_o, this.field_50118_p, this.field_50117_q);
+				this.posX = (float)i2;
+				this.posY = (float)i3;
 				this.renderStringAtPos(string1, z5);
 				return (int)this.posX;
 			}
@@ -652,7 +659,7 @@ namespace net.minecraft.src
 								string10 = "\u00a7" + string13[string13.LastIndexOf("\u00a7", StringComparison.Ordinal) + 1];
 							}
 
-							this.drawText(string13, i2, i3, i5, z6);
+							this.func_50101_a(string13, i2, i3, i5, z6);
 							i3 += this.FONT_HEIGHT;
 						}
 					}
@@ -664,7 +671,7 @@ namespace net.minecraft.src
 							string10 = "\u00a7" + string11[string11.LastIndexOf("\u00a7", StringComparison.Ordinal) + 1];
 						}
 
-						this.drawText(string11, i2, i3, i5, z6);
+						this.func_50101_a(string11, i2, i3, i5, z6);
 						i3 += this.FONT_HEIGHT;
 					}
 				}

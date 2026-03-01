@@ -1,9 +1,8 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public class SlotFurnace : Slot
+	public class SlotFurnace : Slot
 	{
 		private EntityPlayer thePlayer;
 		private int field_48437_f;

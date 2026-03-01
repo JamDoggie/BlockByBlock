@@ -7,6 +7,7 @@ namespace net.minecraft.src
 	{
 		public byte[] imageData { get; set; } = new byte[1024];
 		public int iconIndex;
+		public bool anaglyphEnabled = false;
 		public int textureId = 0;
 		public int tileSize = 1;
 		public int tileImage = 0;
@@ -20,7 +21,7 @@ namespace net.minecraft.src
 		{
 		}
 
-		public virtual void bindImage(TextureManager renderEngine1)
+		public virtual void bindImage(RenderEngine renderEngine1)
 		{
 			if (this.tileImage == 0)
 			{

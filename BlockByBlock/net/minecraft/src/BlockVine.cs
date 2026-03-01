@@ -1,11 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-    public class BlockVine : Block
+	public class BlockVine : Block
 	{
 		public BlockVine(int i1) : base(i1, 143, Material.vine)
 		{

@@ -78,6 +78,16 @@
 				i6 = (int)(50.0F + f13 * 64.0F);
 				int i7 = 255;
 				int i8 = (int)(146.0F + f13 * 50.0F);
+				if (this.anaglyphEnabled)
+				{
+					int i9 = (i5 * 30 + i6 * 59 + i7 * 11) / 100;
+					int i10 = (i5 * 30 + i6 * 70) / 100;
+					int i11 = (i5 * 30 + i7 * 70) / 100;
+					i5 = i9;
+					i6 = i10;
+					i7 = i11;
+				}
+
 				this.imageData[i2 * 4 + 0] = (byte)(i5 & 255);
 				this.imageData[i2 * 4 + 1] = (byte)(i6 & 255);
 				this.imageData[i2 * 4 + 2] = (byte)(i7 & 255);

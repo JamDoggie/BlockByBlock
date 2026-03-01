@@ -1,10 +1,9 @@
 ﻿using System.Collections;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class EntitySenses
+	public class EntitySenses
 	{
 		internal EntityLiving entityObj;
 		internal ArrayList canSeeCachePositive = new ArrayList();

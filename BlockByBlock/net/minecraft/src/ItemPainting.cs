@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class ItemPainting : Item
+	public class ItemPainting : Item
 	{
 		public ItemPainting(int i1) : base(i1)
 		{

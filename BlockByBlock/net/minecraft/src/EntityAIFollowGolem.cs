@@ -1,9 +1,7 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
 
-    public class EntityAIFollowGolem : EntityAIBase
+	public class EntityAIFollowGolem : EntityAIBase
 	{
 		private EntityVillager theVillager;
 		private EntityIronGolem theGolem;

@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAIRestrictSun : EntityAIBase
+	public class EntityAIRestrictSun : EntityAIBase
 	{
 		private EntityCreature theEntity;
 

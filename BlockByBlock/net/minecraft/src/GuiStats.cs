@@ -1,9 +1,8 @@
 ﻿namespace net.minecraft.src
 {
-    using net.minecraft.client.entity.render;
     using OpenTK.Graphics.OpenGL;
     using Minecraft = net.minecraft.client.Minecraft;
-    public class GuiStats : GuiScreen
+	public class GuiStats : GuiScreen
 	{
 		private static RenderItem renderItem = new RenderItem();
 		protected internal GuiScreen parentGui;
@@ -92,10 +91,11 @@
 		private void drawItemSprite(int i1, int i2, int i3)
 		{
 			this.drawButtonBackground(i1 + 1, i2 + 1);
-            
-			GameLighting.EnableGUIStandardItemLighting();
+			GL.Enable(EnableCap.RescaleNormal);
+			RenderHelper.enableGUIStandardItemLighting();
 			renderItem.drawItemIntoGui(this.fontRenderer, this.mc.renderEngine, i3, 0, Item.itemsList[i3].getIconFromDamage(0), i1 + 2, i2 + 2);
-			GameLighting.DisableMeshLighting();
+			RenderHelper.disableStandardItemLighting();
+			GL.Disable(EnableCap.RescaleNormal);
 		}
 
 		private void drawButtonBackground(int i1, int i2)
@@ -106,15 +106,15 @@
 		private void drawSprite(int i1, int i2, int i3, int i4)
 		{
 			int i5 = this.mc.renderEngine.getTexture("/gui/slot.png");
-            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i5);
 			Tessellator tessellator10 = Tessellator.instance;
 			tessellator10.startDrawingQuads();
-			tessellator10.AddVertexWithUV((double)(i1 + 0), (double)(i2 + 18), (double)this.zLevel, (double)((float)(i3 + 0) * 0.0078125F), (double)((float)(i4 + 18) * 0.0078125F));
-			tessellator10.AddVertexWithUV((double)(i1 + 18), (double)(i2 + 18), (double)this.zLevel, (double)((float)(i3 + 18) * 0.0078125F), (double)((float)(i4 + 18) * 0.0078125F));
-			tessellator10.AddVertexWithUV((double)(i1 + 18), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + 18) * 0.0078125F), (double)((float)(i4 + 0) * 0.0078125F));
-			tessellator10.AddVertexWithUV((double)(i1 + 0), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + 0) * 0.0078125F), (double)((float)(i4 + 0) * 0.0078125F));
-			tessellator10.DrawImmediate();
+			tessellator10.addVertexWithUV((double)(i1 + 0), (double)(i2 + 18), (double)this.zLevel, (double)((float)(i3 + 0) * 0.0078125F), (double)((float)(i4 + 18) * 0.0078125F));
+			tessellator10.addVertexWithUV((double)(i1 + 18), (double)(i2 + 18), (double)this.zLevel, (double)((float)(i3 + 18) * 0.0078125F), (double)((float)(i4 + 18) * 0.0078125F));
+			tessellator10.addVertexWithUV((double)(i1 + 18), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + 18) * 0.0078125F), (double)((float)(i4 + 0) * 0.0078125F));
+			tessellator10.addVertexWithUV((double)(i1 + 0), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + 0) * 0.0078125F), (double)((float)(i4 + 0) * 0.0078125F));
+			tessellator10.draw();
 		}
 
 		internal static Minecraft getMinecraft(GuiStats guiStats0)

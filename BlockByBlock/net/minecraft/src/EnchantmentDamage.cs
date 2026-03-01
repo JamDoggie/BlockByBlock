@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EnchantmentDamage : Enchantment
+	public class EnchantmentDamage : Enchantment
 	{
 		private static readonly string[] protectionName = new string[]{"all", "undead", "arthropods"};
 		private static readonly int[] baseEnchantability = new int[]{1, 5, 5};

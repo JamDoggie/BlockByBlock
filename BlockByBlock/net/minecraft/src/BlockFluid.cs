@@ -1,11 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-    public abstract class BlockFluid : Block
+	public abstract class BlockFluid : Block
 	{
 		protected internal BlockFluid(int i1, Material material2) : base(i1, (material2 == Material.lava ? 14 : 12) * 16 + 13, material2)
 		{
@@ -263,10 +262,10 @@ namespace net.minecraft.src
 			return this.blockMaterial == Material.water ? 5 : (this.blockMaterial == Material.lava ? 30 : 0);
 		}
 
-		public override int GetMixedBrightnessForBlock(IBlockAccess iBlockAccess1, int i2, int i3, int i4)
+		public override int getMixedBrightnessForBlock(IBlockAccess iBlockAccess1, int i2, int i3, int i4)
 		{
-			int i5 = iBlockAccess1.GetLightBrightnessForSkyBlocks(i2, i3, i4, 0);
-			int i6 = iBlockAccess1.GetLightBrightnessForSkyBlocks(i2, i3 + 1, i4, 0);
+			int i5 = iBlockAccess1.getLightBrightnessForSkyBlocks(i2, i3, i4, 0);
+			int i6 = iBlockAccess1.getLightBrightnessForSkyBlocks(i2, i3 + 1, i4, 0);
 			int i7 = i5 & 255;
 			int i8 = i6 & 255;
 			int i9 = i5 >> 16 & 255;

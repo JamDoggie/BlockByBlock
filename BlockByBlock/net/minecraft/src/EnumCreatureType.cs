@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public sealed class EnumCreatureType
+	public sealed class EnumCreatureType
 	{
 		public static readonly EnumCreatureType monster = new EnumCreatureType("monster", InnerEnum.monster, typeof(IMob), 70, Material.air, false);
 		public static readonly EnumCreatureType creature = new EnumCreatureType("creature", InnerEnum.creature, typeof(EntityAnimal), 15, Material.air, true);

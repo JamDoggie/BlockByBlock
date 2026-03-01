@@ -1,11 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-    public class BlockIce : BlockBreakable
+	public class BlockIce : BlockBreakable
 	{
 		public BlockIce(int i1, int i2) : base(i1, i2, Material.ice, false)
 		{

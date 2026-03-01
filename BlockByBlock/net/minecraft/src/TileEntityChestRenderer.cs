@@ -1,11 +1,8 @@
 ﻿namespace net.minecraft.src
 {
-    using BlockByBlock.net.minecraft.client.entity.render.model;
-    using net.minecraft.client;
-    using net.minecraft.client.entity.render.model;
-    using OpenTK.Graphics.OpenGL;
+	using OpenTK.Graphics.OpenGL;
 
-    public class TileEntityChestRenderer : TileEntitySpecialRenderer
+	public class TileEntityChestRenderer : TileEntitySpecialRenderer
 	{
 		private ModelChest chestModel = new ModelChest();
 		private ModelChest largeChestModel = new ModelLargeChest();
@@ -44,11 +41,12 @@
 					this.bindTextureByName("/item/largechest.png");
 				}
 
-                Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-				Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
-                Minecraft.renderPipeline.ModelMatrix.Translate((float)d2, (float)d4 + 1.0F, (float)d6 + 1.0F);
-                Minecraft.renderPipeline.ModelMatrix.Scale(1.0F, -1.0F, -1.0F);
-                Minecraft.renderPipeline.ModelMatrix.Translate(0.5F, 0.5F, 0.5F);
+				GL.PushMatrix();
+				GL.Enable(EnableCap.RescaleNormal);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Translate((float)d2, (float)d4 + 1.0F, (float)d6 + 1.0F);
+				GL.Scale(1.0F, -1.0F, -1.0F);
+				GL.Translate(0.5F, 0.5F, 0.5F);
 				short s11 = 0;
 				if (i9 == 2)
 				{
@@ -72,16 +70,16 @@
 
 				if (i9 == 2 && tileEntityChest1.adjacentChestXPos != null)
 				{
-                    Minecraft.renderPipeline.ModelMatrix.Translate(1.0F, 0.0F, 0.0F);
+					GL.Translate(1.0F, 0.0F, 0.0F);
 				}
 
 				if (i9 == 5 && tileEntityChest1.adjacentChestZPos != null)
 				{
-                    Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 0.0F, -1.0F);
+					GL.Translate(0.0F, 0.0F, -1.0F);
 				}
 
-                Minecraft.renderPipeline.ModelMatrix.Rotate((float)s11, 0.0F, 1.0F, 0.0F);
-                Minecraft.renderPipeline.ModelMatrix.Translate(-0.5F, -0.5F, -0.5F);
+				GL.Rotate((float)s11, 0.0F, 1.0F, 0.0F);
+				GL.Translate(-0.5F, -0.5F, -0.5F);
 				float f12 = tileEntityChest1.prevLidAngle + (tileEntityChest1.lidAngle - tileEntityChest1.prevLidAngle) * f8;
 				float f13;
 				if (tileEntityChest1.adjacentChestZNeg != null)
@@ -106,8 +104,9 @@
 				f12 = 1.0F - f12 * f12 * f12;
 				modelChest14.chestLid.rotateAngleX = -(f12 * (float)Math.PI / 2.0F);
 				modelChest14.renderAll();
-                Minecraft.renderPipeline.ModelMatrix.PopMatrix();
-				Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Disable(EnableCap.RescaleNormal);
+				GL.PopMatrix();
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			}
 		}
 

@@ -1,6 +1,6 @@
 ﻿namespace net.minecraft.src
 {
-	public struct ChunkPosition
+	public class ChunkPosition
 	{
 		public readonly int x;
 		public readonly int y;

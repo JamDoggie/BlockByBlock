@@ -7,7 +7,19 @@ namespace net.minecraft.src
     
 	public class GLAllocation
 	{
+		private static System.Collections.IList displayLists = new ArrayList();
 		private static System.Collections.IList textureNames = new ArrayList();
+
+		public static int generateDisplayLists(int i0)
+		{
+			lock (typeof(GLAllocation))
+			{
+				int i1 = GL.GenLists(i0);
+				displayLists.Add(i1);
+				displayLists.Add(i0);
+				return i1;
+			}
+		}
         
 		public static unsafe void generateTextureNames(ByteBuffer intBuffer0)
 		{
@@ -24,11 +36,27 @@ namespace net.minecraft.src
         
 			}
 		}
-        
-		public static unsafe void DeleteTextures()
+
+		public static void deleteDisplayLists(int i0)
 		{
 			lock (typeof(GLAllocation))
 			{
+				int i1 = displayLists.IndexOf(i0);
+				GL.DeleteLists(((int?)displayLists[i1]).Value, ((int?)displayLists[i1 + 1]).Value);
+				displayLists.RemoveAt(i1);
+				displayLists.RemoveAt(i1);
+			}
+		}
+
+		public static unsafe void deleteTexturesAndDisplayLists()
+		{
+			lock (typeof(GLAllocation))
+			{
+				for (int i0 = 0; i0 < displayLists.Count; i0 += 2)
+				{
+					GL.DeleteLists(((int?)displayLists[i0]).Value, ((int?)displayLists[i0 + 1]).Value);
+				}
+
 				ByteBuffer intBuffer2 = createDirectIntBuffer(textureNames.Count);
 				intBuffer2.flip();
                 
@@ -43,6 +71,7 @@ namespace net.minecraft.src
 				intBuffer2.flip();
 				byte[] texBuffer2 = GetBytesFromBuffer(intBuffer2);
 				GL.DeleteTextures(texBuffer2.Length / 4, GetIntBufferFromBytes(texBuffer2));
+				displayLists.Clear();
 				textureNames.Clear();
 			}
 		}

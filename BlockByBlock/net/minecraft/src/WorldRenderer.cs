@@ -1,10 +1,4 @@
 ﻿using BlockByBlock.helpers;
-using BlockByBlock.net.minecraft.client.entity.render;
-using BlockByBlock.net.minecraft.render;
-using net.minecraft.client;
-using net.minecraft.client.entity;
-using net.minecraft.client.entity.render;
-using net.minecraft.client.world.render;
 using OpenTK.Graphics.OpenGL;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,293 +6,245 @@ using System.Collections.Generic;
 namespace net.minecraft.src
 {
 
-    public class WorldRenderer
-    {
-        public World worldObj;
-        private static Tessellator tessellator = Tessellator.instance;
-        public static int chunksUpdated = 0;
-        public int posX { get; set; }
-        public int posY { get; set; }
-        public int posZ { get; set; }
-        public int posXMinus { get; set; }
-        public int posYMinus { get; set; }
-        public int posZMinus { get; set; }
-        public int posXClip { get; set; }
-        public int posYClip { get; set; }
-        public int posZClip { get; set; }
+	public class WorldRenderer
+	{
+		public World worldObj;
+		private int glRenderList = -1;
+		private static Tessellator tessellator = Tessellator.instance;
+		public static int chunksUpdated = 0;
+		public int posX;
+		public int posY;
+		public int posZ;
+		public int posXMinus;
+		public int posYMinus;
+		public int posZMinus;
+		public int posXClip;
+		public int posYClip;
+		public int posZClip;
+		public bool isInFrustum = false;
+		public bool[] skipRenderPass = new bool[2];
+		public int posXPlus;
+		public int posYPlus;
+		public int posZPlus;
+		public bool needsUpdate;
+		public AxisAlignedBB rendererBoundingBox;
+		public int chunkIndex;
+		public bool isVisible = true;
+		public bool isWaitingOnOcclusionQuery;
+		public int glOcclusionQuery;
+		public bool isChunkLit;
+		private bool isInitialized = false;
+		public System.Collections.IList tileEntityRenderers = new ArrayList();
+		private System.Collections.IList tileEntities;
+		private int bytesDrawn;
 
-        public int X2 = 0;
-        public int Y2 = 0;
-        public int Z2 = 0;
-        public double X1 = 0;
-        public double Y1 = 0;
-        public double Z1 = 0;
+		public WorldRenderer(World world1, System.Collections.IList list2, int i3, int i4, int i5, int i6)
+		{
+			this.worldObj = world1;
+			this.tileEntities = list2;
+			this.glRenderList = i6;
+			this.posX = -999;
+			this.setPosition(i3, i4, i5);
+			this.needsUpdate = false;
+		}
 
-        public bool isInFrustum { get; set; } = false;
-        public bool[] skipRenderPass = new bool[2];
-        public int posXPlus;
-        public int posYPlus;
-        public int posZPlus;
-        public bool needsUpdate;
-        public AxisAlignedBB rendererBoundingBox;
-        public int chunkIndex;
-        public bool isVisible = true;
-        public bool isWaitingOnOcclusionQuery;
-        public int glOcclusionQuery { get; set; }
-        public bool isChunkLit;
-        private bool isInitialized = false;
-        public IList tileEntityRenderers = new ArrayList();
-        private IList tileEntities;
-        private int bytesDrawn;
-        private ChunkMeshAllocator meshAllocator;
-        
-        private VertexBuffer? AABBVBO = null;
-        
-        public int?[] meshDataAllocations = { null, null };
+		public virtual void setPosition(int i1, int i2, int i3)
+		{
+			if (i1 != this.posX || i2 != this.posY || i3 != this.posZ)
+			{
+				this.setDontDraw();
+				this.posX = i1;
+				this.posY = i2;
+				this.posZ = i3;
+				this.posXPlus = i1 + 8;
+				this.posYPlus = i2 + 8;
+				this.posZPlus = i3 + 8;
+				this.posXClip = i1 & 1023;
+				this.posYClip = i2;
+				this.posZClip = i3 & 1023;
+				this.posXMinus = i1 - this.posXClip;
+				this.posYMinus = i2 - this.posYClip;
+				this.posZMinus = i3 - this.posZClip;
+				float f4 = 6.0F;
+				this.rendererBoundingBox = AxisAlignedBB.getBoundingBox((double)((float)i1 - f4), (double)((float)i2 - f4), (double)((float)i3 - f4), (double)((float)(i1 + 16) + f4), (double)((float)(i2 + 16) + f4), (double)((float)(i3 + 16) + f4));
+				GL.NewList(this.glRenderList + 2, ListMode.Compile);
+				RenderItem.renderAABB(AxisAlignedBB.getBoundingBoxFromPool((double)((float)this.posXClip - f4), (double)((float)this.posYClip - f4), (double)((float)this.posZClip - f4), (double)((float)(this.posXClip + 16) + f4), (double)((float)(this.posYClip + 16) + f4), (double)((float)(this.posZClip + 16) + f4)));
+				GL.EndList();
+				this.markDirty();
+			}
+		}
 
-        public WorldRenderer(World world1, IList list2, int x, int y, int z, ChunkMeshAllocator meshAllocator)
-        {
-            worldObj = world1;
-            tileEntities = list2;
-            posX = -999;
-            setPosition(x, y, z);
-            needsUpdate = false;
-            this.meshAllocator = meshAllocator;
-        }
+		private void setupGLTranslation()
+		{
+			GL.Translate((float)this.posXClip, (float)this.posYClip, (float)this.posZClip);
+		}
 
-        ~WorldRenderer()
-        {
-            for (int i = 0; i < meshDataAllocations.Length; i++)
-            {
-                if (meshDataAllocations[i] != null)
-                {
-                    meshAllocator.FreeData(meshDataAllocations[i].Value);
-                }
-            }
-        }
+		public virtual void updateRenderer()
+		{
+			if (this.needsUpdate)
+			{
+				this.needsUpdate = false;
+				int i1 = this.posX;
+				int i2 = this.posY;
+				int i3 = this.posZ;
+				int i4 = this.posX + 16;
+				int i5 = this.posY + 16;
+				int i6 = this.posZ + 16;
 
-        public virtual void setPosition(int x, int y, int z)
-        {
-            if (x != posX || y != posY || z != posZ)
-            {
-                setDontDraw();
-                posX = x;
-                posY = y;
-                posZ = z;
-                posXPlus = x + 8;
-                posYPlus = y + 8;
-                posZPlus = z + 8;
-                posXClip = x & 1023;
-                posYClip = y;
-                posZClip = z & 1023;
-                posXMinus = x - posXClip;
-                posYMinus = y - posYClip;
-                posZMinus = z - posZClip;
-                float f4 = 6.0F;
-                rendererBoundingBox = AxisAlignedBB.getBoundingBox((double)((float)x - f4), (double)((float)y - f4), (double)((float)z - f4), (double)((float)(x + 16) + f4), (double)((float)(y + 16) + f4), (double)((float)(z + 16) + f4));
+				for (int i7 = 0; i7 < 2; ++i7)
+				{
+					this.skipRenderPass[i7] = true;
+				}
 
-                AABBVBO = Renderer.BuildAABBVBO(AxisAlignedBB.getBoundingBoxFromPool((double)((float)posXClip - f4), (double)((float)posYClip - f4), (double)((float)posZClip - f4), (double)((float)(posXClip + 16) + f4), (double)((float)(posYClip + 16) + f4), (double)((float)(posZClip + 16) + f4)));
+				Chunk.isLit = false;
+				HashSet<object> hashSet21 = new HashSet<object>();
+				hashSet21.AddAll(this.tileEntityRenderers);
+				this.tileEntityRenderers.Clear();
+				sbyte b8 = 1;
+				ChunkCache chunkCache9 = new ChunkCache(this.worldObj, i1 - b8, i2 - b8, i3 - b8, i4 + b8, i5 + b8, i6 + b8);
+				if (!chunkCache9.getChunksEmpty_IDK())
+				{
+					++chunksUpdated;
+					RenderBlocks renderBlocks10 = new RenderBlocks(chunkCache9);
+					this.bytesDrawn = 0;
 
-                markDirty();
-            }
-        }
+					for (int i11 = 0; i11 < 2; ++i11)
+					{
+						bool z12 = false;
+						bool z13 = false;
+						bool z14 = false;
 
-        public virtual void SetRenderPos(double x, double y, double z, int x2, int y2, int z2)
-        {
-            X1 = x;
-            Y1 = y;
-            Z1 = z;
-            X2 = x2;
-            Y2 = y2;
-            Z2 = z2;
-        }
+						for (int i15 = i2; i15 < i5; ++i15)
+						{
+							for (int i16 = i3; i16 < i6; ++i16)
+							{
+								for (int i17 = i1; i17 < i4; ++i17)
+								{
+									int i18 = chunkCache9.getBlockId(i17, i15, i16);
+									if (i18 > 0)
+									{
+										if (!z14)
+										{
+											z14 = true;
+											GL.NewList(this.glRenderList + i11, ListMode.Compile);
+											GL.PushMatrix();
+											this.setupGLTranslation();
+											float f19 = 1F;
+											GL.Translate(-8.0F, -8.0F, -8.0F);
+											GL.Scale(f19, f19, f19);
+											GL.Translate(8.0F, 8.0F, 8.0F);
+											tessellator.startDrawingQuads();
+											tessellator.setTranslation((double)(-this.posX), (double)(-this.posY), (double)(-this.posZ));
+										}
+                                        
+										if (i11 == 0 && Block.blocksList[i18].hasTileEntity())
+										{
+											TileEntity tileEntity23 = chunkCache9.getBlockTileEntity(i17, i15, i16);
+											if (TileEntityRenderer.instance.hasSpecialRenderer(tileEntity23))
+											{
+												this.tileEntityRenderers.Add(tileEntity23);
+											}
+										}
 
-        internal void setupGLTranslation()
-        {
-            //stack.Translate((float)this.posXClip, (float)this.posYClip, (float)this.posZClip);
-            tessellator.setTranslation(posXClip, posYClip, posZClip);
-        }
+										Block block24 = Block.blocksList[i18];
+										int i20 = block24.RenderBlockPass;
+										if (i20 != i11)
+										{
+											z12 = true;
+										}
+										else if (i20 == i11)
+										{
+											z13 |= renderBlocks10.renderBlockByRenderType(block24, i17, i15, i16);
+										}
+									}
+								}
+							}
+						}
 
-        public virtual void updateRenderer()
-        {
-            Profiler.startSection("updateRenderer");
-            if (needsUpdate)
-            {
-                needsUpdate = false;
-                int i1 = posX;
-                int i2 = posY;
-                int i3 = posZ;
-                int i4 = posX + 16;
-                int i5 = posY + 16;
-                int i6 = posZ + 16;
+						if (z14)
+						{
+							this.bytesDrawn += tessellator.draw();
+							GL.PopMatrix();
+							GL.EndList();
+							tessellator.setTranslation(0.0D, 0.0D, 0.0D);
+						}
+						else
+						{
+							z13 = false;
+						}
 
-                for (int i7 = 0; i7 < 2; ++i7)
-                {
-                    skipRenderPass[i7] = true;
-                }
+						if (z13)
+						{
+							this.skipRenderPass[i11] = false;
+						}
 
-                Chunk.isLit = false;
-                HashSet<object> hashSet21 = new HashSet<object>();
-                hashSet21.AddAll(tileEntityRenderers);
-                tileEntityRenderers.Clear();
-                sbyte b8 = 1;
-                ChunkCache chunkCache9 = new ChunkCache(worldObj, i1 - b8, i2 - b8, i3 - b8, i4 + b8, i5 + b8, i6 + b8);
-                if (!chunkCache9.getChunksEmpty_IDK())
-                {
-                    ++chunksUpdated;
-                    RenderBlocks renderBlocks10 = new(chunkCache9);
+						if (!z12)
+						{
+							break;
+						}
+					}
+				}
 
-                    for (int currentPass = 0; currentPass < 2; ++currentPass)
-                    {
-                        bool z12 = false;
-                        bool rendererContainsBlocks = false;
-                        bool blockFound = false;
+				HashSet<object> hashSet22 = new HashSet<object>();
+				hashSet22.AddAll(this.tileEntityRenderers);
+				hashSet22.RemoveAll(hashSet21);
+				this.tileEntities.AddRange(hashSet22);
+				hashSet21.RemoveAll(this.tileEntityRenderers);
+				this.tileEntities.RemoveAll(hashSet21);
+				this.isChunkLit = Chunk.isLit;
+				this.isInitialized = true;
+			}
+		}
 
-                        for (int i15 = i2; i15 < i5; ++i15)
-                        {
-                            for (int i16 = i3; i16 < i6; ++i16)
-                            {
-                                for (int i17 = i1; i17 < i4; ++i17)
-                                {
-                                    int i18 = chunkCache9.getBlockId(i17, i15, i16);
-                                    if (i18 > 0)
-                                    {
-                                        if (!blockFound)
-                                        {
-                                            blockFound = true;
+		public virtual float distanceToEntitySquared(Entity entity1)
+		{
+			float f2 = (float)(entity1.posX - (double)this.posXPlus);
+			float f3 = (float)(entity1.posY - (double)this.posYPlus);
+			float f4 = (float)(entity1.posZ - (double)this.posZPlus);
+			return f2 * f2 + f3 * f3 + f4 * f4;
+		}
 
-                                            tessellator.StartBuildingVBO(7);
+		public virtual void setDontDraw()
+		{
+			for (int i1 = 0; i1 < 2; ++i1)
+			{
+				this.skipRenderPass[i1] = true;
+			}
 
-                                            Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-                                            
-                                            float f19 = 1F;
-                                            setupGLTranslation();
-                                            
-                                            tessellator.addTranslation((double)(-posX), (double)(-posY), (double)(-posZ));
-                                        }
+			this.isInFrustum = false;
+			this.isInitialized = false;
+		}
 
-                                        if (currentPass == 0 && Block.blocksList[i18].hasTileEntity())
-                                        {
-                                            TileEntity tileEntity23 = chunkCache9.getBlockTileEntity(i17, i15, i16);
-                                            if (TileEntityRenderer.instance.hasSpecialRenderer(tileEntity23))
-                                            {
-                                                tileEntityRenderers.Add(tileEntity23);
-                                            }
-                                        }
+		public virtual void stopRendering()
+		{
+			this.setDontDraw();
+			this.worldObj = null;
+		}
 
-                                        Block block24 = Block.blocksList[i18];
-                                        int renderPass = block24.RenderBlockPass;
-                                        if (renderPass != currentPass)
-                                        {
-                                            z12 = true;
-                                        }
-                                        else if (renderPass == currentPass)
-                                        {
-                                            rendererContainsBlocks |= renderBlocks10.renderBlockByRenderType(block24, i17, i15, i16);
-                                        }
-                                    }
-                                }
-                            }
-                        }
+		public virtual int getGLCallListForPass(int i1)
+		{
+			return !this.isInFrustum ? -1 : (!this.skipRenderPass[i1] ? this.glRenderList + i1 : -1);
+		}
 
-                        if (blockFound)
-                        {
-                            Minecraft.renderPipeline.ModelMatrix.PopMatrix();
+		public virtual void updateInFrustum(ICamera iCamera1)
+		{
+			this.isInFrustum = iCamera1.isBoundingBoxInFrustum(this.rendererBoundingBox);
+		}
 
-                            byte[] meshData = tessellator.BuildCurrentVertexBuffer();
-                            Profiler.startSection("allocatemeshdata");
+		public virtual void callOcclusionQueryList()
+		{
+			GL.CallList(this.glRenderList + 2);
+		}
 
-                            if (meshDataAllocations[currentPass] != null)
-                                meshAllocator.FreeData(meshDataAllocations[currentPass]!.Value);
+		public virtual bool skipAllRenderPasses()
+		{
+			return !this.isInitialized ? false : this.skipRenderPass[0] && this.skipRenderPass[1];
+		}
 
-                            if (meshData.Length > 0)
-                            {
-                                meshDataAllocations[currentPass] = meshAllocator.AllocateData(meshData, this, currentPass);
-                            }
-                            
-                            Profiler.endSection();
-                            
-                            tessellator.setTranslation(0.0D, 0.0D, 0.0D);
-                        }
-                        else
-                        {
-                            rendererContainsBlocks = false;
-                        }
-
-                        if (rendererContainsBlocks)
-                        {
-                            skipRenderPass[currentPass] = false;
-                        }
-
-                        if (!z12)
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                HashSet<object> hashSet22 = new HashSet<object>();
-                hashSet22.AddAll(this.tileEntityRenderers);
-                hashSet22.RemoveAll(hashSet21);
-                this.tileEntities.AddRange(hashSet22);
-                hashSet21.RemoveAll(this.tileEntityRenderers);
-                this.tileEntities.RemoveAll(hashSet21);
-                this.isChunkLit = Chunk.isLit;
-                this.isInitialized = true;
-            }
-            Profiler.endSection();
-        }
-
-        public virtual float distanceToEntitySquared(Entity entity1)
-        {
-            float f2 = (float)(entity1.posX - (double)this.posXPlus);
-            float f3 = (float)(entity1.posY - (double)this.posYPlus);
-            float f4 = (float)(entity1.posZ - (double)this.posZPlus);
-            return f2 * f2 + f3 * f3 + f4 * f4;
-        }
-
-        public virtual void setDontDraw()
-        {
-            for (int i = 0; i < 2; ++i)
-            {
-                skipRenderPass[i] = true;
-                if (meshDataAllocations[i] != null)
-                {
-                    meshAllocator.FreeData(meshDataAllocations[i]!.Value);
-                    meshDataAllocations[i] = null;
-                }
-            }
-
-            isInFrustum = false;
-            isInitialized = false;
-        }
-
-        public virtual void stopRendering()
-        {
-            setDontDraw();
-            worldObj = null;
-        }
-
-        public virtual void updateInFrustum(ICamera iCamera1)
-        {
-            this.isInFrustum = iCamera1.isBoundingBoxInFrustum(this.rendererBoundingBox);
-        }
-
-        public virtual void TessellateOcclusionQueryAABB()
-        {
-            if (AABBVBO != null)
-                Tessellator.instance.TessellateOcclusionQuery(AABBVBO.Value.GLHandle);
-        }
-
-        public virtual bool skipAllRenderPasses()
-        {
-            return !this.isInitialized ? false : this.skipRenderPass[0] && this.skipRenderPass[1];
-        }
-
-        public virtual void markDirty()
-        {
-            needsUpdate = true;
-        }
-    }
+		public virtual void markDirty()
+		{
+			this.needsUpdate = true;
+		}
+	}
 
 }

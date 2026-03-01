@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAIBreakDoor : EntityAIDoorInteract
+	public class EntityAIBreakDoor : EntityAIDoorInteract
 	{
 		private int field_48329_i;
 

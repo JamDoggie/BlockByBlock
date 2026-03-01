@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAIOwnerHurtTarget : EntityAITarget
+	public class EntityAIOwnerHurtTarget : EntityAITarget
 	{
 		internal EntityTameable field_48392_a;
 		internal EntityLiving field_48391_b;

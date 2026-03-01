@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAIFollowOwner : EntityAIBase
+	public class EntityAIFollowOwner : EntityAIBase
 	{
 		private EntityTameable thePet;
 		private EntityLiving theOwner;

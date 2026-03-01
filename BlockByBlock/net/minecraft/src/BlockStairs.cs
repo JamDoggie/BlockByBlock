@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class BlockStairs : Block
+	public class BlockStairs : Block
 	{
 		private Block modelBlock;
 
@@ -112,9 +111,9 @@ namespace net.minecraft.src
 			this.modelBlock.onBlockDestroyedByPlayer(world1, i2, i3, i4, i5);
 		}
 
-		public override int GetMixedBrightnessForBlock(IBlockAccess iBlockAccess1, int i2, int i3, int i4)
+		public override int getMixedBrightnessForBlock(IBlockAccess iBlockAccess1, int i2, int i3, int i4)
 		{
-			return this.modelBlock.GetMixedBrightnessForBlock(iBlockAccess1, i2, i3, i4);
+			return this.modelBlock.getMixedBrightnessForBlock(iBlockAccess1, i2, i3, i4);
 		}
 
 		public override float getBlockBrightness(IBlockAccess iBlockAccess1, int i2, int i3, int i4)

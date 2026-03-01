@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAILookAtVillager : EntityAIBase
+	public class EntityAILookAtVillager : EntityAIBase
 	{
 		private EntityIronGolem theGolem;
 		private EntityVillager theVillager;

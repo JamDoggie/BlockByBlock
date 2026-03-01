@@ -1,9 +1,8 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public class EntityMoveHelper
+	public class EntityMoveHelper
 	{
 		private EntityLiving entity;
 		private double posX;

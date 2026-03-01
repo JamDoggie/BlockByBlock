@@ -1,10 +1,9 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class Packet34EntityTeleport : Packet
+	public class Packet34EntityTeleport : Packet
 	{
 		public int entityId;
 		public int xPosition;

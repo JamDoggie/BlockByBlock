@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAIOpenDoor : EntityAIDoorInteract
+	public class EntityAIOpenDoor : EntityAIDoorInteract
 	{
 		internal bool field_48328_i;
 		internal int field_48327_j;

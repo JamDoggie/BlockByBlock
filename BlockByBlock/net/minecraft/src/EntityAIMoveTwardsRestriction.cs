@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAIMoveTwardsRestriction : EntityAIBase
+	public class EntityAIMoveTwardsRestriction : EntityAIBase
 	{
 		private EntityCreature theEntity;
 		private double movePosX;

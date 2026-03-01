@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class TileEntityMobSpawner : TileEntity
+	public class TileEntityMobSpawner : TileEntity
 	{
 		public int delay = -1;
 		private string mobID = "Pig";

@@ -1,9 +1,8 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public class EntityAIArrowAttack : EntityAIBase
+	public class EntityAIArrowAttack : EntityAIBase
 	{
 		internal World worldObj;
 		internal EntityLiving entityHost;

@@ -1,5 +1,4 @@
-﻿using net.minecraft.client;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -22,7 +21,7 @@ namespace net.minecraft.src
 		protected internal override void drawGuiContainerBackgroundLayer(float f1, int i2, int i3)
 		{
 			int i4 = this.mc.renderEngine.getTexture("/gui/furnace.png");
-            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.mc.renderEngine.bindTexture(i4);
 			int i5 = (this.width - this.xSize) / 2;
 			int i6 = (this.height - this.ySize) / 2;

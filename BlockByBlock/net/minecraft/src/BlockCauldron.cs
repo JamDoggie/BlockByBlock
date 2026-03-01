@@ -1,12 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-    public class BlockCauldron : Block
+	public class BlockCauldron : Block
 	{
 		public BlockCauldron(int i1) : base(i1, Material.iron)
 		{

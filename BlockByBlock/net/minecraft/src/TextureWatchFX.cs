@@ -26,9 +26,9 @@ namespace net.minecraft.src
 				Image<Bgra32> bufferedImage2 = Image.Load<Bgra32>(GameEnv.GetResourceAsStream("/gui/items.png"));
 				int i3 = this.iconIndex % 16 * 16;
 				int i4 = this.iconIndex / 16 * 16;
-				TextureManager.FillIntBufferWithImage(bufferedImage2, watchIconImageData, i3, i4, 16, 16);
+				RenderEngine.FillIntBufferWithImage(bufferedImage2, watchIconImageData, i3, i4, 16, 16);
 				bufferedImage2 = Image.Load<Bgra32>(GameEnv.GetResourceAsStream("/misc/dial.png"));
-				TextureManager.FillIntBufferWithImage(bufferedImage2, dialImageData);
+				RenderEngine.FillIntBufferWithImage(bufferedImage2, dialImageData);
 			}
 			catch (IOException iOException5)
 			{
@@ -95,6 +95,16 @@ namespace net.minecraft.src
 					i11 = (this.dialImageData[i21] >> 16 & 255) * i11 / 255;
 					i12 = (this.dialImageData[i21] >> 8 & 255) * i18 / 255;
 					i13 = (this.dialImageData[i21] >> 0 & 255) * i18 / 255;
+				}
+
+				if (this.anaglyphEnabled)
+				{
+					int i23 = (i11 * 30 + i12 * 59 + i13 * 11) / 100;
+					int i15 = (i11 * 30 + i12 * 70) / 100;
+					int i24 = (i11 * 30 + i13 * 70) / 100;
+					i11 = i23;
+					i12 = i15;
+					i13 = i24;
 				}
 
 				this.imageData[i9 * 4 + 0] = (byte)(i11 & 255);

@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class ItemGlassBottle : Item
+	public class ItemGlassBottle : Item
 	{
 		public ItemGlassBottle(int i1) : base(i1)
 		{

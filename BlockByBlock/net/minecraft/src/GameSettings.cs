@@ -28,10 +28,11 @@ namespace net.minecraft.src
 		public bool invertMouse = false;
 		public int renderDistance = 0;
 		public bool viewBobbing = true;
+		public bool anaglyph = false;
 		public bool advancedOpengl = false;
 		public int limitFramerate = 1;
 		public bool fancyGraphics = true;
-		public bool ambientOcclusion { get; set; } = true;
+		public bool ambientOcclusion = true;
 		public bool clouds = true;
 		public string skin = "Default";
 		public KeyBinding keyBindForward = new KeyBinding("key.forward", 17);
@@ -180,6 +181,12 @@ namespace net.minecraft.src
 				this.mc.renderGlobal.loadRenderers();
 			}
 
+			if (enumOptions1 == EnumOptions.ANAGLYPH)
+			{
+				this.anaglyph = !this.anaglyph;
+				this.mc.renderEngine.refreshTextures();
+			}
+
 			if (enumOptions1 == EnumOptions.FRAMERATE_LIMIT)
 			{
 				this.limitFramerate = (this.limitFramerate + i2 + 3) % 3;
@@ -212,18 +219,20 @@ namespace net.minecraft.src
 
 		public virtual bool getOptionOrdinalValue(EnumOptions enumOptions1)
 		{
-			switch (enumOptions1.innerEnumValue)
+			switch (EnumOptionsMappingHelper.enumOptionsMappingHelperArray[enumOptions1.ordinal()])
 			{
-			case EnumOptions.InnerEnum.INVERT_MOUSE:
-				return invertMouse;
-			case EnumOptions.InnerEnum.VIEW_BOBBING:
-				return viewBobbing;
-			case EnumOptions.InnerEnum.ADVANCED_OPENGL:
-				return advancedOpengl;
-			case EnumOptions.InnerEnum.AMBIENT_OCCLUSION:
-				return ambientOcclusion;
-			case EnumOptions.InnerEnum.RENDER_CLOUDS:
-				return clouds;
+			case 1:
+				return this.invertMouse;
+			case 2:
+				return this.viewBobbing;
+			case 3:
+				return this.anaglyph;
+			case 4:
+				return this.advancedOpengl;
+			case 5:
+				return this.ambientOcclusion;
+			case 6:
+				return this.clouds;
 			default:
 				return false;
 			}
@@ -327,6 +336,11 @@ namespace net.minecraft.src
 							this.viewBobbing = string3[1].Equals("true");
 						}
 
+						if (string3[0].Equals("anaglyph3d"))
+						{
+							this.anaglyph = string3[1].Equals("true");
+						}
+
 						if (string3[0].Equals("advancedOpengl"))
 						{
 							this.advancedOpengl = string3[1].Equals("true");
@@ -418,6 +432,7 @@ namespace net.minecraft.src
 				optionsWriter.WriteLine("guiScale:" + this.guiScale);
 				optionsWriter.WriteLine("particles:" + this.particleSetting);
 				optionsWriter.WriteLine("bobView:" + this.viewBobbing);
+				optionsWriter.WriteLine("anaglyph3d:" + this.anaglyph);
 				optionsWriter.WriteLine("advancedOpengl:" + this.advancedOpengl);
 				optionsWriter.WriteLine("fpsLimit:" + this.limitFramerate);
 				optionsWriter.WriteLine("difficulty:" + this.difficulty);

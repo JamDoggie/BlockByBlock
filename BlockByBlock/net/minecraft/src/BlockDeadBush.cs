@@ -1,11 +1,10 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class BlockDeadBush : BlockFlower
+	public class BlockDeadBush : BlockFlower
 	{
 		protected internal BlockDeadBush(int i1, int i2) : base(i1, i2, Material.vine)
 		{

@@ -1,11 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-    public class BlockDoor : Block
+	public class BlockDoor : Block
 	{
 		protected internal BlockDoor(int i1, Material material2) : base(i1, material2)
 		{

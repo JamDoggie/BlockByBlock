@@ -1,11 +1,10 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public abstract class ComponentVillage : StructureComponent
+	public abstract class ComponentVillage : StructureComponent
 	{
 		private int villagersSpawned;
 

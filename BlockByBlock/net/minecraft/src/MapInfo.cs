@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class MapInfo
+	public class MapInfo
 	{
 		public readonly EntityPlayer entityplayerObj;
 		public int[] field_28119_b;

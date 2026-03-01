@@ -21,7 +21,7 @@
 
 		System.Collections.IList getPossibleCreatures(EnumCreatureType enumCreatureType1, int i2, int i3, int i4);
 
-		ChunkPosition? findClosestStructure(World world1, string string2, int i3, int i4, int i5);
+		ChunkPosition findClosestStructure(World world1, string string2, int i3, int i4, int i5);
 	}
 
 }

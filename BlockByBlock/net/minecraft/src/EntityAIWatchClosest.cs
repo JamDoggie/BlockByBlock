@@ -1,9 +1,8 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public class EntityAIWatchClosest : EntityAIBase
+	public class EntityAIWatchClosest : EntityAIBase
 	{
 		private EntityLiving field_46105_a;
 		private Entity closestEntity;

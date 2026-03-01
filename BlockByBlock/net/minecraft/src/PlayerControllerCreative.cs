@@ -1,9 +1,8 @@
 ﻿namespace net.minecraft.src
 {
-    using net.minecraft.client.entity;
-    using Minecraft = net.minecraft.client.Minecraft;
+	using Minecraft = net.minecraft.client.Minecraft;
 
-    public class PlayerControllerCreative : PlayerController
+	public class PlayerControllerCreative : PlayerController
 	{
 		private int field_35647_c;
 

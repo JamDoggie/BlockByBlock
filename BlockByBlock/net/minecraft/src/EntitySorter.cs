@@ -1,9 +1,7 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
 
-    public class EntitySorter : System.Collections.IComparer
+	public class EntitySorter : System.Collections.IComparer
 	{
 		private double entityPosX;
 		private double entityPosY;

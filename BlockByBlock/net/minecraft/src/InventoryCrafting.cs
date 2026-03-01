@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class InventoryCrafting : IInventory
+	public class InventoryCrafting : IInventory
 	{
 		private ItemStack[] stackList;
 		private int inventoryWidth;

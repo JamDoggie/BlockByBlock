@@ -2,12 +2,11 @@
 using System.Collections;
 using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class Chunk
+	public class Chunk
 	{
 		public static bool isLit;
 		private ExtendedBlockStorage[] storageArrays;
@@ -158,36 +157,36 @@ namespace net.minecraft.src
 				{
 					this.precipitationHeightMap[i2 + (i3 << 4)] = -999;
 
-					int i;
-					for (i = i1 + 16 - 1; i > 0; --i)
+					int i4;
+					for (i4 = i1 + 16 - 1; i4 > 0; --i4)
 					{
-						if (this.getBlockLightOpacity(i2, i - 1, i3) != 0)
+						if (this.getBlockLightOpacity(i2, i4 - 1, i3) != 0)
 						{
-							this.heightMap[i3 << 4 | i2] = i;
+							this.heightMap[i3 << 4 | i2] = i4;
 							break;
 						}
 					}
 
 					if (!this.worldObj.worldProvider.hasNoSky)
 					{
-						i = 15;
+						i4 = 15;
 						int i5 = i1 + 16 - 1;
 
 						do
 						{
-							i -= this.getBlockLightOpacity(i2, i5, i3);
-							if (i > 0)
+							i4 -= this.getBlockLightOpacity(i2, i5, i3);
+							if (i4 > 0)
 							{
 								ExtendedBlockStorage extendedBlockStorage6 = this.storageArrays[i5 >> 4];
 								if (extendedBlockStorage6 != null)
 								{
-									extendedBlockStorage6.setExtSkylightValue(i2, i5 & 15, i3, i);
+									extendedBlockStorage6.setExtSkylightValue(i2, i5 & 15, i3, i4);
 									this.worldObj.func_48464_p((this.xPosition << 4) + i2, i5, (this.zPosition << 4) + i3);
 								}
 							}
 
 							--i5;
-						} while (i5 > 0 && i > 0);
+						} while (i5 > 0 && i4 > 0);
 					}
 				}
 			}

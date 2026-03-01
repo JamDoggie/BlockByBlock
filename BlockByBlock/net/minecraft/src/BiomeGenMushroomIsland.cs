@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class BiomeGenMushroomIsland : BiomeGenBase
+	public class BiomeGenMushroomIsland : BiomeGenBase
 	{
 		public BiomeGenMushroomIsland(int i1) : base(i1)
 		{

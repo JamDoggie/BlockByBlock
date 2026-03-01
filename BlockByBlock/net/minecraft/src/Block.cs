@@ -1,12 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-    public class Block
+	public class Block
 	{
 		public static readonly StepSound soundPowderFootstep = new StepSound("stone", 1.0F, 1.0F);
 		public static readonly StepSound soundWoodFootstep = new StepSound("wood", 1.0F, 1.0F);
@@ -323,11 +322,11 @@ namespace net.minecraft.src
 			return iBlockAccess1.getBrightness(i2, i3, i4, lightValue[this.blockID]);
 		}
 
-		public virtual int GetMixedBrightnessForBlock(IBlockAccess iBlockAccess1, int x, int y, int z)
+		public virtual int getMixedBrightnessForBlock(IBlockAccess iBlockAccess1, int i2, int i3, int i4)
 		{
-			return iBlockAccess1.GetLightBrightnessForSkyBlocks(x, y, z, lightValue[this.blockID]);
+			return iBlockAccess1.getLightBrightnessForSkyBlocks(i2, i3, i4, lightValue[this.blockID]);
 		}
-        
+
 		public virtual bool shouldSideBeRendered(IBlockAccess iBlockAccess1, int i2, int i3, int i4, int i5)
 		{
 			return i5 == 0 && this.minY > 0.0D ? true : (i5 == 1 && this.maxY < 1.0D ? true : (i5 == 2 && this.minZ > 0.0D ? true : (i5 == 3 && this.maxZ < 1.0D ? true : (i5 == 4 && this.minX > 0.0D ? true : (i5 == 5 && this.maxX < 1.0D ? true :!iBlockAccess1.isBlockOpaqueCube(i2, i3, i4))))));
@@ -800,7 +799,7 @@ namespace net.minecraft.src
 			}
 		}
 
-		public virtual float GetAmbientOcclusionLightValue(IBlockAccess iBlockAccess1, int i2, int i3, int i4)
+		public virtual float getAmbientOcclusionLightValue(IBlockAccess iBlockAccess1, int i2, int i3, int i4)
 		{
 			return iBlockAccess1.isBlockNormalCube(i2, i3, i4) ? 0.2F : 1.0F;
 		}

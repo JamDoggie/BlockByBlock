@@ -1,10 +1,9 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class Packet71Weather : Packet
+	public class Packet71Weather : Packet
 	{
 		public int entityID;
 		public int posX;

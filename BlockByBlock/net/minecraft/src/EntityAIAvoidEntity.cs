@@ -1,10 +1,9 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class EntityAIAvoidEntity : EntityAIBase
+	public class EntityAIAvoidEntity : EntityAIBase
 	{
 		private EntityCreature theEntity;
 		private float field_48242_b;

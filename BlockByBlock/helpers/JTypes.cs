@@ -16,7 +16,7 @@ namespace BlockByBlock.helpers
             FloatToIntConverter converter = new()
             {
                 FloatValue = f
-            };
+            }; // Saw this on stackoverflow. Neat trick.
 
             return converter.IntValue;
         }

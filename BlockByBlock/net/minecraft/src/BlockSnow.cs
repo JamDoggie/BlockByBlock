@@ -1,11 +1,10 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class BlockSnow : Block
+	public class BlockSnow : Block
 	{
 		protected internal BlockSnow(int i1, int i2) : base(i1, i2, Material.snow)
 		{

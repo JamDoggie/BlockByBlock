@@ -1,9 +1,8 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public class PathNavigate
+	public class PathNavigate
 	{
 		private EntityLiving theEntity;
 		private World worldObj;

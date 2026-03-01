@@ -1,11 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-    public class BiomeGenTaiga : BiomeGenBase
+	public class BiomeGenTaiga : BiomeGenBase
 	{
 		public BiomeGenTaiga(int i1) : base(i1)
 		{

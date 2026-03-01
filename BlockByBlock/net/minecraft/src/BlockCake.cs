@@ -1,11 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-    public class BlockCake : Block
+	public class BlockCake : Block
 	{
 		protected internal BlockCake(int i1, int i2) : base(i1, i2, Material.cake)
 		{

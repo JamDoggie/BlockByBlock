@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class EnchantmentHelper
+	public class EnchantmentHelper
 	{
 		private static readonly RandomExtended enchantmentRand = new RandomExtended();
 		private static readonly EnchantmentModifierDamage enchantmentModifierDamage = new EnchantmentModifierDamage((Empty3)null);

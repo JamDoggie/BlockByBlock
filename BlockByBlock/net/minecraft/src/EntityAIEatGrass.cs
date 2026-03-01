@@ -1,9 +1,8 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public class EntityAIEatGrass : EntityAIBase
+	public class EntityAIEatGrass : EntityAIBase
 	{
 		private EntityLiving theEntity;
 		private World theWorld;

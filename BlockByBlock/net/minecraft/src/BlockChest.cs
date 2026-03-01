@@ -1,11 +1,10 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class BlockChest : BlockContainer
+	public class BlockChest : BlockContainer
 	{
 		private RandomExtended random = new RandomExtended();
 

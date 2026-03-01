@@ -1,11 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-    public class EntityAIFleeSun : EntityAIBase
+	public class EntityAIFleeSun : EntityAIBase
 	{
 		private EntityCreature theCreature;
 		private double shelterX;

@@ -28,6 +28,17 @@ namespace BlockByBlock.sound
 
             if (fileInfo.Extension == ".mus")
             {
+                /*using (MusInputStream input = new MusInputStream(path, FileMode.Open))
+                {
+                    using (FileStream testFile = new FileStream("test.ogg", FileMode.OpenOrCreate))
+                    {
+                        byte[] buff = new byte[testFile.Length];
+                        input.Read(buff, 0, buff.Length);
+                
+                        testFile.Write(buff, 0, buff.Length);
+                    }
+                }*/
+                
                 _reader = new VorbisReader(new MusInputStream(path, FileMode.Open));
             }
             else
@@ -69,11 +80,7 @@ namespace BlockByBlock.sound
             // Buffer it
             if (read * sizeof(short) > length * Channels * sizeof(short))
             {
-                throw new AccessViolationException("SoundStreamed: Likely heap corruption!"); // If we go outside the given space for our pointer buffer,
-                                                                                              // throw an exception. This should NEVER happen, but if it does
-                                                                                              // it is MUCH better to catch it here instead of letting the
-                                                                                              // runtime eventually randomly crash with an access violation
-                                                                                              // somewhere else.
+                Console.WriteLine("SoundStreamed: Likely heap corruption!");
             }
 
             AL.BufferData(buffer, Format, shortChunkBuffer, read * sizeof(short), SoundSystem.SamplingFrequency);

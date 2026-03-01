@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAIDefendVillage : EntityAITarget
+	public class EntityAIDefendVillage : EntityAITarget
 	{
 		internal EntityIronGolem irongolem;
 		internal EntityLiving villageAgressorTarget;

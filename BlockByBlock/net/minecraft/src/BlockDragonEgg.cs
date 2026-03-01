@@ -1,11 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-    public class BlockDragonEgg : Block
+	public class BlockDragonEgg : Block
 	{
 		public BlockDragonEgg(int i1, int i2) : base(i1, i2, Material.dragonEgg)
 		{

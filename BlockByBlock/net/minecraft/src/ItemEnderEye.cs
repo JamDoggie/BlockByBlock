@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class ItemEnderEye : Item
+	public class ItemEnderEye : Item
 	{
 		public ItemEnderEye(int i1) : base(i1)
 		{
@@ -148,14 +146,14 @@ namespace net.minecraft.src
 
 			if (!world2.isRemote)
 			{
-				ChunkPosition? chunkPosition7 = world2.findClosestStructure("Stronghold", (int)entityPlayer3.posX, (int)entityPlayer3.posY, (int)entityPlayer3.posZ);
+				ChunkPosition chunkPosition7 = world2.findClosestStructure("Stronghold", (int)entityPlayer3.posX, (int)entityPlayer3.posY, (int)entityPlayer3.posZ);
 				if (chunkPosition7 != null)
 				{
 					EntityEnderEye entityEnderEye6 = new EntityEnderEye(world2, entityPlayer3.posX, entityPlayer3.posY + 1.62D - (double)entityPlayer3.yOffset, entityPlayer3.posZ);
-					entityEnderEye6.func_40090_a(chunkPosition7.Value.x, chunkPosition7.Value.y, chunkPosition7.Value.z);
+					entityEnderEye6.func_40090_a((double)chunkPosition7.x, chunkPosition7.y, (double)chunkPosition7.z);
 					world2.spawnEntityInWorld(entityEnderEye6);
 					world2.playSoundAtEntity(entityPlayer3, "random.bow", 0.5F, 0.4F / (itemRand.NextSingle() * 0.4F + 0.8F));
-					world2.playAuxSFXAtEntity(null, 1002, (int)entityPlayer3.posX, (int)entityPlayer3.posY, (int)entityPlayer3.posZ, 0);
+					world2.playAuxSFXAtEntity((EntityPlayer)null, 1002, (int)entityPlayer3.posX, (int)entityPlayer3.posY, (int)entityPlayer3.posZ, 0);
 					if (!entityPlayer3.capabilities.isCreativeMode)
 					{
 						--itemStack1.stackSize;

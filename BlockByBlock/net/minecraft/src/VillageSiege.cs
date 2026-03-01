@@ -1,10 +1,9 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class VillageSiege
+	public class VillageSiege
 	{
 		private World field_48582_a;
 		private bool field_48580_b = false;

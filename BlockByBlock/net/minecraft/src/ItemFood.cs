@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class ItemFood : Item
+	public class ItemFood : Item
 	{
 		public readonly int field_35430_a;
 		private readonly int healAmount;

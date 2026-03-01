@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAIBeg : EntityAIBase
+	public class EntityAIBeg : EntityAIBase
 	{
 		private EntityWolf theWolf;
 		private EntityPlayer field_48348_b;

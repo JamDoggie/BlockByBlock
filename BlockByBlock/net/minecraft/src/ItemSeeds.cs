@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class ItemSeeds : Item
+	public class ItemSeeds : Item
 	{
 		private int blockType;
 		private int soilBlockID;

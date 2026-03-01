@@ -488,7 +488,7 @@ namespace net.minecraft.src
 			return biomeGenBase5 == null ? null : biomeGenBase5.getSpawnableList(enumCreatureType1);
 		}
 
-		public virtual ChunkPosition? findClosestStructure(World world1, string string2, int i3, int i4, int i5)
+		public virtual ChunkPosition findClosestStructure(World world1, string string2, int i3, int i4, int i5)
 		{
 			return "Stronghold".Equals(string2) && this.strongholdGenerator != null ? this.strongholdGenerator.getNearestInstance(world1, i3, i4, i5) : null;
 		}

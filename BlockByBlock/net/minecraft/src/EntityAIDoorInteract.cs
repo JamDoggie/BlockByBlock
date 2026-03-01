@@ -1,9 +1,8 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public abstract class EntityAIDoorInteract : EntityAIBase
+	public abstract class EntityAIDoorInteract : EntityAIBase
 	{
 		protected internal EntityLiving theEntity;
 		protected internal int entityPosX;

@@ -1,9 +1,8 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public class EntityAIAttackOnCollide : EntityAIBase
+	public class EntityAIAttackOnCollide : EntityAIBase
 	{
 		internal World worldObj;
 		internal EntityLiving attacker;

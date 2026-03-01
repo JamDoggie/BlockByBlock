@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class BlockLever : Block
+	public class BlockLever : Block
 	{
 		protected internal BlockLever(int i1, int i2) : base(i1, i2, Material.circuits)
 		{

@@ -1,11 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-    public class BlockTallGrass : BlockFlower
+	public class BlockTallGrass : BlockFlower
 	{
 		protected internal BlockTallGrass(int i1, int i2) : base(i1, i2, Material.vine)
 		{

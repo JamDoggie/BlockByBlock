@@ -1,9 +1,8 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public class EntityBodyHelper
+	public class EntityBodyHelper
 	{
 		private EntityLiving field_48654_a;
 		private int field_48652_b = 0;

@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAIWander : EntityAIBase
+	public class EntityAIWander : EntityAIBase
 	{
 		private EntityCreature entity;
 		private double field_46098_b;

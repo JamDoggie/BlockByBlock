@@ -2,12 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class AnvilChunkLoader : IThreadedFileIO, IChunkLoader
+	public class AnvilChunkLoader : IThreadedFileIO, IChunkLoader
 	{
 		private List<AnvilChunkLoaderPending> field_48451_a = new List<AnvilChunkLoaderPending>();
 		private ISet<object> field_48449_b = new HashSet<object>();

@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAILeapAtTarget : EntityAIBase
+	public class EntityAILeapAtTarget : EntityAIBase
 	{
 		internal EntityLiving leaper;
 		internal EntityLiving leapTarget;

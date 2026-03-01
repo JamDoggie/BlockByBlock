@@ -1,9 +1,8 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public class EntityAITargetNonTamed : EntityAINearestAttackableTarget
+	public class EntityAITargetNonTamed : EntityAINearestAttackableTarget
 	{
 		private EntityTameable field_48390_g;
 

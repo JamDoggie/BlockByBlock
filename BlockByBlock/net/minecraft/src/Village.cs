@@ -1,12 +1,11 @@
 ﻿using BlockByBlock.helpers;
-using net.minecraft.client.entity;
 using System;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-    public class Village
+	public class Village
 	{
 		private readonly World worldObj;
 		private readonly System.Collections.IList villageDoorInfoList = new ArrayList();
@@ -46,7 +45,7 @@ namespace net.minecraft.src
 				if (vec3D3 != null)
 				{
 					EntityIronGolem entityIronGolem4 = new EntityIronGolem(worldObj);
-					entityIronGolem4.SetPosition(vec3D3.xCoord, vec3D3.yCoord, vec3D3.zCoord);
+					entityIronGolem4.setPosition(vec3D3.xCoord, vec3D3.yCoord, vec3D3.zCoord);
 					worldObj.spawnEntityInWorld(entityIronGolem4);
 					++numIronGolems;
 				}

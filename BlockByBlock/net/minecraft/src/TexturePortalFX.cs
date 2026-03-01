@@ -82,6 +82,15 @@ namespace net.minecraft.src
 				int i4 = b1[i2 * 4 + 1] & 255;
 				int i5 = b1[i2 * 4 + 2] & 255;
 				int i6 = b1[i2 * 4 + 3] & 255;
+				if (this.anaglyphEnabled)
+				{
+					int i7 = (i3 * 30 + i4 * 59 + i5 * 11) / 100;
+					int i8 = (i3 * 30 + i4 * 70) / 100;
+					int i9 = (i3 * 30 + i5 * 70) / 100;
+					i3 = i7;
+					i4 = i8;
+					i5 = i9;
+				}
 
 				this.imageData[i2 * 4 + 0] = (byte)(i3 & 255);
 				this.imageData[i2 * 4 + 1] = (byte)(i4 & 255);

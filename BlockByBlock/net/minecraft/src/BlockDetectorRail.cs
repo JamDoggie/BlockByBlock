@@ -1,11 +1,10 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class BlockDetectorRail : BlockRail
+	public class BlockDetectorRail : BlockRail
 	{
 		public BlockDetectorRail(int i1, int i2) : base(i1, i2, true)
 		{

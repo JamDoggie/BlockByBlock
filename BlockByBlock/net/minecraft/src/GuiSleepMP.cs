@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class GuiSleepMP : GuiChat
+	public class GuiSleepMP : GuiChat
 	{
 		public override void initGui()
 		{

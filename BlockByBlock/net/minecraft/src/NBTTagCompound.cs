@@ -52,7 +52,7 @@ namespace net.minecraft.src
 		{
 			get
 			{
-				return 10;
+				return (sbyte)10;
 			}
 		}
 

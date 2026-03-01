@@ -25,7 +25,7 @@ namespace net.minecraft.src
 				Image<Bgra32> bufferedImage2 = Image.Load<Bgra32>(GameEnv.GetResourceAsStream("/gui/items.png"));
 				int i3 = this.iconIndex % 16 * 16;
 				int i4 = this.iconIndex / 16 * 16;
-				TextureManager.FillIntBufferWithImage(bufferedImage2, compassIconImageData, i3, i4, 16, 16);
+				RenderEngine.FillIntBufferWithImage(bufferedImage2, compassIconImageData, i3, i4, 16, 16);
 			}
 			catch (IOException iOException5)
 			{
@@ -43,6 +43,15 @@ namespace net.minecraft.src
 				int i3 = this.compassIconImageData[i1] >> 16 & 255;
 				int i4 = this.compassIconImageData[i1] >> 8 & 255;
 				int i5 = this.compassIconImageData[i1] >> 0 & 255;
+				if (this.anaglyphEnabled)
+				{
+					int i6 = (i3 * 30 + i4 * 59 + i5 * 11) / 100;
+					int i7 = (i3 * 30 + i4 * 70) / 100;
+					int i8 = (i3 * 30 + i5 * 70) / 100;
+					i3 = i6;
+					i4 = i7;
+					i5 = i8;
+				}
 
 				this.imageData[i1 * 4 + 0] = (byte)i3;
 				this.imageData[i1 * 4 + 1] = (byte)i4;
@@ -109,6 +118,15 @@ namespace net.minecraft.src
 				i14 = 100;
 				i15 = 100;
 				s16 = 255;
+				if (this.anaglyphEnabled)
+				{
+					i17 = (i13 * 30 + i14 * 59 + i15 * 11) / 100;
+					i18 = (i13 * 30 + i14 * 70) / 100;
+					i19 = (i13 * 30 + i15 * 70) / 100;
+					i13 = i17;
+					i14 = i18;
+					i15 = i19;
+				}
 
 				this.imageData[i12 * 4 + 0] = (byte)i13;
 				this.imageData[i12 * 4 + 1] = (byte)i14;
@@ -125,6 +143,15 @@ namespace net.minecraft.src
 				i14 = i9 >= 0 ? 20 : 100;
 				i15 = i9 >= 0 ? 20 : 100;
 				s16 = 255;
+				if (this.anaglyphEnabled)
+				{
+					i17 = (i13 * 30 + i14 * 59 + i15 * 11) / 100;
+					i18 = (i13 * 30 + i14 * 70) / 100;
+					i19 = (i13 * 30 + i15 * 70) / 100;
+					i13 = i17;
+					i14 = i18;
+					i15 = i19;
+				}
 
 				this.imageData[i12 * 4 + 0] = (byte)i13;
 				this.imageData[i12 * 4 + 1] = (byte)i14;

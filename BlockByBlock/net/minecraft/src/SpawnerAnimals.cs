@@ -1,12 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-    public sealed class SpawnerAnimals
+	public sealed class SpawnerAnimals
 	{
 		private static Hashtable eligibleChunksForSpawning = new Hashtable();
 		protected internal static readonly Type[] nightSpawnEntities = new Type[]{typeof(EntitySpider), typeof(EntityZombie), typeof(EntitySkeleton)};

@@ -13,37 +13,36 @@ namespace BlockByBlock.helpers
     {
         private static float[] IDENTITY_MATRIX = new float[] { 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F };
         private static float[] currentMatrix = new float[16];
-        
+
         /// <summary>
-        /// Creates a perpsective matrix with the given arguments.
+        /// Loads a perspective matrix with the given inputs.
+        /// PORTING TODO: this is used in EntityRenderer. Make sure it has parity with real GLU.
         /// </summary>
         /// <param name="fovy"></param>
         /// <param name="aspect"></param>
         /// <param name="zNear"></param>
         /// <param name="zFar"></param>
-        /// <returns></returns>
-        public static Matrix4 Perspective(float fovy, float aspect, float zNear, float zFar)
+        public static void Perspective(float fovy, float aspect, float zNear, float zFar)
         {
-            float radians = fovy / 2.0F * (float)Math.PI / 180.0F;
+            float radians = fovy / 2.0F * 3.1415927F / 180.0F;
             float deltaZ = zFar - zNear;
             float sine = (float)Math.Sin((double)radians);
             if (deltaZ != 0.0F && sine != 0.0F && aspect != 0.0F)
             {
                 float cotangent = (float)Math.Cos((double)radians) / sine;
 
-                Matrix4 matrix = Matrix4.Identity;
-                
-                matrix.M11 = cotangent / aspect;
-                matrix.M22 = cotangent;
-                matrix.M33 = -(zFar + zNear) / deltaZ;
-                matrix.M34 = -1.0F;
-                matrix.M43 = -2.0F * zNear * zFar / deltaZ;
-                matrix.M44 = 0.0F;
-                
-                return matrix;
-            }
+                Array.Copy(IDENTITY_MATRIX, currentMatrix, 16);
 
-            return Matrix4.Identity;
+                float[] matrix = currentMatrix;
+                
+                matrix[0] = cotangent / aspect;
+                matrix[5] = cotangent;
+                matrix[10] = -(zFar + zNear) / deltaZ;
+                matrix[11] = -1.0F;
+                matrix[14] = -2.0F * zNear * zFar / deltaZ;
+                matrix[15] = 0.0F;
+                GL.MultMatrix(matrix);
+            }
         }
 
         /// <summary>
@@ -57,9 +56,17 @@ namespace BlockByBlock.helpers
         /// <param name="projMatrix"></param>
         /// <param name="viewport"></param>
         /// <param name="objPos"></param>
-        public static void UnProject(float winx, float winy, float winz, Matrix4 modelMatrix, Matrix4 projMatrix, int[] viewport, float[] objPos)
+        public static void UnProject(float winx, float winy, float winz, float[] modelMatrix, float[] projMatrix, int[] viewport, float[] objPos)
         {
-            Vector3 result = Vector3.Unproject(new Vector3(winx, winy, winz), viewport[0], viewport[1], viewport[2], viewport[3], projMatrix[0, 0], projMatrix[1, 1], (modelMatrix * projMatrix).Inverted());
+            // Get a Matrix4 from modelMatrix
+            Matrix4 modelMatrix4 = new Matrix4(
+                modelMatrix[0], modelMatrix[1], modelMatrix[2], modelMatrix[3],
+                modelMatrix[4], modelMatrix[5], modelMatrix[6], modelMatrix[7],
+                modelMatrix[8], modelMatrix[9], modelMatrix[10], modelMatrix[11],
+                modelMatrix[12], modelMatrix[13], modelMatrix[14], modelMatrix[15]
+            );
+
+            Vector3 result = Vector3.Unproject(new Vector3(winx, winy, winz), viewport[0], viewport[1], viewport[2], viewport[3], projMatrix[0], projMatrix[5], modelMatrix4);
             objPos[0] = result.X;
             objPos[1] = result.Y;
             objPos[2] = result.Z;

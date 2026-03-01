@@ -1,9 +1,8 @@
 ﻿using System;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public class SlotCrafting : Slot
+	public class SlotCrafting : Slot
 	{
 		private readonly IInventory craftMatrix;
 		private EntityPlayer thePlayer;

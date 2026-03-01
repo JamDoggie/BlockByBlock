@@ -10,14 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 // This class goes out to Paul. Shoutouts Paul!!!!
-
 namespace BlockByBlock.sound
 {
-    /// <summary>
-    /// This is essentially a recreation of pauls soundsystem (or atleast the necessary parts). Figured it'd be easier to just make my own OpenAL wrapper
-    /// instead of porting some random java library Notch decided to use. Plus, this could technically be made into an interface so that other
-    /// sound libraries could be hooked up like SDL or FMOD.
-    /// </summary>
     public class SoundSystem
     {
         public string OpenALVersion { get; private set; }
@@ -78,7 +72,8 @@ namespace BlockByBlock.sound
             
             // Create our sound pool.
             SoundPool = new ConcurrentBag<AudioSource>();
-            SoundPoolSize = Math.Max(1, monoSources - 4); // Leave some buffer space for music and other possible non negotiable sounds.
+            //SoundPoolSize = Math.Max(1, monoSources - 4); // Leave some buffer space for music and other possible non negotiable sounds.
+            SoundPoolSize = 32;
         }
 
         public void RunThread()

@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class TileEntityFurnace : TileEntity, IInventory
+	public class TileEntityFurnace : TileEntity, IInventory
 	{
 		private ItemStack[] furnaceItemStacks = new ItemStack[3];
 		public int furnaceBurnTime = 0;

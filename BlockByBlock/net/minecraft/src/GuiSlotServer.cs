@@ -1,5 +1,4 @@
-﻿using net.minecraft.client;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -73,7 +72,7 @@ namespace net.minecraft.src
 			this.parentGui.drawString(this.parentGui.fontRenderer, serverNBTStorage6.motd, i2 + 2, i3 + 12, 8421504);
 			this.parentGui.drawString(this.parentGui.fontRenderer, serverNBTStorage6.playerCount, i2 + 215 - this.parentGui.fontRenderer.getStringWidth(serverNBTStorage6.playerCount), i3 + 12, 8421504);
 			this.parentGui.drawString(this.parentGui.fontRenderer, serverNBTStorage6.host, i2 + 2, i3 + 12 + 11, 3158064);
-            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			this.parentGui.mc.renderEngine.bindTexture(this.parentGui.mc.renderEngine.getTexture("/gui/icons.png"));
 			string string9 = "";
 			sbyte b7;

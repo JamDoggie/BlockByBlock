@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class EntityAISit : EntityAIBase
+	public class EntityAISit : EntityAIBase
 	{
 		private EntityTameable theEntity;
 		private bool field_48408_b = false;

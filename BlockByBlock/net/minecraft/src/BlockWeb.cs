@@ -1,11 +1,10 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 
 namespace net.minecraft.src
 {
 
-    public class BlockWeb : Block
+	public class BlockWeb : Block
 	{
 		public BlockWeb(int i1, int i2) : base(i1, i2, Material.web)
 		{

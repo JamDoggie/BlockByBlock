@@ -1,11 +1,10 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class WorldGenSpikes : WorldGenerator
+	public class WorldGenSpikes : WorldGenerator
 	{
 		private int replaceID;
 

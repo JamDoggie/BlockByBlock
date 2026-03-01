@@ -3,12 +3,11 @@ using System;
 using System.Collections;
 using System.Text;
 using OpenTK.Input;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class GuiChat : GuiScreen
+	public class GuiChat : GuiScreen
 	{
 		private string field_50062_b = "";
 		private int field_50063_c = -1;

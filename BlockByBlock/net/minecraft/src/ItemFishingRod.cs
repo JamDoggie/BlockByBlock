@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class ItemFishingRod : Item
+	public class ItemFishingRod : Item
 	{
 		public ItemFishingRod(int i1) : base(i1)
 		{

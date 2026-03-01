@@ -1,5 +1,4 @@
-﻿using net.minecraft.client;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -73,12 +72,12 @@ namespace net.minecraft.src
 		public override void drawScreen(int i1, int i2, float f3)
 		{
 			this.drawGradientRect(0, 0, this.width, this.height, 1615855616, -1602211792);
-            Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-            Minecraft.renderPipeline.ModelMatrix.Scale(2.0F, 2.0F, 2.0F);
+			GL.PushMatrix();
+			GL.Scale(2.0F, 2.0F, 2.0F);
 			bool z4 = this.mc.theWorld.WorldInfo.HardcoreModeEnabled;
 			string string5 = z4 ? StatCollector.translateToLocal("deathScreen.title.hardcore") : StatCollector.translateToLocal("deathScreen.title");
 			this.drawCenteredString(this.fontRenderer, string5, this.width / 2 / 2, 30, 0xFFFFFF);
-            Minecraft.renderPipeline.ModelMatrix.PopMatrix();
+			GL.PopMatrix();
 			if (z4)
 			{
 				this.drawCenteredString(this.fontRenderer, StatCollector.translateToLocal("deathScreen.hardcoreInfo"), this.width / 2, 144, 0xFFFFFF);

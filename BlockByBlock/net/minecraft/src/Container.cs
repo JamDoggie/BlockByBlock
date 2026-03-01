@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public abstract class Container
+	public abstract class Container
 	{
 		public System.Collections.IList inventoryItemStacks = new ArrayList();
 		public System.Collections.IList inventorySlots = new ArrayList();

@@ -1,6 +1,4 @@
-﻿using BlockByBlock.net.minecraft.render;
-using net.minecraft.client;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
@@ -55,16 +53,16 @@ namespace net.minecraft.src
 			float f8 = (float)(i4 & 255) / 255.0F;
 			Tessellator tessellator9 = Tessellator.instance;
 			GL.Enable(EnableCap.Blend);
-            Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            Minecraft.renderPipeline.SetColor(f6, f7, f8, f10);
+			GL.Disable(EnableCap.Texture2D);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			GL.Color4(f6, f7, f8, f10);
 			tessellator9.startDrawingQuads();
-			tessellator9.AddVertex((double)i0, (double)i3, 0.0D);
-			tessellator9.AddVertex((double)i2, (double)i3, 0.0D);
-			tessellator9.AddVertex((double)i2, (double)i1, 0.0D);
-			tessellator9.AddVertex((double)i0, (double)i1, 0.0D);
-			tessellator9.DrawImmediate();
-			Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
+			tessellator9.addVertex((double)i0, (double)i3, 0.0D);
+			tessellator9.addVertex((double)i2, (double)i3, 0.0D);
+			tessellator9.addVertex((double)i2, (double)i1, 0.0D);
+			tessellator9.addVertex((double)i0, (double)i1, 0.0D);
+			tessellator9.draw();
+			GL.Enable(EnableCap.Texture2D);
 			GL.Disable(EnableCap.Blend);
 		}
 
@@ -78,29 +76,29 @@ namespace net.minecraft.src
 			float f12 = (float)(i6 >> 16 & 255) / 255.0F;
 			float f13 = (float)(i6 >> 8 & 255) / 255.0F;
 			float f14 = (float)(i6 & 255) / 255.0F;
-			Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
+			GL.Disable(EnableCap.Texture2D);
 			GL.Enable(EnableCap.Blend);
-			Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
+			GL.Disable(EnableCap.AlphaTest);
 			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-			Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, true);
+			GL.ShadeModel(ShadingModel.Smooth);
 			Tessellator tessellator15 = Tessellator.instance;
 			tessellator15.startDrawingQuads();
 			tessellator15.setColorRGBA_F(f8, f9, f10, f7);
-			tessellator15.AddVertex((double)i3, (double)i2, (double)this.zLevel);
-			tessellator15.AddVertex((double)i1, (double)i2, (double)this.zLevel);
+			tessellator15.addVertex((double)i3, (double)i2, (double)this.zLevel);
+			tessellator15.addVertex((double)i1, (double)i2, (double)this.zLevel);
 			tessellator15.setColorRGBA_F(f12, f13, f14, f11);
-			tessellator15.AddVertex((double)i1, (double)i4, (double)this.zLevel);
-			tessellator15.AddVertex((double)i3, (double)i4, (double)this.zLevel);
-			tessellator15.DrawImmediate();
-			Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, false);
+			tessellator15.addVertex((double)i1, (double)i4, (double)this.zLevel);
+			tessellator15.addVertex((double)i3, (double)i4, (double)this.zLevel);
+			tessellator15.draw();
+			GL.ShadeModel(ShadingModel.Flat);
 			GL.Disable(EnableCap.Blend);
-			Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-			Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
+			GL.Enable(EnableCap.AlphaTest);
+			GL.Enable(EnableCap.Texture2D);
 		}
 
-		public virtual void drawCenteredString(FontRenderer fontRenderer1, string string2, int x, int y, int i5)
+		public virtual void drawCenteredString(FontRenderer fontRenderer1, string string2, int i3, int i4, int i5)
 		{
-			fontRenderer1.drawStringWithShadow(string2, x - fontRenderer1.getStringWidth(string2) / 2, y, i5);
+			fontRenderer1.drawStringWithShadow(string2, i3 - fontRenderer1.getStringWidth(string2) / 2, i4, i5);
 		}
 
 		public virtual void drawString(FontRenderer fontRenderer1, string string2, int i3, int i4, int i5)
@@ -108,17 +106,17 @@ namespace net.minecraft.src
 			fontRenderer1.drawStringWithShadow(string2, i3, i4, i5);
 		}
 
-		public virtual void drawTexturedModalRect(int x, int y, int x1, int y1, int width, int height)
+		public virtual void drawTexturedModalRect(int i1, int i2, int i3, int i4, int i5, int i6)
 		{
 			float f7 = 0.00390625F;
 			float f8 = 0.00390625F;
 			Tessellator tessellator9 = Tessellator.instance;
 			tessellator9.startDrawingQuads();
-			tessellator9.AddVertexWithUV((double)(x + 0), (double)(y + height), (double)this.zLevel, (double)((float)(x1 + 0) * f7), (double)((float)(y1 + height) * f8));
-			tessellator9.AddVertexWithUV((double)(x + width), (double)(y + height), (double)this.zLevel, (double)((float)(x1 + width) * f7), (double)((float)(y1 + height) * f8));
-			tessellator9.AddVertexWithUV((double)(x + width), (double)(y + 0), (double)this.zLevel, (double)((float)(x1 + width) * f7), (double)((float)(y1 + 0) * f8));
-			tessellator9.AddVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel, (double)((float)(x1 + 0) * f7), (double)((float)(y1 + 0) * f8));
-			tessellator9.DrawImmediate();
+			tessellator9.addVertexWithUV((double)(i1 + 0), (double)(i2 + i6), (double)this.zLevel, (double)((float)(i3 + 0) * f7), (double)((float)(i4 + i6) * f8));
+			tessellator9.addVertexWithUV((double)(i1 + i5), (double)(i2 + i6), (double)this.zLevel, (double)((float)(i3 + i5) * f7), (double)((float)(i4 + i6) * f8));
+			tessellator9.addVertexWithUV((double)(i1 + i5), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + i5) * f7), (double)((float)(i4 + 0) * f8));
+			tessellator9.addVertexWithUV((double)(i1 + 0), (double)(i2 + 0), (double)this.zLevel, (double)((float)(i3 + 0) * f7), (double)((float)(i4 + 0) * f8));
+			tessellator9.draw();
 		}
 	}
 

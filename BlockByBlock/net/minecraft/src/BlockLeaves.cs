@@ -1,11 +1,10 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class BlockLeaves : BlockLeavesBase
+	public class BlockLeaves : BlockLeavesBase
 	{
 		private int baseIndexInPNG;
 		internal int[] adjacentTreeBlocks;

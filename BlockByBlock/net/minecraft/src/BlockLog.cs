@@ -1,11 +1,10 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class BlockLog : Block
+	public class BlockLog : Block
 	{
 		protected internal BlockLog(int i1) : base(i1, Material.wood)
 		{

@@ -2,12 +2,14 @@
 {
 	public class ClippingHelper
 	{
+		//JAVA TO C# CONVERTER NOTE: The following call to the 'RectangularArrays' helper class reproduces the rectangular array initialization that is automatic in Java:
+		//ORIGINAL LINE: public float[][] frustum = new float[16][16];
 		public float[][] frustum = RectangularArrays.RectangularFloatArray(16, 16);
 		public float[] projectionMatrix = new float[16];
 		public float[] modelviewMatrix = new float[16];
 		public float[] clippingMatrix = new float[16];
 
-        public virtual bool isBoxInFrustum(double d1, double d3, double d5, double d7, double d9, double d11)
+		public virtual bool isBoxInFrustum(double d1, double d3, double d5, double d7, double d9, double d11)
 		{
 			for (int i13 = 0; i13 < 6; ++i13)
 			{

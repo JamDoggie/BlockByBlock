@@ -1,14 +1,11 @@
-﻿using net.minecraft.client;
-using net.minecraft.client.entity;
-using net.minecraft.client.entity.render;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-    public class TileEntityRenderer
+	public class TileEntityRenderer
 	{
 		private System.Collections.IDictionary specialRendererMap = new Hashtable();
 		public static TileEntityRenderer instance = new TileEntityRenderer();
@@ -16,7 +13,7 @@ namespace net.minecraft.src
 		public static double staticPlayerX;
 		public static double staticPlayerY;
 		public static double staticPlayerZ;
-		public TextureManager renderEngine;
+		public RenderEngine renderEngine;
 		public World worldObj;
 		public EntityLiving entityLivingPlayer;
 		public float playerYaw;
@@ -65,7 +62,7 @@ namespace net.minecraft.src
 			return tileEntity1 == null ? null : this.getSpecialRendererForClass(tileEntity1.GetType());
 		}
 
-		public virtual void cacheActiveRenderInfo(World world1, TextureManager renderEngine2, FontRenderer fontRenderer3, EntityLiving entityLiving4, float f5)
+		public virtual void cacheActiveRenderInfo(World world1, RenderEngine renderEngine2, FontRenderer fontRenderer3, EntityLiving entityLiving4, float f5)
 		{
 			if (this.worldObj != world1)
 			{
@@ -90,11 +87,11 @@ namespace net.minecraft.src
 		{
 			if (tileEntity1.getDistanceFrom(this.playerX, this.playerY, this.playerZ) < 4096.0D)
 			{
-				int i3 = this.worldObj.GetLightBrightnessForSkyBlocks(tileEntity1.xCoord, tileEntity1.yCoord, tileEntity1.zCoord, 0);
+				int i3 = this.worldObj.getLightBrightnessForSkyBlocks(tileEntity1.xCoord, tileEntity1.yCoord, tileEntity1.zCoord, 0);
 				int i4 = i3 % 65536;
 				int i5 = i3 / 65536;
-				LightmapManager.setLightmapTextureCoords(LightmapManager.lightmapTexUnit, (float)i4 / 1.0F, (float)i5 / 1.0F);
-                Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i4 / 1.0F, (float)i5 / 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				this.renderTileEntityAt(tileEntity1, (double)tileEntity1.xCoord - staticPlayerX, (double)tileEntity1.yCoord - staticPlayerY, (double)tileEntity1.zCoord - staticPlayerZ, f2);
 			}
 

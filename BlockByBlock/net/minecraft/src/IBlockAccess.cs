@@ -6,7 +6,7 @@
 
 		TileEntity getBlockTileEntity(int i1, int i2, int i3);
 
-		int GetLightBrightnessForSkyBlocks(int x, int y, int z, int minimumBlockLight);
+		int getLightBrightnessForSkyBlocks(int i1, int i2, int i3, int i4);
 
 		float getBrightness(int i1, int i2, int i3, int i4);
 

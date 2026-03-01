@@ -1,5 +1,4 @@
 ﻿using System;
-using net.minecraft.client;
 using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
@@ -63,14 +62,14 @@ namespace net.minecraft.src
 		{
 			TexturePackBase texturePackBase6 = (TexturePackBase)GuiTexturePacks.func_22121_h(this.parentTexturePackGui).texturePackList.availableTexturePacks()[i1];
 			texturePackBase6.bindThumbnailTexture(GuiTexturePacks.func_22123_i(this.parentTexturePackGui));
-            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			tessellator5.startDrawingQuads();
 			tessellator5.ColorOpaque_I = 0xFFFFFF;
-			tessellator5.AddVertexWithUV((double)i2, (double)(i3 + i4), 0.0D, 0.0D, 1.0D);
-			tessellator5.AddVertexWithUV((double)(i2 + 32), (double)(i3 + i4), 0.0D, 1.0D, 1.0D);
-			tessellator5.AddVertexWithUV((double)(i2 + 32), (double)i3, 0.0D, 1.0D, 0.0D);
-			tessellator5.AddVertexWithUV((double)i2, (double)i3, 0.0D, 0.0D, 0.0D);
-			tessellator5.DrawImmediate();
+			tessellator5.addVertexWithUV((double)i2, (double)(i3 + i4), 0.0D, 0.0D, 1.0D);
+			tessellator5.addVertexWithUV((double)(i2 + 32), (double)(i3 + i4), 0.0D, 1.0D, 1.0D);
+			tessellator5.addVertexWithUV((double)(i2 + 32), (double)i3, 0.0D, 1.0D, 0.0D);
+			tessellator5.addVertexWithUV((double)i2, (double)i3, 0.0D, 0.0D, 0.0D);
+			tessellator5.draw();
 			this.parentTexturePackGui.drawString(GuiTexturePacks.func_22127_j(this.parentTexturePackGui), texturePackBase6.texturePackFileName, i2 + 32 + 2, i3 + 1, 0xFFFFFF);
 			this.parentTexturePackGui.drawString(GuiTexturePacks.func_22120_k(this.parentTexturePackGui), texturePackBase6.firstDescriptionLine, i2 + 32 + 2, i3 + 12, 8421504);
 			this.parentTexturePackGui.drawString(GuiTexturePacks.func_22125_l(this.parentTexturePackGui), texturePackBase6.secondDescriptionLine, i2 + 32 + 2, i3 + 12 + 10, 8421504);

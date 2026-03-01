@@ -1,9 +1,8 @@
 ﻿using System.Text;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
-    public class ItemMap : ItemMapBase
+	public class ItemMap : ItemMapBase
 	{
 		protected internal ItemMap(int i1) : base(i1)
 		{

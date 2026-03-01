@@ -1,25 +1,18 @@
 ﻿using System;
 using System.Collections;
 using BlockByBlock.java_extensions;
-using BlockByBlock.net.minecraft.client.entity.particle;
-using BlockByBlock.net.minecraft.client.entity.render;
-using BlockByBlock.net.minecraft.render;
-using javax.swing;
-using net.minecraft.client.entity;
-using net.minecraft.client.entity.render;
-using net.minecraft.client.world.render;
 using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
 
-    using Minecraft = net.minecraft.client.Minecraft;
+	using Minecraft = net.minecraft.client.Minecraft;
 
-    public class RenderGlobal : IWorldAccess
+	public class RenderGlobal : IWorldAccess
 	{
 		public System.Collections.IList tileEntities = new ArrayList();
 		private World worldObj;
-		private TextureManager renderEngine;
+		private RenderEngine renderEngine;
 		private List<WorldRenderer> worldRenderersToUpdate = new();
 		private WorldRenderer[] sortedWorldRenderers { get; set; }
 		private WorldRenderer[] worldRenderers;
@@ -55,84 +48,88 @@ namespace net.minecraft.src
 		private int renderersSkippingRenderPass;
 		private int dummyRenderInt;
 		private int worldRenderersCheckIndex;
-		private System.Collections.IList activeWorldRenderers = new ArrayList();
-		private ChunkMeshAllocator meshAllocator;
-
-		private VertexBuffer starVBO;
-        private VertexBuffer sky1VBO;
-        private VertexBuffer sky2VBO;
-		
+		private System.Collections.IList glRenderLists = new ArrayList();
+		private RenderList[] allRenderLists = new RenderList[]
+		{
+			new RenderList(),
+			new RenderList(),
+			new RenderList(),
+			new RenderList()
+		};
 		internal double prevSortX = -9999.0D;
 		internal double prevSortY = -9999.0D;
 		internal double prevSortZ = -9999.0D;
 		public float damagePartialTime;
 		internal int frustumCheckOffset = 0;
 
-		public RenderGlobal(Minecraft minecraft1, TextureManager renderEngine2)
+		public RenderGlobal(Minecraft minecraft1, RenderEngine renderEngine2)
 		{
-			mc = minecraft1;
-			renderEngine = renderEngine2;
+			this.mc = minecraft1;
+			this.renderEngine = renderEngine2;
 			sbyte b3 = 34;
 			sbyte b4 = 32;
-			occlusionEnabled = OpenGlCapsChecker.checkARBOcclusion();
+			this.glRenderListBase = GLAllocation.generateDisplayLists(b3 * b3 * b4 * 3);
+			this.occlusionEnabled = OpenGlCapsChecker.checkARBOcclusion();
 			if (this.occlusionEnabled)
 			{
 				glOcclusionQueryBase = new int[b3 * b3 * b4];
-				GL.GenQueries(glOcclusionQueryBase.Length, glOcclusionQueryBase); // PORTING TODO: Wasn't 100% sure about the first argument here. Investigate if this doesn't work.
+				GL.Arb.GenQueries(glOcclusionQueryBase.Length, glOcclusionQueryBase); // PORTING TODO: Wasn't 100% sure about the first argument here. Investigate if this doesn't work.
 			}
-            
-			Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-            
-            starVBO = GenerateStarModel();
-            
-            Minecraft.renderPipeline.ModelMatrix.PopMatrix();
+
+			this.starGLCallList = GLAllocation.generateDisplayLists(3);
+			GL.PushMatrix();
+			GL.NewList(starGLCallList, ListMode.Compile);
+			this.renderStars();
+			GL.EndList();
+			GL.PopMatrix();
 			Tessellator tessellator5 = Tessellator.instance;
-            
-            sbyte b7 = 64;
+			this.glSkyList = this.starGLCallList + 1;
+			GL.NewList(this.glSkyList, ListMode.Compile);
+			sbyte b7 = 64;
 			int i8 = 256 / b7 + 2;
 			float f6 = 16.0F;
 
 			int i9;
 			int i10;
-            tessellator5.StartBuildingVBO();
-            for (i9 = -b7 * i8; i9 <= b7 * i8; i9 += b7)
+			for (i9 = -b7 * i8; i9 <= b7 * i8; i9 += b7)
 			{
 				for (i10 = -b7 * i8; i10 <= b7 * i8; i10 += b7)
 				{
-					
-					tessellator5.AddVertex((double)(i9 + 0), (double)f6, (double)(i10 + 0));
-					tessellator5.AddVertex((double)(i9 + b7), (double)f6, (double)(i10 + 0));
-					tessellator5.AddVertex((double)(i9 + b7), (double)f6, (double)(i10 + b7));
-					tessellator5.AddVertex((double)(i9 + 0), (double)f6, (double)(i10 + b7));
-					
+					tessellator5.startDrawingQuads();
+					tessellator5.addVertex((double)(i9 + 0), (double)f6, (double)(i10 + 0));
+					tessellator5.addVertex((double)(i9 + b7), (double)f6, (double)(i10 + 0));
+					tessellator5.addVertex((double)(i9 + b7), (double)f6, (double)(i10 + b7));
+					tessellator5.addVertex((double)(i9 + 0), (double)f6, (double)(i10 + b7));
+					tessellator5.draw();
 				}
 			}
-            sky1VBO = tessellator5.BuildCurrentVBO();
-            
-            f6 = -16.0F;
-			tessellator5.StartBuildingVBO();
+
+			GL.EndList();
+			this.glSkyList2 = this.starGLCallList + 2;
+			GL.NewList(this.glSkyList2, ListMode.Compile);
+			f6 = -16.0F;
+			tessellator5.startDrawingQuads();
 
 			for (i9 = -b7 * i8; i9 <= b7 * i8; i9 += b7)
 			{
 				for (i10 = -b7 * i8; i10 <= b7 * i8; i10 += b7)
 				{
-					tessellator5.AddVertex((double)(i9 + b7), (double)f6, (double)(i10 + 0));
-					tessellator5.AddVertex((double)(i9 + 0), (double)f6, (double)(i10 + 0));
-					tessellator5.AddVertex((double)(i9 + 0), (double)f6, (double)(i10 + b7));
-					tessellator5.AddVertex((double)(i9 + b7), (double)f6, (double)(i10 + b7));
+					tessellator5.addVertex((double)(i9 + b7), (double)f6, (double)(i10 + 0));
+					tessellator5.addVertex((double)(i9 + 0), (double)f6, (double)(i10 + 0));
+					tessellator5.addVertex((double)(i9 + 0), (double)f6, (double)(i10 + b7));
+					tessellator5.addVertex((double)(i9 + b7), (double)f6, (double)(i10 + b7));
 				}
 			}
 
-			sky2VBO = tessellator5.BuildCurrentVBO();
-            
-            meshAllocator = new();
-        }
+			tessellator5.draw();
+			GL.EndList();
+		}
 
-		private VertexBuffer GenerateStarModel()
+		private void renderStars()
 		{
 			RandomExtended random1 = new RandomExtended(10842L);
 			Tessellator tessellator2 = Tessellator.instance;
-			tessellator2.StartBuildingVBO();
+			tessellator2.startDrawingQuads();
 
 			for (int i3 = 0; i3 < 1500; ++i3)
 			{
@@ -171,12 +168,12 @@ namespace net.minecraft.src
 						double d55 = d39 * d28 - d47 * d30;
 						double d57 = d55 * d22 - d49 * d24;
 						double d61 = d49 * d22 + d55 * d24;
-						tessellator2.AddVertex(d14 + d57, d16 + d53, d18 + d61);
+						tessellator2.addVertex(d14 + d57, d16 + d53, d18 + d61);
 					}
 				}
 			}
 
-			return tessellator2.BuildCurrentVBO();
+			tessellator2.draw();
 		}
 
 		public virtual void changeWorld(World world1)
@@ -202,20 +199,20 @@ namespace net.minecraft.src
 
 		public virtual void loadRenderers()
 		{
-			if (worldObj != null)
+			if (this.worldObj != null)
 			{
-				Block.leaves.GraphicsLevel = mc.gameSettings.fancyGraphics;
-				renderDistance = mc.gameSettings.renderDistance;
+				Block.leaves.GraphicsLevel = this.mc.gameSettings.fancyGraphics;
+				this.renderDistance = this.mc.gameSettings.renderDistance;
 				int i1;
-				if (worldRenderers != null)
+				if (this.worldRenderers != null)
 				{
-					for (i1 = 0; i1 < worldRenderers.Length; ++i1)
+					for (i1 = 0; i1 < this.worldRenderers.Length; ++i1)
 					{
-						worldRenderers[i1].stopRendering();
+						this.worldRenderers[i1].stopRendering();
 					}
 				}
 
-				i1 = 64 << 3 - renderDistance;
+				i1 = 64 << 3 - this.renderDistance;
 				if (i1 > 400)
 				{
 					i1 = 400;
@@ -224,8 +221,8 @@ namespace net.minecraft.src
 				renderChunksWide = i1 / 16 + 1;
 				renderChunksTall = 16;
 				renderChunksDeep = i1 / 16 + 1;
-				worldRenderers = new WorldRenderer[renderChunksWide * renderChunksTall * renderChunksDeep];
-				sortedWorldRenderers = new WorldRenderer[renderChunksWide * renderChunksTall * renderChunksDeep];
+				worldRenderers = new WorldRenderer[this.renderChunksWide * this.renderChunksTall * this.renderChunksDeep];
+				sortedWorldRenderers = new WorldRenderer[this.renderChunksWide * this.renderChunksTall * this.renderChunksDeep];
 				int i2 = 0;
 				int i3 = 0;
 				minBlockX = 0;
@@ -236,57 +233,57 @@ namespace net.minecraft.src
 				maxBlockZ = renderChunksDeep;
 
 				int i4;
-				for (i4 = 0; i4 < worldRenderersToUpdate.Count; ++i4)
+				for (i4 = 0; i4 < this.worldRenderersToUpdate.Count; ++i4)
 				{
-					((WorldRenderer)worldRenderersToUpdate[i4]).needsUpdate = false;
+					((WorldRenderer)this.worldRenderersToUpdate[i4]).needsUpdate = false;
 				}
 
-				worldRenderersToUpdate.Clear();
-				tileEntities.Clear();
+				this.worldRenderersToUpdate.Clear();
+				this.tileEntities.Clear();
 
-				for (i4 = 0; i4 < renderChunksWide; ++i4)
+				for (i4 = 0; i4 < this.renderChunksWide; ++i4)
 				{
-					for (int i5 = 0; i5 < renderChunksTall; ++i5)
+					for (int i5 = 0; i5 < this.renderChunksTall; ++i5)
 					{
-						for (int i6 = 0; i6 < renderChunksDeep; ++i6)
+						for (int i6 = 0; i6 < this.renderChunksDeep; ++i6)
 						{
-							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4] = new WorldRenderer(worldObj, tileEntities, i4 * 16, i5 * 16, i6 * 16, meshAllocator);
-							if (occlusionEnabled)
+							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4] = new WorldRenderer(this.worldObj, this.tileEntities, i4 * 16, i5 * 16, i6 * 16, this.glRenderListBase + i2);
+							if (this.occlusionEnabled)
 							{
-								worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].glOcclusionQuery = glOcclusionQueryBase[i3];
+								this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].glOcclusionQuery = this.glOcclusionQueryBase[i3];
 							}
 
-							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].isWaitingOnOcclusionQuery = false;
-							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].isVisible = true;
-							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].isInFrustum = true;
-							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].chunkIndex = i3++;
-							worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4].markDirty();
-							sortedWorldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4] = worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4];
-							worldRenderersToUpdate.Add(worldRenderers[(i6 * renderChunksTall + i5) * renderChunksWide + i4]);
+							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].isWaitingOnOcclusionQuery = false;
+							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].isVisible = true;
+							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].isInFrustum = true;
+							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].chunkIndex = i3++;
+							this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4].markDirty();
+							this.sortedWorldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4] = this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4];
+							this.worldRenderersToUpdate.Add(this.worldRenderers[(i6 * this.renderChunksTall + i5) * this.renderChunksWide + i4]);
 							i2 += 3;
 						}
 					}
 				}
 
-				if (worldObj != null)
+				if (this.worldObj != null)
 				{
-					EntityLiving entityLiving7 = mc.renderViewEntity;
+					EntityLiving entityLiving7 = this.mc.renderViewEntity;
 					if (entityLiving7 != null)
 					{
-						markRenderersForNewPosition(MathHelper.floor_double(entityLiving7.posX), MathHelper.floor_double(entityLiving7.posY), MathHelper.floor_double(entityLiving7.posZ));
-						Array.Sort(sortedWorldRenderers, new EntitySorter(entityLiving7));
+						this.markRenderersForNewPosition(MathHelper.floor_double(entityLiving7.posX), MathHelper.floor_double(entityLiving7.posY), MathHelper.floor_double(entityLiving7.posZ));
+						Array.Sort(this.sortedWorldRenderers, new EntitySorter(entityLiving7));
 					}
 				}
 
-				renderEntitiesStartupCounter = 2;
+				this.renderEntitiesStartupCounter = 2;
 			}
 		}
 
 		public virtual void renderEntities(Vec3D vec3D1, ICamera iCamera2, float f3)
 		{
-			if (renderEntitiesStartupCounter > 0)
+			if (this.renderEntitiesStartupCounter > 0)
 			{
-				--renderEntitiesStartupCounter;
+				--this.renderEntitiesStartupCounter;
 			}
 			else
 			{
@@ -304,7 +301,7 @@ namespace net.minecraft.src
 				TileEntityRenderer.staticPlayerX = entityLiving4.lastTickPosX + (entityLiving4.posX - entityLiving4.lastTickPosX) * (double)f3;
 				TileEntityRenderer.staticPlayerY = entityLiving4.lastTickPosY + (entityLiving4.posY - entityLiving4.lastTickPosY) * (double)f3;
 				TileEntityRenderer.staticPlayerZ = entityLiving4.lastTickPosZ + (entityLiving4.posZ - entityLiving4.lastTickPosZ) * (double)f3;
-				this.mc.gameRenderer.enableLightmap((double)f3);
+				this.mc.entityRenderer.enableLightmap((double)f3);
 				Profiler.endStartSection("global");
 				System.Collections.IList list5 = this.worldObj.LoadedEntityList;
 				this.countEntitiesTotal = list5.Count;
@@ -334,14 +331,14 @@ namespace net.minecraft.src
 				}
 
 				Profiler.endStartSection("tileentities");
-				GameLighting.EnableMeshLighting();
+				RenderHelper.enableStandardItemLighting();
 
 				for (i6 = 0; i6 < this.tileEntities.Count; ++i6)
 				{
 					TileEntityRenderer.instance.renderTileEntity((TileEntity)this.tileEntities[i6], f3);
 				}
 
-				this.mc.gameRenderer.disableLightmap((double)f3);
+				this.mc.entityRenderer.disableLightmap((double)f3);
 				Profiler.endSection();
 			}
 		}
@@ -362,78 +359,78 @@ namespace net.minecraft.src
 			}
 		}
 
-		private void markRenderersForNewPosition(int rendererX, int rendererY, int rendererZ)
+		private void markRenderersForNewPosition(int i1, int i2, int i3)
 		{
-            rendererX -= 8;
-			rendererY -= 8;
-			rendererZ -= 8;
+			i1 -= 8;
+			i2 -= 8;
+			i3 -= 8;
 			this.minBlockX = int.MaxValue;
 			this.minBlockY = int.MaxValue;
 			this.minBlockZ = int.MaxValue;
 			this.maxBlockX = int.MinValue;
 			this.maxBlockY = int.MinValue;
 			this.maxBlockZ = int.MinValue;
-			int renderDistanceInBlocks = this.renderChunksWide * 16;
-			int renderDistanceBlocksHalved = renderDistanceInBlocks / 2;
+			int i4 = this.renderChunksWide * 16;
+			int i5 = i4 / 2;
 
-			for (int chunkIter = 0; chunkIter < this.renderChunksWide; chunkIter++)
+			for (int i6 = 0; i6 < this.renderChunksWide; ++i6)
 			{
-				int x = chunkIter * 16;
-				int i8 = x + renderDistanceBlocksHalved - rendererX;
+				int i7 = i6 * 16;
+				int i8 = i7 + i5 - i1;
 				if (i8 < 0)
 				{
-					i8 -= renderDistanceInBlocks - 1;
+					i8 -= i4 - 1;
 				}
 
-				i8 /= renderDistanceInBlocks;
-				x -= i8 * renderDistanceInBlocks;
-				if (x < this.minBlockX)
+				i8 /= i4;
+				i7 -= i8 * i4;
+				if (i7 < this.minBlockX)
 				{
-					this.minBlockX = x;
+					this.minBlockX = i7;
 				}
 
-				if (x > this.maxBlockX)
+				if (i7 > this.maxBlockX)
 				{
-					this.maxBlockX = x;
+					this.maxBlockX = i7;
 				}
 
 				for (int i9 = 0; i9 < this.renderChunksDeep; ++i9)
 				{
-					int z = i9 * 16;
-					int i11 = z + renderDistanceBlocksHalved - rendererZ;
+					int i10 = i9 * 16;
+					int i11 = i10 + i5 - i3;
 					if (i11 < 0)
 					{
-						i11 -= renderDistanceInBlocks - 1;
+						i11 -= i4 - 1;
 					}
 
-					i11 /= renderDistanceInBlocks;
-					z -= i11 * renderDistanceInBlocks;
-					if (z < this.minBlockZ)
+					i11 /= i4;
+					i10 -= i11 * i4;
+					if (i10 < this.minBlockZ)
 					{
-						this.minBlockZ = z;
+						this.minBlockZ = i10;
 					}
 
-					if (z > this.maxBlockZ)
+					if (i10 > this.maxBlockZ)
 					{
-						this.maxBlockZ = z;
+						this.maxBlockZ = i10;
 					}
 
 					for (int i12 = 0; i12 < this.renderChunksTall; ++i12)
 					{
-						int y = i12 * 16;
-						if (y < this.minBlockY)
+						int i13 = i12 * 16;
+						if (i13 < this.minBlockY)
 						{
-							this.minBlockY = y;
+							this.minBlockY = i13;
 						}
 
-						if (y > this.maxBlockY)
+						if (i13 > this.maxBlockY)
 						{
-							this.maxBlockY = y;
+							this.maxBlockY = i13;
 						}
 
-						WorldRenderer worldRenderer14 = this.worldRenderers[(i9 * this.renderChunksTall + i12) * this.renderChunksWide + chunkIter];
+						WorldRenderer worldRenderer14 = this.worldRenderers[(i9 * this.renderChunksTall + i12) * this.renderChunksWide + i6];
 						bool z15 = worldRenderer14.needsUpdate;
-						worldRenderer14.setPosition(x, y, z);
+						worldRenderer14.setPosition(i7, i13, i10);
 						if (!z15 && worldRenderer14.needsUpdate)
 						{
 							this.worldRenderersToUpdate.Add(worldRenderer14);
@@ -441,35 +438,36 @@ namespace net.minecraft.src
 					}
 				}
 			}
+
 		}
 
-		public virtual int sortAndRender(EntityLiving entityLiving1, int pass, double d3)
+		public virtual int sortAndRender(EntityLiving entityLiving1, int i2, double d3)
 		{
 			Profiler.startSection("sortchunks");
 
 			for (int i5 = 0; i5 < 10; ++i5)
 			{
-				worldRenderersCheckIndex = (worldRenderersCheckIndex + 1) % worldRenderers.Length;
-				WorldRenderer worldRenderer6 = worldRenderers[worldRenderersCheckIndex];
-				if (worldRenderer6.needsUpdate && !worldRenderersToUpdate.Contains(worldRenderer6))
+				this.worldRenderersCheckIndex = (this.worldRenderersCheckIndex + 1) % this.worldRenderers.Length;
+				WorldRenderer worldRenderer6 = this.worldRenderers[this.worldRenderersCheckIndex];
+				if (worldRenderer6.needsUpdate && !this.worldRenderersToUpdate.Contains(worldRenderer6))
 				{
-					worldRenderersToUpdate.Add(worldRenderer6);
+					this.worldRenderersToUpdate.Add(worldRenderer6);
 				}
 			}
 
-			if (mc.gameSettings.renderDistance != renderDistance)
+			if (this.mc.gameSettings.renderDistance != this.renderDistance)
 			{
-				loadRenderers();
+				this.loadRenderers();
 			}
 
-			if (pass == 0)
+			if (i2 == 0)
 			{
-				renderersLoaded = 0;
-				dummyRenderInt = 0;
-				renderersBeingClipped = 0;
-				renderersBeingOccluded = 0;
-				renderersBeingRendered = 0;
-				renderersSkippingRenderPass = 0;
+				this.renderersLoaded = 0;
+				this.dummyRenderInt = 0;
+				this.renderersBeingClipped = 0;
+				this.renderersBeingOccluded = 0;
+				this.renderersBeingRendered = 0;
+				this.renderersSkippingRenderPass = 0;
 			}
 
 			double d33 = entityLiving1.lastTickPosX + (entityLiving1.posX - entityLiving1.lastTickPosX) * d3;
@@ -487,10 +485,10 @@ namespace net.minecraft.src
 				Array.Sort(this.sortedWorldRenderers, new EntitySorter(entityLiving1));
 			}
 
-			GameLighting.DisableMeshLighting();
+			RenderHelper.disableStandardItemLighting();
 			sbyte b17 = 0;
 			int i34;
-			if (this.occlusionEnabled && this.mc.gameSettings.advancedOpengl && pass == 0)
+			if (this.occlusionEnabled && this.mc.gameSettings.advancedOpengl && !this.mc.gameSettings.anaglyph && i2 == 0)
 			{
 				sbyte b18 = 0;
 				int i19 = 16;
@@ -502,7 +500,7 @@ namespace net.minecraft.src
 				}
 
 				Profiler.endStartSection("render");
-				i34 = b17 + this.renderSortedRenderers(b18, i19, pass, d3);
+				i34 = b17 + this.renderSortedRenderers(b18, i19, i2, d3);
 
 				do
 				{
@@ -514,16 +512,16 @@ namespace net.minecraft.src
 						i19 = this.sortedWorldRenderers.Length;
 					}
 
-                    Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
-                    Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
-                    Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
-                    Minecraft.renderPipeline.SetState(RenderState.FogState, false);
-                    GL.ColorMask(false, false, false, false);
+					GL.Disable(EnableCap.Texture2D);
+					GL.Disable(EnableCap.Lighting);
+					GL.Disable(EnableCap.AlphaTest);
+					GL.Disable(EnableCap.Fog);
+					GL.ColorMask(false, false, false, false);
 					GL.DepthMask(false);
 					Profiler.startSection("check");
 					this.checkOcclusionQueryResult(i35, i19);
 					Profiler.endSection();
-                    Minecraft.renderPipeline.ModelMatrix.PushMatrix();
+					GL.PushMatrix();
 					float f36 = 0.0F;
 					float f21 = 0.0F;
 					float f22 = 0.0F;
@@ -556,38 +554,52 @@ namespace net.minecraft.src
 									float f32 = f29 - f22;
 									if (f30 != 0.0F || f31 != 0.0F || f32 != 0.0F)
 									{
-                                        Minecraft.renderPipeline.ModelMatrix.Translate(f30, f31, f32);
+										GL.Translate(f30, f31, f32);
 										f36 += f30;
 										f21 += f31;
 										f22 += f32;
 									}
-                                    
+
 									Profiler.startSection("bb");
-                                    GL.BeginQuery(QueryTarget.SamplesPassed, sortedWorldRenderers[i23].glOcclusionQuery);
-                                    sortedWorldRenderers[i23].TessellateOcclusionQueryAABB();
-									GL.EndQuery(QueryTarget.SamplesPassed);
+                                    GL.Arb.BeginQuery(ArbOcclusionQuery.SamplesPassedArb, this.sortedWorldRenderers[i23].glOcclusionQuery);
+                                    this.sortedWorldRenderers[i23].callOcclusionQueryList();
+									GL.Arb.EndQuery(QueryTarget.SamplesPassed);
 									Profiler.endSection();
-									sortedWorldRenderers[i23].isWaitingOnOcclusionQuery = true;
+									this.sortedWorldRenderers[i23].isWaitingOnOcclusionQuery = true;
 								}
 							}
 						}
 					}
 
-                    Minecraft.renderPipeline.ModelMatrix.PopMatrix();
-					GL.ColorMask(true, true, true, true);
+					GL.PopMatrix();
+					if (this.mc.gameSettings.anaglyph)
+					{
+						if (EntityRenderer.anaglyphField == 0)
+						{
+							GL.ColorMask(false, true, true, true);
+						}
+						else
+						{
+							GL.ColorMask(true, false, false, true);
+						}
+					}
+					else
+					{
+						GL.ColorMask(true, true, true, true);
+					}
 
 					GL.DepthMask(true);
-                    Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
-                    Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-                    Minecraft.renderPipeline.SetState(RenderState.FogState, true);
-                    Profiler.endStartSection("render");
-					i34 += this.renderSortedRenderers(i35, i19, pass, d3);
+					GL.Enable(EnableCap.Texture2D);
+					GL.Enable(EnableCap.AlphaTest);
+					GL.Enable(EnableCap.Fog);
+					Profiler.endStartSection("render");
+					i34 += this.renderSortedRenderers(i35, i19, i2, d3);
 				} while (i19 < this.sortedWorldRenderers.Length);
 			}
 			else
 			{
 				Profiler.endStartSection("render");
-				i34 = b17 + this.renderSortedRenderers(0, this.sortedWorldRenderers.Length, pass, d3);
+				i34 = b17 + this.renderSortedRenderers(0, this.sortedWorldRenderers.Length, i2, d3);
 			}
 
 			Profiler.endSection();
@@ -601,33 +613,29 @@ namespace net.minecraft.src
 				if (this.sortedWorldRenderers[i3].isWaitingOnOcclusionQuery)
 				{
                     //Console.WriteLine($"World Renderer {i3} is waiting on occlusion query ({i1},{i2})");
-                    GL.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, GetQueryObjectParam.QueryResultAvailable, this.occlusionResult);
+                    GL.Arb.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, QueryObjectParameterName.QueryResultAvailable, this.occlusionResult);
 					if (this.occlusionResult[0] != 0)
 					{
 						this.sortedWorldRenderers[i3].isWaitingOnOcclusionQuery = false;
-						GL.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, GetQueryObjectParam.QueryResult, this.occlusionResult);
+						GL.Arb.GetQueryObject(this.sortedWorldRenderers[i3].glOcclusionQuery, QueryObjectParameterName.QueryResult, this.occlusionResult);
 						this.sortedWorldRenderers[i3].isVisible = this.occlusionResult[0] != 0;
 					}
 				}
 			}
+
 		}
 
-		private float worldRenderX;
-		private float worldRenderY;
-		private float worldRenderZ;
-
-		private int renderSortedRenderers(int i1, int i2, int pass, double d4)
+		private int renderSortedRenderers(int i1, int i2, int i3, double d4)
 		{
-			Profiler.startSection("addWorldRenderers");
-            this.activeWorldRenderers.Clear();
+			this.glRenderLists.Clear();
 			int i6 = 0;
 
 			for (int i7 = i1; i7 < i2; ++i7)
 			{
-				if (pass == 0)
+				if (i3 == 0)
 				{
 					++this.renderersLoaded;
-					if (this.sortedWorldRenderers[i7].skipRenderPass[pass])
+					if (this.sortedWorldRenderers[i7].skipRenderPass[i3])
 					{
 						++this.renderersSkippingRenderPass;
 					}
@@ -645,138 +653,157 @@ namespace net.minecraft.src
 					}
 				}
 
-				if (!this.sortedWorldRenderers[i7].skipRenderPass[pass] && this.sortedWorldRenderers[i7].isInFrustum && (!this.occlusionEnabled || this.sortedWorldRenderers[i7].isVisible))
+				if (!this.sortedWorldRenderers[i7].skipRenderPass[i3] && this.sortedWorldRenderers[i7].isInFrustum && (!this.occlusionEnabled || this.sortedWorldRenderers[i7].isVisible))
 				{
-                    this.activeWorldRenderers.Add(this.sortedWorldRenderers[i7]);
-                }
+					int i8 = this.sortedWorldRenderers[i7].getGLCallListForPass(i3);
+					if (i8 >= 0)
+					{
+						this.glRenderLists.Add(this.sortedWorldRenderers[i7]);
+						++i6;
+					}
+				}
 			}
 
-            EntityLiving entityLiving19 = this.mc.renderViewEntity;
-			double x = entityLiving19.lastTickPosX + (entityLiving19.posX - entityLiving19.lastTickPosX) * d4;
-			double y = entityLiving19.lastTickPosY + (entityLiving19.posY - entityLiving19.lastTickPosY) * d4;
-			double z = entityLiving19.lastTickPosZ + (entityLiving19.posZ - entityLiving19.lastTickPosZ) * d4;
+			EntityLiving entityLiving19 = this.mc.renderViewEntity;
+			double d20 = entityLiving19.lastTickPosX + (entityLiving19.posX - entityLiving19.lastTickPosX) * d4;
+			double d10 = entityLiving19.lastTickPosY + (entityLiving19.posY - entityLiving19.lastTickPosY) * d4;
+			double d12 = entityLiving19.lastTickPosZ + (entityLiving19.posZ - entityLiving19.lastTickPosZ) * d4;
+			int i14 = 0;
 
-            int i14 = 0;
-
-			worldRenderX = (float)x;
-			worldRenderY = (float)y;
-			worldRenderZ = (float)z;
-			
-			Profiler.endStartSection("positionWorldRenderers");
-			
-			for (int i = 0; i < this.activeWorldRenderers.Count; ++i)
+			int i15;
+			for (i15 = 0; i15 < this.allRenderLists.Length; ++i15)
 			{
-				WorldRenderer? renderer = (WorldRenderer?)this.activeWorldRenderers[i];
+				this.allRenderLists[i15].func_859_b();
+			}
 
-                renderer.SetRenderPos(x, y, z, renderer.posXMinus, renderer.posYMinus, renderer.posZMinus);
-            }
-			
-			Profiler.endStartSection("tessellateWorldRenderers");
-            RenderAllWorldRenderers(pass, d4);
-			Profiler.endSection();
-            return i6;
+			for (i15 = 0; i15 < this.glRenderLists.Count; ++i15)
+			{
+				WorldRenderer worldRenderer16 = (WorldRenderer)this.glRenderLists[i15];
+				int i17 = -1;
+
+				for (int i18 = 0; i18 < i14; ++i18)
+				{
+					if (this.allRenderLists[i18].func_862_a(worldRenderer16.posXMinus, worldRenderer16.posYMinus, worldRenderer16.posZMinus))
+					{
+						i17 = i18;
+					}
+				}
+
+				if (i17 < 0)
+				{
+					i17 = i14++;
+					this.allRenderLists[i17].func_861_a(worldRenderer16.posXMinus, worldRenderer16.posYMinus, worldRenderer16.posZMinus, d20, d10, d12);
+				}
+
+				this.allRenderLists[i17].func_858_a(worldRenderer16.getGLCallListForPass(i3));
+			}
+
+			this.renderAllRenderLists(i3, d4);
+			return i6;
 		}
-        
-		public virtual void RenderAllWorldRenderers(int pass, double d2)
+
+		public virtual void renderAllRenderLists(int i1, double d2)
 		{
-			meshAllocator.FrameUpdate();
+			this.mc.entityRenderer.enableLightmap(d2);
 
-            MatrixStack modelMatrix = Minecraft.renderPipeline.ModelMatrix;
+			for (int i4 = 0; i4 < this.allRenderLists.Length; ++i4)
+			{
+				this.allRenderLists[i4].func_860_a();
+			}
 
-            mc.gameRenderer.enableLightmap(d2);
-
-            // Draw world VBO
-			modelMatrix.PushMatrix();
-			GL.Enable(EnableCap.CullFace);
-            Tessellator.instance.DrawMeshAllocator(meshAllocator.WorldBuffer, meshAllocator, sortedWorldRenderers, pass);
-            modelMatrix.PopMatrix();
-
-            mc.gameRenderer.disableLightmap(d2);
-        }
+			this.mc.entityRenderer.disableLightmap(d2);
+		}
 
 		public virtual void updateClouds()
 		{
-			++cloudOffsetX;
+			++this.cloudOffsetX;
 		}
 
 		public virtual void renderSky(float f1)
 		{
 			if (this.mc.theWorld.worldProvider.worldType == 1)
 			{
-                Minecraft.renderPipeline.SetState(RenderState.FogState, false);
-                Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
-                GL.Enable(EnableCap.Blend);
+				GL.Disable(EnableCap.Fog);
+				GL.Disable(EnableCap.AlphaTest);
+				GL.Enable(EnableCap.Blend);
 				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-				GameLighting.DisableMeshLighting();
+				RenderHelper.disableStandardItemLighting();
 				GL.DepthMask(false);
 				this.renderEngine.bindTexture(this.renderEngine.getTexture("/misc/tunnel.png"));
 				Tessellator tessellator19 = Tessellator.instance;
 
 				for (int i20 = 0; i20 < 6; ++i20)
 				{
-                    Minecraft.renderPipeline.ModelMatrix.PushMatrix();
+					GL.PushMatrix();
 					if (i20 == 1)
 					{
-                        Minecraft.renderPipeline.ModelMatrix.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
+						GL.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
 					}
 
 					if (i20 == 2)
 					{
-                        Minecraft.renderPipeline.ModelMatrix.Rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+						GL.Rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 					}
 
 					if (i20 == 3)
 					{
-                        Minecraft.renderPipeline.ModelMatrix.Rotate(180.0F, 1.0F, 0.0F, 0.0F);
+						GL.Rotate(180.0F, 1.0F, 0.0F, 0.0F);
 					}
 
 					if (i20 == 4)
 					{
-                        Minecraft.renderPipeline.ModelMatrix.Rotate(90.0F, 0.0F, 0.0F, 1.0F);
+						GL.Rotate(90.0F, 0.0F, 0.0F, 1.0F);
 					}
 
 					if (i20 == 5)
 					{
-                        Minecraft.renderPipeline.ModelMatrix.Rotate(-90.0F, 0.0F, 0.0F, 1.0F);
+						GL.Rotate(-90.0F, 0.0F, 0.0F, 1.0F);
 					}
 
 					tessellator19.startDrawingQuads();
 					tessellator19.ColorOpaque_I = 1579032;
-					tessellator19.AddVertexWithUV(-100.0D, -100.0D, -100.0D, 0.0D, 0.0D);
-					tessellator19.AddVertexWithUV(-100.0D, -100.0D, 100.0D, 0.0D, 16.0D);
-					tessellator19.AddVertexWithUV(100.0D, -100.0D, 100.0D, 16.0D, 16.0D);
-					tessellator19.AddVertexWithUV(100.0D, -100.0D, -100.0D, 16.0D, 0.0D);
-					tessellator19.DrawImmediate();
-                    Minecraft.renderPipeline.ModelMatrix.PopMatrix();
+					tessellator19.addVertexWithUV(-100.0D, -100.0D, -100.0D, 0.0D, 0.0D);
+					tessellator19.addVertexWithUV(-100.0D, -100.0D, 100.0D, 0.0D, 16.0D);
+					tessellator19.addVertexWithUV(100.0D, -100.0D, 100.0D, 16.0D, 16.0D);
+					tessellator19.addVertexWithUV(100.0D, -100.0D, -100.0D, 16.0D, 0.0D);
+					tessellator19.draw();
+					GL.PopMatrix();
 				}
 
 				GL.DepthMask(true);
-                Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
-                Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-            }
+				GL.Enable(EnableCap.Texture2D);
+				GL.Enable(EnableCap.AlphaTest);
+			}
 			else if (this.mc.theWorld.worldProvider.func_48217_e())
 			{
-                Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
-                Vec3D vec3D2 = this.worldObj.getSkyColor(this.mc.renderViewEntity, f1);
+				GL.Disable(EnableCap.Texture2D);
+				Vec3D vec3D2 = this.worldObj.getSkyColor(this.mc.renderViewEntity, f1);
 				float f3 = (float)vec3D2.xCoord;
 				float f4 = (float)vec3D2.yCoord;
 				float f5 = (float)vec3D2.zCoord;
 				float f7;
 				float f8;
+				if (this.mc.gameSettings.anaglyph)
+				{
+					float f6 = (f3 * 30.0F + f4 * 59.0F + f5 * 11.0F) / 100.0F;
+					f7 = (f3 * 30.0F + f4 * 70.0F) / 100.0F;
+					f8 = (f3 * 30.0F + f5 * 70.0F) / 100.0F;
+					f3 = f6;
+					f4 = f7;
+					f5 = f8;
+				}
 
-				Minecraft.renderPipeline.SetColor(f3, f4, f5);
+				GL.Color3(f3, f4, f5);
 				Tessellator tessellator21 = Tessellator.instance;
 				GL.DepthMask(false);
-                Minecraft.renderPipeline.SetState(RenderState.FogState, true);
-                Minecraft.renderPipeline.SetColor(f3, f4, f5);
-                
-				tessellator21.Draw(sky1VBO);
-
-                Minecraft.renderPipeline.SetState(RenderState.FogState, false);
-                Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
-                GL.Enable(EnableCap.Blend);
+				GL.Enable(EnableCap.Fog);
+				GL.Color3(f3, f4, f5);
+				GL.CallList(this.glSkyList);
+				GL.Disable(EnableCap.Fog);
+				GL.Disable(EnableCap.AlphaTest);
+				GL.Enable(EnableCap.Blend);
 				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-				GameLighting.DisableMeshLighting();
+				RenderHelper.disableStandardItemLighting();
 				float[] f22 = this.worldObj.worldProvider.calcSunriseSunsetColors(this.worldObj.getCelestialAngle(f1), f1);
 				float f9;
 				float f10;
@@ -786,20 +813,29 @@ namespace net.minecraft.src
 				int i25;
 				if (f22 != null)
 				{
-                    Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
-                    Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, true);
-                    Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-                    Minecraft.renderPipeline.ModelMatrix.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
-                    Minecraft.renderPipeline.ModelMatrix.Rotate(MathHelper.sin(this.worldObj.getCelestialAngleRadians(f1)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
-                    Minecraft.renderPipeline.ModelMatrix.Rotate(90.0F, 0.0F, 0.0F, 1.0F);
+					GL.Disable(EnableCap.Texture2D);
+					GL.ShadeModel(ShadingModel.Smooth);
+					GL.PushMatrix();
+					GL.Rotate(90.0F, 1.0F, 0.0F, 0.0F);
+					GL.Rotate(MathHelper.sin(this.worldObj.getCelestialAngleRadians(f1)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
+					GL.Rotate(90.0F, 0.0F, 0.0F, 1.0F);
 					f8 = f22[0];
 					f9 = f22[1];
 					f10 = f22[2];
 					float f13;
+					if (this.mc.gameSettings.anaglyph)
+					{
+						f11 = (f8 * 30.0F + f9 * 59.0F + f10 * 11.0F) / 100.0F;
+						f12 = (f8 * 30.0F + f9 * 70.0F) / 100.0F;
+						f13 = (f8 * 30.0F + f10 * 70.0F) / 100.0F;
+						f8 = f11;
+						f9 = f12;
+						f10 = f13;
+					}
 
 					tessellator21.startDrawing(6);
 					tessellator21.setColorRGBA_F(f8, f9, f10, f22[3]);
-					tessellator21.AddVertex(0.0D, 100.0D, 0.0D);
+					tessellator21.addVertex(0.0D, 100.0D, 0.0D);
 					sbyte b24 = 16;
 					tessellator21.setColorRGBA_F(f22[0], f22[1], f22[2], 0.0F);
 
@@ -808,33 +844,33 @@ namespace net.minecraft.src
 						f13 = (float)i25 * (float)Math.PI * 2.0F / (float)b24;
 						float f14 = MathHelper.sin(f13);
 						f15 = MathHelper.cos(f13);
-						tessellator21.AddVertex((double)(f14 * 120.0F), (double)(f15 * 120.0F), (double)(-f15 * 40.0F * f22[3]));
+						tessellator21.addVertex((double)(f14 * 120.0F), (double)(f15 * 120.0F), (double)(-f15 * 40.0F * f22[3]));
 					}
 
-					tessellator21.DrawImmediate();
-                    Minecraft.renderPipeline.ModelMatrix.PopMatrix();
-                    Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, false);
-                }
+					tessellator21.draw();
+					GL.PopMatrix();
+					GL.ShadeModel(ShadingModel.Flat);
+				}
 
-                Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
-                GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.One);
-                Minecraft.renderPipeline.ModelMatrix.PushMatrix();
+				GL.Enable(EnableCap.Texture2D);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.One);
+				GL.PushMatrix();
 				f7 = 1.0F - this.worldObj.getRainStrength(f1);
 				f8 = 0.0F;
 				f9 = 0.0F;
 				f10 = 0.0F;
-				Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, f7);
-                Minecraft.renderPipeline.ModelMatrix.Translate(f8, f9, f10);
-                Minecraft.renderPipeline.ModelMatrix.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
-                Minecraft.renderPipeline.ModelMatrix.Rotate(this.worldObj.getCelestialAngle(f1) * 360.0F, 1.0F, 0.0F, 0.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, f7);
+				GL.Translate(f8, f9, f10);
+				GL.Rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+				GL.Rotate(this.worldObj.getCelestialAngle(f1) * 360.0F, 1.0F, 0.0F, 0.0F);
 				f11 = 30.0F;
-                GL.BindTexture(TextureTarget.Texture2D, this.renderEngine.getTexture("/terrain/sun.png"));
+				GL.BindTexture(TextureTarget.Texture2D, this.renderEngine.getTexture("/terrain/sun.png"));
 				tessellator21.startDrawingQuads();
-				tessellator21.AddVertexWithUV((double)(-f11), 100.0D, (double)(-f11), 0.0D, 0.0D);
-				tessellator21.AddVertexWithUV((double)f11, 100.0D, (double)(-f11), 1.0D, 0.0D);
-				tessellator21.AddVertexWithUV((double)f11, 100.0D, (double)f11, 1.0D, 1.0D);
-				tessellator21.AddVertexWithUV((double)(-f11), 100.0D, (double)f11, 0.0D, 1.0D);
-				tessellator21.DrawImmediate();
+				tessellator21.addVertexWithUV((double)(-f11), 100.0D, (double)(-f11), 0.0D, 0.0D);
+				tessellator21.addVertexWithUV((double)f11, 100.0D, (double)(-f11), 1.0D, 0.0D);
+				tessellator21.addVertexWithUV((double)f11, 100.0D, (double)f11, 1.0D, 1.0D);
+				tessellator21.addVertexWithUV((double)(-f11), 100.0D, (double)f11, 0.0D, 1.0D);
+				tessellator21.draw();
 				f11 = 20.0F;
 				GL.BindTexture(TextureTarget.Texture2D, this.renderEngine.getTexture("/terrain/moon_phases.png"));
 				i25 = this.worldObj.getMoonPhase(f1);
@@ -845,76 +881,76 @@ namespace net.minecraft.src
 				float f17 = (float)(i26 + 1) / 4.0F;
 				float f18 = (float)(i27 + 1) / 2.0F;
 				tessellator21.startDrawingQuads();
-				tessellator21.AddVertexWithUV((double)(-f11), -100.0D, (double)f11, (double)f17, (double)f18);
-				tessellator21.AddVertexWithUV((double)f11, -100.0D, (double)f11, (double)f15, (double)f18);
-				tessellator21.AddVertexWithUV((double)f11, -100.0D, (double)(-f11), (double)f15, (double)f16);
-				tessellator21.AddVertexWithUV((double)(-f11), -100.0D, (double)(-f11), (double)f17, (double)f16);
-				tessellator21.DrawImmediate();
-                Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
-                f12 = this.worldObj.getStarBrightness(f1) * f7;
+				tessellator21.addVertexWithUV((double)(-f11), -100.0D, (double)f11, (double)f17, (double)f18);
+				tessellator21.addVertexWithUV((double)f11, -100.0D, (double)f11, (double)f15, (double)f18);
+				tessellator21.addVertexWithUV((double)f11, -100.0D, (double)(-f11), (double)f15, (double)f16);
+				tessellator21.addVertexWithUV((double)(-f11), -100.0D, (double)(-f11), (double)f17, (double)f16);
+				tessellator21.draw();
+				GL.Disable(EnableCap.Texture2D);
+				f12 = this.worldObj.getStarBrightness(f1) * f7;
 				if (f12 > 0.0F)
 				{
-                    Minecraft.renderPipeline.SetColor(f12, f12, f12, f12);
-					tessellator21.Draw(starVBO);
+					GL.Color4(f12, f12, f12, f12);
+					GL.CallList(this.starGLCallList);
 				}
 
-                Minecraft.renderPipeline.SetColor(1.0F);
-                GL.Disable(EnableCap.Blend);
-                Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-                Minecraft.renderPipeline.SetState(RenderState.FogState, true);
-                Minecraft.renderPipeline.ModelMatrix.PopMatrix();
-                Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
-                Minecraft.renderPipeline.SetColor(0.0F, 0.0F, 0.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Disable(EnableCap.Blend);
+				GL.Enable(EnableCap.AlphaTest);
+				GL.Enable(EnableCap.Fog);
+				GL.PopMatrix();
+				GL.Disable(EnableCap.Texture2D);
+				GL.Color3(0.0F, 0.0F, 0.0F);
 				double d23 = this.mc.thePlayer.getPosition(f1).yCoord - this.worldObj.SeaLevel;
 				if (d23 < 0.0D)
 				{
-                    Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-                    Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 12.0F, 0.0F);
-                    tessellator21.Draw(sky2VBO);
-                    Minecraft.renderPipeline.ModelMatrix.PopMatrix();
+					GL.PushMatrix();
+					GL.Translate(0.0F, 12.0F, 0.0F);
+					GL.CallList(this.glSkyList2);
+					GL.PopMatrix();
 					f9 = 1.0F;
 					f10 = -((float)(d23 + 65.0D));
 					f11 = -f9;
 					tessellator21.startDrawingQuads();
 					tessellator21.setColorRGBA_I(0, 255);
-					tessellator21.AddVertex((double)(-f9), (double)f10, (double)f9);
-					tessellator21.AddVertex((double)f9, (double)f10, (double)f9);
-					tessellator21.AddVertex((double)f9, (double)f11, (double)f9);
-					tessellator21.AddVertex((double)(-f9), (double)f11, (double)f9);
-					tessellator21.AddVertex((double)(-f9), (double)f11, (double)(-f9));
-					tessellator21.AddVertex((double)f9, (double)f11, (double)(-f9));
-					tessellator21.AddVertex((double)f9, (double)f10, (double)(-f9));
-					tessellator21.AddVertex((double)(-f9), (double)f10, (double)(-f9));
-					tessellator21.AddVertex((double)f9, (double)f11, (double)(-f9));
-					tessellator21.AddVertex((double)f9, (double)f11, (double)f9);
-					tessellator21.AddVertex((double)f9, (double)f10, (double)f9);
-					tessellator21.AddVertex((double)f9, (double)f10, (double)(-f9));
-					tessellator21.AddVertex((double)(-f9), (double)f10, (double)(-f9));
-					tessellator21.AddVertex((double)(-f9), (double)f10, (double)f9);
-					tessellator21.AddVertex((double)(-f9), (double)f11, (double)f9);
-					tessellator21.AddVertex((double)(-f9), (double)f11, (double)(-f9));
-					tessellator21.AddVertex((double)(-f9), (double)f11, (double)(-f9));
-					tessellator21.AddVertex((double)(-f9), (double)f11, (double)f9);
-					tessellator21.AddVertex((double)f9, (double)f11, (double)f9);
-					tessellator21.AddVertex((double)f9, (double)f11, (double)(-f9));
-					tessellator21.DrawImmediate();
+					tessellator21.addVertex((double)(-f9), (double)f10, (double)f9);
+					tessellator21.addVertex((double)f9, (double)f10, (double)f9);
+					tessellator21.addVertex((double)f9, (double)f11, (double)f9);
+					tessellator21.addVertex((double)(-f9), (double)f11, (double)f9);
+					tessellator21.addVertex((double)(-f9), (double)f11, (double)(-f9));
+					tessellator21.addVertex((double)f9, (double)f11, (double)(-f9));
+					tessellator21.addVertex((double)f9, (double)f10, (double)(-f9));
+					tessellator21.addVertex((double)(-f9), (double)f10, (double)(-f9));
+					tessellator21.addVertex((double)f9, (double)f11, (double)(-f9));
+					tessellator21.addVertex((double)f9, (double)f11, (double)f9);
+					tessellator21.addVertex((double)f9, (double)f10, (double)f9);
+					tessellator21.addVertex((double)f9, (double)f10, (double)(-f9));
+					tessellator21.addVertex((double)(-f9), (double)f10, (double)(-f9));
+					tessellator21.addVertex((double)(-f9), (double)f10, (double)f9);
+					tessellator21.addVertex((double)(-f9), (double)f11, (double)f9);
+					tessellator21.addVertex((double)(-f9), (double)f11, (double)(-f9));
+					tessellator21.addVertex((double)(-f9), (double)f11, (double)(-f9));
+					tessellator21.addVertex((double)(-f9), (double)f11, (double)f9);
+					tessellator21.addVertex((double)f9, (double)f11, (double)f9);
+					tessellator21.addVertex((double)f9, (double)f11, (double)(-f9));
+					tessellator21.draw();
 				}
 
 				if (this.worldObj.worldProvider.SkyColored)
 				{
-                    Minecraft.renderPipeline.SetColor(f3 * 0.2F + 0.04F, f4 * 0.2F + 0.04F, f5 * 0.6F + 0.1F);
+					GL.Color3(f3 * 0.2F + 0.04F, f4 * 0.2F + 0.04F, f5 * 0.6F + 0.1F);
 				}
 				else
 				{
-                    Minecraft.renderPipeline.SetColor(f3, f4, f5);
+					GL.Color3(f3, f4, f5);
 				}
 
-                Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-                Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, -((float)(d23 - 16.0D)), 0.0F);
-                tessellator21.Draw(sky2VBO);
-                Minecraft.renderPipeline.ModelMatrix.PopMatrix();
-                Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
-                GL.DepthMask(true);
+				GL.PushMatrix();
+				GL.Translate(0.0F, -((float)(d23 - 16.0D)), 0.0F);
+				GL.CallList(this.glSkyList2);
+				GL.PopMatrix();
+				GL.Enable(EnableCap.Texture2D);
+				GL.DepthMask(true);
 			}
 		}
 
@@ -941,6 +977,15 @@ namespace net.minecraft.src
 					float f8 = (float)vec3D6.yCoord;
 					float f9 = (float)vec3D6.zCoord;
 					float f10;
+					if (this.mc.gameSettings.anaglyph)
+					{
+						f10 = (f7 * 30.0F + f8 * 59.0F + f9 * 11.0F) / 100.0F;
+						float f11 = (f7 * 30.0F + f8 * 70.0F) / 100.0F;
+						float f12 = (f7 * 30.0F + f9 * 70.0F) / 100.0F;
+						f7 = f10;
+						f8 = f11;
+						f9 = f12;
+					}
 
 					f10 = 4.8828125E-4F;
 					double d24 = (double)((float)this.cloudOffsetX + f1);
@@ -960,16 +1005,16 @@ namespace net.minecraft.src
 					{
 						for (int i23 = -b3 * i4; i23 < b3 * i4; i23 += b3)
 						{
-							tessellator5.AddVertexWithUV((double)(i22 + 0), (double)f19, (double)(i23 + b3), (double)((float)(i22 + 0) * f10 + f20), (double)((float)(i23 + b3) * f10 + f21));
-							tessellator5.AddVertexWithUV((double)(i22 + b3), (double)f19, (double)(i23 + b3), (double)((float)(i22 + b3) * f10 + f20), (double)((float)(i23 + b3) * f10 + f21));
-							tessellator5.AddVertexWithUV((double)(i22 + b3), (double)f19, (double)(i23 + 0), (double)((float)(i22 + b3) * f10 + f20), (double)((float)(i23 + 0) * f10 + f21));
-							tessellator5.AddVertexWithUV((double)(i22 + 0), (double)f19, (double)(i23 + 0), (double)((float)(i22 + 0) * f10 + f20), (double)((float)(i23 + 0) * f10 + f21));
+							tessellator5.addVertexWithUV((double)(i22 + 0), (double)f19, (double)(i23 + b3), (double)((float)(i22 + 0) * f10 + f20), (double)((float)(i23 + b3) * f10 + f21));
+							tessellator5.addVertexWithUV((double)(i22 + b3), (double)f19, (double)(i23 + b3), (double)((float)(i22 + b3) * f10 + f20), (double)((float)(i23 + b3) * f10 + f21));
+							tessellator5.addVertexWithUV((double)(i22 + b3), (double)f19, (double)(i23 + 0), (double)((float)(i22 + b3) * f10 + f20), (double)((float)(i23 + 0) * f10 + f21));
+							tessellator5.addVertexWithUV((double)(i22 + 0), (double)f19, (double)(i23 + 0), (double)((float)(i22 + 0) * f10 + f20), (double)((float)(i23 + 0) * f10 + f21));
 						}
 					}
 
-					tessellator5.DrawImmediate();
-                    Minecraft.renderPipeline.SetColor(1.0F);
-                    GL.Disable(EnableCap.Blend);
+					tessellator5.draw();
+					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+					GL.Disable(EnableCap.Blend);
 					GL.Enable(EnableCap.CullFace);
 				}
 			}
@@ -1005,6 +1050,15 @@ namespace net.minecraft.src
 			float f19;
 			float f20;
 			float f21;
+			if (this.mc.gameSettings.anaglyph)
+			{
+				f19 = (f16 * 30.0F + f17 * 59.0F + f18 * 11.0F) / 100.0F;
+				f20 = (f16 * 30.0F + f17 * 70.0F) / 100.0F;
+				f21 = (f16 * 30.0F + f18 * 70.0F) / 100.0F;
+				f16 = f19;
+				f17 = f20;
+				f18 = f21;
+			}
 
 			f19 = (float)(d8 * 0.0D);
 			f20 = (float)(d10 * 0.0D);
@@ -1016,13 +1070,24 @@ namespace net.minecraft.src
 			sbyte b24 = 8;
 			sbyte b25 = 4;
 			float f26 = 9.765625E-4F;
-            Minecraft.renderPipeline.ModelMatrix.Scale(f4, 1.0F, f4);
+			GL.Scale(f4, 1.0F, f4);
 
 			for (int i27 = 0; i27 < 2; ++i27)
 			{
 				if (i27 == 0)
 				{
 					GL.ColorMask(false, false, false, false);
+				}
+				else if (this.mc.gameSettings.anaglyph)
+				{
+					if (EntityRenderer.anaglyphField == 0)
+					{
+						GL.ColorMask(false, true, true, true);
+					}
+					else
+					{
+						GL.ColorMask(true, false, false, true);
+					}
 				}
 				else
 				{
@@ -1041,85 +1106,85 @@ namespace net.minecraft.src
 						if (f12 > -f5 - 1.0F)
 						{
 							tessellator3.setColorRGBA_F(f16 * 0.7F, f17 * 0.7F, f18 * 0.7F, 0.8F);
-							tessellator3.SetNormal(0.0F, -1.0F, 0.0F);
-							tessellator3.AddVertexWithUV((double)(f32 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + (float)b24), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
-							tessellator3.AddVertexWithUV((double)(f32 + (float)b24), (double)(f12 + 0.0F), (double)(f33 + (float)b24), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
-							tessellator3.AddVertexWithUV((double)(f32 + (float)b24), (double)(f12 + 0.0F), (double)(f33 + 0.0F), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
-							tessellator3.AddVertexWithUV((double)(f32 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + 0.0F), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
+							tessellator3.setNormal(0.0F, -1.0F, 0.0F);
+							tessellator3.addVertexWithUV((double)(f32 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + (float)b24), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
+							tessellator3.addVertexWithUV((double)(f32 + (float)b24), (double)(f12 + 0.0F), (double)(f33 + (float)b24), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
+							tessellator3.addVertexWithUV((double)(f32 + (float)b24), (double)(f12 + 0.0F), (double)(f33 + 0.0F), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
+							tessellator3.addVertexWithUV((double)(f32 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + 0.0F), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
 						}
 
 						if (f12 <= f5 + 1.0F)
 						{
 							tessellator3.setColorRGBA_F(f16, f17, f18, 0.8F);
-							tessellator3.SetNormal(0.0F, 1.0F, 0.0F);
-							tessellator3.AddVertexWithUV((double)(f32 + 0.0F), (double)(f12 + f5 - f26), (double)(f33 + (float)b24), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
-							tessellator3.AddVertexWithUV((double)(f32 + (float)b24), (double)(f12 + f5 - f26), (double)(f33 + (float)b24), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
-							tessellator3.AddVertexWithUV((double)(f32 + (float)b24), (double)(f12 + f5 - f26), (double)(f33 + 0.0F), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
-							tessellator3.AddVertexWithUV((double)(f32 + 0.0F), (double)(f12 + f5 - f26), (double)(f33 + 0.0F), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
+							tessellator3.setNormal(0.0F, 1.0F, 0.0F);
+							tessellator3.addVertexWithUV((double)(f32 + 0.0F), (double)(f12 + f5 - f26), (double)(f33 + (float)b24), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
+							tessellator3.addVertexWithUV((double)(f32 + (float)b24), (double)(f12 + f5 - f26), (double)(f33 + (float)b24), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
+							tessellator3.addVertexWithUV((double)(f32 + (float)b24), (double)(f12 + f5 - f26), (double)(f33 + 0.0F), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
+							tessellator3.addVertexWithUV((double)(f32 + 0.0F), (double)(f12 + f5 - f26), (double)(f33 + 0.0F), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
 						}
 
 						tessellator3.setColorRGBA_F(f16 * 0.9F, f17 * 0.9F, f18 * 0.9F, 0.8F);
 						int i34;
 						if (i28 > -1)
 						{
-							tessellator3.SetNormal(-1.0F, 0.0F, 0.0F);
+							tessellator3.setNormal(-1.0F, 0.0F, 0.0F);
 
 							for (i34 = 0; i34 < b24; ++i34)
 							{
-								tessellator3.AddVertexWithUV((double)(f32 + (float)i34 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + (float)b24), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + (float)i34 + 0.0F), (double)(f12 + f5), (double)(f33 + (float)b24), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + (float)i34 + 0.0F), (double)(f12 + f5), (double)(f33 + 0.0F), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + (float)i34 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + 0.0F), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)i34 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + (float)b24), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)i34 + 0.0F), (double)(f12 + f5), (double)(f33 + (float)b24), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)i34 + 0.0F), (double)(f12 + f5), (double)(f33 + 0.0F), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)i34 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + 0.0F), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
 							}
 						}
 
 						if (i28 <= 1)
 						{
-							tessellator3.SetNormal(1.0F, 0.0F, 0.0F);
+							tessellator3.setNormal(1.0F, 0.0F, 0.0F);
 
 							for (i34 = 0; i34 < b24; ++i34)
 							{
-								tessellator3.AddVertexWithUV((double)(f32 + (float)i34 + 1.0F - f26), (double)(f12 + 0.0F), (double)(f33 + (float)b24), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + (float)i34 + 1.0F - f26), (double)(f12 + f5), (double)(f33 + (float)b24), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + (float)i34 + 1.0F - f26), (double)(f12 + f5), (double)(f33 + 0.0F), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + (float)i34 + 1.0F - f26), (double)(f12 + 0.0F), (double)(f33 + 0.0F), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)i34 + 1.0F - f26), (double)(f12 + 0.0F), (double)(f33 + (float)b24), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)i34 + 1.0F - f26), (double)(f12 + f5), (double)(f33 + (float)b24), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + (float)b24) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)i34 + 1.0F - f26), (double)(f12 + f5), (double)(f33 + 0.0F), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)i34 + 1.0F - f26), (double)(f12 + 0.0F), (double)(f33 + 0.0F), (double)((f30 + (float)i34 + 0.5F) * f21 + f19), (double)((f31 + 0.0F) * f21 + f20));
 							}
 						}
 
 						tessellator3.setColorRGBA_F(f16 * 0.8F, f17 * 0.8F, f18 * 0.8F, 0.8F);
 						if (i29 > -1)
 						{
-							tessellator3.SetNormal(0.0F, 0.0F, -1.0F);
+							tessellator3.setNormal(0.0F, 0.0F, -1.0F);
 
 							for (i34 = 0; i34 < b24; ++i34)
 							{
-								tessellator3.AddVertexWithUV((double)(f32 + 0.0F), (double)(f12 + f5), (double)(f33 + (float)i34 + 0.0F), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + (float)b24), (double)(f12 + f5), (double)(f33 + (float)i34 + 0.0F), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + (float)b24), (double)(f12 + 0.0F), (double)(f33 + (float)i34 + 0.0F), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + (float)i34 + 0.0F), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + 0.0F), (double)(f12 + f5), (double)(f33 + (float)i34 + 0.0F), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)b24), (double)(f12 + f5), (double)(f33 + (float)i34 + 0.0F), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)b24), (double)(f12 + 0.0F), (double)(f33 + (float)i34 + 0.0F), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + (float)i34 + 0.0F), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
 							}
 						}
 
 						if (i29 <= 1)
 						{
-							tessellator3.SetNormal(0.0F, 0.0F, 1.0F);
+							tessellator3.setNormal(0.0F, 0.0F, 1.0F);
 
 							for (i34 = 0; i34 < b24; ++i34)
 							{
-								tessellator3.AddVertexWithUV((double)(f32 + 0.0F), (double)(f12 + f5), (double)(f33 + (float)i34 + 1.0F - f26), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + (float)b24), (double)(f12 + f5), (double)(f33 + (float)i34 + 1.0F - f26), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + (float)b24), (double)(f12 + 0.0F), (double)(f33 + (float)i34 + 1.0F - f26), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
-								tessellator3.AddVertexWithUV((double)(f32 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + (float)i34 + 1.0F - f26), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + 0.0F), (double)(f12 + f5), (double)(f33 + (float)i34 + 1.0F - f26), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)b24), (double)(f12 + f5), (double)(f33 + (float)i34 + 1.0F - f26), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + (float)b24), (double)(f12 + 0.0F), (double)(f33 + (float)i34 + 1.0F - f26), (double)((f30 + (float)b24) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
+								tessellator3.addVertexWithUV((double)(f32 + 0.0F), (double)(f12 + 0.0F), (double)(f33 + (float)i34 + 1.0F - f26), (double)((f30 + 0.0F) * f21 + f19), (double)((f31 + (float)i34 + 0.5F) * f21 + f20));
 							}
 						}
 
-						tessellator3.DrawImmediate();
+						tessellator3.draw();
 					}
 				}
 			}
 
-            Minecraft.renderPipeline.SetColor(1.0F);
-            GL.Disable(EnableCap.Blend);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Disable(EnableCap.Blend);
 			GL.Enable(EnableCap.CullFace);
 		}
 
@@ -1304,15 +1369,15 @@ namespace net.minecraft.src
 				}
 			}
 		}
-		
+
 		public virtual void drawBlockBreaking(EntityPlayer entityPlayer1, MovingObjectPosition movingObjectPosition2, int i3, ItemStack itemStack4, float f5)
 		{
 			Tessellator tessellator6 = Tessellator.instance;
 			GL.Enable(EnableCap.Blend);
-            Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.One);
-            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, (MathHelper.sin((float)DateTimeHelper.CurrentUnixTimeMillis() / 100.0F) * 0.2F + 0.4F) * 0.5F);
-            int i8;
+			GL.Enable(EnableCap.AlphaTest);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.One);
+			GL.Color4(1.0F, 1.0F, 1.0F, (MathHelper.sin((float)DateTimeHelper.CurrentUnixTimeMillis() / 100.0F) * 0.2F + 0.4F) * 0.5F);
+			int i8;
 			if (i3 == 0)
 			{
 				if (this.damagePartialTime > 0.0F)
@@ -1320,12 +1385,12 @@ namespace net.minecraft.src
 					GL.BlendFunc(BlendingFactor.DstColor, BlendingFactor.SrcColor);
 					int i7 = this.renderEngine.getTexture("/terrain.png");
 					GL.BindTexture(TextureTarget.Texture2D, i7);
-                    Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 0.5F);
-                    Minecraft.renderPipeline.ModelMatrix.PushMatrix();
+					GL.Color4(1.0F, 1.0F, 1.0F, 0.5F);
+					GL.PushMatrix();
 					i8 = this.worldObj.getBlockId(movingObjectPosition2.blockX, movingObjectPosition2.blockY, movingObjectPosition2.blockZ);
 					Block block9 = i8 > 0 ? Block.blocksList[i8] : null;
-                    Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
-                    GL.PolygonOffset(-3.0F, -3.0F);
+					GL.Disable(EnableCap.AlphaTest);
+					GL.PolygonOffset(-3.0F, -3.0F);
 					GL.Enable(EnableCap.PolygonOffsetFill);
 					double d10 = entityPlayer1.lastTickPosX + (entityPlayer1.posX - entityPlayer1.lastTickPosX) * (double)f5;
 					double d12 = entityPlayer1.lastTickPosY + (entityPlayer1.posY - entityPlayer1.lastTickPosY) * (double)f5;
@@ -1335,26 +1400,26 @@ namespace net.minecraft.src
 						block9 = Block.stone;
 					}
 
-                    Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-                    tessellator6.startDrawingQuads();
+					GL.Enable(EnableCap.AlphaTest);
+					tessellator6.startDrawingQuads();
 					tessellator6.setTranslation(-d10, -d12, -d14);
 					tessellator6.disableColor();
 					this.globalRenderBlocks.renderBlockUsingTexture(block9, movingObjectPosition2.blockX, movingObjectPosition2.blockY, movingObjectPosition2.blockZ, 240 + (int)(this.damagePartialTime * 10.0F));
-					tessellator6.DrawImmediate();
+					tessellator6.draw();
 					tessellator6.setTranslation(0.0D, 0.0D, 0.0D);
-                    Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
-                    GL.PolygonOffset(0.0F, 0.0F);
+					GL.Disable(EnableCap.AlphaTest);
+					GL.PolygonOffset(0.0F, 0.0F);
 					GL.Disable(EnableCap.PolygonOffsetFill);
-					Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
+					GL.Enable(EnableCap.AlphaTest);
 					GL.DepthMask(true);
-                    Minecraft.renderPipeline.ModelMatrix.PopMatrix();
+					GL.PopMatrix();
 				}
 			}
 			else if (itemStack4 != null)
 			{
 				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 				float f16 = MathHelper.sin((float)DateTimeHelper.CurrentUnixTimeMillis() / 100.0F) * 0.2F + 0.8F;
-                Minecraft.renderPipeline.SetColor(f16, f16, f16, MathHelper.sin((float)DateTimeHelper.CurrentUnixTimeMillis() / 200.0F) * 0.2F + 0.5F);
+				GL.Color4(f16, f16, f16, MathHelper.sin((float)DateTimeHelper.CurrentUnixTimeMillis() / 200.0F) * 0.2F + 0.5F);
 				i8 = this.renderEngine.getTexture("/terrain.png");
 				GL.BindTexture(TextureTarget.Texture2D, i8);
 				int i17 = movingObjectPosition2.blockX;
@@ -1392,8 +1457,8 @@ namespace net.minecraft.src
 			}
 
 			GL.Disable(EnableCap.Blend);
-            Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
-        }
+			GL.Disable(EnableCap.AlphaTest);
+		}
 
 		public virtual void drawSelectionBox(EntityPlayer entityPlayer1, MovingObjectPosition movingObjectPosition2, int i3, ItemStack itemStack4, float f5)
 		{
@@ -1401,10 +1466,10 @@ namespace net.minecraft.src
 			{
 				GL.Enable(EnableCap.Blend);
 				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-                Minecraft.renderPipeline.SetColor(0.0F, 0.0F, 0.0F, 0.4F);
+				GL.Color4(0.0F, 0.0F, 0.0F, 0.4F);
 				GL.LineWidth(2.0F);
-                Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
-                GL.DepthMask(false);
+				GL.Disable(EnableCap.Texture2D);
+				GL.DepthMask(false);
 				float f6 = 0.002F;
 				int i7 = this.worldObj.getBlockId(movingObjectPosition2.blockX, movingObjectPosition2.blockY, movingObjectPosition2.blockZ);
 				if (i7 > 0)
@@ -1417,8 +1482,8 @@ namespace net.minecraft.src
 				}
 
 				GL.DepthMask(true);
-                Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
-                GL.Disable(EnableCap.Blend);
+				GL.Enable(EnableCap.Texture2D);
+				GL.Disable(EnableCap.Blend);
 			}
 
 		}
@@ -1427,29 +1492,29 @@ namespace net.minecraft.src
 		{
 			Tessellator tessellator2 = Tessellator.instance;
 			tessellator2.startDrawing(3);
-			tessellator2.AddVertex(axisAlignedBB1.minX, axisAlignedBB1.minY, axisAlignedBB1.minZ);
-			tessellator2.AddVertex(axisAlignedBB1.maxX, axisAlignedBB1.minY, axisAlignedBB1.minZ);
-			tessellator2.AddVertex(axisAlignedBB1.maxX, axisAlignedBB1.minY, axisAlignedBB1.maxZ);
-			tessellator2.AddVertex(axisAlignedBB1.minX, axisAlignedBB1.minY, axisAlignedBB1.maxZ);
-			tessellator2.AddVertex(axisAlignedBB1.minX, axisAlignedBB1.minY, axisAlignedBB1.minZ);
-			tessellator2.DrawImmediate();
+			tessellator2.addVertex(axisAlignedBB1.minX, axisAlignedBB1.minY, axisAlignedBB1.minZ);
+			tessellator2.addVertex(axisAlignedBB1.maxX, axisAlignedBB1.minY, axisAlignedBB1.minZ);
+			tessellator2.addVertex(axisAlignedBB1.maxX, axisAlignedBB1.minY, axisAlignedBB1.maxZ);
+			tessellator2.addVertex(axisAlignedBB1.minX, axisAlignedBB1.minY, axisAlignedBB1.maxZ);
+			tessellator2.addVertex(axisAlignedBB1.minX, axisAlignedBB1.minY, axisAlignedBB1.minZ);
+			tessellator2.draw();
 			tessellator2.startDrawing(3);
-			tessellator2.AddVertex(axisAlignedBB1.minX, axisAlignedBB1.maxY, axisAlignedBB1.minZ);
-			tessellator2.AddVertex(axisAlignedBB1.maxX, axisAlignedBB1.maxY, axisAlignedBB1.minZ);
-			tessellator2.AddVertex(axisAlignedBB1.maxX, axisAlignedBB1.maxY, axisAlignedBB1.maxZ);
-			tessellator2.AddVertex(axisAlignedBB1.minX, axisAlignedBB1.maxY, axisAlignedBB1.maxZ);
-			tessellator2.AddVertex(axisAlignedBB1.minX, axisAlignedBB1.maxY, axisAlignedBB1.minZ);
-			tessellator2.DrawImmediate();
+			tessellator2.addVertex(axisAlignedBB1.minX, axisAlignedBB1.maxY, axisAlignedBB1.minZ);
+			tessellator2.addVertex(axisAlignedBB1.maxX, axisAlignedBB1.maxY, axisAlignedBB1.minZ);
+			tessellator2.addVertex(axisAlignedBB1.maxX, axisAlignedBB1.maxY, axisAlignedBB1.maxZ);
+			tessellator2.addVertex(axisAlignedBB1.minX, axisAlignedBB1.maxY, axisAlignedBB1.maxZ);
+			tessellator2.addVertex(axisAlignedBB1.minX, axisAlignedBB1.maxY, axisAlignedBB1.minZ);
+			tessellator2.draw();
 			tessellator2.startDrawing(1);
-			tessellator2.AddVertex(axisAlignedBB1.minX, axisAlignedBB1.minY, axisAlignedBB1.minZ);
-			tessellator2.AddVertex(axisAlignedBB1.minX, axisAlignedBB1.maxY, axisAlignedBB1.minZ);
-			tessellator2.AddVertex(axisAlignedBB1.maxX, axisAlignedBB1.minY, axisAlignedBB1.minZ);
-			tessellator2.AddVertex(axisAlignedBB1.maxX, axisAlignedBB1.maxY, axisAlignedBB1.minZ);
-			tessellator2.AddVertex(axisAlignedBB1.maxX, axisAlignedBB1.minY, axisAlignedBB1.maxZ);
-			tessellator2.AddVertex(axisAlignedBB1.maxX, axisAlignedBB1.maxY, axisAlignedBB1.maxZ);
-			tessellator2.AddVertex(axisAlignedBB1.minX, axisAlignedBB1.minY, axisAlignedBB1.maxZ);
-			tessellator2.AddVertex(axisAlignedBB1.minX, axisAlignedBB1.maxY, axisAlignedBB1.maxZ);
-			tessellator2.DrawImmediate();
+			tessellator2.addVertex(axisAlignedBB1.minX, axisAlignedBB1.minY, axisAlignedBB1.minZ);
+			tessellator2.addVertex(axisAlignedBB1.minX, axisAlignedBB1.maxY, axisAlignedBB1.minZ);
+			tessellator2.addVertex(axisAlignedBB1.maxX, axisAlignedBB1.minY, axisAlignedBB1.minZ);
+			tessellator2.addVertex(axisAlignedBB1.maxX, axisAlignedBB1.maxY, axisAlignedBB1.minZ);
+			tessellator2.addVertex(axisAlignedBB1.maxX, axisAlignedBB1.minY, axisAlignedBB1.maxZ);
+			tessellator2.addVertex(axisAlignedBB1.maxX, axisAlignedBB1.maxY, axisAlignedBB1.maxZ);
+			tessellator2.addVertex(axisAlignedBB1.minX, axisAlignedBB1.minY, axisAlignedBB1.maxZ);
+			tessellator2.addVertex(axisAlignedBB1.minX, axisAlignedBB1.maxY, axisAlignedBB1.maxZ);
+			tessellator2.draw();
 		}
 
 		public virtual void markBlocksForUpdate(int i1, int i2, int i3, int i4, int i5, int i6)
@@ -1556,7 +1621,7 @@ namespace net.minecraft.src
 			this.func_40193_b(string1, d2, d4, d6, d8, d10, d12);
 		}
 
-		public virtual ParticleEffect func_40193_b(string string1, double d2, double d4, double d6, double d8, double d10, double d12)
+		public virtual EntityFX func_40193_b(string string1, double d2, double d4, double d6, double d8, double d10, double d12)
 		{
 			if (this.mc != null && this.mc.renderViewEntity != null && this.mc.effectRenderer != null)
 			{
@@ -1572,16 +1637,16 @@ namespace net.minecraft.src
 				object object21 = null;
 				if (string1.Equals("hugeexplosion"))
 				{
-					this.mc.effectRenderer.addEffect((ParticleEffect)(object21 = new EntityHugeExplodeFX(this.worldObj, d2, d4, d6, d8, d10, d12)));
+					this.mc.effectRenderer.addEffect((EntityFX)(object21 = new EntityHugeExplodeFX(this.worldObj, d2, d4, d6, d8, d10, d12)));
 				}
 				else if (string1.Equals("largeexplode"))
 				{
-					this.mc.effectRenderer.addEffect((ParticleEffect)(object21 = new EntityLargeExplodeFX(this.renderEngine, this.worldObj, d2, d4, d6, d8, d10, d12)));
+					this.mc.effectRenderer.addEffect((EntityFX)(object21 = new EntityLargeExplodeFX(this.renderEngine, this.worldObj, d2, d4, d6, d8, d10, d12)));
 				}
 
 				if (object21 != null)
 				{
-					return (ParticleEffect)object21;
+					return (EntityFX)object21;
 				}
 				else
 				{
@@ -1619,8 +1684,8 @@ namespace net.minecraft.src
 						else if (string1.Equals("magicCrit"))
 						{
 							object21 = new EntityCritFX(this.worldObj, d2, d4, d6, d8, d10, d12);
-							((ParticleEffect)object21).SetColor(((ParticleEffect)object21).GetParticleColorR() * 0.3F, ((ParticleEffect)object21).GetParticleColorG() * 0.8F, ((ParticleEffect)object21).GetParticleColorB());
-							((ParticleEffect)object21).ParticleTextureIndex = ((ParticleEffect)object21).ParticleTextureIndex + 1;
+							((EntityFX)object21).func_40097_b(((EntityFX)object21).func_40098_n() * 0.3F, ((EntityFX)object21).func_40101_o() * 0.8F, ((EntityFX)object21).func_40102_p());
+							((EntityFX)object21).ParticleTextureIndex = ((EntityFX)object21).ParticleTextureIndex + 1;
 						}
 						else if (string1.Equals("smoke"))
 						{
@@ -1629,7 +1694,7 @@ namespace net.minecraft.src
 						else if (string1.Equals("mobSpell"))
 						{
 							object21 = new EntitySpellParticleFX(this.worldObj, d2, d4, d6, 0.0D, 0.0D, 0.0D);
-							((ParticleEffect)object21).SetColor((float)d8, (float)d10, (float)d12);
+							((EntityFX)object21).func_40097_b((float)d8, (float)d10, (float)d12);
 						}
 						else if (string1.Equals("spell"))
 						{
@@ -1725,10 +1790,10 @@ namespace net.minecraft.src
 
 						if (object21 != null)
 						{
-							this.mc.effectRenderer.addEffect((ParticleEffect)object21);
+							this.mc.effectRenderer.addEffect((EntityFX)object21);
 						}
 
-						return (ParticleEffect)object21;
+						return (EntityFX)object21;
 					}
 				}
 			}
@@ -1769,6 +1834,11 @@ namespace net.minecraft.src
 
 		public virtual void doNothingWithTileEntity(int i1, int i2, int i3, TileEntity tileEntity4)
 		{
+		}
+
+		public virtual void func_28137_f()
+		{
+			GLAllocation.deleteDisplayLists(this.glRenderListBase);
 		}
 
 		public virtual void playAuxSFX(EntityPlayer entityPlayer1, int i2, int i3, int i4, int i5, int i6)
@@ -1892,12 +1962,12 @@ namespace net.minecraft.src
 					d25 = Math.Cos(d23) * d21;
 					d27 = 0.01D + random7.NextDouble() * 0.5D;
 					d29 = Math.Sin(d23) * d21;
-					ParticleEffect entityFX31 = this.func_40193_b(string19, d33 + d25 * 0.1D, d10 + 0.3D, d12 + d29 * 0.1D, d25, d27, d29);
+					EntityFX entityFX31 = this.func_40193_b(string19, d33 + d25 * 0.1D, d10 + 0.3D, d12 + d29 * 0.1D, d25, d27, d29);
 					if (entityFX31 != null)
 					{
 						float f32 = 0.75F + random7.NextSingle() * 0.25F;
-						entityFX31.SetColor(f16 * f32, f17 * f32, f18 * f32);
-						entityFX31.MultiplyVelocity((float)d21);
+						entityFX31.func_40097_b(f16 * f32, f17 * f32, f18 * f32);
+						entityFX31.multiplyVelocity((float)d21);
 					}
 				}
 

@@ -88,8 +88,7 @@ namespace net.minecraft.src
 
 		public static bool stringNullOrLengthZero(string string0)
 		{
-			
-			return string.IsNullOrEmpty(string0);
+			return string.ReferenceEquals(string0, null) || string0.Length == 0;
 		}
 
 		public static int getRandomIntegerInRange(RandomExtended random0, int i1, int i2)

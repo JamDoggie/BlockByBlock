@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class ItemEnderPearl : Item
+	public class ItemEnderPearl : Item
 	{
 		public ItemEnderPearl(int i1) : base(i1)
 		{

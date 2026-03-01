@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class ContainerBrewingStand : Container
+	public class ContainerBrewingStand : Container
 	{
 		private TileEntityBrewingStand tileBrewingStand;
 		private int brewTime = 0;

@@ -1,7 +1,6 @@
 ﻿namespace net.minecraft.src
 {
-	using BlockByBlock.net.minecraft.render;
-	using OpenTK.Graphics.OpenGL;
+    using OpenTK.Graphics.OpenGL;
     using Minecraft = net.minecraft.client.Minecraft;
 
     public class TileEntityRendererPiston : TileEntitySpecialRenderer
@@ -15,18 +14,18 @@
 			{
 				Tessellator tessellator10 = Tessellator.instance;
 				this.bindTextureByName("/terrain.png");
-				GameLighting.DisableMeshLighting();
+				RenderHelper.disableStandardItemLighting();
 				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 				GL.Enable(EnableCap.Blend);
 				GL.Disable(EnableCap.CullFace);
 				if (Minecraft.AmbientOcclusionEnabled)
 				{
-                    Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, true);
-                }
+					GL.ShadeModel(ShadingModel.Smooth);
+				}
 				else
 				{
-                    Minecraft.renderPipeline.SetState(RenderState.SmoothShadingState, false);
-                }
+					GL.ShadeModel(ShadingModel.Flat);
+				}
 
 				tessellator10.startDrawingQuads();
 				tessellator10.setTranslation((double)((float)d2 - (float)tileEntityPiston1.xCoord + tileEntityPiston1.getOffsetX(f8)), (double)((float)d4 - (float)tileEntityPiston1.yCoord + tileEntityPiston1.getOffsetY(f8)), (double)((float)d6 - (float)tileEntityPiston1.zCoord + tileEntityPiston1.getOffsetZ(f8)));
@@ -49,8 +48,8 @@
 				}
 
 				tessellator10.setTranslation(0.0D, 0.0D, 0.0D);
-				tessellator10.DrawImmediate();
-				GameLighting.EnableMeshLighting();
+				tessellator10.draw();
+				RenderHelper.enableStandardItemLighting();
 			}
 
 		}

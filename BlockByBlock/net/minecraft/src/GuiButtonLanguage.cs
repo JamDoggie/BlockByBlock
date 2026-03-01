@@ -13,7 +13,7 @@
 			if (this.shouldDrawButton)
 			{
 				GL.BindTexture(TextureTarget.Texture2D, minecraft1.renderEngine.getTexture("/gui/gui.png"));
-				Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				bool z4 = i2 >= this.xPosition && i3 >= this.yPosition && i2 < this.xPosition + this.width && i3 < this.yPosition + this.height;
 				int i5 = 106;
 				if (z4)

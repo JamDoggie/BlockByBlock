@@ -1,12 +1,11 @@
 ﻿using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 using System;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-    public class BlockEndPortal : BlockContainer
+	public class BlockEndPortal : BlockContainer
 	{
 		public static bool bossDefeated = false;
 

@@ -3,18 +3,15 @@ using System.Collections;
 using System.Diagnostics;
 using BlockByBlock.helpers;
 using BlockByBlock.java_extensions;
-using BlockByBlock.net.minecraft.render;
-using net.minecraft.client.entity;
-using net.minecraft.client.entity.render;
 using OpenTK.Graphics.OpenGL;
 
 namespace net.minecraft.src
 {
 
-    using Minecraft = net.minecraft.client.Minecraft;
+	using Minecraft = net.minecraft.client.Minecraft;
+    
 
-
-    public class GuiIngame : Gui
+	public class GuiIngame : Gui
 	{
 		private static RenderItem itemRenderer = new RenderItem();
 		private System.Collections.IList chatMessageList = new ArrayList();
@@ -43,7 +40,7 @@ namespace net.minecraft.src
 			int i6 = scaledResolution5.ScaledWidth;
 			int i7 = scaledResolution5.ScaledHeight;
 			FontRenderer fontRenderer8 = this.mc.fontRenderer;
-			this.mc.gameRenderer.setupOverlayRendering();
+			this.mc.entityRenderer.setupOverlayRendering();
 			GL.Enable(EnableCap.Blend);
 			if (Minecraft.FancyGraphicsEnabled)
 			{
@@ -79,9 +76,9 @@ namespace net.minecraft.src
 			int i22;
 			int i23;
 			int i45;
-			if (!this.mc.playerController.IsPanoramaCamera())
+			if (!this.mc.playerController.func_35643_e())
 			{
-				Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/gui/gui.png"));
 				InventoryPlayer inventoryPlayer31 = this.mc.thePlayer.inventory;
 				this.zLevel = -90.0F;
@@ -282,7 +279,8 @@ namespace net.minecraft.src
 				}
 
 				GL.Disable(EnableCap.Blend);
-				GameLighting.EnableGUIStandardItemLighting();
+				GL.Enable(EnableCap.RescaleNormal);
+				RenderHelper.enableGUIStandardItemLighting();
 
 				for (i18 = 0; i18 < 9; ++i18)
 				{
@@ -291,15 +289,16 @@ namespace net.minecraft.src
 					this.renderInventorySlot(i18, i19, i20, f1);
 				}
 
-				GameLighting.DisableMeshLighting();
+				RenderHelper.disableStandardItemLighting();
+				GL.Disable(EnableCap.RescaleNormal);
 			}
 
 			float f33;
 			if (this.mc.thePlayer.SleepTimer > 0)
 			{
 				GL.Disable(EnableCap.DepthTest);
-                Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
-                int i32 = this.mc.thePlayer.SleepTimer;
+				GL.Disable(EnableCap.AlphaTest);
+				int i32 = this.mc.thePlayer.SleepTimer;
 				f33 = (float)i32 / 100.0F;
 				if (f33 > 1.0F)
 				{
@@ -309,8 +308,8 @@ namespace net.minecraft.src
 				i12 = (int)(220.0F * f33) << 24 | 1052704;
 				drawRect(0, 0, i6, i7, i12);
 				GL.Enable(EnableCap.DepthTest);
-                Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-            }
+				GL.Enable(EnableCap.AlphaTest);
+			}
 
 			int i39;
 			int i40;
@@ -330,10 +329,10 @@ namespace net.minecraft.src
 
 			if (this.mc.gameSettings.showDebugInfo)
 			{
-                Minecraft.renderPipeline.ModelMatrix.PushMatrix();
+				GL.PushMatrix();
 				if (Minecraft.hasPaidCheckTime > 0L)
 				{
-                    Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, 32.0F, 0.0F);
+					GL.Translate(0.0F, 32.0F, 0.0F);
 				}
 
 				fontRenderer8.drawStringWithShadow($"Minecraft 1.2.5 ({mc.debug}) Runtime: .Net {Environment.Version}", 2, 2, 0xFFFFFF);
@@ -367,7 +366,7 @@ namespace net.minecraft.src
 					this.drawString(fontRenderer8, "Seed: " + this.mc.theWorld.Seed, 2, 112, 14737632);
 				}
 
-                Minecraft.renderPipeline.ModelMatrix.PopMatrix();
+				GL.PopMatrix();
 			}
 
 			if (this.recordPlayingUpFor > 0)
@@ -381,8 +380,8 @@ namespace net.minecraft.src
 
 				if (i12 > 0)
 				{
-                    Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-                    Minecraft.renderPipeline.ModelMatrix.Translate((float)(i6 / 2), (float)(i7 - 48), 0.0F);
+					GL.PushMatrix();
+					GL.Translate((float)(i6 / 2), (float)(i7 - 48), 0.0F);
 					GL.Enable(EnableCap.Blend);
 					GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 					i13 = 0xFFFFFF;
@@ -393,17 +392,17 @@ namespace net.minecraft.src
 
 					fontRenderer8.drawString(this.recordPlaying, -fontRenderer8.getStringWidth(this.recordPlaying) / 2, -4, i13 + (i12 << 24));
 					GL.Disable(EnableCap.Blend);
-                    Minecraft.renderPipeline.ModelMatrix.PopMatrix();
+					GL.PopMatrix();
 				}
 			}
-            
+
 			GL.Enable(EnableCap.Blend);
 			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
-            Minecraft.renderPipeline.ModelMatrix.PushMatrix();
-            Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, (float)(i7 - 48), 0.0F);
-			this.func_50010_a(fontRenderer8); // TODO: whatever this is should be named.
-            Minecraft.renderPipeline.ModelMatrix.PopMatrix();
+			GL.Disable(EnableCap.AlphaTest);
+			GL.PushMatrix();
+			GL.Translate(0.0F, (float)(i7 - 48), 0.0F);
+			this.func_50010_a(fontRenderer8);
+			GL.PopMatrix();
 			if (this.mc.thePlayer is EntityClientPlayerMP && this.mc.gameSettings.keyBindPlayerList.pressed)
 			{
 				NetClientHandler netClientHandler37 = ((EntityClientPlayerMP)this.mc.thePlayer).sendQueue;
@@ -431,9 +430,9 @@ namespace net.minecraft.src
 					i20 = i17 + i19 % i40 * i16;
 					i45 = b43 + i19 / i40 * 9;
 					drawRect(i20, i45, i20 + i16 - 1, i45 + 8, 553648127);
-					Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
-                    Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-                    if (i19 < list38.Count)
+					GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+					GL.Enable(EnableCap.AlphaTest);
+					if (i19 < list38.Count)
 					{
 						GuiPlayerInfo guiPlayerInfo46 = (GuiPlayerInfo)list38[i19];
 						fontRenderer8.drawStringWithShadow(guiPlayerInfo46.name, i20, i45, 0xFFFFFF);
@@ -473,10 +472,10 @@ namespace net.minecraft.src
 				}
 			}
 
-			Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
-            Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
-            Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-        }
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Disable(EnableCap.Lighting);
+			GL.Enable(EnableCap.AlphaTest);
+		}
 
 		private void func_50010_a(FontRenderer fontRenderer1)
 		{
@@ -534,7 +533,7 @@ namespace net.minecraft.src
 
 				if (z3)
 				{
-                    Minecraft.renderPipeline.ModelMatrix.Translate(0.0F, (float)fontRenderer1.FONT_HEIGHT, 0.0F);
+					GL.Translate(0.0F, (float)fontRenderer1.FONT_HEIGHT, 0.0F);
 					i6 = i5 * fontRenderer1.FONT_HEIGHT + i5;
 					int i14 = i4 * fontRenderer1.FONT_HEIGHT + i4;
 					int i15 = this.field_50017_n * i14 / i5;
@@ -573,7 +572,7 @@ namespace net.minecraft.src
 
 				string string9 = "Boss health";
 				fontRenderer2.drawStringWithShadow(string9, i4 / 2 - fontRenderer2.getStringWidth(string9) / 2, b8 - 10, 16711935);
-				Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+				GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 				GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("/gui/icons.png"));
 			}
 		}
@@ -583,20 +582,20 @@ namespace net.minecraft.src
 			GL.Disable(EnableCap.DepthTest);
 			GL.DepthMask(false);
 			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-			Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
-            Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
-            GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("%blur%/misc/pumpkinblur.png"));
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Disable(EnableCap.AlphaTest);
+			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("%blur%/misc/pumpkinblur.png"));
 			Tessellator tessellator3 = Tessellator.instance;
 			tessellator3.startDrawingQuads();
-			tessellator3.AddVertexWithUV(0.0D, (double)i2, -90.0D, 0.0D, 1.0D);
-			tessellator3.AddVertexWithUV((double)i1, (double)i2, -90.0D, 1.0D, 1.0D);
-			tessellator3.AddVertexWithUV((double)i1, 0.0D, -90.0D, 1.0D, 0.0D);
-			tessellator3.AddVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
-			tessellator3.DrawImmediate();
+			tessellator3.addVertexWithUV(0.0D, (double)i2, -90.0D, 0.0D, 1.0D);
+			tessellator3.addVertexWithUV((double)i1, (double)i2, -90.0D, 1.0D, 1.0D);
+			tessellator3.addVertexWithUV((double)i1, 0.0D, -90.0D, 1.0D, 0.0D);
+			tessellator3.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
+			tessellator3.draw();
 			GL.DepthMask(true);
 			GL.Enable(EnableCap.DepthTest);
-            Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Enable(EnableCap.AlphaTest);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 		}
 
 		private void renderVignette(float f1, int i2, int i3)
@@ -616,18 +615,18 @@ namespace net.minecraft.src
 			GL.Disable(EnableCap.DepthTest);
 			GL.DepthMask(false);
 			GL.BlendFunc(BlendingFactor.Zero, BlendingFactor.OneMinusSrcColor);
-			Minecraft.renderPipeline.SetColor(this.prevVignetteBrightness, this.prevVignetteBrightness, this.prevVignetteBrightness, 1.0F);
+			GL.Color4(this.prevVignetteBrightness, this.prevVignetteBrightness, this.prevVignetteBrightness, 1.0F);
 			GL.BindTexture(TextureTarget.Texture2D, this.mc.renderEngine.getTexture("%blur%/misc/vignette.png"));
 			Tessellator tessellator4 = Tessellator.instance;
 			tessellator4.startDrawingQuads();
-			tessellator4.AddVertexWithUV(0.0D, (double)i3, -90.0D, 0.0D, 1.0D);
-			tessellator4.AddVertexWithUV((double)i2, (double)i3, -90.0D, 1.0D, 1.0D);
-			tessellator4.AddVertexWithUV((double)i2, 0.0D, -90.0D, 1.0D, 0.0D);
-			tessellator4.AddVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
-			tessellator4.DrawImmediate();
+			tessellator4.addVertexWithUV(0.0D, (double)i3, -90.0D, 0.0D, 1.0D);
+			tessellator4.addVertexWithUV((double)i2, (double)i3, -90.0D, 1.0D, 1.0D);
+			tessellator4.addVertexWithUV((double)i2, 0.0D, -90.0D, 1.0D, 0.0D);
+			tessellator4.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
+			tessellator4.draw();
 			GL.DepthMask(true);
 			GL.Enable(EnableCap.DepthTest);
-			Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 		}
 
@@ -640,11 +639,11 @@ namespace net.minecraft.src
 				f1 = f1 * 0.8F + 0.2F;
 			}
 
-            Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, false);
-            GL.Disable(EnableCap.DepthTest);
+			GL.Disable(EnableCap.AlphaTest);
+			GL.Disable(EnableCap.DepthTest);
 			GL.DepthMask(false);
 			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-			Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, f1);
+			GL.Color4(1.0F, 1.0F, 1.0F, f1);
 			GL.BindTexture(TextureTarget.Texture2D, mc.renderEngine.getTexture("/terrain.png"));
 			float f4 = (float)(Block.portal.blockIndexInTexture % 16) / 16.0F;
 			float f5 = (float)(Block.portal.blockIndexInTexture / 16) / 16.0F;
@@ -652,15 +651,15 @@ namespace net.minecraft.src
 			float f7 = (float)(Block.portal.blockIndexInTexture / 16 + 1) / 16.0F;
 			Tessellator tessellator8 = Tessellator.instance;
 			tessellator8.startDrawingQuads();
-			tessellator8.AddVertexWithUV(0.0D, (double)i3, -90.0D, (double)f4, (double)f7);
-			tessellator8.AddVertexWithUV((double)i2, (double)i3, -90.0D, (double)f6, (double)f7);
-			tessellator8.AddVertexWithUV((double)i2, 0.0D, -90.0D, (double)f6, (double)f5);
-			tessellator8.AddVertexWithUV(0.0D, 0.0D, -90.0D, (double)f4, (double)f5);
-			tessellator8.DrawImmediate();
+			tessellator8.addVertexWithUV(0.0D, (double)i3, -90.0D, (double)f4, (double)f7);
+			tessellator8.addVertexWithUV((double)i2, (double)i3, -90.0D, (double)f6, (double)f7);
+			tessellator8.addVertexWithUV((double)i2, 0.0D, -90.0D, (double)f6, (double)f5);
+			tessellator8.addVertexWithUV(0.0D, 0.0D, -90.0D, (double)f4, (double)f5);
+			tessellator8.draw();
 			GL.DepthMask(true);
 			GL.Enable(EnableCap.DepthTest);
-            Minecraft.renderPipeline.SetState(RenderState.AlphaTestState, true);
-            Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Enable(EnableCap.AlphaTest);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 		}
 
 		private void renderInventorySlot(int i1, int i2, int i3, float f4)
@@ -671,17 +670,17 @@ namespace net.minecraft.src
 				float f6 = (float)itemStack5.animationsToGo - f4;
 				if (f6 > 0.0F)
 				{
-                    Minecraft.renderPipeline.ModelMatrix.PushMatrix();
+					GL.PushMatrix();
 					float f7 = 1.0F + f6 / 5.0F;
-                    Minecraft.renderPipeline.ModelMatrix.Translate((float)(i2 + 8), (float)(i3 + 12), 0.0F);
-                    Minecraft.renderPipeline.ModelMatrix.Scale(1.0F / f7, (f7 + 1.0F) / 2.0F, 1.0F);
-                    Minecraft.renderPipeline.ModelMatrix.Translate((float)(-(i2 + 8)), (float)(-(i3 + 12)), 0.0F);
+					GL.Translate((float)(i2 + 8), (float)(i3 + 12), 0.0F);
+					GL.Scale(1.0F / f7, (f7 + 1.0F) / 2.0F, 1.0F);
+					GL.Translate((float)(-(i2 + 8)), (float)(-(i3 + 12)), 0.0F);
 				}
 
 				itemRenderer.renderItemIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, itemStack5, i2, i3);
 				if (f6 > 0.0F)
 				{
-                    Minecraft.renderPipeline.ModelMatrix.PopMatrix();
+					GL.PopMatrix();
 				}
 
 				itemRenderer.renderItemOverlayIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, itemStack5, i2, i3);

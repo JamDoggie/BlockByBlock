@@ -1,11 +1,10 @@
 ﻿using BlockByBlock.helpers;
-using net.minecraft.client.entity;
 using System.Collections;
 
 namespace net.minecraft.src
 {
 
-    public class TileEntityPiston : TileEntity
+	public class TileEntityPiston : TileEntity
 	{
 		private int storedBlockID;
 		private int storedMetadata;

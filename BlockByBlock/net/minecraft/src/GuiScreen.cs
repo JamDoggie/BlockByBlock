@@ -5,7 +5,6 @@ using OpenTK.Graphics.OpenGL;
 using net.minecraft.client;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using net.minecraft.input;
-using BlockByBlock.net.minecraft.render;
 
 namespace net.minecraft.src
 {
@@ -204,19 +203,19 @@ namespace net.minecraft.src
 
 		public virtual void drawBackground(int i1)
 		{
-            Minecraft.renderPipeline.SetState(RenderState.LightingState, false);
-            Minecraft.renderPipeline.SetState(RenderState.FogState, false);
-            Tessellator tessellator2 = Tessellator.instance;
+			GL.Disable(EnableCap.Lighting);
+			GL.Disable(EnableCap.Fog);
+			Tessellator tessellator2 = Tessellator.instance;
 			GL.BindTexture(TextureTarget.Texture2D, mc.renderEngine.getTexture("/gui/background.png"));
-			Minecraft.renderPipeline.SetColor(1.0F, 1.0F, 1.0F, 1.0F);
+			GL.Color4(1.0F, 1.0F, 1.0F, 1.0F);
 			float f3 = 32.0F;
 			tessellator2.startDrawingQuads();
 			tessellator2.ColorOpaque_I = 4210752;
-			tessellator2.AddVertexWithUV(0.0D, (double)this.height, 0.0D, 0.0D, (double)((float)this.height / f3 + (float)i1));
-			tessellator2.AddVertexWithUV((double)this.width, (double)this.height, 0.0D, (double)((float)this.width / f3), (double)((float)this.height / f3 + (float)i1));
-			tessellator2.AddVertexWithUV((double)this.width, 0.0D, 0.0D, (double)((float)this.width / f3), (double)i1);
-			tessellator2.AddVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, (double)i1);
-			tessellator2.DrawImmediate();
+			tessellator2.addVertexWithUV(0.0D, (double)this.height, 0.0D, 0.0D, (double)((float)this.height / f3 + (float)i1));
+			tessellator2.addVertexWithUV((double)this.width, (double)this.height, 0.0D, (double)((float)this.width / f3), (double)((float)this.height / f3 + (float)i1));
+			tessellator2.addVertexWithUV((double)this.width, 0.0D, 0.0D, (double)((float)this.width / f3), (double)i1);
+			tessellator2.addVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, (double)i1);
+			tessellator2.draw();
 		}
 
 		public virtual bool doesGuiPauseGame()

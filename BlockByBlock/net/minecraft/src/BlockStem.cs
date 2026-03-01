@@ -1,11 +1,10 @@
 ﻿using System;
 using BlockByBlock.java_extensions;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class BlockStem : BlockFlower
+	public class BlockStem : BlockFlower
 	{
 		private Block fruitType;
 

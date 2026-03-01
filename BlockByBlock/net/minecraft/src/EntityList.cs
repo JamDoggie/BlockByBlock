@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
-using net.minecraft.client.entity;
 
 namespace net.minecraft.src
 {
 
-    public class EntityList
+	public class EntityList
 	{
 		private static System.Collections.IDictionary stringToClassMapping = new Hashtable();
 		private static System.Collections.IDictionary classToStringMapping = new Hashtable();

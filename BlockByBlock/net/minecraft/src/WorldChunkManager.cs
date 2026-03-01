@@ -174,7 +174,7 @@ namespace net.minecraft.src
 			return true;
 		}
 
-		public virtual ChunkPosition? findBiomePosition(int i1, int i2, int i3, System.Collections.IList list4, RandomExtended random5)
+		public virtual ChunkPosition findBiomePosition(int i1, int i2, int i3, System.Collections.IList list4, RandomExtended random5)
 		{
 			int i6 = i1 - i3 >> 2;
 			int i7 = i2 - i3 >> 2;
@@ -183,7 +183,7 @@ namespace net.minecraft.src
 			int i10 = i8 - i6 + 1;
 			int i11 = i9 - i7 + 1;
 			int[] i12 = this.genBiomes.getInts(i6, i7, i10, i11);
-			ChunkPosition? chunkPosition13 = null;
+			ChunkPosition chunkPosition13 = null;
 			int i14 = 0;
 
 			for (int i15 = 0; i15 < i12.Length; ++i15)

@@ -1,6 +1,4 @@
-﻿using BlockByBlock.net.minecraft.render;
-using net.minecraft.client;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 using System;
 
 namespace net.minecraft.src
@@ -465,18 +463,18 @@ namespace net.minecraft.src
 			}
 
 			Tessellator tessellator6 = Tessellator.instance;
-            Minecraft.renderPipeline.SetColor(0.0F, 0.0F, 255.0F, 255.0F);
-            Minecraft.renderPipeline.SetState(RenderState.TextureState, false);
-            GL.Enable(EnableCap.ColorLogicOp);
+			GL.Color4(0.0F, 0.0F, 255.0F, 255.0F);
+			GL.Disable(EnableCap.Texture2D);
+			GL.Enable(EnableCap.ColorLogicOp);
 			GL.LogicOp(LogicOp.OrReverse);
 			tessellator6.startDrawingQuads();
-			tessellator6.AddVertex((double)i1, (double)i4, 0.0D);
-			tessellator6.AddVertex((double)i3, (double)i4, 0.0D);
-			tessellator6.AddVertex((double)i3, (double)i2, 0.0D);
-			tessellator6.AddVertex((double)i1, (double)i2, 0.0D);
-			tessellator6.DrawImmediate();
+			tessellator6.addVertex((double)i1, (double)i4, 0.0D);
+			tessellator6.addVertex((double)i3, (double)i4, 0.0D);
+			tessellator6.addVertex((double)i3, (double)i2, 0.0D);
+			tessellator6.addVertex((double)i1, (double)i2, 0.0D);
+			tessellator6.draw();
 			GL.Disable(EnableCap.ColorLogicOp);
-			Minecraft.renderPipeline.SetState(RenderState.TextureState, true);
+			GL.Enable(EnableCap.Texture2D);
 		}
 
 		public virtual int MaxStringLength

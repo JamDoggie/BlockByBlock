@@ -1,8 +1,6 @@
-﻿using net.minecraft.client.entity;
-
-namespace net.minecraft.src
+﻿namespace net.minecraft.src
 {
-    public class ItemSlab : ItemBlock
+	public class ItemSlab : ItemBlock
 	{
 		public ItemSlab(int i1) : base(i1)
 		{
